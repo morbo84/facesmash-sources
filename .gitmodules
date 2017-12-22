@@ -1,0 +1,3 @@
+[submodule "assets"]
+	path = assets
+	url = git@bitbucket.org:gamee-boy/facesmash-assets.git

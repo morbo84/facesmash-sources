@@ -1,0 +1,21 @@
+set(
+    FACE_SMASH_SOURCES
+    ${facesmash_SOURCE_DIR}/src/game/game_env.cpp
+    ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
+    ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
+    ${facesmash_SOURCE_DIR}/src/input/user_input_handler.cpp
+    ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
+    ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_game.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_menu.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_splash.cpp
+    ${facesmash_SOURCE_DIR}/src/settings/settings.cpp
+    ${facesmash_SOURCE_DIR}/src/system/fade_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/time/clock.cpp
+    ${facesmash_SOURCE_DIR}/src/main.cpp
+    PARENT_SCOPE
+)
