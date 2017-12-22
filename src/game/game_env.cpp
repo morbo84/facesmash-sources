@@ -159,9 +159,6 @@ int GameEnv::exec() noexcept {
                 elapsed = clampOverElapsed;
             }
 
-            // render the scene
-            update(*renderer, elapsed);
-
             // poll events for the next loop
             Locator::InputHandler::ref().poll();
 
@@ -174,6 +171,9 @@ int GameEnv::exec() noexcept {
 
             // dispatch the events collected so far (if any)
             Locator::Dispatcher::ref().update();
+
+            // render the scene
+            update(*renderer, elapsed);
 
             // sleep for a while to save the users' battery
             current = clock.ticks();

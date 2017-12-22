@@ -2,6 +2,7 @@
 #include "../locator/locator.hpp"
 #include "../scene/scene_game.h"
 #include "../scene/scene_menu.h"
+#include "../scene/scene_null.h"
 #include "../scene/scene_splash.h"
 #include "game_renderer.h"
 #include "game_loop.h"
@@ -12,6 +13,7 @@ namespace gamee {
 
 void GameLoop::setup() {
     // TODO load resources
+    // (at least the ones necessary for the first scene)
 }
 
 
@@ -29,12 +31,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 }
 
 
-GameLoop::GameLoop()
-    // well, probably the right thing to do, isn't it?
-    : current{std::make_unique<SceneSplash>()}
-
-{
+GameLoop::GameLoop(): current{std::make_unique<SceneNull>()} {
     Locator::Dispatcher::ref().connect<SceneEvent>(this);
+    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneEvent::Type::SPLASH);
 }
 
 
@@ -44,7 +43,9 @@ GameLoop::~GameLoop() {
 
 
 void GameLoop::receive(const SceneEvent &event) noexcept {
-    current->leaving();
+    if(current) {
+        current->leaving();
+    }
 
     switch(event.type) {
     case SceneEvent::Type::GAME:
@@ -56,6 +57,8 @@ void GameLoop::receive(const SceneEvent &event) noexcept {
     case SceneEvent::Type::SPLASH:
         current = std::make_unique<SceneSplash>();
         break;
+    default:
+        current = std::make_unique<SceneNull>();
     }
 
     current->entering();
