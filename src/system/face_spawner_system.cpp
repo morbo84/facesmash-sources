@@ -1,6 +1,7 @@
 #include <cmath>
 #include <cassert>
 #include <SDL_rect.h>
+#include "../settings/settings.h"
 #include "face_spawner_system.h"
 
 
@@ -33,12 +34,6 @@ public:
 };
 
 
-static const size_t width = 1920U;
-static const size_t height = 1080U;
-static float percent = 0.2f;
-static Ellipse comfortRegion{percent * width, percent * height, {width/2, height/2}};
-
-
 static float randomFloat(float a, float b) {
     auto random = rand() / static_cast<float>(RAND_MAX);
     auto r = random * (b - a);
@@ -54,23 +49,24 @@ static float randomTheta() {
 
 enum class Edge {top, left, bottom, right};
 
-
-
 SDL_Point startingPoint() {
     SDL_Point ret;
     auto edge = static_cast<Edge>(rand() % 4);
+    Settings settings;
+
     switch (edge) {
     case Edge::top:
     case Edge::bottom:
-        ret.x = randomFloat(0, width);
-        ret.y = edge == Edge::top ? 0.f : static_cast<float>(height);
+        ret.x = randomFloat(0, settings.logicalWidth());
+        ret.y = edge == Edge::top ? 0.f : (1.f * settings.logicalHeight());
         break;
     case Edge::left:
     case Edge::right:
-        ret.x = edge == Edge::left ? 0.f : static_cast<float>(width);
-        ret.y = randomFloat(0, height);
+        ret.x = edge == Edge::left ? 0.f : (1.f * settings.logicalWidth());
+        ret.y = randomFloat(0, 1.f * settings.logicalHeight());
         break;
     }
+
     return ret;
 }
 
@@ -78,6 +74,8 @@ SDL_Point startingPoint() {
 Parabola FaceSpawnerSystem::spawnPath() const {
     constexpr auto g = 1.f; // TODO: find a reasonable value
     auto p1 = startingPoint();
+    Settings settings;
+    Ellipse comfortRegion{.2f * settings.logicalWidth(), .2f * settings.logicalHeight(), {settings.logicalWidth()/2, settings.logicalHeight()/2}};
     auto p2 = comfortRegion.point(randomTheta());
     auto vy = randomFloat(1.f, 2.f); // TODO: find reasonable values
     auto t2 = (-vy + std::sqrt(vy * vy - 2 * g * (p1.y - p2.y))) / g;
