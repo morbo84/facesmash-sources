@@ -109,11 +109,12 @@ struct UIButton final {
 };
 
 struct Parabola {
+    int x; // x position of the path at time t = 0
+    int y; // y position of the path at time t = 0
+    float vy; // vertical component of velocity at time t = 0
+    float vx; // horizontal component of the velocity at time t = 0
     float g; // sort of _gravitational constant_
-    Transform p1; // position of the path at time t = 0
-    float vy; // vertical component of velocity in P1
-    float vx; // horizontal component of the velocity
-    delta_type t{}; // time elapsed since t = 0
+    UInt16 elapsed{0_ui16}; // time elapsed since t = 0
 };
 
 

@@ -1,23 +1,19 @@
-#include "face_spawner_system.h"
 #include <cmath>
+#include <cassert>
+#include <SDL_rect.h>
+#include "face_spawner_system.h"
 
 
 namespace gamee {
 
 
-struct Point {
-    float x{};
-    float y{};
-};
-
-
 class Ellipse {
     const float a; // horizontal semi-axis length
     const float b; // vertical semi-axis length
-    const Point C; // center of the ellipse
+    const SDL_Point C; // center of the ellipse
 
 public:
-    Ellipse(float a, float b, Point center = {})
+    Ellipse(float a, float b, SDL_Point center = {})
         : a{a}
         , b{b}
         , C{std::move(center)}
@@ -25,9 +21,14 @@ public:
         assert(a != 0.f && b != 0.f);
     }
 
-    Point point(float theta) const {
+    SDL_Point point(float theta) const {
         auto r = (b * b) / (a * (1 - std::cos(theta)));
-        return {r * std::cos(theta) + C.x, r * std::sin(theta) + C.y};
+
+        SDL_Point ret;
+        ret.x = r * std::cos(theta) + C.x;
+        ret.y = r * std::sin(theta) + C.y;
+
+        return ret;
     }
 };
 
@@ -35,7 +36,7 @@ public:
 static const size_t width = 1920U;
 static const size_t height = 1080U;
 static float percent = 0.2f;
-static Ellipse comfortRegion{percent * width, percent * height, {0.5f * width, 0.5f * height}};
+static Ellipse comfortRegion{percent * width, percent * height, {width/2, height/2}};
 
 
 static float randomFloat(float a, float b) {
@@ -55,8 +56,8 @@ enum class Edge {top, left, bottom, right};
 
 
 
-Point startingPoint() {
-    Point ret;
+SDL_Point startingPoint() {
+    SDL_Point ret;
     auto edge = static_cast<Edge>(rand() % 4);
     switch (edge) {
     case Edge::top:
@@ -81,7 +82,7 @@ Parabola FaceSpawnerSystem::spawnPath() const {
     auto vy = randomFloat(1.f, 2.f); // TODO: find reasonable values
     auto t2 = (-vy + std::sqrt(vy * vy - 2 * g * (p1.y - p2.y))) / g;
     auto vx = (p2.x - p1.x) / t2;
-    return {g, {p1.x, p1.y, 0.f}, vx, vy};
+    return {p1.x, p1.y, vx, vy, g};
 }
 
 

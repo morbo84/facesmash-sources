@@ -6,14 +6,13 @@ namespace gamee {
 
 
 void PathUpdaterSystem::update(Registry& registry, delta_type delta) {
-    auto view = registry.view<Parabola, Transform, Renderable>(); // TODO: fill in the spaces...
-    for(auto entityId : view) {
-        auto& prbl = registry.get<Parabola>(entityId);
-        prbl.t += delta;
-        auto& transform = registry.get<Transform>(entityId);
-        transform.x = 0.5f * prbl.g * prbl.t * prbl.t + prbl.vy * prbl.t + prbl.p1.y;
-        transform.y = prbl.vx * prbl.t + prbl.p1.x;
-    }
+    auto view = registry.view<Parabola, Transform>(); // TODO: fill in the spaces...
+
+    view.each([delta](auto, auto &parabola, auto &transform) {
+        parabola.elapsed += delta;
+        transform.x = 0.5f * parabola.g * parabola.elapsed * parabola.elapsed + parabola.vy * parabola.elapsed + parabola.y;
+        transform.y = parabola.vx * parabola.elapsed + parabola.x;
+    });
 }
 
 
