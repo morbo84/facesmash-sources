@@ -4,8 +4,9 @@
 namespace gamee {
 
 
-void SceneMenu::update(GameRenderer &, delta_type) {
-    // TODO
+void SceneMenu::update(GameRenderer &renderer, delta_type) {
+    uiButtonSystem.update(registry);
+    renderingSystem.update(registry, renderer);
 }
 
 
@@ -15,7 +16,7 @@ void SceneMenu::entering() {
 
 
 void SceneMenu::leaving() {
-    // TODO
+    registry.reset();
 }
 
 

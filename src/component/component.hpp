@@ -100,6 +100,15 @@ struct RotationAnimation final {
 };
 
 
+struct UIButton final {
+    enum class Action: UInt8 {
+        PLAY
+    };
+
+    Action action;
+};
+
+
 }
 
 

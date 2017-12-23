@@ -101,8 +101,9 @@ void ProcessSplash::updateBanner(GameRenderer &renderer) {
 
 int ProcessSplash::assets(void *data) {
     auto &renderer = *static_cast<GameRenderer *>(data);
+    auto &textureCache = Locator::TextureCache::ref();
 
-    // TODO
+    textureCache.load<SDLTextureLoader>("ui/buttons", "png/buttons.png", renderer);
 
     return 0;
 }

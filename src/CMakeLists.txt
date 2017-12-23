@@ -15,6 +15,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/settings/settings.cpp
     ${facesmash_SOURCE_DIR}/src/system/fade_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp
