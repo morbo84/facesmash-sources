@@ -1,5 +1,5 @@
-#ifndef PATH_UPDATER_SYSTEM_H
-#define PATH_UPDATER_SYSTEM_H
+#ifndef FACE_SMASH_SYSTEM_PATH_UPDATER_SYSTEM_H
+#define FACE_SMASH_SYSTEM_PATH_UPDATER_SYSTEM_H
 
 
 #include "../types/types.hpp"
@@ -16,4 +16,4 @@ struct PathUpdaterSystem final {
 }
 
 
-#endif // PATH_UPDATER_SYSTEM_H
+#endif // FACE_SMASH_SYSTEM_PATH_UPDATER_SYSTEM_H
