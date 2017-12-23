@@ -27,13 +27,13 @@ SDL_Rect operator *(const Rect &rect, const Pos &pos) {
 
 template<typename Pos>
 Pos operator +(const Pos &lhs, const Pos &rhs) {
-    return Pos{ lhs.x + rhs.x, lhs.y + rhs.y, lhs.z };
+    return Pos{ lhs.x + rhs.x, lhs.y + rhs.y };
 }
 
 
 template<typename Pos>
 Pos operator -(const Pos &lhs, const Pos &rhs) {
-    return Pos{ lhs.x - rhs.x, lhs.y - rhs.y, lhs.z };
+    return Pos{ lhs.x - rhs.x, lhs.y - rhs.y };
 }
 
 

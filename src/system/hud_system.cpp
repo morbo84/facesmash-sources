@@ -51,12 +51,12 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
 
 
 void HudSystem::update(Registry &registry, GameRenderer &renderer) {
-    registry.sort<Transform>([](const auto &lhs, const auto &rhs) {
+    registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
 
     auto view = registry.persistent<Transform, Renderable, HUD>();
-    view.sort<Transform>();
+    view.sort<Renderable>();
 
     view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &hud) {
         SDL_Rect src;

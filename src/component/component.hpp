@@ -47,6 +47,7 @@ struct Sprite final {
 struct Renderable final {
     float angle{0.f};
     float factor{1.f};
+    UInt8 z{127_ui8};
     UInt8 alpha{255_ui8};
     bool flip{false};
 };
@@ -55,14 +56,10 @@ struct Renderable final {
 struct Transform final {
     float x;
     float y;
-    float z;
 };
 
 
-struct Camera final {
-    float x;
-    float y;
-};
+struct Camera final {};
 
 
 struct BoundingBox final: SDL_Rect {

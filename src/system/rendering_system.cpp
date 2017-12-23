@@ -14,14 +14,14 @@ namespace gamee {
 
 
 void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
-    registry.sort<Transform>([](const auto &lhs, const auto &rhs) {
+    registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
 
     const auto &offset = registry.get<Transform>(registry.attachee<Camera>());
     auto view = registry.persistent<Transform, Renderable, Sprite>();
 
-    view.sort<Transform>();
+    view.sort<Renderable>();
 
     Settings settings{};
     SDL_Rect screen;
@@ -63,15 +63,6 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 #endif // DEBUG
         }
     });
-
-#if DEBUG
-    const auto &camera = registry.get<Camera>();
-    SDL_SetRenderDrawColor(renderer, 255_ui8, 255_ui8, 255_ui8, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawLine(renderer, camera.x - 48, camera.y, camera.x + 48, camera.y);
-    SDL_RenderDrawLine(renderer, camera.x - 48, camera.y - 1, camera.x + 48, camera.y - 1);
-    SDL_RenderDrawLine(renderer, camera.x, camera.y - 48, camera.x, camera.y + 48);
-    SDL_RenderDrawLine(renderer, camera.x - 1, camera.y - 48, camera.x - 1, camera.y + 48);
-#endif // DEBUG
 }
 
 
