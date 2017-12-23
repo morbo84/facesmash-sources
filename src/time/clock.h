@@ -12,6 +12,8 @@ struct ClockEvent;
 
 
 struct Clock final {
+    Clock();
+
     void pause() noexcept;
     void unpause() noexcept;
 

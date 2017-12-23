@@ -5,6 +5,13 @@
 namespace gamee {
 
 
+Clock::Clock()
+    : previous{SDL_GetTicks()},
+      gap{0},
+      paused{false}
+{}
+
+
 void Clock::pause() noexcept {
     previous = SDL_GetTicks();
     paused = true;

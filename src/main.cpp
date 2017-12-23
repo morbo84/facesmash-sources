@@ -22,6 +22,10 @@ int main(int , char **) {
     // destroy the loop
     loop.reset();
 
+    // reset cache (and avoid crasches)
+    gamee::Locator::TextureCache::ref().clear();
+    gamee::Locator::TTFFontCache::ref().clear();
+
     // tear down services
     gamee::Locator::InputHandler::reset();
     gamee::Locator::Dispatcher::reset();
