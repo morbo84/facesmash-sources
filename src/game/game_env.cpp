@@ -180,6 +180,10 @@ int GameEnv::exec() noexcept {
         }
     }
 
+    // reset cache (and avoid crasches)
+    Locator::TextureCache::ref().clear();
+    Locator::TTFFontCache::ref().clear();
+
     return static_cast<std::underlying_type_t<ErrorCode>>(errcode);
 }
 

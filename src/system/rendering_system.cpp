@@ -67,8 +67,10 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 #if DEBUG
     const auto &camera = registry.get<Camera>();
     SDL_SetRenderDrawColor(renderer, 255_ui8, 255_ui8, 255_ui8, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawLine(renderer, camera.x - 96, camera.y, camera.x + 96, camera.y);
-    SDL_RenderDrawLine(renderer, camera.x, camera.y - 256, camera.x, camera.y + 256);
+    SDL_RenderDrawLine(renderer, camera.x - 48, camera.y, camera.x + 48, camera.y);
+    SDL_RenderDrawLine(renderer, camera.x - 48, camera.y - 1, camera.x + 48, camera.y - 1);
+    SDL_RenderDrawLine(renderer, camera.x, camera.y - 48, camera.x, camera.y + 48);
+    SDL_RenderDrawLine(renderer, camera.x - 1, camera.y - 48, camera.x - 1, camera.y + 48);
 #endif // DEBUG
 }
 

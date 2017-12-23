@@ -1,4 +1,5 @@
 #include "../component/component.hpp"
+#include "../locator/locator.hpp"
 #include "../settings/settings.h"
 #include "scene_menu.h"
 
@@ -13,13 +14,22 @@ void SceneMenu::update(GameRenderer &renderer, delta_type) {
 
 
 void SceneMenu::entering() {
+    auto &textureCache = Locator::TextureCache::ref();
     Settings settings;
 
-    auto camera = registry.create();
-    registry.assign<Transform>(camera, settings.logicalWidth() / 2.f, settings.logicalHeight() / 2.f, 128.f);
-    registry.attach<Camera>(camera, settings.logicalWidth() / 2.f, settings.logicalHeight() / 2.f);
+    float xC = settings.logicalWidth() / 2.f;
+    float yC = settings.logicalHeight() / 2.f;
 
-    // TODO create ui
+    auto camera = registry.create();
+    registry.assign<Transform>(camera, 0.f, 0.f, 128.f);
+    registry.attach<Camera>(camera, xC, yC);
+
+    auto button = registry.create();
+    registry.assign<Transform>(button, xC - 80, yC - 80, 128.f);
+    registry.assign<Renderable>(button);
+    registry.assign<Sprite>(button, textureCache.handle("ui/buttons"), 160_ui16, 160_ui16, 160_ui16, 160_ui16, 0_ui16, 160_ui16);
+    registry.assign<BoundingBox>(button, 160, 160);
+    registry.assign<UIButton>(button, UIButton::Action::PLAY);
 }
 
 
