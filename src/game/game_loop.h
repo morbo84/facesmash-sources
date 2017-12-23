@@ -16,9 +16,6 @@ struct Scene;
 
 
 class GameLoop final: public GameEnv {
-    void setup() override;
-    void shutdown() override;
-
     void update(GameRenderer &, delta_type) override;
 
 public:

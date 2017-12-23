@@ -21,9 +21,6 @@ class GameEnv {
     virtual void suspend();
     virtual void resume();
 
-    virtual void setup() = 0;
-    virtual void shutdown() = 0;
-
     virtual void update(GameRenderer &, delta_type) = 0;
 
 public:

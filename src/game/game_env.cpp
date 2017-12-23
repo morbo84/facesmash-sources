@@ -142,9 +142,6 @@ int GameEnv::exec() noexcept {
     loop = loop && (errcode == ErrorCode::NONE);
 
     if(loop) {
-        // set up the game
-        setup();
-
         // initialize game times
         delta_type previous = clock.ticks();
 
@@ -181,9 +178,6 @@ int GameEnv::exec() noexcept {
                 clock.delay(previous + msPerFrame - current);
             }
         }
-
-        // tear down the game
-        shutdown();
     }
 
     return static_cast<std::underlying_type_t<ErrorCode>>(errcode);

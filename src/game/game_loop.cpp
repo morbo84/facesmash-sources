@@ -11,19 +11,6 @@
 namespace gamee {
 
 
-void GameLoop::setup() {
-    // TODO load resources
-    // (at least the ones necessary for the first scene)
-}
-
-
-void GameLoop::shutdown() {
-    // TODO unload resources
-
-    current.reset();
-}
-
-
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     renderer.clear();
     current->update(renderer, delta);

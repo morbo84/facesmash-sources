@@ -4,6 +4,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
     ${facesmash_SOURCE_DIR}/src/input/user_input_handler.cpp
+    ${facesmash_SOURCE_DIR}/src/process/process_init.cpp
+    ${facesmash_SOURCE_DIR}/src/process/process_splash.cpp
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_game.cpp

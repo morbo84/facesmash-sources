@@ -12,6 +12,9 @@ struct SceneSplash final: Scene {
     void update(GameRenderer &, delta_type) override;
     void entering() override;
     void leaving() override;
+
+private:
+    Scheduler scheduler;
 };
 
 
