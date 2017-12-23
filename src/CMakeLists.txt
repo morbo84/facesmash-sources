@@ -19,6 +19,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/path_updater_system.cpp
     ${facesmash_SOURCE_DIR}/src/time/clock.cpp
     ${facesmash_SOURCE_DIR}/src/main.cpp
     PARENT_SCOPE
