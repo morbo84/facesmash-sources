@@ -19,19 +19,7 @@ class HudSystem final {
     void update(Registry &, GameRenderer &);
 
 public:
-    HudSystem(TextureCache &, TTFFontCache &) noexcept;
-
-    TextureCache & texture() const noexcept;
-    void texture(TextureCache &) noexcept;
-
-    TTFFontCache & font() const noexcept;
-    void font(TTFFontCache &) noexcept;
-
     void update(Registry &, GameRenderer &, delta_type);
-
-private:
-    TextureCache *textureCache;
-    TTFFontCache *fontCache;
 };
 
 

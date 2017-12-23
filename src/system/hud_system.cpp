@@ -2,8 +2,9 @@
 #include <SDL_ttf.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
-#include "../game/game_renderer.h"
 #include "../component/component.hpp"
+#include "../game/game_renderer.h"
+#include "../locator/locator.hpp"
 #include "../settings/settings.h"
 #include "../math/math.hpp"
 #include "hud_system.h"
@@ -21,7 +22,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
     int height, width;
     UInt16 h, w;
 
-    auto font = fontCache->handle("ttf/constant/36");
+    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
 
     view.each([&](auto, auto &debug) {
         debug.average = (debug.average * .9f) + (delta * .1f);
@@ -33,7 +34,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         TTF_SizeText(font.get(), time.str().c_str(), &width, &height);
         h = height, w = width;
 
-        registry.accomodate<HUD>(debug.time, textureCache->temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg), w, h, w, h);
+        registry.accomodate<HUD>(debug.time, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg), w, h, w, h);
         registry.accomodate<Transform>(debug.time, 150.f, 0.f + settings.logicalHeight() - height);
 
         std::stringstream fps;
@@ -43,7 +44,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         TTF_SizeText(font.get(), fps.str().c_str(), &width, &height);
         h = height, w = width;
 
-        registry.accomodate<HUD>(debug.fps, textureCache->temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg), w, h, w, h);
+        registry.accomodate<HUD>(debug.fps, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg), w, h, w, h);
         registry.accomodate<Transform>(debug.fps, 0.f, 0.f + settings.logicalHeight() - height);    });
 }
 #endif // DEBUG
@@ -84,31 +85,6 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         }
 #endif // DEBUG
     });
-}
-
-
-HudSystem::HudSystem(TextureCache &textureCache, TTFFontCache &fontCache) noexcept
-    : textureCache{&textureCache}, fontCache{&fontCache}
-{}
-
-
-TextureCache & HudSystem::texture() const noexcept {
-    return *textureCache;
-}
-
-
-void HudSystem::texture(TextureCache &cache) noexcept {
-    textureCache = &cache;
-}
-
-
-TTFFontCache & HudSystem::font() const noexcept {
-    return *fontCache;
-}
-
-
-void HudSystem::font(TTFFontCache &cache) noexcept {
-    fontCache = &cache;
 }
 
 

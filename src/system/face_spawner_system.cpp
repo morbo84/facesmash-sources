@@ -85,7 +85,7 @@ Parabola FaceSpawnerSystem::spawnPath() const {
 
 
 void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
-
+    // TODO
 }
 
 

@@ -96,7 +96,17 @@ target_link_libraries(
 # Package
 #
 
-# TODO
+install(
+    DIRECTORY
+        ${facesmash_SOURCE_DIR}/assets/png
+        ${facesmash_SOURCE_DIR}/assets/font
+    DESTINATION ${facesmash_BINARY_DIR}/game
+)
+
+install(
+    TARGETS facesmash
+    DESTINATION ${facesmash_BINARY_DIR}/game
+)
 
 #
 # AOB
