@@ -14,7 +14,7 @@ namespace gamee {
 void ProcessSplash::updateRainbow(GameRenderer &renderer) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto handle = textureCache.handle("splash/rainbow");
+    auto handle = textureCache.handle("logo/rainbow");
     Settings settings;
 
     SDL_Rect orangeSrc{0, 0, 150, 33};
@@ -55,12 +55,10 @@ void ProcessSplash::updateGamee(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto roboto = ttfFontCache.handle("ttf/roboto/regular/108");
     int width, height;
+    TTF_SizeText(*ttfFontCache.handle("ttf/roboto/regular/108"), "GAMEE", &width, &height);
 
-    TTF_SizeText(*roboto, "GAMEE", &width, &height);
-
-    auto texture = textureCache.temp<TTFFontTextureLoader>("GAMEE", renderer, *roboto, SDL_Color{205, 205, 205, 205});
+    auto handle = textureCache.handle("logo/gamee");
     Settings settings;
 
     SDL_Rect dst;
@@ -69,9 +67,9 @@ void ProcessSplash::updateGamee(GameRenderer &renderer) {
     dst.x = settings.logicalWidth() / 2 - width / 2;
     dst.y = settings.logicalHeight() / 2 - 60;
 
-    SDL_SetTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(*texture, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));
-    SDL_RenderCopy(renderer, *texture, nullptr, &dst);
+    SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(*handle, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));
+    SDL_RenderCopy(renderer, *handle, nullptr, &dst);
 }
 
 
@@ -79,12 +77,10 @@ void ProcessSplash::updateBanner(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto roboto = ttfFontCache.handle("ttf/roboto/condensed/48");
     int width, height;
+    TTF_SizeText(*ttfFontCache.handle("ttf/roboto/condensed/48"), "Cynny Game Division", &width, &height);
 
-    TTF_SizeText(*roboto, "Cynny Game Division", &width, &height);
-
-    auto texture = textureCache.temp<TTFFontTextureLoader>("Cynny Game Division", renderer, *roboto, SDL_Color{205, 205, 205, 205});
+    auto texture = textureCache.handle("logo/division");
     Settings settings;
 
     SDL_Rect dst;
@@ -102,8 +98,19 @@ void ProcessSplash::updateBanner(GameRenderer &renderer) {
 int ProcessSplash::assets(void *data) {
     auto &renderer = *static_cast<GameRenderer *>(data);
     auto &textureCache = Locator::TextureCache::ref();
+    auto &fontCache = Locator::TTFFontCache::ref();
+
+    fontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
 
     textureCache.load<SDLTextureLoader>("ui/buttons", "png/buttons.png", renderer);
+
+    textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/happy", "png/happy.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/rested", "png/rested.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer);
 
     return 0;
 }

@@ -9,12 +9,16 @@
 namespace gamee {
 
 
-struct FaceSpawnerSystem final {
+class FaceSpawnerSystem final {
+    static constexpr delta_type interval = 1000;
+
+    Parabola spawnPath() const;
+
+public:
     void update(Registry &, delta_type);
 
-
 private:
-    Parabola spawnPath() const;
+    delta_type elapsed{};
 };
 
 

@@ -31,6 +31,16 @@ void SceneGame::entering() {
     registry.assign<Transform>(camera, 0.f, 0.f);
     registry.attach<Camera>(camera);
 
+#if DEBUG
+    auto fps = registry.create();
+    auto time = registry.create();
+    auto debug = registry.create();
+
+    registry.assign<Renderable>(fps);
+    registry.assign<Renderable>(time);
+    registry.assign<Debug>(debug, fps, time, 0.f);
+#endif // DEBUG
+
     // TODO
 }
 

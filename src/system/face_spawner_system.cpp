@@ -1,6 +1,7 @@
 #include <cmath>
 #include <cassert>
 #include <SDL_rect.h>
+#include "../locator/locator.hpp"
 #include "../settings/settings.h"
 #include "face_spawner_system.h"
 
@@ -85,7 +86,20 @@ Parabola FaceSpawnerSystem::spawnPath() const {
 
 
 void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
-    // TODO
+    elapsed += delta;
+
+    if(elapsed > interval) {
+        auto &textureCache = Locator::TextureCache::ref();
+        auto parabola = spawnPath();
+        auto entity = registry.create();
+
+        registry.assign<Transform>(entity, 1.f * parabola.x, 1.f * parabola.y);
+        registry.assign<Renderable>(entity);
+        registry.assign<Sprite>(entity, textureCache.handle("emoji/happy"), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
+        registry.assign<Parabola>(entity, parabola);
+
+        elapsed = delta_type{};
+    }
 }
 
 
