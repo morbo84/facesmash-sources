@@ -12,10 +12,10 @@ namespace gamee {
 class Ellipse {
     const float a; // horizontal semi-axis length
     const float b; // vertical semi-axis length
-    const SDL_Point C; // center of the ellipse
+    const Transform C; // center of the ellipse
 
 public:
-    Ellipse(float a, float b, SDL_Point center = {})
+    Ellipse(float a, float b, Transform center = {})
         : a{a}
         , b{b}
         , C{std::move(center)}
@@ -23,10 +23,10 @@ public:
         assert(a != 0.f && b != 0.f);
     }
 
-    SDL_Point point(float theta) const {
-        auto r = (b * b) / (a * (1 - std::cos(theta)));
+    Transform point(float theta) const {
+        auto r = (a*b) / (std::sqrt(std::pow((b*std::cos(theta)), 2) + std::pow((a*std::sin(theta)), 2)));
 
-        SDL_Point ret;
+        Transform ret;
         ret.x = r * std::cos(theta) + C.x;
         ret.y = r * std::sin(theta) + C.y;
 
@@ -48,40 +48,54 @@ static float randomTheta() {
 }
 
 
-enum class Edge {top, left, bottom, right};
-
-SDL_Point startingPoint() {
-    SDL_Point ret;
-    auto edge = static_cast<Edge>(rand() % 4);
+Transform startingPoint() {
     Settings settings;
-
-    switch (edge) {
-    case Edge::top:
-    case Edge::bottom:
-        ret.x = randomFloat(0, settings.logicalWidth());
-        ret.y = edge == Edge::top ? 0.f : (1.f * settings.logicalHeight());
-        break;
-    case Edge::left:
-    case Edge::right:
-        ret.x = edge == Edge::left ? 0.f : (1.f * settings.logicalWidth());
-        ret.y = randomFloat(0, 1.f * settings.logicalHeight());
-        break;
-    }
-
-    return ret;
+    float y = settings.logicalHeight();
+    constexpr float range = 200.f;
+    auto x = randomFloat(-range, settings.logicalWidth() + range);
+    return {x, y};
 }
 
 
-Parabola FaceSpawnerSystem::spawnPath() const {
-    constexpr auto g = 1.f; // TODO: find a reasonable value
+std::pair<Transform, Parabola> FaceSpawnerSystem::spawnPath() const {
+    constexpr auto g = 0.001f; // TODO: find a reasonable value
     auto p1 = startingPoint();
     Settings settings;
-    Ellipse comfortRegion{.2f * settings.logicalWidth(), .2f * settings.logicalHeight(), {settings.logicalWidth()/2, settings.logicalHeight()/2}};
+    Ellipse comfortRegion{.2f * settings.logicalWidth(), .2f * settings.logicalHeight(), {.5f * settings.logicalWidth(), .5f * settings.logicalHeight()}};
     auto p2 = comfortRegion.point(randomTheta());
-    auto vy = randomFloat(1.f, 2.f); // TODO: find reasonable values
-    auto t2 = (-vy + std::sqrt(vy * vy - 2 * g * (p1.y - p2.y))) / g;
-    auto vx = (p2.x - p1.x) / t2;
-    return {p1.x, p1.y, vx, vy, g};
+    auto t = randomFloat(750.f, 1500.f); // TODO: find reasonable values
+    auto vx = (p2.x - p1.x) / t;
+    auto vy = -t * g;
+    return {p1, {g, vx, vy}};
+}
+
+
+enum class Emotion {
+    angry, disgusted, happy, rested, surprised, fearful, sad
+};
+
+
+static entt::HashedString emoji() {
+    auto r = rand() % (static_cast<int>(Emotion::sad) + 1);
+    switch (static_cast<Emotion>(r)) {
+    case Emotion::angry:
+        return "emoji/angry";
+    case Emotion::disgusted:
+        return "emoji/disgusted";
+    case Emotion::happy:
+        return "emoji/happy";
+    case Emotion::rested:
+        return "emoji/rested";
+    case Emotion::surprised:
+        return "emoji/surprised";
+    case Emotion::fearful:
+        return "emoji/fearful";
+    case Emotion::sad:
+        return "emoji/sad";
+    default:
+        assert(0);
+        return "emoji/happy";
+    }
 }
 
 
@@ -90,13 +104,13 @@ void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
 
     if(elapsed > interval) {
         auto &textureCache = Locator::TextureCache::ref();
-        auto parabola = spawnPath();
+        auto path = spawnPath();
         auto entity = registry.create();
 
-        registry.assign<Transform>(entity, 1.f * parabola.x, 1.f * parabola.y);
+        registry.assign<Transform>(entity, 1.f * path.first.x, 1.f * path.first.y);
         registry.assign<Renderable>(entity);
-        registry.assign<Sprite>(entity, textureCache.handle("emoji/happy"), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
-        registry.assign<Parabola>(entity, parabola);
+        registry.assign<Sprite>(entity, textureCache.handle(emoji()), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
+        registry.assign<Parabola>(entity, path.second);
 
         elapsed = delta_type{};
     }

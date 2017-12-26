@@ -4,6 +4,7 @@
 
 #include "../types/types.hpp"
 #include "../component/component.hpp"
+#include <utility>
 
 
 namespace gamee {
@@ -12,7 +13,7 @@ namespace gamee {
 class FaceSpawnerSystem final {
     static constexpr delta_type interval = 1000;
 
-    Parabola spawnPath() const;
+    std::pair<Transform, Parabola> spawnPath() const;
 
 public:
     void update(Registry &, delta_type);
