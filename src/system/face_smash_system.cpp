@@ -1,9 +1,9 @@
 #include <SDL_rect.h>
+#include "../common/constants.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
-#include "../settings/settings.h"
 #include "face_smash_system.h"
 
 
@@ -32,15 +32,9 @@ void FaceSmashSystem::receive(const SmashEvent &event) noexcept {
 void FaceSmashSystem::update(Registry &registry, delta_type delta) {
     if(dirty) {
         auto view = registry.view<FaceSmash, Transform, BoundingBox>();
-        Settings settings;
+        const SDL_Rect screen = logicalScreen;
 
-        SDL_Rect scene;
-        scene.x = 0;
-        scene.y = 0;
-        scene.w = settings.logicalWidth();
-        scene.h = settings.logicalHeight();
-
-        view.each([&registry, delta, scene, this](auto entity, const auto &smash, const auto &transform, const auto &box) {
+        view.each([&registry, delta, screen, this](auto entity, const auto &smash, const auto &transform, const auto &box) {
             if(smash.type == type) {
                 // TODO particles
 
@@ -48,7 +42,7 @@ void FaceSmashSystem::update(Registry &registry, delta_type delta) {
             } else {
                 const auto area = transform * box;
 
-                if(!SDL_HasIntersection(&scene, &area)) {
+                if(!SDL_HasIntersection(&screen, &area)) {
                     // TODO miss
                 }
             }

@@ -2,7 +2,7 @@
 #define FACE_SMASH_EVENT_EVENT_HPP
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {

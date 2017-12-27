@@ -2,10 +2,10 @@
 #include <SDL_ttf.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
+#include "../common/constants.h"
 #include "../component/component.hpp"
 #include "../game/game_renderer.h"
 #include "../locator/locator.hpp"
-#include "../settings/settings.h"
 #include "../math/math.hpp"
 #include "hud_system.h"
 
@@ -18,7 +18,6 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
     auto view = registry.view<Debug>();
 
     SDL_Color fg = { 255, 255, 255, 255 };
-    Settings settings;
     int height, width;
     UInt16 h, w;
 
@@ -35,7 +34,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         h = height, w = width;
 
         registry.accomodate<HUD>(debug.time, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg), w, h, w, h);
-        registry.accomodate<Transform>(debug.time, 150.f, 0.f + settings.logicalHeight() - height);
+        registry.accomodate<Transform>(debug.time, 150.f, 0.f + logicalHeight - height);
 
         std::stringstream fps;
         fps.precision(2);
@@ -45,7 +44,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         h = height, w = width;
 
         registry.accomodate<HUD>(debug.fps, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg), w, h, w, h);
-        registry.accomodate<Transform>(debug.fps, 0.f, 0.f + settings.logicalHeight() - height);    });
+        registry.accomodate<Transform>(debug.fps, 0.f, 0.f + logicalHeight - height);    });
 }
 #endif // DEBUG
 

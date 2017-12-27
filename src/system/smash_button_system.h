@@ -3,7 +3,7 @@
 
 
 #include <SDL_rect.h>
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {

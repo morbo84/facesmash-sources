@@ -3,7 +3,7 @@
 #include <SDL_video.h>
 #include <SDL_render.h>
 #include <SDL_pixels.h>
-#include "../settings/settings.h"
+#include "../common/constants.h"
 #include "game_renderer.h"
 
 
@@ -19,16 +19,13 @@ GameRenderer::GameRenderer()
     int init = SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
 
     if(0 == init) {
-        Settings settings;
-        auto w = settings.logicalWidth();
-        auto h = settings.logicalHeight();
         UInt32 format = SDL_GetWindowPixelFormat(window);
 
         if(format == SDL_PIXELFORMAT_UNKNOWN) {
             format = SDL_PIXELFORMAT_RGBA8888;
         }
 
-        SDL_RenderSetLogicalSize(renderer, w, h);
+        SDL_RenderSetLogicalSize(renderer, logicalWidth, logicalHeight);
     }
 }
 

@@ -2,7 +2,7 @@
 #define FACE_SMASH_PROCESS_PROCESS_INIT_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {

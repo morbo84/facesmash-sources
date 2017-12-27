@@ -2,9 +2,9 @@
 #define FACE_SMASH_SCENE_MENU_H
 
 
+#include "../common/types.h"
 #include "../system/ui_button_system.h"
 #include "../system/rendering_system.h"
-#include "../types/types.hpp"
 #include "scene.h"
 
 

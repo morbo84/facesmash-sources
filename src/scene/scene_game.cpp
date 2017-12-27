@@ -1,6 +1,6 @@
+#include "../common/constants.h"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
-#include "../settings/settings.h"
 #include "scene_game.h"
 
 
@@ -20,8 +20,6 @@ void SceneGame::addDebugStuff() {
 
 
 void SceneGame::addSmashButtons() {
-    Settings settings;
-
     auto addButton = [](Registry &registry, SmashType type, TextureCache::resource_type emoji, float x, float y) {
         auto &textureCache = Locator::TextureCache::ref();
         auto button = registry.create();
@@ -33,9 +31,9 @@ void SceneGame::addSmashButtons() {
         registry.assign<BoundingBox>(button, 64, 64);
     };
 
-    const auto x = settings.logicalWidth() - 64 - 16;
+    const auto x = logicalWidth - 64 - 16;
 
-    auto y = (settings.logicalHeight() - 64 * 7 - 32 * 6) / 2;
+    auto y = (logicalHeight - 64 * 7 - 32 * 6) / 2;
     addButton(registry, SmashType::ANGRY, "emoji/angry", x, y);
     y += 64 + 32;
     addButton(registry, SmashType::DISGUSTED, "emoji/disgusted", x, y);

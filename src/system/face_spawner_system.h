@@ -2,7 +2,7 @@
 #define FACE_SMASH_SYSTEM_FACE_SPAWNER_SYSTEM_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 #include "../component/component.hpp"
 #include <utility>
 

@@ -2,7 +2,7 @@
 #define FACE_SMASH_SYSTEM_FADE_ANIMATION_SYSTEM_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {

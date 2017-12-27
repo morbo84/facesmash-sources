@@ -3,8 +3,8 @@
 
 
 #include <entt/locator/locator.hpp>
+#include "../common/types.h"
 #include "../input/input_handler.h"
-#include "../types/types.hpp"
 
 
 namespace gamee {

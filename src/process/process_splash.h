@@ -2,7 +2,7 @@
 #define FACE_SMASH_PROCESS_PROCESS_SPLASH_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 struct SDL_Thread;

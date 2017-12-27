@@ -2,6 +2,7 @@
 #define FACE_SMASH_SCENE_GAME_H
 
 
+#include "../common/types.h"
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
 #include "../system/fade_animation_system.h"
@@ -11,7 +12,6 @@
 #include "../system/rotation_animation_system.h"
 #include "../system/smash_button_system.h"
 #include "../system/sprite_animation_system.h"
-#include "../types/types.hpp"
 #include "scene.h"
 
 

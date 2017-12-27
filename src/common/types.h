@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_TYPES_TYPES_HPP
-#define FACE_SMASH_TYPES_TYPES_HPP
+#ifndef FACE_SMASH_COMMON_TYPES_H
+#define FACE_SMASH_COMMON_TYPES_H
 
 
 #include <cstdint>
@@ -65,4 +65,4 @@ enum SmashType {
 }
 
 
-#endif // FACE_SMASH_TYPES_TYPES_HPP
+#endif // FACE_SMASH_COMMON_TYPES_H

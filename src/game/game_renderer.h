@@ -2,7 +2,7 @@
 #define FACE_SMASH_GAME_GAME_RENDERER_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 struct SDL_Window;

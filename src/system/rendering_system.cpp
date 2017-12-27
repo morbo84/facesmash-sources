@@ -2,11 +2,11 @@
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_pixels.h>
+#include "../common/constants.h"
+#include "../common/types.h"
 #include "../component/component.hpp"
 #include "../game/game_renderer.h"
 #include "../math/math.hpp"
-#include "../settings/settings.h"
-#include "../types/types.hpp"
 #include "rendering_system.h"
 
 
@@ -20,15 +20,9 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 
     const auto &offset = registry.get<Transform>(registry.attachee<Camera>());
     auto view = registry.persistent<Transform, Renderable, Sprite>();
+    const SDL_Rect screen = logicalScreen;
 
     view.sort<Renderable>();
-
-    Settings settings{};
-    SDL_Rect screen;
-    screen.x = 0;
-    screen.y = 0;
-    screen.w = settings.logicalWidth();
-    screen.h = settings.logicalHeight();
 
     view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &sprite) {
         // move objects according to camera position

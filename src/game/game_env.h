@@ -3,8 +3,8 @@
 
 
 #include <memory>
+#include "../common/types.h"
 #include "../time/clock.h"
-#include "../types/types.hpp"
 #include "game_renderer.h"
 
 

@@ -2,7 +2,7 @@
 #define FACE_SMASH_SCENE_SCENE_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {

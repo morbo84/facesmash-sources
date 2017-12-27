@@ -1,8 +1,8 @@
 #include <cmath>
 #include <cassert>
 #include <SDL_rect.h>
+#include "../common/constants.h"
 #include "../locator/locator.hpp"
-#include "../settings/settings.h"
 #include "face_spawner_system.h"
 
 
@@ -49,10 +49,9 @@ static float randomTheta() {
 
 
 Transform startingPoint() {
-    Settings settings;
-    float y = settings.logicalHeight();
+    const float y = logicalHeight;
     constexpr float range = 200.f;
-    auto x = randomFloat(-range, settings.logicalWidth() + range);
+    auto x = randomFloat(-range, logicalWidth + range);
     return {x, y};
 }
 
@@ -60,8 +59,7 @@ Transform startingPoint() {
 std::pair<Transform, Movement> FaceSpawnerSystem::spawnPath() const {
     constexpr auto gravity = 0.001f; // TODO: find a reasonable value
     auto p1 = startingPoint();
-    Settings settings;
-    Ellipse comfortRegion{.2f * settings.logicalWidth(), .2f * settings.logicalHeight(), {.5f * settings.logicalWidth(), .5f * settings.logicalHeight()}};
+    Ellipse comfortRegion{.2f * logicalWidth, .2f * logicalHeight, {.5f * logicalWidth, .5f * logicalHeight}};
     auto p2 = comfortRegion.point(randomTheta());
     auto t = randomFloat(750.f, 1500.f); // TODO: find reasonable values
     auto velX = (p2.x - p1.x) / t;

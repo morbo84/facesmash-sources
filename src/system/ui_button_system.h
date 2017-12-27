@@ -3,8 +3,8 @@
 
 
 #include <SDL_rect.h>
+#include "../common/types.h"
 #include "../event/event.hpp"
-#include "../types/types.hpp"
 
 
 namespace gamee {

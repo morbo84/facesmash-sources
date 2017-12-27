@@ -1,9 +1,9 @@
 #include <SDL.h>
 #include <memory>
+#include "common/types.h"
 #include "game/game_loop.h"
 #include "input/user_input_handler.h"
 #include "locator/locator.hpp"
-#include "types/types.hpp"
 
 
 int main(int , char **) {

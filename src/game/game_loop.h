@@ -3,7 +3,7 @@
 
 
 #include <memory>
-#include "../types/types.hpp"
+#include "../common/types.h"
 #include "game_env.h"
 
 

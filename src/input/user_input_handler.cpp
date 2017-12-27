@@ -1,6 +1,6 @@
 #include <SDL_events.h>
+#include "../common/constants.h"
 #include "../event/event.hpp"
-#include "../settings/settings.h"
 #include "../locator/locator.hpp"
 #include "user_input_handler.h"
 
@@ -34,9 +34,8 @@ void UserInputHandler::mousebutton(const SDL_MouseButtonEvent &event) noexcept {
 
 
 void UserInputHandler::touchfinger(const SDL_TouchFingerEvent &event) noexcept {
-    Settings settings;
-    auto x = event.x * settings.logicalWidth();
-    auto y = event.y * settings.logicalHeight();
+    auto x = event.x * logicalWidth;
+    auto y = event.y * logicalHeight;
     Locator::Dispatcher::ref().enqueue<TouchEvent>(x, y);
 }
 

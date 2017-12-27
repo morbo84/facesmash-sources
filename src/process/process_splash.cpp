@@ -1,10 +1,10 @@
 #include <SDL_rect.h>
 #include <SDL_pixels.h>
 #include <SDL_thread.h>
+#include "../common/constants.h"
 #include "../event/event.hpp"
 #include "../game/game_renderer.h"
 #include "../locator/locator.hpp"
-#include "../settings/settings.h"
 #include "process_splash.h"
 
 
@@ -15,22 +15,21 @@ void ProcessSplash::updateRainbow(GameRenderer &renderer) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto handle = textureCache.handle("logo/rainbow");
-    Settings settings;
 
     SDL_Rect orangeSrc{0, 0, 150, 33};
-    SDL_Rect orangeDst{settings.logicalWidth() / 2 - 200, settings.logicalHeight() / 2 - 60, 80, 20};
+    SDL_Rect orangeDst{logicalWidth / 2 - 200, logicalHeight / 2 - 60, 80, 20};
 
     SDL_Rect yellowSrc{150, 0, 150, 33};
-    SDL_Rect yellowDst{settings.logicalWidth() / 2 - 120, settings.logicalHeight() / 2 - 60, 80, 20};
+    SDL_Rect yellowDst{logicalWidth / 2 - 120, logicalHeight / 2 - 60, 80, 20};
 
     SDL_Rect greenSrc{300, 0, 150, 33};
-    SDL_Rect greenDst{settings.logicalWidth() / 2 - 40, settings.logicalHeight() / 2 - 60, 80, 20};
+    SDL_Rect greenDst{logicalWidth / 2 - 40, logicalHeight / 2 - 60, 80, 20};
 
     SDL_Rect blueSrc{450, 0, 150, 33};
-    SDL_Rect blueDst{settings.logicalWidth() / 2 + 40, settings.logicalHeight() / 2 - 60, 80, 20};
+    SDL_Rect blueDst{logicalWidth / 2 + 40, logicalHeight / 2 - 60, 80, 20};
 
     SDL_Rect purpleSrc{600, 0, 148, 33};
-    SDL_Rect purpleDst{settings.logicalWidth() / 2 + 120, settings.logicalHeight() / 2 - 60, 80, 20};
+    SDL_Rect purpleDst{logicalWidth / 2 + 120, logicalHeight / 2 - 60, 80, 20};
 
     SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
 
@@ -59,13 +58,12 @@ void ProcessSplash::updateGamee(GameRenderer &renderer) {
     TTF_SizeText(*ttfFontCache.handle("ttf/roboto/regular/108"), "GAMEE", &width, &height);
 
     auto handle = textureCache.handle("logo/gamee");
-    Settings settings;
 
     SDL_Rect dst;
     dst.w = width;
     dst.h = height;
-    dst.x = settings.logicalWidth() / 2 - width / 2;
-    dst.y = settings.logicalHeight() / 2 - 60;
+    dst.x = logicalWidth / 2 - width / 2;
+    dst.y = logicalHeight / 2 - 60;
 
     SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(*handle, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));
@@ -81,13 +79,12 @@ void ProcessSplash::updateBanner(GameRenderer &renderer) {
     TTF_SizeText(*ttfFontCache.handle("ttf/roboto/condensed/48"), "Cynny Game Division", &width, &height);
 
     auto texture = textureCache.handle("logo/division");
-    Settings settings;
 
     SDL_Rect dst;
     dst.w = width;
     dst.h = height;
-    dst.x = settings.logicalWidth() / 2 - width / 2;
-    dst.y = settings.logicalHeight() / 2 + 60;
+    dst.x = logicalWidth / 2 - width / 2;
+    dst.y = logicalHeight / 2 + 60;
 
     SDL_SetTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
     SDL_SetTextureAlphaMod(*texture, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));

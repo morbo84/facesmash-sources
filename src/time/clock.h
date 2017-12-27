@@ -2,7 +2,7 @@
 #define FACE_SMASH_TIME_CLOCK_H
 
 
-#include "../types/types.hpp"
+#include "../common/types.h"
 
 
 namespace gamee {
