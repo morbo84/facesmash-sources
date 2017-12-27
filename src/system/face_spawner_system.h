@@ -13,7 +13,7 @@ namespace gamee {
 class FaceSpawnerSystem final {
     static constexpr delta_type interval = 1000;
 
-    std::pair<Transform, Parabola> spawnPath() const;
+    std::pair<Transform, Movement> spawnPath() const;
 
 public:
     void update(Registry &, delta_type);

@@ -57,44 +57,40 @@ Transform startingPoint() {
 }
 
 
-std::pair<Transform, Parabola> FaceSpawnerSystem::spawnPath() const {
-    constexpr auto g = 0.001f; // TODO: find a reasonable value
+std::pair<Transform, Movement> FaceSpawnerSystem::spawnPath() const {
+    constexpr auto gravity = 0.001f; // TODO: find a reasonable value
     auto p1 = startingPoint();
     Settings settings;
     Ellipse comfortRegion{.2f * settings.logicalWidth(), .2f * settings.logicalHeight(), {.5f * settings.logicalWidth(), .5f * settings.logicalHeight()}};
     auto p2 = comfortRegion.point(randomTheta());
     auto t = randomFloat(750.f, 1500.f); // TODO: find reasonable values
-    auto vx = (p2.x - p1.x) / t;
-    auto vy = -t * g;
-    return {p1, {g, vx, vy}};
+    auto velX = (p2.x - p1.x) / t;
+    auto velY = -t * gravity;
+    return {p1, {gravity, velX, velY}};
 }
 
 
-enum class Emotion {
-    angry, disgusted, happy, rested, surprised, fearful, sad
-};
-
-
 static entt::HashedString emoji() {
-    auto r = rand() % (static_cast<int>(Emotion::sad) + 1);
-    switch (static_cast<Emotion>(r)) {
-    case Emotion::angry:
+    auto type = rand() % (SmashType::SAD + 1);
+
+    switch (type) {
+    case SmashType::ANGRY:
         return "emoji/angry";
-    case Emotion::disgusted:
+    case SmashType::DISGUSTED:
         return "emoji/disgusted";
-    case Emotion::happy:
+    case SmashType::HAPPY:
         return "emoji/happy";
-    case Emotion::rested:
+    case SmashType::RESTED:
         return "emoji/rested";
-    case Emotion::surprised:
+    case SmashType::SURPRISED:
         return "emoji/surprised";
-    case Emotion::fearful:
+    case SmashType::FEARFUL:
         return "emoji/fearful";
-    case Emotion::sad:
+    case SmashType::SAD:
         return "emoji/sad";
     default:
-        assert(0);
-        return "emoji/happy";
+        assert(false);
+        (void)0;
     }
 }
 
@@ -110,7 +106,8 @@ void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
         registry.assign<Transform>(entity, 1.f * path.first.x, 1.f * path.first.y);
         registry.assign<Renderable>(entity);
         registry.assign<Sprite>(entity, textureCache.handle(emoji()), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
-        registry.assign<Parabola>(entity, path.second);
+        registry.assign<BoundingBox>(entity, 64_ui16, 64_ui16);
+        registry.assign<Movement>(entity, path.second);
 
         elapsed = delta_type{};
     }

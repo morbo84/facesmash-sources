@@ -16,6 +16,10 @@ struct Debug final {
     entity_type time;
     float average;
 };
+
+struct SmashButton final {
+    SmashType type;
+};
 #endif // DEBUG
 
 
@@ -105,10 +109,18 @@ struct UIButton final {
     Action action;
 };
 
-struct Parabola {
-    float g; // sort of _gravitational constant_
-    float vx; // horizontal component of the velocity
-    float vy; // vertical component of the velocity
+
+struct Movement final {
+    float gravity; // sort of _gravitational constant_
+    float velX; // horizontal component of the velocity
+    float velY; // vertical component of the velocity
+};
+
+
+struct FaceSmash final {
+    SmashType type;
+    UInt8 smash{100_ui8};
+    UInt8 miss{50_ui8};
 };
 
 

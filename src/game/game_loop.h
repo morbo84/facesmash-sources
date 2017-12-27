@@ -26,6 +26,8 @@ public:
 
 private:
     std::unique_ptr<Scene> current;
+    std::unique_ptr<Scene> next;
+    bool dirty;
 };
 
 

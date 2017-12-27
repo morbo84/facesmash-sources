@@ -39,6 +39,11 @@ struct SceneEvent final {
 };
 
 
+struct SmashEvent final {
+    SmashType type;
+};
+
+
 }
 
 

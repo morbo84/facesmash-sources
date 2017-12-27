@@ -13,13 +13,15 @@ set(
     ${facesmash_SOURCE_DIR}/src/scene/scene_null.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_splash.cpp
     ${facesmash_SOURCE_DIR}/src/settings/settings.cpp
+    ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/fade_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/path_updater_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_spawner_system.cpp
     ${facesmash_SOURCE_DIR}/src/time/clock.cpp
     ${facesmash_SOURCE_DIR}/src/main.cpp

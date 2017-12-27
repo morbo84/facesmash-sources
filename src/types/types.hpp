@@ -51,6 +51,17 @@ using Registry = entt::DefaultRegistry;
 using entity_type = typename Registry::entity_type;
 
 
+enum SmashType {
+    ANGRY = 0,
+    DISGUSTED,
+    HAPPY,
+    RESTED,
+    SURPRISED,
+    FEARFUL,
+    SAD
+};
+
+
 }
 
 
