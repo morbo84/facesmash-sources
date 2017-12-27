@@ -22,9 +22,9 @@ void SceneMenu::entering() {
 
     auto button = registry.create();
     registry.assign<Renderable>(button);
-    registry.assign<Transform>(button, logicalWidth / 2.f - 80, logicalHeight / 2.f - 80);
-    registry.assign<Sprite>(button, textureCache.handle("ui/buttons"), 160_ui16, 160_ui16, 160_ui16, 160_ui16, 0_ui16, 160_ui16);
-    registry.assign<BoundingBox>(button, 160, 160);
+    registry.assign<Transform>(button, logicalWidth / 2.f - 64, logicalHeight / 2.f - 64);
+    registry.assign<Sprite>(button, textureCache.handle("emoji/happy"), 128, 128, 128, 128);
+    registry.assign<BoundingBox>(button, 128, 128);
     registry.assign<UIButton>(button, UIButton::Action::PLAY);
 }
 

@@ -26,7 +26,7 @@ void SceneGame::addSmashButtons() {
 
         registry.assign<SmashButton>(button, type);
         registry.assign<Transform>(button, x, y);
-        registry.assign<Sprite>(button, textureCache.handle(emoji), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
+        registry.assign<Sprite>(button, textureCache.handle(emoji), 128, 128, 64, 64);
         registry.assign<Renderable>(button);
         registry.assign<BoundingBox>(button, 64, 64);
     };

@@ -89,8 +89,6 @@ int ProcessSplash::assets(void *data) {
 
     fontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
 
-    textureCache.load<SDLTextureLoader>("ui/buttons", "png/buttons.png", renderer);
-
     textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer);
     textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer);
     textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer);

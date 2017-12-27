@@ -103,8 +103,8 @@ void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
 
         registry.assign<Transform>(entity, 1.f * path.first.x, 1.f * path.first.y);
         registry.assign<Renderable>(entity);
-        registry.assign<Sprite>(entity, textureCache.handle(emoji()), 128_ui16, 128_ui16, 64_ui16, 64_ui16);
-        registry.assign<BoundingBox>(entity, 64_ui16, 64_ui16);
+        registry.assign<Sprite>(entity, textureCache.handle(emoji()), 128, 128, 64, 64);
+        registry.assign<BoundingBox>(entity, 64, 64);
         registry.assign<Movement>(entity, path.second);
 
         elapsed = delta_type{};
