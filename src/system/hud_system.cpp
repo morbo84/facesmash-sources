@@ -17,10 +17,7 @@ namespace gamee {
 void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type delta) {
     auto view = registry.view<Debug>();
 
-    SDL_Color fg = { 255, 255, 255, 255 };
-    int height, width;
-    UInt16 h, w;
-
+    const SDL_Color fg = { 255, 255, 255, 255 };
     auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
 
     view.each([&](auto, auto &debug) {
@@ -30,21 +27,20 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         time.precision(3);
         time << "TIME: " << debug.average;
 
-        TTF_SizeText(font.get(), time.str().c_str(), &width, &height);
-        h = height, w = width;
+        auto timeHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
 
-        registry.accomodate<HUD>(debug.time, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg), w, h, w, h);
-        registry.accomodate<Transform>(debug.time, 150.f, 0.f + logicalHeight - height);
+        registry.accomodate<HUDText>(debug.time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+        registry.accomodate<Transform>(debug.time, 150.f, 0.f + logicalHeight - timeHandle->height());
 
         std::stringstream fps;
         fps.precision(2);
         fps << "FPS: " << (1000.f / debug.average);
 
-        TTF_SizeText(font.get(), fps.str().c_str(), &width, &height);
-        h = height, w = width;
+        auto fpsHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
 
-        registry.accomodate<HUD>(debug.fps, Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg), w, h, w, h);
-        registry.accomodate<Transform>(debug.fps, 0.f, 0.f + logicalHeight - height);    });
+        registry.accomodate<HUDText>(debug.fps, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
+        registry.accomodate<Transform>(debug.fps, 0.f, 0.f + logicalHeight - fpsHandle->height());
+    });
 }
 #endif // DEBUG
 
@@ -54,7 +50,7 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
 
-    auto view = registry.persistent<Transform, Renderable, HUD>();
+    auto view = registry.persistent<Transform, Renderable, HUDText>();
     view.sort<Renderable>();
 
     view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &hud) {

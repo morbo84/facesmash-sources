@@ -51,18 +51,13 @@ void ProcessSplash::updateRainbow(GameRenderer &renderer) {
 
 
 void ProcessSplash::updateGamee(GameRenderer &renderer) {
-    auto &ttfFontCache = Locator::TTFFontCache::ref();
-    auto &textureCache = Locator::TextureCache::ref();
-
-    int width, height;
-    TTF_SizeText(*ttfFontCache.handle("ttf/roboto/regular/108"), "GAMEE", &width, &height);
-
-    auto handle = textureCache.handle("logo/gamee");
+    auto &ttfFontTextureCache = Locator::TTFFontTextureCache::ref();
+    auto handle = ttfFontTextureCache.handle("logo/gamee");
 
     SDL_Rect dst;
-    dst.w = width;
-    dst.h = height;
-    dst.x = logicalWidth / 2 - width / 2;
+    dst.w = handle->width();
+    dst.h = handle->height();
+    dst.x = logicalWidth / 2 - handle->width() / 2;
     dst.y = logicalHeight / 2 - 60;
 
     SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
@@ -72,23 +67,18 @@ void ProcessSplash::updateGamee(GameRenderer &renderer) {
 
 
 void ProcessSplash::updateBanner(GameRenderer &renderer) {
-    auto &ttfFontCache = Locator::TTFFontCache::ref();
-    auto &textureCache = Locator::TextureCache::ref();
-
-    int width, height;
-    TTF_SizeText(*ttfFontCache.handle("ttf/roboto/condensed/48"), "Cynny Game Division", &width, &height);
-
-    auto texture = textureCache.handle("logo/division");
+    auto &ttfFontTextureCache = Locator::TTFFontTextureCache::ref();
+    auto handle = ttfFontTextureCache.handle("logo/division");
 
     SDL_Rect dst;
-    dst.w = width;
-    dst.h = height;
-    dst.x = logicalWidth / 2 - width / 2;
+    dst.w = handle->width();
+    dst.h = handle->height();
+    dst.x = logicalWidth / 2 - handle->width() / 2;
     dst.y = logicalHeight / 2 + 60;
 
-    SDL_SetTextureBlendMode(*texture, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureAlphaMod(*texture, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));
-    SDL_RenderCopy(renderer, *texture, nullptr, &dst);
+    SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(*handle, 255 * (elapsed / logo > 1 ? 1 : (elapsed / logo)));
+    SDL_RenderCopy(renderer, *handle, nullptr, &dst);
 }
 
 

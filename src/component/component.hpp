@@ -23,8 +23,8 @@ struct SmashButton final {
 #endif // DEBUG
 
 
-struct HUD final {
-    SDLTextureHandle handle;
+struct HUDText final {
+    TTFFontTextureHandle handle;
     UInt16 width;
     UInt16 height;
     UInt16 w;

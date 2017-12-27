@@ -21,6 +21,31 @@ TTFFontResource::operator TTF_Font *() const noexcept {
 }
 
 
+TTFFontTextureResource::TTFFontTextureResource(SDL_Texture *texture, int w, int h) noexcept
+    : texture{texture}, w{w}, h{h}
+{}
+
+
+TTFFontTextureResource::~TTFFontTextureResource() noexcept {
+    SDL_DestroyTexture(texture);
+}
+
+
+TTFFontTextureResource::operator SDL_Texture *() const noexcept {
+    return texture;
+}
+
+
+int TTFFontTextureResource::width() const noexcept {
+    return w;
+}
+
+
+int TTFFontTextureResource::height() const noexcept {
+    return h;
+}
+
+
 std::shared_ptr<TTFFontResource> TTFFontLoader::load(const char *res, int pt) const {
     std::shared_ptr<TTFFontResource> ret;
     TTF_Font *font = TTF_OpenFont(res, pt);
@@ -33,8 +58,8 @@ std::shared_ptr<TTFFontResource> TTFFontLoader::load(const char *res, int pt) co
 }
 
 
-std::shared_ptr<SDLTextureResource> TTFFontTextureLoader::load(const char *text, SDL_Renderer *renderer, TTF_Font *font, SDL_Color fg) const {
-    std::shared_ptr<SDLTextureResource> ret;
+std::shared_ptr<TTFFontTextureResource> TTFFontTextureLoader::load(const char *text, SDL_Renderer *renderer, TTF_Font *font, SDL_Color fg) const {
+    std::shared_ptr<TTFFontTextureResource> ret;
     SDL_Surface *surface = TTF_RenderText_Blended(font, text, fg);
 
     if(surface) {
@@ -42,7 +67,9 @@ std::shared_ptr<SDLTextureResource> TTFFontTextureLoader::load(const char *text,
         SDL_FreeSurface(surface);
 
         if(texture) {
-            ret = std::make_shared<SDLTextureResource>(texture);
+            int width, height;
+            TTF_SizeText(font, text, &width, &height);
+            ret = std::make_shared<TTFFontTextureResource>(texture, width, height);
         }
     }
 
