@@ -23,7 +23,7 @@ struct SmashButton final {
 #endif // DEBUG
 
 
-struct HUDText final {
+struct HUD final {
     TTFFontTextureHandle handle;
     int width;
     int height;

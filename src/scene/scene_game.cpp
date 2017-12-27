@@ -81,8 +81,8 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
 
 void SceneGame::entering() {
     auto camera = registry.create();
-    registry.assign<Transform>(camera, 0.f, 0.f);
     registry.attach<Camera>(camera);
+    registry.assign<Transform>(camera, 0.f, 0.f);
 
 #if DEBUG
     addDebugStuff();

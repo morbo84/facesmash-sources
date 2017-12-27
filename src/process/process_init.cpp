@@ -20,6 +20,7 @@ void ProcessInit::update(delta_type, void *data) {
     ttfFontTextureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), SDL_Color{205, 205, 205, 205});
 
     textureCache.load<SDLTextureLoader>("logo/rainbow", "png/rainbow.png", renderer);
+    textureCache.load<SDLTextureLoader>("game/explosion", "png/explosion.png", renderer);
 
     succeed();
 }

@@ -88,6 +88,7 @@ int ProcessSplash::assets(void *data) {
     auto &fontCache = Locator::TTFFontCache::ref();
 
     fontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
+    fontCache.load<TTFFontLoader>("ttf/constant/54", "font/one_constant.ttf", 54);
 
     textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer);
     textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer);

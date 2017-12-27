@@ -13,6 +13,8 @@ namespace gamee {
 
 
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
+    renderer.clear();
+
     if(dirty) {
         current->leaving();
         current.swap(next);
@@ -21,7 +23,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         dirty = false;
     }
 
-    renderer.clear();
     current->update(renderer, delta);
     renderer.present();
 }

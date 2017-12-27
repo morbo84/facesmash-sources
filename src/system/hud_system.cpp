@@ -29,7 +29,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
 
         auto timeHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
 
-        registry.accomodate<HUDText>(debug.time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+        registry.accomodate<HUD>(debug.time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
         registry.accomodate<Transform>(debug.time, 150.f, 0.f + logicalHeight - timeHandle->height());
 
         std::stringstream fps;
@@ -38,7 +38,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
 
         auto fpsHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
 
-        registry.accomodate<HUDText>(debug.fps, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
+        registry.accomodate<HUD>(debug.fps, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
         registry.accomodate<Transform>(debug.fps, 0.f, 0.f + logicalHeight - fpsHandle->height());
     });
 }
@@ -50,7 +50,7 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
 
-    auto view = registry.persistent<Transform, Renderable, HUDText>();
+    auto view = registry.persistent<Transform, Renderable, HUD>();
     view.sort<Renderable>();
 
     view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &hud) {

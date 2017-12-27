@@ -68,24 +68,38 @@ std::pair<Transform, Movement> FaceSpawnerSystem::spawnPath() const {
 }
 
 
-static entt::HashedString emoji() {
+static void assignEmoji(Registry &registry, entity_type entity) {
     auto type = rand() % (SmashType::SAD + 1);
+
+    auto assign = [&registry, entity](TextureCache::resource_type resource, SmashType type) {
+        auto &textureCache = Locator::TextureCache::ref();
+        registry.assign<Sprite>(entity, textureCache.handle(resource), 128, 128, 128, 128);
+        registry.assign<BoundingBox>(entity, 128, 128);
+        registry.assign<FaceSmash>(entity, type);
+    };
 
     switch (type) {
     case SmashType::ANGRY:
-        return "emoji/angry";
+        assign("emoji/angry", SmashType::ANGRY);
+        break;
     case SmashType::DISGUSTED:
-        return "emoji/disgusted";
+        assign("emoji/disgusted", SmashType::DISGUSTED);
+        break;
     case SmashType::HAPPY:
-        return "emoji/happy";
+        assign("emoji/happy", SmashType::HAPPY);
+        break;
     case SmashType::RESTED:
-        return "emoji/rested";
+        assign("emoji/rested", SmashType::RESTED);
+        break;
     case SmashType::SURPRISED:
-        return "emoji/surprised";
+        assign("emoji/surprised", SmashType::SURPRISED);
+        break;
     case SmashType::FEARFUL:
-        return "emoji/fearful";
+        assign("emoji/fearful", SmashType::FEARFUL);
+        break;
     case SmashType::SAD:
-        return "emoji/sad";
+        assign("emoji/sad", SmashType::SAD);
+        break;
     default:
         assert(false);
         (void)0;
@@ -97,14 +111,13 @@ void FaceSpawnerSystem::update(Registry& registry, delta_type delta) {
     elapsed += delta;
 
     if(elapsed > interval) {
-        auto &textureCache = Locator::TextureCache::ref();
         auto path = spawnPath();
         auto entity = registry.create();
 
+        assignEmoji(registry, entity);
+
         registry.assign<Transform>(entity, 1.f * path.first.x, 1.f * path.first.y);
         registry.assign<Renderable>(entity);
-        registry.assign<Sprite>(entity, textureCache.handle(emoji()), 128, 128, 64, 64);
-        registry.assign<BoundingBox>(entity, 64, 64);
         registry.assign<Movement>(entity, path.second);
 
         elapsed = delta_type{};
