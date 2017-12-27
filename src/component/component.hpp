@@ -25,23 +25,23 @@ struct SmashButton final {
 
 struct HUDText final {
     TTFFontTextureHandle handle;
-    UInt16 width;
-    UInt16 height;
-    UInt16 w;
-    UInt16 h;
-    UInt16 x{0_ui16};
-    UInt16 y{0_ui16};
+    int width;
+    int height;
+    int w;
+    int h;
+    int x{0};
+    int y{0};
 };
 
 
 struct Sprite final {
     SDLTextureHandle handle;
-    UInt16 width;
-    UInt16 height;
-    UInt16 w;
-    UInt16 h;
-    UInt16 x{0_ui16};
-    UInt16 y{0_ui16};
+    int width;
+    int height;
+    int w;
+    int h;
+    int x{0};
+    int y{0};
     UInt8 frames{1_ui8};
     UInt8 frame{0_ui8};
     bool horizontal{true};
@@ -51,8 +51,8 @@ struct Sprite final {
 struct Renderable final {
     float angle{0.f};
     float factor{1.f};
-    UInt8 z{127_ui8};
-    UInt8 alpha{255_ui8};
+    int z{127};
+    int alpha{255};
     bool flip{false};
 };
 
@@ -78,25 +78,25 @@ struct BoundingBox final: SDL_Rect {
 
 
 struct SpriteAnimation final {
-    UInt16 duration;
-    UInt16 elapsed{0_ui16};
+    delta_type duration;
+    delta_type elapsed{0_ui32};
     bool repeat{true};
 };
 
 
 struct FadeAnimation final {
-    UInt8 from;
-    UInt8 to;
-    UInt16 duration;
-    UInt16 elapsed{0_ui16};
+    int from;
+    int to;
+    delta_type duration;
+    delta_type elapsed{0_ui32};
 };
 
 
 struct RotationAnimation final {
     float from;
     float to;
-    UInt16 duration;
-    UInt16 elapsed{0_ui16};
+    delta_type duration;
+    delta_type elapsed{0_ui32};
     bool repeat{true};
 };
 

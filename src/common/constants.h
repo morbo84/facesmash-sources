@@ -9,8 +9,8 @@
 namespace gamee {
 
 
-constexpr UInt16 logicalWidth = 1080;
-constexpr UInt16 logicalHeight = 1920;
+constexpr int logicalWidth = 1080;
+constexpr int logicalHeight = 1920;
 constexpr SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 
 
