@@ -8,14 +8,14 @@
 namespace gamee {
 
 
-struct SmashEvent;
+struct FaceSmashEvent;
 
 
 struct FaceSmashSystem final {
     FaceSmashSystem();
     ~FaceSmashSystem();
 
-    void receive(const SmashEvent &) noexcept;
+    void receive(const FaceSmashEvent &) noexcept;
 
     void update(Registry &, delta_type);
 

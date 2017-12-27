@@ -43,8 +43,8 @@ struct Sprite final {
     int x{0};
     int y{0};
     UInt8 frames{1_ui8};
+    UInt8 line{1_ui8};
     UInt8 frame{0_ui8};
-    bool horizontal{true};
 };
 
 
@@ -121,6 +121,12 @@ struct FaceSmash final {
     SmashType type;
     UInt8 smash{100_ui8};
     UInt8 miss{50_ui8};
+};
+
+
+struct DestroyLater final {
+    delta_type delay;
+    delta_type elapsed{0_ui32};
 };
 
 

@@ -14,16 +14,16 @@ FaceSmashSystem::FaceSmashSystem()
     : type{SmashType::HAPPY},
       dirty{false}
 {
-    Locator::Dispatcher::ref().connect<SmashEvent>(this);
+    Locator::Dispatcher::ref().connect<FaceSmashEvent>(this);
 }
 
 
 FaceSmashSystem::~FaceSmashSystem() {
-    Locator::Dispatcher::ref().disconnect<SmashEvent>(this);
+    Locator::Dispatcher::ref().disconnect<FaceSmashEvent>(this);
 }
 
 
-void FaceSmashSystem::receive(const SmashEvent &event) noexcept {
+void FaceSmashSystem::receive(const FaceSmashEvent &event) noexcept {
     type = event.type;
     dirty = true;
 }
@@ -44,6 +44,8 @@ void FaceSmashSystem::update(Registry &registry, delta_type delta) {
 
                 if(!SDL_HasIntersection(&screen, &area)) {
                     // TODO miss
+
+                    Locator::Dispatcher::ref().enqueue<FaceMissEvent>();
                 }
             }
         });

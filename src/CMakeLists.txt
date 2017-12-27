@@ -12,6 +12,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/scene/scene_menu.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_null.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_splash.cpp
+    ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/fade_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp

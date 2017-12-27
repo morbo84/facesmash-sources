@@ -39,9 +39,12 @@ struct SceneEvent final {
 };
 
 
-struct SmashEvent final {
+struct FaceSmashEvent final {
     SmashType type;
 };
+
+
+struct FaceMissEvent final {};
 
 
 }

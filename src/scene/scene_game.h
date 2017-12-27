@@ -3,6 +3,7 @@
 
 
 #include "../common/types.h"
+#include "../system/destroy_later_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
 #include "../system/fade_animation_system.h"
@@ -37,6 +38,7 @@ private:
     // entity-component system
     Registry registry;
     // systems
+    DestroyLaterSystem destroyLaterSystem;
     FaceSmashSystem faceSmashSystem;
     FaceSpawnerSystem faceSpawnerSystem;
     FadeAnimationSystem fadeAnimationSystem;

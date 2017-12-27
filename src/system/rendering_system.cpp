@@ -31,10 +31,12 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
         SDL_Rect src;
         SDL_Rect dst;
 
+        const auto pos = sprite.frame % sprite.line;
+
         src.w = sprite.width;
         src.h = sprite.height;
-        src.x = sprite.x + (sprite.horizontal ? (src.w * sprite.frame) : 0);
-        src.y = sprite.y + (sprite.horizontal ? 0 : (src.h * sprite.frame));
+        src.x = sprite.x + src.w * pos;
+        src.y = sprite.y + src.h * (sprite.frame - pos) / sprite.line;
 
         dst.w = sprite.w;
         dst.h = sprite.h;

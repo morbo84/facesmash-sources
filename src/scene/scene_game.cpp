@@ -59,7 +59,9 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
     smashButtonSystem.update(registry);
 #endif // DEBUG
 
+    destroyLaterSystem.update(registry, delta);
     faceSmashSystem.update(registry, delta);
+    faceSpawnerSystem.update(registry, delta);
 
     // invoke systems at 50 fps (but for rendering and few other systems)
     while(accumulator >= msPerUpdate) {
@@ -71,7 +73,6 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
     fadeAnimationSystem.update(registry, delta);
     rotationAnimationSystem.update(registry, delta);
     spriteAnimationSystem.update(registry, delta);
-    faceSpawnerSystem.update(registry, delta);
 
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);
