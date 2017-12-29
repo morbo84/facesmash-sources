@@ -21,7 +21,7 @@ public:
 
     void receive(const FaceSmashEvent &) noexcept;
 
-    void update(Registry &, delta_type);
+    void update(Registry &);
 
 private:
     SmashType type;

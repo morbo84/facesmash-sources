@@ -9,13 +9,8 @@ namespace gamee {
 
 #ifdef DEBUG
 void SceneGame::addDebugStuff() {
-    auto fps = registry.create();
-    auto time = registry.create();
-    auto debug = registry.create();
-
-    registry.assign<Renderable>(fps);
-    registry.assign<Renderable>(time);
-    registry.assign<Debug>(debug, fps, time, 0.f);
+    registry.attach<TimeDebug>(registry.create<Renderable>(), 0.f);
+    registry.attach<FPSDebug>(registry.create<Renderable>());
 }
 
 
@@ -61,7 +56,7 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
 #endif // DEBUG
 
     destroyLaterSystem.update(registry, delta);
-    faceSmashSystem.update(registry, delta);
+    faceSmashSystem.update(registry);
     faceSpawnerSystem.update(registry, delta);
 
     // invoke systems at 50 fps (but for rendering and few other systems)

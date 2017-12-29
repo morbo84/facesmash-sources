@@ -48,10 +48,12 @@ void FaceSmashSystem::receive(const FaceSmashEvent &event) noexcept {
 }
 
 
-void FaceSmashSystem::update(Registry &registry, delta_type delta) {
+void FaceSmashSystem::update(Registry &registry) {
     auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
     auto &textureCache = Locator::TextureCache::ref();
     const SDL_Rect screen = logicalScreen;
+
+    ScoreEvent event{ 0, 0_ui16, 0_ui16 };
 
     view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
         const auto area = transform * box;
@@ -71,6 +73,9 @@ void FaceSmashSystem::update(Registry &registry, delta_type delta) {
                 // TODO other scores ...
             }
 
+            event.score -= smash.miss;
+            ++event.miss;
+
             registry.destroy(entity);
         } else if(dirty && smash.type == type) {
             auto explosion = registry.create();
@@ -87,9 +92,16 @@ void FaceSmashSystem::update(Registry &registry, delta_type delta) {
                 // TODO other scores ...
             }
 
+            event.score += smash.smash;
+            ++event.smash;
+
             registry.destroy(entity);
         }
     });
+
+    if(event.miss || event.smash) {
+        Locator::Dispatcher::ref().enqueue<ScoreEvent>(event);
+    }
 
     dirty = false;
 }

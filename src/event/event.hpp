@@ -44,6 +44,13 @@ struct FaceSmashEvent final {
 };
 
 
+struct ScoreEvent final {
+    int score;
+    UInt16 smash;
+    UInt16 miss;
+};
+
+
 }
 
 

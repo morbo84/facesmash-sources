@@ -11,11 +11,8 @@ namespace gamee {
 
 
 #if DEBUG
-struct Debug final {
-    entity_type fps;
-    entity_type time;
-    float average;
-};
+struct TimeDebug final { float average; };
+struct FPSDebug final {};
 
 struct SmashButton final {
     SmashType type;
