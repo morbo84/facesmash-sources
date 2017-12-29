@@ -2,6 +2,7 @@
 #define FACE_SMASH_SYSTEM_FACE_SMASH_SYSTEM_H
 
 
+#include <SDL_rect.h>
 #include "../common/types.h"
 
 
@@ -11,7 +12,10 @@ namespace gamee {
 struct FaceSmashEvent;
 
 
-struct FaceSmashSystem final {
+class FaceSmashSystem final {
+    void addScore(Registry &, SDLTextureHandle, SDL_Point);
+
+public:
     FaceSmashSystem();
     ~FaceSmashSystem();
 

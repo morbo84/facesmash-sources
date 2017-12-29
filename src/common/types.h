@@ -44,7 +44,6 @@ using Process = entt::Process<Derived, delta_type>;
 using Scheduler = entt::Scheduler<delta_type>;
 using TextureCache = entt::ResourceCache<SDLTextureResource>;
 using TTFFontCache = entt::ResourceCache<TTFFontResource>;
-using TTFFontTextureCache = entt::ResourceCache<TTFFontTextureResource>;
 using Dispatcher = entt::UnmanagedDispatcher;
 using Registry = entt::DefaultRegistry;
 

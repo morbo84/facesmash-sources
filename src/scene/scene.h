@@ -12,6 +12,8 @@ class GameRenderer;
 
 
 struct Scene {
+    virtual ~Scene() = default;
+
     virtual void update(GameRenderer &, delta_type) = 0;
     virtual void entering() = 0;
     virtual void leaving() = 0;

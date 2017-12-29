@@ -13,7 +13,8 @@ void RotationAnimationSystem::update(Registry &registry, delta_type delta) {
 
         if(animation.elapsed < animation.duration || animation.repeat) {
             animation.elapsed %= animation.duration;
-            renderable.angle = animation.from + (animation.elapsed * (animation.to - animation.from)) / animation.duration;
+            const float mul = 1.f * animation.elapsed / animation.duration;
+            renderable.angle = animation.from + (mul * (animation.to - animation.from));
         } else {
             renderable.angle = animation.to;
             registry.remove<RotationAnimation>(entity);

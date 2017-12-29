@@ -73,7 +73,8 @@ static void assignEmoji(Registry &registry, entity_type entity) {
 
     auto assign = [&registry, entity](TextureCache::resource_type resource, SmashType type) {
         auto &textureCache = Locator::TextureCache::ref();
-        registry.assign<Sprite>(entity, textureCache.handle(resource), 128, 128, 128, 128);
+        auto handle = textureCache.handle(resource);
+        registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), 128, 128);
         registry.assign<BoundingBox>(entity, 128, 128);
         registry.assign<FaceSmash>(entity, type);
     };

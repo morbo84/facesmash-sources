@@ -23,29 +23,30 @@ void SceneGame::addSmashButtons() {
     auto addButton = [](Registry &registry, SmashType type, TextureCache::resource_type emoji, float x, float y) {
         auto &textureCache = Locator::TextureCache::ref();
         auto button = registry.create();
+        auto handle = textureCache.handle(emoji);
 
         registry.assign<SmashButton>(button, type);
         registry.assign<Transform>(button, x, y);
-        registry.assign<Sprite>(button, textureCache.handle(emoji), 128, 128, 64, 64);
+        registry.assign<Sprite>(button, handle, handle->width(), handle->height(), 96, 96);
         registry.assign<Renderable>(button);
-        registry.assign<BoundingBox>(button, 64, 64);
+        registry.assign<BoundingBox>(button, 96, 96);
     };
 
-    const auto x = logicalWidth - 64 - 16;
+    const auto x = logicalWidth - 96 - 16;
 
-    auto y = (logicalHeight - 64 * 7 - 32 * 6) / 2;
+    auto y = (logicalHeight - 96 * 7 - 32 * 6) / 2;
     addButton(registry, SmashType::ANGRY, "emoji/angry", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::DISGUSTED, "emoji/disgusted", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::HAPPY, "emoji/happy", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::RESTED, "emoji/rested", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::SURPRISED, "emoji/surprised", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::FEARFUL, "emoji/fearful", x, y);
-    y += 64 + 32;
+    y += 96 + 32;
     addButton(registry, SmashType::SAD, "emoji/sad", x, y);
 }
 #endif // DEBUG

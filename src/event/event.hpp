@@ -44,9 +44,6 @@ struct FaceSmashEvent final {
 };
 
 
-struct FaceMissEvent final {};
-
-
 }
 
 

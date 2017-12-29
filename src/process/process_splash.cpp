@@ -51,13 +51,12 @@ void ProcessSplash::updateRainbow(GameRenderer &renderer) {
 
 
 void ProcessSplash::updateGamee(GameRenderer &renderer) {
-    auto &ttfFontTextureCache = Locator::TTFFontTextureCache::ref();
-    auto handle = ttfFontTextureCache.handle("logo/gamee");
+    auto handle = Locator::TextureCache::ref().handle("logo/gamee");
 
     SDL_Rect dst;
     dst.w = handle->width();
     dst.h = handle->height();
-    dst.x = logicalWidth / 2 - handle->width() / 2;
+    dst.x = logicalWidth / 2 - dst.w / 2;
     dst.y = logicalHeight / 2 - 60;
 
     SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
@@ -67,13 +66,12 @@ void ProcessSplash::updateGamee(GameRenderer &renderer) {
 
 
 void ProcessSplash::updateBanner(GameRenderer &renderer) {
-    auto &ttfFontTextureCache = Locator::TTFFontTextureCache::ref();
-    auto handle = ttfFontTextureCache.handle("logo/division");
+    auto handle = Locator::TextureCache::ref().handle("logo/division");
 
     SDL_Rect dst;
     dst.w = handle->width();
     dst.h = handle->height();
-    dst.x = logicalWidth / 2 - handle->width() / 2;
+    dst.x = logicalWidth / 2 - dst.w / 2;
     dst.y = logicalHeight / 2 + 60;
 
     SDL_SetTextureBlendMode(*handle, SDL_BLENDMODE_BLEND);
@@ -85,18 +83,24 @@ void ProcessSplash::updateBanner(GameRenderer &renderer) {
 int ProcessSplash::assets(void *data) {
     auto &renderer = *static_cast<GameRenderer *>(data);
     auto &textureCache = Locator::TextureCache::ref();
-    auto &fontCache = Locator::TTFFontCache::ref();
+    auto &ttfFontCache = Locator::TTFFontCache::ref();
 
-    fontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
-    fontCache.load<TTFFontLoader>("ttf/constant/54", "font/one_constant.ttf", 54);
+    ttfFontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
+    ttfFontCache.load<TTFFontLoader>("ttf/constant/72", "font/one_constant.ttf", 72);
 
-    textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/happy", "png/happy.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/rested", "png/rested.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer);
-    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer);
+    textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/happy", "png/happy.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/rested", "png/rested.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer, 128, 128);
+
+    const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
+    const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
+
+    textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
+    textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
 
     return 0;
 }

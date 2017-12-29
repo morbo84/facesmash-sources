@@ -1,5 +1,4 @@
 #include <sstream>
-#include <SDL_ttf.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include "../common/constants.h"
@@ -27,8 +26,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         time.precision(3);
         time << "TIME: " << debug.average;
 
-        auto timeHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
-
+        auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
         registry.accomodate<HUD>(debug.time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
         registry.accomodate<Transform>(debug.time, 150.f, 0.f + logicalHeight - timeHandle->height());
 
@@ -36,8 +34,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
         fps.precision(2);
         fps << "FPS: " << (1000.f / debug.average);
 
-        auto fpsHandle = Locator::TTFFontTextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
-
+        auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
         registry.accomodate<HUD>(debug.fps, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
         registry.accomodate<Transform>(debug.fps, 0.f, 0.f + logicalHeight - fpsHandle->height());
     });

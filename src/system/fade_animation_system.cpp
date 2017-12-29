@@ -12,7 +12,8 @@ void FadeAnimationSystem::update(Registry &registry, delta_type delta) {
         animation.elapsed += delta;
 
         if(animation.elapsed < animation.duration) {
-            renderable.alpha = animation.from + (animation.elapsed * (animation.to - animation.from)) / animation.duration;
+            const float mul = 1.f * animation.elapsed / animation.duration;
+            renderable.alpha = animation.from + (mul * (animation.to - animation.from));
         } else {
             renderable.alpha = animation.to;
             registry.remove<FadeAnimation>(entity);

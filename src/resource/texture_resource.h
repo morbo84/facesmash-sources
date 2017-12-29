@@ -27,13 +27,21 @@ struct SDLTextureResource final {
 
     operator SDL_Texture *() const noexcept;
 
+    int width() const noexcept;
+    int height() const noexcept;
+
+    void width(int) noexcept;
+    void height(int) noexcept;
+
 private:
     SDL_Texture *texture;
+    int w;
+    int h;
 };
 
 
 struct SDLTextureLoader final: public entt::ResourceLoader<SDLTextureLoader, SDLTextureResource> {
-    std::shared_ptr<SDLTextureResource> load(const char *, SDL_Renderer *) const;
+    std::shared_ptr<SDLTextureResource> load(const char *, SDL_Renderer *, int, int) const;
 };
 
 

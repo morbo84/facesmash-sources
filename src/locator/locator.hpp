@@ -12,7 +12,6 @@ namespace gamee {
 
 struct Locator final {
     using TTFFontCache = entt::ServiceLocator<gamee::TTFFontCache>;
-    using TTFFontTextureCache = entt::ServiceLocator<gamee::TTFFontTextureCache>;
     using TextureCache = entt::ServiceLocator<gamee::TextureCache>;
     using Dispatcher = entt::ServiceLocator<gamee::Dispatcher>;
     using InputHandler = entt::ServiceLocator<gamee::InputHandler>;

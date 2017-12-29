@@ -9,7 +9,6 @@
 int main(int , char **) {
     // set up services
     gamee::Locator::TTFFontCache::set();
-    gamee::Locator::TTFFontTextureCache::set();
     gamee::Locator::TextureCache::set();
     gamee::Locator::Dispatcher::set();
     gamee::Locator::InputHandler::set<gamee::UserInputHandler>();
@@ -27,7 +26,6 @@ int main(int , char **) {
     gamee::Locator::InputHandler::reset();
     gamee::Locator::Dispatcher::reset();
     gamee::Locator::TextureCache::reset();
-    gamee::Locator::TTFFontTextureCache::reset();
     gamee::Locator::TTFFontCache::reset();
 
     // bye bye, have a nice day
