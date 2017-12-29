@@ -87,6 +87,7 @@ int ProcessSplash::assets(void *data) {
 
     ttfFontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
     ttfFontCache.load<TTFFontLoader>("ttf/constant/72", "font/one_constant.ttf", 72);
+    ttfFontCache.load<TTFFontLoader>("ttf/constant/90", "font/one_constant.ttf", 90);
 
     textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer, 128, 128);
@@ -101,6 +102,12 @@ int ProcessSplash::assets(void *data) {
 
     textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
     textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
+
+    const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
+
+    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/smash", "SMASH:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/miss", "MISS:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
 
     return 0;
 }

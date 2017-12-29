@@ -11,6 +11,7 @@
 #include "../system/movement_system.h"
 #include "../system/rendering_system.h"
 #include "../system/rotation_animation_system.h"
+#include "../system/score_system.h"
 #include "../system/smash_button_system.h"
 #include "../system/sprite_animation_system.h"
 #include "scene.h"
@@ -26,6 +27,10 @@ class SceneGame final: public Scene {
     void addDebugStuff();
     void addSmashButtons();
 #endif // DEBUG
+
+    void addHUDScore();
+    void addHUDSmash();
+    void addHUDMiss();
 
 public:
     void update(GameRenderer &, delta_type) override;
@@ -46,6 +51,7 @@ private:
     MovementSystem movementSystem;
     RenderingSystem renderingSystem;
     RotationAnimationSystem rotationAnimationSystem;
+    ScoreSystem scoreSystem;
     SpriteAnimationSystem spriteAnimationSystem;
 
 #if DEBUG

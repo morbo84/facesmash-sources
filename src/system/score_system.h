@@ -9,6 +9,7 @@ namespace gamee {
 
 
 struct ScoreEvent;
+struct GameRenderer;
 
 
 struct ScoreSystem final {
@@ -17,7 +18,10 @@ struct ScoreSystem final {
 
     void receive(const ScoreEvent &) noexcept;
 
-    void update(Registry &);
+    void update(Registry &, GameRenderer &);
+
+private:
+    int score;
 };
 
 

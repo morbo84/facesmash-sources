@@ -47,6 +47,20 @@ void SceneGame::addSmashButtons() {
 #endif // DEBUG
 
 
+void SceneGame::addHUDScore() {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto label = registry.create<Renderable>();
+    auto handle = textureCache.handle("hud/score");
+    registry.assign<HUD>(label, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(label, 32.f, 32.f);
+
+    auto score = registry.create<Renderable>();
+    registry.attach<HUDScore>(score);
+    registry.assign<Transform>(score, 32.f + handle->width() + 16.f, 32.f);
+}
+
+
 void SceneGame::update(GameRenderer &renderer, delta_type delta) {
     // sum what remains from the previous step
     accumulator += delta;
@@ -70,6 +84,8 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
     rotationAnimationSystem.update(registry, delta);
     spriteAnimationSystem.update(registry, delta);
 
+    scoreSystem.update(registry, renderer);
+
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);
 }
@@ -84,6 +100,8 @@ void SceneGame::entering() {
     addDebugStuff();
     addSmashButtons();
 #endif // DEBUG
+
+    addHUDScore();
 }
 
 

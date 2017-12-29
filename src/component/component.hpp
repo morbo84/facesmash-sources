@@ -31,6 +31,9 @@ struct HUD final {
 };
 
 
+struct HUDScore final {};
+
+
 struct Sprite final {
     SDLTextureHandle handle;
     int width;
