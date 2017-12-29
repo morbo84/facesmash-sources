@@ -5,9 +5,6 @@
 #include "../common/types.h"
 
 
-struct SDL_Thread;
-
-
 namespace gamee {
 
 
@@ -15,22 +12,18 @@ class GameRenderer;
 
 
 class ProcessSplash final: public Process<ProcessSplash> {
-    static constexpr float duration = 5000;
-    static constexpr float logo = 3000;
+    static constexpr float duration = 3000;
+    static constexpr float logo = 2000;
 
     void updateRainbow(GameRenderer &);
     void updateGamee(GameRenderer &);
     void updateBanner(GameRenderer &);
 
-    static int assets(void *);
-
 public:
-    void init(void *);
     void update(delta_type, void *);
 
 private:
     delta_type elapsed{0};
-    SDL_Thread *loader;
 };
 
 
