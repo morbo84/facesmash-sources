@@ -12,8 +12,11 @@ struct SmashEvent;
 
 
 class ComboSystem final {
-    static constexpr delta_type interval = 500;
+    static constexpr delta_type interval = 600;
+    static constexpr delta_type bonus = 50;
     static constexpr UInt8 max = 5;
+
+    void combo(Registry &, SDLTextureHandle, SDLTextureHandle, int);
 
 public:
     ComboSystem();
