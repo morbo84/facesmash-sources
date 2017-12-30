@@ -9,7 +9,7 @@
 namespace gamee {
 
 
-struct FaceSmashEvent;
+struct FaceEvent;
 
 
 class FaceSmashSystem final {
@@ -19,7 +19,7 @@ public:
     FaceSmashSystem();
     ~FaceSmashSystem();
 
-    void receive(const FaceSmashEvent &) noexcept;
+    void receive(const FaceEvent &) noexcept;
 
     void update(Registry &);
 

@@ -3,6 +3,7 @@
 
 
 #include "../common/types.h"
+#include "../system/combo_system.h"
 #include "../system/destroy_later_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
@@ -43,6 +44,7 @@ private:
     // entity-component system
     Registry registry;
     // systems
+    ComboSystem comboSystem;
     DestroyLaterSystem destroyLaterSystem;
     FaceSmashSystem faceSmashSystem;
     FaceSpawnerSystem faceSpawnerSystem;

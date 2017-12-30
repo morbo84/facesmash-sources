@@ -33,16 +33,16 @@ FaceSmashSystem::FaceSmashSystem()
     : type{SmashType::HAPPY},
       dirty{false}
 {
-    Locator::Dispatcher::ref().connect<FaceSmashEvent>(this);
+    Locator::Dispatcher::ref().connect<FaceEvent>(this);
 }
 
 
 FaceSmashSystem::~FaceSmashSystem() {
-    Locator::Dispatcher::ref().disconnect<FaceSmashEvent>(this);
+    Locator::Dispatcher::ref().disconnect<FaceEvent>(this);
 }
 
 
-void FaceSmashSystem::receive(const FaceSmashEvent &event) noexcept {
+void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
     type = event.type;
     dirty = true;
 }
@@ -53,7 +53,8 @@ void FaceSmashSystem::update(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     const SDL_Rect screen = logicalScreen;
 
-    ScoreEvent event{ 0, 0_ui16, 0_ui16 };
+    ScoreEvent scoreEvent{ 0 };
+    SmashEvent smashEvent{ 0_ui16, 0_ui16 };
 
     view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
         const auto area = transform * box;
@@ -73,8 +74,8 @@ void FaceSmashSystem::update(Registry &registry) {
                 // TODO other scores ...
             }
 
-            event.score -= smash.miss;
-            ++event.miss;
+            scoreEvent.score -= smash.miss;
+            ++smashEvent.miss;
 
             registry.destroy(entity);
         } else if(dirty && smash.type == type) {
@@ -92,15 +93,19 @@ void FaceSmashSystem::update(Registry &registry) {
                 // TODO other scores ...
             }
 
-            event.score += smash.smash;
-            ++event.smash;
+            scoreEvent.score += smash.smash;
+            ++smashEvent.smash;
 
             registry.destroy(entity);
         }
     });
 
-    if(event.miss || event.smash) {
-        Locator::Dispatcher::ref().enqueue<ScoreEvent>(event);
+    if(scoreEvent.score) {
+        Locator::Dispatcher::ref().enqueue<ScoreEvent>(scoreEvent);
+    }
+
+    if(smashEvent.miss || smashEvent.smash) {
+        Locator::Dispatcher::ref().enqueue<SmashEvent>(smashEvent);
     }
 
     dirty = false;

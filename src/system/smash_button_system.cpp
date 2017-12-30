@@ -33,7 +33,7 @@ void SmashButtonSystem::update(Registry &registry) {
             auto area = transform * box;
 
             if(SDL_PointInRect(&coord, &area)) {
-                Locator::Dispatcher::ref().enqueue<FaceSmashEvent>(button.type);
+                Locator::Dispatcher::ref().enqueue<FaceEvent>(button.type);
             }
         });
 

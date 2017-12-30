@@ -39,7 +39,7 @@ struct SceneEvent final {
 };
 
 
-struct FaceSmashEvent final {
+struct FaceEvent final {
     SmashType type;
 };
 
@@ -49,6 +49,10 @@ struct FrameEvent final {};
 
 struct ScoreEvent final {
     int score;
+};
+
+
+struct SmashEvent final {
     UInt16 smash;
     UInt16 miss;
 };
