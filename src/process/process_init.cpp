@@ -40,21 +40,21 @@ void ProcessInit::update(delta_type, void *data) {
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/54"), missColor);
-    textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/54"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
+    textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
 
     const SDL_Color comboColor{145_ui8, 145_ui8, 145_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("combo/x2", "2x COMBO", renderer, *ttfFontCache.handle("ttf/constant/72"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("combo/x3", "3x COMBO", renderer, *ttfFontCache.handle("ttf/constant/72"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("combo/x4", "4x COMBO", renderer, *ttfFontCache.handle("ttf/constant/72"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("combo/x5", "5x COMBO", renderer, *ttfFontCache.handle("ttf/constant/72"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("combo/x2", "2x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("combo/x3", "3x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("combo/x4", "4x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("combo/x5", "5x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
 
     const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
-    textureCache.load<TTFFontTextureLoader>("hud/smash", "SMASH:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
-    textureCache.load<TTFFontTextureLoader>("hud/miss", "MISS:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/smash", "SMASH:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/miss", "MISS:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
 
     if(cameraService.available()) {
         textureCache.load<SDLStreamingTextureLoader>("visage/frame", renderer, cameraService.width(), cameraService.height());
