@@ -48,13 +48,14 @@ void SceneGame::addSmashButtons() {
 
 
 void SceneGame::addBackgroundFrame() {
-    auto &textureCache = Locator::TextureCache::ref();
+    if(Locator::Camera::ref().available()) {
+        auto handle = Locator::TextureCache::ref().handle("visage/frame");
+        auto frame = registry.create();
 
-    auto frame = registry.create();
-    auto handle = textureCache.handle("visage/frame");
-    registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Renderable>(frame, 0.f, 20);
-    registry.assign<Transform>(frame, (logicalWidth - handle->width()) / 2.f, (logicalHeight - handle->height()) / 2.f);
+        registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), handle->width(), handle->height());
+        registry.assign<Renderable>(frame, 0.f, 20);
+        registry.assign<Transform>(frame, (logicalWidth - handle->width()) / 2.f, (logicalHeight - handle->height()) / 2.f);
+    }
 }
 
 
@@ -82,7 +83,7 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
 
     destroyLaterSystem.update(registry, delta);
     faceSmashSystem.update(registry);
-    frameSystem.update(registry);
+    frameSystem.update();
     faceSpawnerSystem.update(registry, delta);
 
     // invoke systems at 50 fps (but for rendering and few other systems)

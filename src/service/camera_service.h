@@ -11,10 +11,13 @@ struct CameraService {
     virtual void init() = 0;
     virtual void release() = 0;
 
+    virtual bool available() const noexcept = 0;
+
     virtual int width() const noexcept = 0;
     virtual int height() const noexcept = 0;
 
-    virtual const void * frame() const noexcept = 0;
+    virtual const void * pixels() const noexcept = 0;
+    virtual int pitch() const noexcept = 0;
 };
 
 

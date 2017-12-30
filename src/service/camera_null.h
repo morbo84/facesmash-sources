@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SERVICE_CAMERA_ANDROID_H
-#define FACE_SMASH_SERVICE_CAMERA_ANDROID_H
+#ifndef FACE_SMASH_SERVICE_CAMERA_NULL_H
+#define FACE_SMASH_SERVICE_CAMERA_NULL_H
 
 
 #include "camera_service.h"
@@ -8,7 +8,7 @@
 namespace gamee {
 
 
-struct CameraAndroid final: CameraService {
+struct CameraNull final: CameraService {
     void init() override;
     void release() override;
 
@@ -25,4 +25,4 @@ struct CameraAndroid final: CameraService {
 }
 
 
-#endif // FACE_SMASH_SERVICE_CAMERA_ANDROID_H
+#endif // FACE_SMASH_SERVICE_CAMERA_NULL_H

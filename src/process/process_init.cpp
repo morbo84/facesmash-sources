@@ -48,7 +48,9 @@ void ProcessInit::update(delta_type, void *data) {
     textureCache.load<TTFFontTextureLoader>("hud/smash", "SMASH:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
     textureCache.load<TTFFontTextureLoader>("hud/miss", "MISS:", renderer, *ttfFontCache.handle("ttf/constant/90"), hudColor);
 
-    textureCache.load<SDLStreamingTextureLoader>("visage/frame", renderer, cameraService.width(), cameraService.height());
+    if(cameraService.available()) {
+        textureCache.load<SDLStreamingTextureLoader>("visage/frame", renderer, cameraService.width(), cameraService.height());
+    }
 
     succeed();
 }

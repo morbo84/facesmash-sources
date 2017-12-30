@@ -7,7 +7,7 @@
 #include "input/user_input_handler.h"
 #include "locator/locator.hpp"
 #include "service/camera_android.h"
-#include "service/camera_mock.h"
+#include "service/camera_null.h"
 
 
 void initBasicServices() {
@@ -32,7 +32,7 @@ void initPlatformServices() {
     if(platform == "Android") {
         gamee::Locator::Camera::set<gamee::CameraAndroid>();
     } else {
-        gamee::Locator::Camera::set<gamee::CameraMock>();
+        gamee::Locator::Camera::set<gamee::CameraNull>();
     }
 
     gamee::Locator::Camera::ref().init();

@@ -14,6 +14,12 @@ void CameraAndroid::release() {
 }
 
 
+bool CameraAndroid::available() const noexcept {
+    // TODO
+    return false;
+}
+
+
 int CameraAndroid::width() const noexcept {
     // TODO
     return {};
@@ -26,7 +32,13 @@ int CameraAndroid::height() const noexcept {
 }
 
 
-const void * CameraAndroid::frame() const noexcept {
+const void * CameraAndroid::pixels() const noexcept {
+    // TODO
+    return {};
+}
+
+
+int CameraAndroid::pitch() const noexcept {
     // TODO
     return {};
 }

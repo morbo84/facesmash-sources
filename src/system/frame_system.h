@@ -2,9 +2,6 @@
 #define FACE_SMASH_SYSTEM_FRAME_SYSTEM_H
 
 
-#include "../common/types.h"
-
-
 namespace gamee {
 
 
@@ -17,7 +14,7 @@ struct FrameSystem final {
 
     void receive(const FrameEvent &) noexcept;
 
-    void update(Registry &);
+    void update();
 
 private:
     bool pending;
