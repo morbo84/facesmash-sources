@@ -44,6 +44,9 @@ struct FaceSmashEvent final {
 };
 
 
+struct FrameEvent final {};
+
+
 struct ScoreEvent final {
     int score;
     UInt16 smash;

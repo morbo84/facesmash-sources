@@ -60,4 +60,18 @@ std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_
 }
 
 
+std::shared_ptr<SDLTextureResource> SDLStreamingTextureLoader::load(SDL_Renderer *renderer, int w, int h) const {
+    std::shared_ptr<SDLTextureResource> ret;
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_NV21, SDL_TEXTUREACCESS_STREAMING, w, h);
+
+    if(texture) {
+        ret = std::make_shared<SDLTextureResource>(texture);
+        ret->width(w);
+        ret->height(h);
+    }
+
+    return ret;
+}
+
+
 }

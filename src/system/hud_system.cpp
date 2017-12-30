@@ -14,30 +14,35 @@ namespace gamee {
 
 #if DEBUG
 void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    const SDL_Color fg = { 255, 255, 255, 255 };
-    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
+    if(registry.has<TimeDebug>()) {
+        const SDL_Color fg = { 255, 255, 255, 255 };
+        auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
 
-    auto &timeDebug = registry.get<TimeDebug>();
-    auto timeEntity = registry.attachee<TimeDebug>();
-    auto fpsEntity = registry.attachee<FPSDebug>();
+        auto &timeDebug = registry.get<TimeDebug>();
+        auto timeEntity = registry.attachee<TimeDebug>();
 
-    timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
+        timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
 
-    std::stringstream time;
-    time.precision(3);
-    time << "TIME: " << timeDebug.average;
+        std::stringstream time;
+        time.precision(3);
+        time << "TIME: " << timeDebug.average;
 
-    auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
-    registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
-    registry.accomodate<Transform>(timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
+        auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
+        registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+        registry.accomodate<Transform>(timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
 
-    std::stringstream fps;
-    fps.precision(2);
-    fps << "FPS: " << (1000.f / timeDebug.average);
+        if(registry.has<FPSDebug>()) {
+            auto fpsEntity = registry.attachee<FPSDebug>();
 
-    auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
-    registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
-    registry.accomodate<Transform>(fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
+            std::stringstream fps;
+            fps.precision(2);
+            fps << "FPS: " << (1000.f / timeDebug.average);
+
+            auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
+            registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
+            registry.accomodate<Transform>(fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
+        }
+    }
 }
 #endif // DEBUG
 
@@ -66,8 +71,7 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         SDL_Texture *texture = hud.handle.get();
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
         SDL_SetTextureAlphaMod(texture, renderable.alpha);
-        SDL_RendererFlip flip = renderable.flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-        SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, flip);
+        SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
 
 #if DEBUG
         if(registry.has<BoundingBox>(entity)) {

@@ -45,6 +45,11 @@ struct SDLTextureLoader final: public entt::ResourceLoader<SDLTextureLoader, SDL
 };
 
 
+struct SDLStreamingTextureLoader final: public entt::ResourceLoader<SDLStreamingTextureLoader, SDLTextureResource> {
+    std::shared_ptr<SDLTextureResource> load(SDL_Renderer *, int, int) const;
+};
+
+
 using SDLTextureHandle = entt::ResourceHandle<SDLTextureResource>;
 
 

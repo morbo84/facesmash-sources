@@ -7,6 +7,7 @@
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
 #include "../system/fade_animation_system.h"
+#include "../system/frame_system.h"
 #include "../system/hud_system.h"
 #include "../system/movement_system.h"
 #include "../system/rendering_system.h"
@@ -28,9 +29,8 @@ class SceneGame final: public Scene {
     void addSmashButtons();
 #endif // DEBUG
 
+    void addBackgroundFrame();
     void addHUDScore();
-    void addHUDSmash();
-    void addHUDMiss();
 
 public:
     void update(GameRenderer &, delta_type) override;
@@ -47,6 +47,7 @@ private:
     FaceSmashSystem faceSmashSystem;
     FaceSpawnerSystem faceSpawnerSystem;
     FadeAnimationSystem fadeAnimationSystem;
+    FrameSystem frameSystem;
     HudSystem hudSystem;
     MovementSystem movementSystem;
     RenderingSystem renderingSystem;

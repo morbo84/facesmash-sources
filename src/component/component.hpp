@@ -11,8 +11,13 @@ namespace gamee {
 
 
 #if DEBUG
-struct TimeDebug final { float average; };
+struct TimeDebug final {
+    float average;
+};
+
+
 struct FPSDebug final {};
+
 
 struct SmashButton final {
     SmashType type;
@@ -50,10 +55,8 @@ struct Sprite final {
 
 struct Renderable final {
     float angle{0.f};
-    float factor{1.f};
     int z{127};
     int alpha{255};
-    bool flip{false};
 };
 
 

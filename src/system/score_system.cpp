@@ -25,13 +25,15 @@ void ScoreSystem::receive(const ScoreEvent &event) noexcept {
 
 
 void ScoreSystem::update(Registry &registry, GameRenderer &renderer) {
-    auto entity = registry.attachee<HUDScore>();
-    std::stringstream label;
-    label << score;
-    const SDL_Color fg = { 255, 255, 255, 255 };
-    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/90");
-    auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);
-    registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    if(registry.has<HUDScore>()) {
+        auto entity = registry.attachee<HUDScore>();
+        std::stringstream label;
+        label << score;
+        const SDL_Color fg = { 255, 255, 255, 255 };
+        auto font = Locator::TTFFontCache::ref().handle("ttf/constant/90");
+        auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);
+        registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    }
 }
 
 

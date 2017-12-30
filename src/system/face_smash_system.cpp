@@ -80,7 +80,7 @@ void FaceSmashSystem::update(Registry &registry) {
         } else if(dirty && smash.type == type) {
             auto explosion = registry.create();
             registry.assign<Sprite>(explosion, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
-            registry.assign<Renderable>(explosion, 0.f, 1.f, 255);
+            registry.assign<Renderable>(explosion, 0.f, 255);
             registry.assign<Transform>(explosion, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
             registry.assign<SpriteAnimation>(explosion, 1000_ui32, 0_ui32, false);
             registry.assign<DestroyLater>(explosion, 1000_ui32);

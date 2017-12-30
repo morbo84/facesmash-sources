@@ -1,3 +1,4 @@
+#include <cassert>
 #include <vector>
 #include <SDL_rect.h>
 #include <SDL_render.h>
@@ -17,6 +18,9 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
     registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
+
+    // it doesn't make sense otherwise...
+    assert(registry.has<Camera>());
 
     const auto &offset = registry.get<Transform>(registry.attachee<Camera>());
     auto view = registry.persistent<Transform, Renderable, Sprite>();
@@ -40,15 +44,14 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 
         dst.w = sprite.w;
         dst.h = sprite.h;
-        dst.x = position.x / renderable.factor;
+        dst.x = position.x;
         dst.y = position.y;
 
         if(SDL_HasIntersection(&screen, &dst)) {
             SDL_Texture *texture = sprite.handle.get();
             SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
             SDL_SetTextureAlphaMod(texture, renderable.alpha);
-            SDL_RendererFlip flip = renderable.flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-            SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, flip);
+            SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
 
 #if DEBUG
             if(registry.has<BoundingBox>(entity)) {
