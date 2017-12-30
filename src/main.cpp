@@ -6,6 +6,8 @@
 #include "game/game_loop.h"
 #include "input/user_input_handler.h"
 #include "locator/locator.hpp"
+#include "service/audio_null.h"
+#include "service/audio_sdl.h"
 #include "service/camera_android.h"
 #include "service/camera_null.h"
 
@@ -29,19 +31,25 @@ void releaseBasicServices() {
 void initPlatformServices() {
     std::string platform = SDL_GetPlatform();
 
+    gamee::Locator::Audio::set<gamee::AudioSDL>();
+
     if(platform == "Android") {
         gamee::Locator::Camera::set<gamee::CameraAndroid>();
     } else {
         gamee::Locator::Camera::set<gamee::CameraNull>();
     }
 
+    gamee::Locator::Audio::ref().init();
     gamee::Locator::Camera::ref().init();
 }
 
 
 void releasePlatformServices() {
     gamee::Locator::Camera::ref().release();
+    gamee::Locator::Audio::ref().release();
+
     gamee::Locator::Camera::reset();
+    gamee::Locator::Audio::reset();
 }
 
 
