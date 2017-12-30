@@ -29,13 +29,7 @@ struct TouchEvent final {
 
 
 struct SceneEvent final {
-    enum class Type: UInt8 {
-        SPLASH,
-        MENU,
-        GAME
-    };
-
-    const Type type;
+    const SceneType type;
 };
 
 

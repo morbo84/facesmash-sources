@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SCENE_GAME_H
-#define FACE_SMASH_SCENE_GAME_H
+#ifndef FACE_SMASH_SCENE_CHALLENGE_H
+#define FACE_SMASH_SCENE_CHALLENGE_H
 
 
 #include "../common/types.h"
@@ -22,7 +22,7 @@
 namespace gamee {
 
 
-class SceneGame final: public Scene {
+class SceneChallenge final: public Scene {
     static constexpr delta_type msPerUpdate = 20;
 
 #ifdef DEBUG
@@ -66,4 +66,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SCENE_GAME_H
+#endif // FACE_SMASH_SCENE_CHALLENGE_H

@@ -86,7 +86,7 @@ void ProcessSplash::update(delta_type delta, void *data) {
     elapsed += delta;
 
     if(elapsed >= duration) {
-        Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneEvent::Type::MENU);
+        Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::MENU_PAGE);
         succeed();
     } else {
         updateRainbow(renderer);

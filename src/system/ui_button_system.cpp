@@ -34,8 +34,8 @@ void UIButtonSystem::update(Registry &registry) {
 
             if(SDL_PointInRect(&coord, &area)) {
                 switch(button.action) {
-                case UIButton::Action::PLAY:
-                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneEvent::Type::GAME);
+                case UIButton::Action::CHALLENGE:
+                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_CHALLENGE);
                     break;
                 }
             }

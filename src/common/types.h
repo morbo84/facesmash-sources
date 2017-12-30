@@ -51,6 +51,15 @@ using Registry = entt::DefaultRegistry;
 using entity_type = typename Registry::entity_type;
 
 
+enum class SceneType: UInt8 {
+    SPLASH_SCREEN,
+    MENU_PAGE,
+    GAME_TRAINING,
+    GAME_CHALLENGE,
+    GAME_TIMER
+};
+
+
 enum SmashType {
     ANGRY = 0,
     DISGUSTED,

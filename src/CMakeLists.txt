@@ -8,7 +8,9 @@ set(
     ${facesmash_SOURCE_DIR}/src/process/process_splash.cpp
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_game.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_challenge.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_timer.cpp
+    ${facesmash_SOURCE_DIR}/src/scene/scene_training.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_menu.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_null.cpp
     ${facesmash_SOURCE_DIR}/src/scene/scene_splash.cpp

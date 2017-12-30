@@ -27,7 +27,7 @@ void SceneMenu::entering() {
     registry.assign<Transform>(button, logicalWidth / 2.f - 64, logicalHeight / 2.f - 64);
     registry.assign<Sprite>(button, handle, handle->width(), handle->height(), 128, 128);
     registry.assign<BoundingBox>(button, 128, 128);
-    registry.assign<UIButton>(button, UIButton::Action::PLAY);
+    registry.assign<UIButton>(button, UIButton::Action::CHALLENGE);
 }
 
 

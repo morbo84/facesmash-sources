@@ -1,20 +1,20 @@
 #include "../common/constants.h"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
-#include "scene_game.h"
+#include "scene_challenge.h"
 
 
 namespace gamee {
 
 
 #ifdef DEBUG
-void SceneGame::addDebugStuff() {
+void SceneChallenge::addDebugStuff() {
     registry.attach<TimeDebug>(registry.create<Renderable>(), 0.f);
     registry.attach<FPSDebug>(registry.create<Renderable>());
 }
 
 
-void SceneGame::addSmashButtons() {
+void SceneChallenge::addSmashButtons() {
     auto addButton = [](Registry &registry, SmashType type, TextureCache::resource_type emoji, float x, float y) {
         auto &textureCache = Locator::TextureCache::ref();
         auto button = registry.create();
@@ -47,7 +47,7 @@ void SceneGame::addSmashButtons() {
 #endif // DEBUG
 
 
-void SceneGame::addBackgroundFrame() {
+void SceneChallenge::addBackgroundFrame() {
     if(Locator::Camera::ref().available()) {
         auto handle = Locator::TextureCache::ref().handle("visage/frame");
         auto frame = registry.create();
@@ -59,7 +59,7 @@ void SceneGame::addBackgroundFrame() {
 }
 
 
-void SceneGame::addHUDScore() {
+void SceneChallenge::addHUDScore() {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto label = registry.create<Renderable>();
@@ -73,7 +73,7 @@ void SceneGame::addHUDScore() {
 }
 
 
-void SceneGame::update(GameRenderer &renderer, delta_type delta) {
+void SceneChallenge::update(GameRenderer &renderer, delta_type delta) {
     // sum what remains from the previous step
     accumulator += delta;
 
@@ -105,7 +105,7 @@ void SceneGame::update(GameRenderer &renderer, delta_type delta) {
 }
 
 
-void SceneGame::entering() {
+void SceneChallenge::entering() {
     auto camera = registry.create();
     registry.attach<Camera>(camera);
     registry.assign<Transform>(camera, 0.f, 0.f);
@@ -120,7 +120,7 @@ void SceneGame::entering() {
 }
 
 
-void SceneGame::leaving() {
+void SceneChallenge::leaving() {
     registry.reset();
 }
 

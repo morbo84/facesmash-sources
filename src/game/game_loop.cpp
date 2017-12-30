@@ -1,7 +1,9 @@
 #include <cassert>
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
-#include "../scene/scene_game.h"
+#include "../scene/scene_challenge.h"
+#include "../scene/scene_timer.h"
+#include "../scene/scene_training.h"
 #include "../scene/scene_menu.h"
 #include "../scene/scene_null.h"
 #include "../scene/scene_splash.h"
@@ -34,7 +36,7 @@ GameLoop::GameLoop()
       dirty{false}
 {
     Locator::Dispatcher::ref().connect<SceneEvent>(this);
-    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneEvent::Type::SPLASH);
+    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::SPLASH_SCREEN);
 }
 
 
@@ -45,13 +47,19 @@ GameLoop::~GameLoop() {
 
 void GameLoop::receive(const SceneEvent &event) noexcept {
     switch(event.type) {
-    case SceneEvent::Type::GAME:
-        next = std::make_unique<SceneGame>();
+    case SceneType::GAME_TRAINING:
+        next = std::make_unique<SceneTraining>();
         break;
-    case SceneEvent::Type::MENU:
+    case SceneType::GAME_TIMER:
+        next = std::make_unique<SceneTimer>();
+        break;
+    case SceneType::GAME_CHALLENGE:
+        next = std::make_unique<SceneChallenge>();
+        break;
+    case SceneType::MENU_PAGE:
         next = std::make_unique<SceneMenu>();
         break;
-    case SceneEvent::Type::SPLASH:
+    case SceneType::SPLASH_SCREEN:
         next = std::make_unique<SceneSplash>();
         break;
     default:
