@@ -37,6 +37,12 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIButton::Action::CHALLENGE:
                     Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_CHALLENGE);
                     break;
+                case UIButton::Action::TRAINING:
+                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_TRAINING);
+                    break;
+                case UIButton::Action::TIMER:
+                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_TIMER);
+                    break;
                 }
             }
         });
