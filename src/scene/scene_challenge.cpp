@@ -1,4 +1,4 @@
-#include "scene_challenge.h".h"
+#include "scene_challenge.h"
 
 
 namespace gamee {
