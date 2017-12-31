@@ -9,7 +9,11 @@
 namespace gamee {
 
 
-ScoreSystem::ScoreSystem(): score{0} {
+ScoreSystem::ScoreSystem()
+    : elapsed{0_ui8},
+      current{0_ui16},
+      score{0_ui16}
+{
     Locator::Dispatcher::ref().connect<ScoreEvent>(this);
 }
 
@@ -20,15 +24,31 @@ ScoreSystem::~ScoreSystem() {
 
 
 void ScoreSystem::receive(const ScoreEvent &event) noexcept {
-    score += event.score;
+    if(event.score < 0) {
+        score += (-event.score > score) ? -score : event.score;
+    } else {
+        score += event.score;
+    }
 }
 
 
-void ScoreSystem::update(Registry &registry, GameRenderer &renderer) {
+void ScoreSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
+    elapsed += delta;
+
+    if(elapsed > interval) {
+        elapsed = 0_ui8;
+
+        if(current < score) {
+            current += std::max((score - current) / 2, 1);
+        } else if(current > score) {
+            current -= std::max((current - score) / 2, 1);
+        }
+    }
+
     if(registry.has<HUDScore>()) {
         auto entity = registry.attachee<HUDScore>();
         std::stringstream label;
-        label << score;
+        label << current;
         const SDL_Color fg = { 255, 255, 255, 255 };
         auto font = Locator::TTFFontCache::ref().handle("ttf/constant/54");
         auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);

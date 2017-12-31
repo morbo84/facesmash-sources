@@ -98,9 +98,8 @@ void SceneChallenge::update(GameRenderer &renderer, delta_type delta) {
     rotationAnimationSystem.update(registry, delta);
     spriteAnimationSystem.update(registry, delta);
 
-    scoreSystem.update(registry, renderer);
-
     renderingSystem.update(registry, renderer);
+    scoreSystem.update(registry, renderer, delta);
     hudSystem.update(registry, renderer, delta);
 }
 

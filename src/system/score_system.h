@@ -12,16 +12,21 @@ struct ScoreEvent;
 struct GameRenderer;
 
 
-struct ScoreSystem final {
+class ScoreSystem final {
+    static constexpr UInt8 interval = 50;
+
+public:
     ScoreSystem();
     ~ScoreSystem();
 
     void receive(const ScoreEvent &) noexcept;
 
-    void update(Registry &, GameRenderer &);
+    void update(Registry &, GameRenderer &, delta_type);
 
 private:
-    int score;
+    UInt8 elapsed;
+    UInt16 current;
+    UInt16 score;
 };
 
 
