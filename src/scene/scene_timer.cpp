@@ -98,8 +98,10 @@ void SceneTimer::update(GameRenderer &renderer, delta_type delta) {
     rotationAnimationSystem.update(registry, delta);
     spriteAnimationSystem.update(registry, delta);
 
-    renderingSystem.update(registry, renderer);
     scoreSystem.update(registry, renderer, delta);
+    timerSystem.update(registry, renderer, delta);
+
+    renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);
 }
 

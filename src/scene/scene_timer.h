@@ -16,6 +16,7 @@
 #include "../system/score_system.h"
 #include "../system/smash_button_system.h"
 #include "../system/sprite_animation_system.h"
+#include "../system/timer_system.h"
 #include "scene.h"
 
 
@@ -56,6 +57,7 @@ private:
     RotationAnimationSystem rotationAnimationSystem;
     ScoreSystem scoreSystem;
     SpriteAnimationSystem spriteAnimationSystem;
+    TimerSystem timerSystem;
 
 #if DEBUG
     SmashButtonSystem smashButtonSystem;
