@@ -135,6 +135,13 @@ struct DestroyLater final {
 };
 
 
+struct SceneChangeRequest final {
+    SceneType scene;
+    delta_type delay{0_ui32};
+    delta_type elapsed{0_ui32};
+};
+
+
 }
 
 

@@ -5,8 +5,6 @@
 #include <cstdint>
 #include <SDL_stdinc.h>
 #include <entt/entity/registry.hpp>
-#include <entt/process/process.hpp>
-#include <entt/process/scheduler.hpp>
 #include <entt/resource/cache.hpp>
 #include <entt/signal/dispatcher.hpp>
 #include "../resource/font_resource.h"
@@ -38,10 +36,6 @@ constexpr SInt64 operator"" _si64 (unsigned long long ull) { return SInt64(ull);
 
 using delta_type = UInt32;
 
-template<typename Derived>
-using Process = entt::Process<Derived, delta_type>;
-
-using Scheduler = entt::Scheduler<delta_type>;
 using TextureCache = entt::ResourceCache<SDLTextureResource>;
 using TTFFontCache = entt::ResourceCache<TTFFontResource>;
 using Dispatcher = entt::UnmanagedDispatcher;

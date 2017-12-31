@@ -28,11 +28,6 @@ struct TouchEvent final {
 };
 
 
-struct SceneEvent final {
-    const SceneType type;
-};
-
-
 struct FaceEvent final {
     SmashType type;
 };

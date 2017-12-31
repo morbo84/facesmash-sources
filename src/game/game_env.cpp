@@ -142,6 +142,9 @@ int GameEnv::exec() noexcept {
     loop = loop && (errcode == ErrorCode::NONE);
 
     if(loop) {
+        // initialize the game
+        init(*renderer);
+
         // initialize game times
         delta_type previous = clock.ticks();
 
@@ -180,9 +183,7 @@ int GameEnv::exec() noexcept {
         }
     }
 
-    // reset cache (and avoid crasches)
-    Locator::TextureCache::ref().clear();
-    Locator::TTFFontCache::ref().clear();
+    close();
 
     return static_cast<std::underlying_type_t<ErrorCode>>(errcode);
 }

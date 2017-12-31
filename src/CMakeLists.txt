@@ -4,16 +4,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
     ${facesmash_SOURCE_DIR}/src/input/user_input_handler.cpp
-    ${facesmash_SOURCE_DIR}/src/process/process_init.cpp
-    ${facesmash_SOURCE_DIR}/src/process/process_splash.cpp
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_challenge.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_timer.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_training.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_menu.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_null.cpp
-    ${facesmash_SOURCE_DIR}/src/scene/scene_splash.cpp
     ${facesmash_SOURCE_DIR}/src/service/audio_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/audio_sdl.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_android.cpp
@@ -29,6 +21,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/score_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp

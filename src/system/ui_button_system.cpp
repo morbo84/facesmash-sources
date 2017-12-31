@@ -29,19 +29,23 @@ void UIButtonSystem::update(Registry &registry) {
     if(dirty) {
         auto view = registry.view<UIButton, Transform, BoundingBox>();
 
-        view.each([this](auto, auto &button, auto &transform, auto &box) {
+        view.each([&, this](auto, auto &button, auto &transform, auto &box) {
             auto area = transform * box;
 
             if(SDL_PointInRect(&coord, &area)) {
+                if(registry.has<SceneChangeRequest>()) {
+                    registry.destroy(registry.attachee<SceneChangeRequest>());
+                }
+
                 switch(button.action) {
                 case UIButton::Action::CHALLENGE:
-                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_CHALLENGE);
+                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_CHALLENGE);
                     break;
                 case UIButton::Action::TRAINING:
-                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_TRAINING);
+                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_TRAINING);
                     break;
                 case UIButton::Action::TIMER:
-                    Locator::Dispatcher::ref().enqueue<SceneEvent>(SceneType::GAME_TIMER);
+                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_TIMER);
                     break;
                 }
             }
