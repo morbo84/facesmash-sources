@@ -29,7 +29,7 @@ struct TouchEvent final {
 
 
 struct FaceEvent final {
-    SmashType type;
+    FaceType type;
 };
 
 

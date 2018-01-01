@@ -2,24 +2,26 @@
 #define FACE_SMASH_SYSTEM_FACE_SPAWNER_SYSTEM_H
 
 
+#include <random>
 #include "../common/types.h"
-#include "../component/component.hpp"
-#include <utility>
 
 
 namespace gamee {
 
 
 class FaceSpawnerSystem final {
-    static constexpr delta_type interval = 1000;
-
-    std::pair<Transform, Movement> spawnPath() const;
+    static constexpr UInt8 extra = 100;
+    static constexpr UInt8 length = 7;
 
 public:
+    FaceSpawnerSystem();
+
     void update(Registry &, delta_type);
 
 private:
-    delta_type elapsed{};
+    std::mt19937 generator;
+    FaceType faces[length];
+    UInt8 next;
 };
 
 

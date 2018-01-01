@@ -77,6 +77,9 @@ void SceneSystem::timer(Registry &registry) {
     backgroundFrame(registry);
     hudScore(registry);
 
+    // default spawner
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{340, 400, 400, 200}, 1200_ui32, 1800_ui32);
+
 #if DEBUG
     smashButtons(registry);
 #endif // DEBUG
@@ -125,7 +128,7 @@ void SceneSystem::camera(Registry &registry) {
 
 #if DEBUG
 void SceneSystem::smashButtons(Registry &registry) {
-    auto addButton = [](Registry &registry, SmashType type, TextureCache::resource_type emoji, float x, float y) {
+    auto addButton = [](Registry &registry, FaceType type, TextureCache::resource_type emoji, float x, float y) {
         auto &textureCache = Locator::TextureCache::ref();
         auto button = registry.create();
         auto handle = textureCache.handle(emoji);
@@ -140,19 +143,19 @@ void SceneSystem::smashButtons(Registry &registry) {
     const auto x = logicalWidth - 96 - 16;
 
     auto y = (logicalHeight - 96 * 7 - 32 * 6) / 2;
-    addButton(registry, SmashType::ANGRY, "emoji/angry", x, y);
+    addButton(registry, FaceType::ANGRY, "emoji/angry", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::DISGUSTED, "emoji/disgusted", x, y);
+    addButton(registry, FaceType::DISGUSTED, "emoji/disgusted", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::HAPPY, "emoji/happy", x, y);
+    addButton(registry, FaceType::HAPPY, "emoji/happy", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::RESTED, "emoji/rested", x, y);
+    addButton(registry, FaceType::RESTED, "emoji/rested", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::SURPRISED, "emoji/surprised", x, y);
+    addButton(registry, FaceType::SURPRISED, "emoji/surprised", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::FEARFUL, "emoji/fearful", x, y);
+    addButton(registry, FaceType::FEARFUL, "emoji/fearful", x, y);
     y += 96 + 32;
-    addButton(registry, SmashType::SAD, "emoji/sad", x, y);
+    addButton(registry, FaceType::SAD, "emoji/sad", x, y);
 }
 
 

@@ -24,7 +24,7 @@ public:
     void update(Registry &);
 
 private:
-    SmashType type;
+    FaceType type;
     bool dirty;
 };
 

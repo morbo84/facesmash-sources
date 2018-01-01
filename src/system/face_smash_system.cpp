@@ -30,7 +30,7 @@ void FaceSmashSystem::addScore(Registry &registry, SDLTextureHandle handle, SDL_
 
 
 FaceSmashSystem::FaceSmashSystem()
-    : type{SmashType::HAPPY},
+    : type{FaceType::HAPPY},
       dirty{false}
 {
     Locator::Dispatcher::ref().connect<FaceEvent>(this);

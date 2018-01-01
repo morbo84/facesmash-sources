@@ -20,7 +20,7 @@ struct FPSDebug final {};
 
 
 struct SmashButton final {
-    SmashType type;
+    FaceType type;
 };
 #endif // DEBUG
 
@@ -123,7 +123,7 @@ struct Movement final {
 
 
 struct FaceSmash final {
-    SmashType type;
+    FaceType type;
     UInt8 smash{100_ui8};
     UInt8 miss{50_ui8};
 };
@@ -138,6 +138,14 @@ struct DestroyLater final {
 struct SceneChangeRequest final {
     SceneType scene;
     delta_type delay{0_ui32};
+    delta_type elapsed{0_ui32};
+};
+
+
+struct SpawnRequest final {
+    SDL_Rect zone;
+    delta_type timing;
+    delta_type interval;
     delta_type elapsed{0_ui32};
 };
 

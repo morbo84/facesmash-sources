@@ -1,4 +1,4 @@
-#include <cassert>
+#include "../component/component.hpp"
 #include "../locator/locator.hpp"
 #include "game_renderer.h"
 #include "game_loop.h"
