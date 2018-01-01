@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../common/constants.h"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
@@ -175,9 +176,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
     if(registry.has<SceneChangeRequest>()) {
         auto &request = registry.get<SceneChangeRequest>();
 
-        request.elapsed += delta;
+        request.remaining -= std::min(request.remaining, delta);
 
-        if(!(request.elapsed < request.delay)) {
+        if(0 == request.remaining) {
             // copy on purpose, we are going to reset the registry after all
             auto scene = request.scene;
 

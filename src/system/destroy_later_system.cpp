@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../component/component.hpp"
 #include "destroy_later_system.h"
 
@@ -9,9 +10,9 @@ void DestroyLaterSystem::update(Registry &registry, delta_type delta) {
     auto view = registry.view<DestroyLater>();
 
     view.each([&registry, delta](auto entity, auto &later) {
-        later.elapsed += delta;
+        later.remaining -= std::min(later.remaining, delta);
 
-        if(later.elapsed > later.delay) {
+        if(0 == later.remaining) {
             registry.destroy(entity);
         }
     });

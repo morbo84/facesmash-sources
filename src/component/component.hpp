@@ -130,15 +130,13 @@ struct FaceSmash final {
 
 
 struct DestroyLater final {
-    delta_type delay;
-    delta_type elapsed{0_ui32};
+    delta_type remaining{0_ui32};
 };
 
 
 struct SceneChangeRequest final {
     SceneType scene;
-    delta_type delay{0_ui32};
-    delta_type elapsed{0_ui32};
+    delta_type remaining{0_ui32};
 };
 
 

@@ -18,7 +18,6 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/frame_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rotation_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
@@ -26,6 +25,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/sprite_animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/timer_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/time/clock.cpp
     ${facesmash_SOURCE_DIR}/src/main.cpp
     PARENT_SCOPE
