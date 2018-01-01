@@ -8,7 +8,6 @@
 namespace gamee {
 
 
-struct ScoreEvent;
 struct GameRenderer;
 
 
@@ -16,17 +15,11 @@ class ScoreSystem final {
     static constexpr UInt8 interval = 50;
 
 public:
-    ScoreSystem();
-    ~ScoreSystem();
-
-    void receive(const ScoreEvent &) noexcept;
-
     void update(Registry &, GameRenderer &, delta_type);
 
 private:
-    UInt8 elapsed;
-    UInt16 current;
-    UInt16 score;
+    UInt8 elapsed{0_ui8};
+    UInt16 current{0_ui16};
 };
 
 

@@ -34,52 +34,64 @@ ComboSystem::ComboSystem()
     : remaining{interval},
       current{0_ui8}
 {
-    Locator::Dispatcher::ref().connect<SmashEvent>(this);
+    Locator::Dispatcher::ref().connect<FaceSmashEvent>(this);
+    Locator::Dispatcher::ref().connect<FaceMissEvent>(this);
 }
 
 
 ComboSystem::~ComboSystem() {
-    Locator::Dispatcher::ref().disconnect<SmashEvent>(this);
+    Locator::Dispatcher::ref().disconnect<FaceMissEvent>(this);
+    Locator::Dispatcher::ref().disconnect<FaceSmashEvent>(this);
 }
 
 
-void ComboSystem::receive(const SmashEvent &event) noexcept {
-    current = event.miss ? 0_ui8 : current;
-
+void ComboSystem::receive(const FaceSmashEvent &) noexcept {
     if(current < max) {
-        current = event.smash ? (current+1) : current;
+        ++current;
         remaining = interval + current * bonus;
     }
 }
 
 
+void ComboSystem::receive(const FaceMissEvent &) noexcept {
+    current = 0_ui8;
+    remaining = interval;
+}
+
+
 void ComboSystem::update(Registry &registry, delta_type delta) {
-    auto &textureCache = Locator::TextureCache::ref();
+    if(registry.has<PlayerScore>()) {
+        auto &textureCache = Locator::TextureCache::ref();
 
-    remaining -= std::min(delta, remaining);
+        remaining -= std::min(delta, remaining);
 
-    if(0 == remaining) {
-        switch(current) {
-        case 0:
-        case 1:
-            // not a combo
-            break;
-        case 2:
-            combo(registry, textureCache.handle("combo/x2"), textureCache.handle("combo/200"), 200);
-            break;
-        case 3:
-            combo(registry, textureCache.handle("combo/x3"), textureCache.handle("combo/300"), 300);
-            break;
-        case 4:
-            combo(registry, textureCache.handle("combo/x4"), textureCache.handle("combo/400"), 400);
-            break;
-        default:
-            combo(registry, textureCache.handle("combo/x5"), textureCache.handle("combo/500"), 500);
-            break;
+        if(0 == remaining) {
+            switch(current) {
+            case 0:
+            case 1:
+                // not a combo
+                break;
+            case 2:
+                combo(registry, textureCache.handle("combo/x2"), textureCache.handle("combo/200"), 200);
+                registry.get<PlayerScore>().score += 200;
+                break;
+            case 3:
+                combo(registry, textureCache.handle("combo/x3"), textureCache.handle("combo/300"), 300);
+                registry.get<PlayerScore>().score += 300;
+                break;
+            case 4:
+                combo(registry, textureCache.handle("combo/x4"), textureCache.handle("combo/400"), 400);
+                registry.get<PlayerScore>().score += 400;
+                break;
+            default:
+                combo(registry, textureCache.handle("combo/x5"), textureCache.handle("combo/500"), 500);
+                registry.get<PlayerScore>().score += 500;
+                break;
+            }
+
+            remaining = interval;
+            current = 0_ui8;
         }
-
-        remaining = interval;
-        current = 0_ui8;
     }
 }
 

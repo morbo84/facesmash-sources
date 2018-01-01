@@ -34,17 +34,9 @@ struct FaceEvent final {
 
 
 struct FrameEvent final {};
-
-
-struct ScoreEvent final {
-    int score;
-};
-
-
-struct SmashEvent final {
-    UInt16 smash;
-    UInt16 miss;
-};
+struct FaceSmashEvent final {};
+struct FaceMissEvent final {};
+struct GameOverEvent final {};
 
 
 }

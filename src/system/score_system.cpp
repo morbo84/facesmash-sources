@@ -10,44 +10,23 @@
 namespace gamee {
 
 
-ScoreSystem::ScoreSystem()
-    : elapsed{0_ui8},
-      current{0_ui16},
-      score{0_ui16}
-{
-    Locator::Dispatcher::ref().connect<ScoreEvent>(this);
-}
-
-
-ScoreSystem::~ScoreSystem() {
-    Locator::Dispatcher::ref().disconnect<ScoreEvent>(this);
-}
-
-
-void ScoreSystem::receive(const ScoreEvent &event) noexcept {
-    if(event.score < 0) {
-        score += (-event.score > score) ? -score : event.score;
-    } else {
-        score += event.score;
-    }
-}
-
-
 void ScoreSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    elapsed += delta;
+    if(registry.has<PlayerScore>()) {
+        auto entity = registry.attachee<PlayerScore>();
+        auto &score = registry.get<PlayerScore>();
 
-    if(elapsed > interval) {
-        elapsed = 0_ui8;
+        elapsed += delta;
 
-        if(current < score) {
-            current += std::max((score - current) / 2, 1);
-        } else if(current > score) {
-            current -= std::max((current - score) / 2, 1);
+        if(elapsed > interval) {
+            elapsed = 0_ui8;
+
+            if(current < score.score) {
+                current += std::max((score.score - current) / 2, 1);
+            } else if(current > score.score) {
+                current -= std::max((current - score.score) / 2, 1);
+            }
         }
-    }
 
-    if(registry.has<HUDScore>()) {
-        auto entity = registry.attachee<HUDScore>();
         std::stringstream label;
         label << current;
         const SDL_Color fg = { 255, 255, 255, 255 };

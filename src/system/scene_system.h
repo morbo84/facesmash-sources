@@ -16,7 +16,7 @@ class SceneSystem final {
     void challenge(Registry &);
 
     void backgroundFrame(Registry &);
-    void hudScore(Registry &);
+    void score(Registry &);
     void camera(Registry &);
 
 #if DEBUG

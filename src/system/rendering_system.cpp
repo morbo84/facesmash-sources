@@ -62,6 +62,15 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 #endif // DEBUG
         }
     });
+
+#if DEBUG
+    registry.view<SpawnRequest>().each([&](auto, const auto &request) {
+        SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &request.zone);
+        const SDL_Rect source{request.margin, logicalHeight - 8, logicalWidth - 2 * request.margin, 8};
+        SDL_RenderDrawRect(renderer, &source);
+    });
+#endif // DEBUG
 }
 
 

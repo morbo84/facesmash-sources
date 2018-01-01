@@ -8,7 +8,8 @@
 namespace gamee {
 
 
-struct SmashEvent;
+struct FaceSmashEvent;
+struct FaceMissEvent;
 
 
 class ComboSystem final {
@@ -22,7 +23,8 @@ public:
     ComboSystem();
     ~ComboSystem();
 
-    void receive(const SmashEvent &) noexcept;
+    void receive(const FaceSmashEvent &) noexcept;
+    void receive(const FaceMissEvent &) noexcept;
 
     void update(Registry &, delta_type);
 

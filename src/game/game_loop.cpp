@@ -58,6 +58,7 @@ void GameLoop::init(GameRenderer &renderer) {
     const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/time", "TIME:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
 
     if(cameraService.available()) {
         textureCache.load<SDLStreamingTextureLoader>("visage/frame", renderer, cameraService.width(), cameraService.height());

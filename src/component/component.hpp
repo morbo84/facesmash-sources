@@ -36,9 +36,6 @@ struct HUD final {
 };
 
 
-struct HUDScore final {};
-
-
 struct Sprite final {
     SDLTextureHandle handle;
     int width;
@@ -142,9 +139,20 @@ struct SceneChangeRequest final {
 
 struct SpawnRequest final {
     SDL_Rect zone;
+    int margin;
     delta_type timing;
     delta_type interval;
     delta_type elapsed{0_ui32};
+};
+
+
+struct GameTimer final {
+    delta_type remaining;
+};
+
+
+struct PlayerScore final {
+    int score{0};
 };
 
 

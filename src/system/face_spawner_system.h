@@ -10,7 +10,6 @@ namespace gamee {
 
 
 class FaceSpawnerSystem final {
-    static constexpr UInt8 extra = 100;
     static constexpr UInt8 length = 7;
 
 public:

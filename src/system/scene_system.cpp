@@ -76,10 +76,23 @@ void SceneSystem::training(Registry &registry) {
 
 void SceneSystem::timer(Registry &registry) {
     backgroundFrame(registry);
-    hudScore(registry);
+    score(registry);
 
     // default spawner
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{340, 400, 400, 200}, 1200_ui32, 1800_ui32);
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
+
+    auto &textureCache = Locator::TextureCache::ref();
+
+    // timer & time
+
+    auto timer = registry.create<Renderable>();
+    auto handle = textureCache.handle("hud/time");
+    registry.assign<HUD>(timer, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(timer, logicalWidth - 2.f * handle->width(), 32.f);
+
+    auto time = registry.create<Renderable>();
+    registry.attach<GameTimer>(time, 30000_ui32);
+    registry.assign<Transform>(time, logicalWidth - handle->width() + 16.f, 32.f);
 
 #if DEBUG
     smashButtons(registry);
@@ -104,7 +117,7 @@ void SceneSystem::backgroundFrame(Registry &registry) {
 }
 
 
-void SceneSystem::hudScore(Registry &registry) {
+void SceneSystem::score(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto label = registry.create<Renderable>();
@@ -113,7 +126,7 @@ void SceneSystem::hudScore(Registry &registry) {
     registry.assign<Transform>(label, 32.f, 32.f);
 
     auto score = registry.create<Renderable>();
-    registry.attach<HUDScore>(score);
+    registry.attach<PlayerScore>(score);
     registry.assign<Transform>(score, 32.f + handle->width() + 16.f, 32.f);
 }
 

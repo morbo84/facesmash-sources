@@ -53,9 +53,6 @@ void FaceSmashSystem::update(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     const SDL_Rect screen = logicalScreen;
 
-    ScoreEvent scoreEvent{ 0 };
-    SmashEvent smashEvent{ 0_ui16, 0_ui16 };
-
     view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
         const auto area = transform * box;
         SDL_Point center = { area.x + area.w / 2, area.y + area.h / 2 };
@@ -74,8 +71,11 @@ void FaceSmashSystem::update(Registry &registry) {
                 // TODO other scores ...
             }
 
-            scoreEvent.score -= smash.miss;
-            ++smashEvent.miss;
+            if(registry.has<PlayerScore>()) {
+                auto &score = registry.get<PlayerScore>();
+                score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
+                Locator::Dispatcher::ref().enqueue<FaceMissEvent>();
+            }
 
             registry.destroy(entity);
         } else if(dirty && smash.type == type) {
@@ -93,20 +93,14 @@ void FaceSmashSystem::update(Registry &registry) {
                 // TODO other scores ...
             }
 
-            scoreEvent.score += smash.smash;
-            ++smashEvent.smash;
+            if(registry.has<PlayerScore>()) {
+                registry.get<PlayerScore>().score += smash.smash;
+                Locator::Dispatcher::ref().enqueue<FaceSmashEvent>();
+            }
 
             registry.destroy(entity);
         }
     });
-
-    if(scoreEvent.score) {
-        Locator::Dispatcher::ref().enqueue<ScoreEvent>(scoreEvent);
-    }
-
-    if(smashEvent.miss || smashEvent.smash) {
-        Locator::Dispatcher::ref().enqueue<SmashEvent>(smashEvent);
-    }
 
     dirty = false;
 }
