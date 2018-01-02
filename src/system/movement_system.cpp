@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../component/component.hpp"
 #include "movement_system.h"
 

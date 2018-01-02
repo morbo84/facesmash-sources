@@ -66,9 +66,29 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 #if DEBUG
     registry.view<SpawnRequest>().each([&](auto, const auto &request) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &request.zone);
-        const SDL_Rect source{request.margin, logicalHeight - 8, logicalWidth - 2 * request.margin, 8};
-        SDL_RenderDrawRect(renderer, &source);
+        SDL_RenderDrawRect(renderer, &request.target);
+
+        if(request.horizontal) {
+            if(request.rightBottom) {
+                // bottom
+                const SDL_Rect source{request.from, logicalHeight - 8, request.width, 8};
+                SDL_RenderDrawRect(renderer, &source);
+            } else {
+                // top
+                const SDL_Rect source{request.from, 0, request.width, 8};
+                SDL_RenderDrawRect(renderer, &source);
+            }
+        } else {
+            if(request.rightBottom) {
+                // right
+                const SDL_Rect source{logicalWidth - 8, request.from, 8, request.width};
+                SDL_RenderDrawRect(renderer, &source);
+            } else {
+                // left
+                const SDL_Rect source{0, request.from, 8, request.width};
+                SDL_RenderDrawRect(renderer, &source);
+            }
+        }
     });
 #endif // DEBUG
 }

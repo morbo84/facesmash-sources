@@ -110,9 +110,9 @@ struct UIButton final {
 
 
 struct Movement final {
-    float gravity; // sort of _gravitational constant_
-    float velX; // horizontal component of the velocity
-    float velY; // vertical component of the velocity
+    float gravity;
+    float velX;
+    float velY;
 };
 
 
@@ -135,9 +135,13 @@ struct SceneChangeRequest final {
 
 
 struct SpawnRequest final {
-    SDL_Rect zone;
-    int margin;
-    delta_type timing;
+    SDL_Rect target;
+    int from;
+    int width;
+    bool horizontal;
+    bool rightBottom;
+    delta_type xt;
+    delta_type yt;
     delta_type interval;
     delta_type elapsed{0_ui32};
 };

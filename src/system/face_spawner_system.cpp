@@ -31,11 +31,32 @@ void FaceSpawnerSystem::update(Registry &registry, delta_type delta) {
             }
 
             auto spawn = [&, this](auto handle, auto type) {
-                const int dstX = request.zone.x + (generator() % request.zone.w);
-                const int dstY = request.zone.y + (generator() % request.zone.h);
+                const int dstX = request.target.x + (generator() % request.target.w) - (handle->width() / 2);
+                const int dstY = request.target.y + (generator() % request.target.h) - (handle->height() / 2);
 
-                const int srcX = (generator() % (logicalWidth + 2 * request.margin)) - request.margin - handle->width() / 2;
-                const int srcY = logicalHeight + handle->height();
+                int srcX, srcY;
+
+                if(request.horizontal) {
+                    if(request.rightBottom) {
+                        // bottom
+                        srcX = (generator() % request.width) + request.from - (handle->width() / 2);
+                        srcY = logicalHeight;
+                    } else {
+                        // top
+                        srcX = (generator() % request.width) + request.from - (handle->width() / 2);
+                        srcY = -handle->height();
+                    }
+                } else {
+                    if(request.rightBottom) {
+                        // right
+                        srcX = logicalWidth;
+                        srcY = (generator() % request.width) + request.from - (handle->height() / 2);
+                    } else {
+                        // left
+                        srcX = -handle->width();
+                        srcY = (generator() % request.width) + request.from - (handle->height() / 2);
+                    }
+                }
 
                 const float dX = dstX - srcX;
                 const float dY = dstY - srcY;
@@ -43,11 +64,10 @@ void FaceSpawnerSystem::update(Registry &registry, delta_type delta) {
 
                 auto entity = registry.create<Renderable>();
                 registry.assign<Transform>(entity, 1.f * srcX, 1.f * srcY);
-                registry.assign<Movement>(entity, gravity, 1.f * dX / request.timing, 1.f * dY / request.timing);
+                registry.assign<Movement>(entity, gravity, 1.f * dX / request.xt, 1.f * dY / request.yt);
                 registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
                 registry.assign<BoundingBox>(entity, handle->width(), handle->height());
                 registry.assign<FaceSmash>(entity, type);
-
             };
 
             switch (faces[next]) {

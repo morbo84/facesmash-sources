@@ -60,7 +60,10 @@ void SceneSystem::camera(Registry &registry) {
 
 
 void SceneSystem::spawner(Registry &registry) {
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, 140, 800, true, true, 1800_ui32, 1200_ui32, 2000_ui32);
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{490, logicalHeight - 100, 100, 50}, 140, 800, true, false, 2000_ui32, 0xFFFFFFFF_ui32, 5000_ui32);
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{100, logicalHeight - 100, 100, 50}, 200, 400, false, false, 400_ui32, 0xFFFFFFFF_ui32, 4000_ui32);
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{logicalWidth - 200, logicalHeight - 100, 100, 50}, 200, 400, false, true, 400_ui32, 0xFFFFFFFF_ui32, 4000_ui32);
 }
 
 
@@ -207,7 +210,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 mainMenu(registry);
                 break;
             case SceneType::THE_GAME:
-                timer(registry);
+                theGame(registry);
                 break;
             case SceneType::GAME_OVER:
                 gameOver(registry);
