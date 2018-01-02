@@ -17,7 +17,11 @@ void FrameSystem::update() {
         int pitch;
 
         SDL_LockTexture(*handle, nullptr, &pixels, &pitch);
-        std::memcpy(pixels, Locator::Camera::ref().pixels(), pitch * cameraService.height());
+
+        Locator::Camera::ref().pixels([&](const void *data) {
+            std::memcpy(pixels, data, pitch * cameraService.height());
+        });
+
         SDL_UnlockTexture(*handle);
     }
 }

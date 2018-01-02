@@ -16,15 +16,9 @@ int CameraAndroid::height() const noexcept {
 }
 
 
-const void * CameraAndroid::pixels() const noexcept {
+void CameraAndroid::pixels(std::function<void(const void *)> func) const noexcept {
     // TODO
-    return {};
-}
-
-
-int CameraAndroid::pitch() const noexcept {
-    // TODO
-    return {};
+    func(nullptr);
 }
 
 

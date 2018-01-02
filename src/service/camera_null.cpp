@@ -14,13 +14,8 @@ int CameraNull::height() const noexcept {
 }
 
 
-const void * CameraNull::pixels() const noexcept {
-    return nullptr;
-}
-
-
-int CameraNull::pitch() const noexcept {
-    return {};
+void CameraNull::pixels(std::function<void(const void *)> func) const noexcept {
+    func(nullptr);
 }
 
 
