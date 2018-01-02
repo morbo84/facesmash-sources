@@ -28,6 +28,7 @@ void releaseBasicServices() {
 
 
 void initPlatformServices() {
+    gamee::Locator::FaceBus::set<gamee::FaceBusService>();
     gamee::Locator::Audio::set<gamee::AudioSDL>();
 
 #ifdef __ANDROID__
@@ -45,6 +46,7 @@ void releasePlatformServices() {
 
     gamee::Locator::Camera::reset();
     gamee::Locator::Audio::reset();
+    gamee::Locator::FaceBus::reset();
 }
 
 
