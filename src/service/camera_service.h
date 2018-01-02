@@ -12,6 +12,7 @@ struct CameraService {
     virtual void release() = 0;
 
     virtual bool available() const noexcept = 0;
+    virtual bool dirty() const noexcept = 0;
 
     virtual int width() const noexcept = 0;
     virtual int height() const noexcept = 0;

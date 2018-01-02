@@ -20,6 +20,12 @@ bool CameraAndroid::available() const noexcept {
 }
 
 
+bool CameraAndroid::dirty() const noexcept {
+    // TODO
+    return false;
+}
+
+
 int CameraAndroid::width() const noexcept {
     // TODO
     return {};

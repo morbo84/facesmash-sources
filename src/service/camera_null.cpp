@@ -12,6 +12,12 @@ bool CameraNull::available() const noexcept {
     return false;
 }
 
+
+bool CameraNull::dirty() const noexcept {
+    return false;
+}
+
+
 int CameraNull::width() const noexcept {
     return {};
 }

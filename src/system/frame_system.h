@@ -5,19 +5,8 @@
 namespace gamee {
 
 
-struct FrameEvent;
-
-
 struct FrameSystem final {
-    FrameSystem();
-    ~FrameSystem();
-
-    void receive(const FrameEvent &) noexcept;
-
     void update();
-
-private:
-    bool pending;
 };
 
 

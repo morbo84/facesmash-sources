@@ -10,7 +10,6 @@
 namespace gamee {
 
 
-#if DEBUG
 struct TimeDebug final {
     float average;
 };
@@ -22,7 +21,6 @@ struct FPSDebug final {};
 struct SmashButton final {
     FaceType type;
 };
-#endif // DEBUG
 
 
 struct HUD final {
