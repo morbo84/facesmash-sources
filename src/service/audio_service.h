@@ -6,10 +6,8 @@ namespace gamee {
 
 
 struct AudioService {
-    virtual ~AudioService() = default;
-
-    virtual void init() = 0;
-    virtual void release() = 0;
+    void init();
+    void release();
 
     // TODO
 };
