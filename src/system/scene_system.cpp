@@ -36,12 +36,31 @@ void SceneSystem::score(Registry &registry) {
 }
 
 
+void SceneSystem::timer(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto timer = registry.create<Renderable>();
+    auto handle = textureCache.handle("hud/time");
+
+    registry.assign<HUD>(timer, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(timer, logicalWidth - 2.f * handle->width(), 32.f);
+
+    auto time = registry.create<Renderable>();
+    registry.attach<GameTimer>(time, 60000_ui32);
+    registry.assign<Transform>(time, logicalWidth - handle->width() + 16.f, 32.f);
+}
+
+
 void SceneSystem::camera(Registry &registry) {
     if(!registry.has<Camera>()) {
         auto camera = registry.create();
         registry.assign<Transform>(camera, 0.f, 0.f);
         registry.attach<Camera>(camera);
     }
+}
+
+
+void SceneSystem::spawner(Registry &registry) {
+    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
 }
 
 
@@ -140,88 +159,22 @@ void SceneSystem::splashScreen(Registry &registry) {
 void SceneSystem::mainMenu(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto training = registry.create();
-    auto happy = textureCache.handle("emoji/happy");
+    auto entity = registry.create();
+    auto emoji = textureCache.handle("emoji/happy");
 
-    registry.assign<Renderable>(training);
-    registry.assign<Transform>(training, 116.f, logicalHeight / 2.f - happy->height() / 2);
-    registry.assign<Sprite>(training, happy, happy->width(), happy->height(), happy->width(), happy->height());
-    registry.assign<BoundingBox>(training, happy->width(), happy->height());
-    registry.assign<UIButton>(training, UIButton::Action::TRAINING);
-
-    auto timer = registry.create();
-    auto sad = textureCache.handle("emoji/sad");
-
-    registry.assign<Renderable>(timer);
-    registry.assign<Transform>(timer, 476.f, logicalHeight / 2.f - sad->height() / 2);
-    registry.assign<Sprite>(timer, sad, sad->width(), sad->height(), sad->width(), sad->height());
-    registry.assign<BoundingBox>(timer, sad->width(), sad->height());
-    registry.assign<UIButton>(timer, UIButton::Action::TIMER);
-
-    auto challenge = registry.create();
-    auto surprised = textureCache.handle("emoji/surprised");
-
-    registry.assign<Renderable>(challenge);
-    registry.assign<Transform>(challenge, 836.f, logicalHeight / 2.f - surprised->height() / 2);
-    registry.assign<Sprite>(challenge, surprised, surprised->width(), surprised->height(), surprised->width(), surprised->height());
-    registry.assign<BoundingBox>(challenge, surprised->width(), surprised->height());
-    registry.assign<UIButton>(challenge, UIButton::Action::CHALLENGE);
+    registry.assign<Renderable>(entity);
+    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
+    registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
+    registry.assign<BoundingBox>(entity, emoji->width(), emoji->height());
+    registry.assign<UIButton>(entity, UIButton::Action::PLAY);
 }
 
 
-void SceneSystem::training(Registry &registry) {
+void SceneSystem::theGame(Registry &registry) {
     backgroundFrame(registry);
     score(registry);
-
-    // default spawner
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
-
-    // TODO add stuff to lifes management
-
-#if DEBUG
-    smashButtons(registry);
-#endif // DEBUG
-}
-
-
-void SceneSystem::timer(Registry &registry) {
-    backgroundFrame(registry);
-    score(registry);
-
-    // default spawner
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
-
-    auto &textureCache = Locator::TextureCache::ref();
-
-    // timer & time
-
-    auto timer = registry.create<Renderable>();
-    auto handle = textureCache.handle("hud/time");
-    registry.assign<HUD>(timer, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(timer, logicalWidth - 2.f * handle->width(), 32.f);
-
-    auto time = registry.create<Renderable>();
-    registry.attach<GameTimer>(time, 30000_ui32);
-    registry.assign<Transform>(time, logicalWidth - handle->width() + 16.f, 32.f);
-
-#if DEBUG
-    smashButtons(registry);
-#endif // DEBUG
-}
-
-
-void SceneSystem::challenge(Registry &registry) {
-    backgroundFrame(registry);
-
-    // default spawner
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, -140, 1200_ui32, 1800_ui32);
-
-    auto handle = Locator::TextureCache::ref().handle("icon/end");
-    auto end = registry.create<Renderable>();
-    registry.assign<Transform>(end, logicalWidth / 2.f - handle->width() / 2.f, handle->height() + 16.f);
-    registry.assign<Sprite>(end, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<BoundingBox>(end, handle->width(), handle->height());
-    registry.assign<UIButton>(end, UIButton::Action::MENU);
+    timer(registry);
+    spawner(registry);
 
 #if DEBUG
     smashButtons(registry);
@@ -253,14 +206,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::MENU_PAGE:
                 mainMenu(registry);
                 break;
-            case SceneType::GAME_TRAINING:
-                training(registry);
-                break;
-            case SceneType::GAME_TIMER:
+            case SceneType::THE_GAME:
                 timer(registry);
-                break;
-            case SceneType::GAME_CHALLENGE:
-                challenge(registry);
                 break;
             case SceneType::GAME_OVER:
                 gameOver(registry);

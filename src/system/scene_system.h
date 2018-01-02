@@ -11,7 +11,9 @@ namespace gamee {
 class SceneSystem final {
     void backgroundFrame(Registry &);
     void score(Registry &);
+    void timer(Registry &);
     void camera(Registry &);
+    void spawner(Registry &);
 
 #if DEBUG
     void smashButtons(Registry &);
@@ -20,9 +22,7 @@ class SceneSystem final {
 
     void splashScreen(Registry &);
     void mainMenu(Registry &);
-    void training(Registry &);
-    void timer(Registry &);
-    void challenge(Registry &);
+    void theGame(Registry &);
     void gameOver(Registry &);
 
 public:

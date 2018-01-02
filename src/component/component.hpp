@@ -101,9 +101,7 @@ struct RotationAnimation final {
 
 struct UIButton final {
     enum class Action: UInt8 {
-        CHALLENGE,
-        TRAINING,
-        TIMER,
+        PLAY,
         MENU
     };
 

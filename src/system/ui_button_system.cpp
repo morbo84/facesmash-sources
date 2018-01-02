@@ -38,14 +38,8 @@ void UIButtonSystem::update(Registry &registry) {
                 }
 
                 switch(button.action) {
-                case UIButton::Action::CHALLENGE:
-                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_CHALLENGE);
-                    break;
-                case UIButton::Action::TRAINING:
-                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_TRAINING);
-                    break;
-                case UIButton::Action::TIMER:
-                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_TIMER);
+                case UIButton::Action::PLAY:
+                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::THE_GAME);
                     break;
                 case UIButton::Action::MENU:
                     registry.attach<SceneChangeRequest>(registry.create(), SceneType::MENU_PAGE);
