@@ -9,12 +9,6 @@ namespace gamee {
 
 
 struct CameraAndroid final: CameraService {
-    void init() override;
-    void release() override;
-
-    bool available() const noexcept override;
-    bool dirty() const noexcept override;
-
     int width() const noexcept override;
     int height() const noexcept override;
 

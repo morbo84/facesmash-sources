@@ -9,12 +9,6 @@ namespace gamee {
 
 
 class SceneSystem final {
-    void splashScreen(Registry &);
-    void mainMenu(Registry &);
-    void training(Registry &);
-    void timer(Registry &);
-    void challenge(Registry &);
-
     void backgroundFrame(Registry &);
     void score(Registry &);
     void camera(Registry &);
@@ -23,6 +17,13 @@ class SceneSystem final {
     void smashButtons(Registry &);
     void debug(Registry &);
 #endif // DEBUG
+
+    void splashScreen(Registry &);
+    void mainMenu(Registry &);
+    void training(Registry &);
+    void timer(Registry &);
+    void challenge(Registry &);
+    void gameOver(Registry &);
 
 public:
     void update(Registry &, delta_type);

@@ -12,7 +12,6 @@ void GameLoop::init(GameRenderer &renderer) {
 
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
-    auto &cameraService = Locator::Camera::ref();
 
     ttfFontCache.load<TTFFontLoader>("ttf/roboto/condensed/48", "font/roboto-condensed.ttf", 48);
     ttfFontCache.load<TTFFontLoader>("ttf/roboto/regular/108", "font/roboto.ttf", 108);
@@ -37,6 +36,8 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer, 128, 128);
 
+    textureCache.load<SDLTextureLoader>("icon/end", "png/end.png", renderer, 128, 128);
+
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
 
@@ -60,9 +61,10 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
     textureCache.load<TTFFontTextureLoader>("hud/time", "TIME:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
 
-    if(cameraService.available()) {
-        textureCache.load<SDLStreamingTextureLoader>("visage/frame", renderer, cameraService.width(), cameraService.height());
-    }
+#ifdef __ANDROID__
+    auto &cameraService = Locator::Camera::ref();
+    textureCache.load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
+#endif
 
     // request the splash screen
 

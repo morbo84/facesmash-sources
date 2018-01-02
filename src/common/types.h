@@ -50,7 +50,8 @@ enum class SceneType: UInt8 {
     MENU_PAGE,
     GAME_TRAINING,
     GAME_CHALLENGE,
-    GAME_TIMER
+    GAME_TIMER,
+    GAME_OVER
 };
 
 

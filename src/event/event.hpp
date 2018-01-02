@@ -35,7 +35,6 @@ struct FaceEvent final {
 
 struct FaceSmashEvent final {};
 struct FaceMissEvent final {};
-struct GameOverEvent final {};
 
 
 }

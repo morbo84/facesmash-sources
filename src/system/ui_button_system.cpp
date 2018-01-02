@@ -47,6 +47,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIButton::Action::TIMER:
                     registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_TIMER);
                     break;
+                case UIButton::Action::MENU:
+                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::MENU_PAGE);
+                    break;
                 }
             }
         });

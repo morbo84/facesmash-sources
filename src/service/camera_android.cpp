@@ -4,28 +4,6 @@
 namespace gamee {
 
 
-void CameraAndroid::init() {
-    // TODO
-}
-
-
-void CameraAndroid::release() {
-    // TODO
-}
-
-
-bool CameraAndroid::available() const noexcept {
-    // TODO
-    return false;
-}
-
-
-bool CameraAndroid::dirty() const noexcept {
-    // TODO
-    return false;
-}
-
-
 int CameraAndroid::width() const noexcept {
     // TODO
     return {};

@@ -4,27 +4,13 @@
 namespace gamee {
 
 
-void CameraNull::init() {}
-void CameraNull::release() {}
-
-
-bool CameraNull::available() const noexcept {
-    return false;
-}
-
-
-bool CameraNull::dirty() const noexcept {
-    return false;
-}
-
-
 int CameraNull::width() const noexcept {
-    return {};
+    return 0;
 }
 
 
 int CameraNull::height() const noexcept {
-    return {};
+    return 0;
 }
 
 

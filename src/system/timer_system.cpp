@@ -25,7 +25,11 @@ void TimerSystem::update(Registry &registry, GameRenderer &renderer, delta_type 
         registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
 
         if(0 == timer.remaining) {
-            Locator::Dispatcher::ref().enqueue<GameOverEvent>();
+            if(registry.has<SceneChangeRequest>()) {
+                registry.destroy(registry.attachee<SceneChangeRequest>());
+            }
+
+            registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_OVER);
         }
     }
 }

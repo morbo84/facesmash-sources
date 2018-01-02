@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <SDL_platform.h>
 #include <memory>
 #include <string>
 #include "common/types.h"
@@ -29,23 +28,19 @@ void releaseBasicServices() {
 
 
 void initPlatformServices() {
-    std::string platform = SDL_GetPlatform();
-
     gamee::Locator::Audio::set<gamee::AudioSDL>();
 
-    if(platform == "Android") {
-        gamee::Locator::Camera::set<gamee::CameraAndroid>();
-    } else {
-        gamee::Locator::Camera::set<gamee::CameraNull>();
-    }
+#ifdef __ANDROID__
+    gamee::Locator::Camera::set<gamee::CameraAndroid>();
+#else
+    gamee::Locator::Camera::set<gamee::CameraNull>();
+#endif
 
     gamee::Locator::Audio::ref().init();
-    gamee::Locator::Camera::ref().init();
 }
 
 
 void releasePlatformServices() {
-    gamee::Locator::Camera::ref().release();
     gamee::Locator::Audio::ref().release();
 
     gamee::Locator::Camera::reset();
