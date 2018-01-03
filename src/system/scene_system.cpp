@@ -15,9 +15,15 @@ void SceneSystem::backgroundFrame(Registry &registry) {
         auto &cameraService = Locator::Camera::ref();
         auto frame = registry.create();
 
-        registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.assign<Renderable>(frame, cameraService.height() > cameraService.width() ? 0.f : -90.f, 20);
-        registry.assign<Transform>(frame, (logicalWidth - handle->width()) / 2.f, (logicalHeight - handle->height()) / 2.f);
+        if(cameraService.height() > cameraService.width()) {
+            registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), logicalWidth, handle->height() * logicalWidth / handle->width());
+            registry.assign<Transform>(frame, 0.f, (logicalHeight - handle->height()) / 2.f);
+            registry.assign<Renderable>(frame, 0.f, 20);
+        } else {
+            registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), handle->height() * logicalWidth / handle->width(), logicalWidth);
+            registry.assign<Transform>(frame, 0.f, (logicalHeight - handle->width()) / 2.f);
+            registry.assign<Renderable>(frame, -90.f, 20);
+        }
     }
 }
 
