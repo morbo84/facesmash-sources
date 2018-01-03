@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <SDL_events.h>
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -63,16 +64,18 @@ void GameEnv::resume() {
 GameEnv::GameEnv() noexcept
     : errcode{ErrorCode::NONE}, renderer{nullptr}, loop{true}
 {
-    Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER;
-    int sdlImageFlags = IMG_INIT_PNG;
+    const Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER;
+    const int sdlImageFlags = IMG_INIT_PNG;
+    const int sdlMixerFlags = 0;
 
     SDL_WasInit = (SDL_Init(sdlFlags) == 0);
     IMG_WasInit = ((IMG_Init(sdlImageFlags) & sdlImageFlags) == sdlImageFlags);
+    Mix_WasInit = ((Mix_Init(sdlMixerFlags) & sdlMixerFlags) == sdlMixerFlags);
     TTF_Init();
 
     renderer = std::make_unique<GameRenderer>();
 
-    if(!SDL_WasInit || !IMG_WasInit || !TTF_WasInit()) {
+    if(!SDL_WasInit || !IMG_WasInit || !Mix_WasInit || !TTF_WasInit()) {
         errcode = ErrorCode::UNDERLYING_LIBRARY_INITIALIZATION;
     } else if(!*renderer) {
         errcode = ErrorCode::RENDERER_INITIALIZATION;
@@ -90,6 +93,7 @@ GameEnv::~GameEnv() noexcept {
     SDL_SetEventFilter(nullptr, nullptr);
     if(TTF_WasInit()) { TTF_Quit(); }
     if(IMG_WasInit) { IMG_Quit(); }
+    if(Mix_WasInit) { Mix_Quit(); }
     if(SDL_WasInit) { SDL_Quit(); }
 }
 

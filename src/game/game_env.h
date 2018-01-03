@@ -49,9 +49,10 @@ public:
     int exec() noexcept;
 
 private:
-    // internal TTF like WasInit variables for SDL2 and Image
+    // internal TTF like WasInit variables for SDL2, Image and Mixer
     bool SDL_WasInit;
     bool IMG_WasInit;
+    bool Mix_WasInit;
     // actual game data members
     ErrorCode errcode;
     std::unique_ptr<GameRenderer> renderer;

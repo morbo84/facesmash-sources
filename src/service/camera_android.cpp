@@ -3,9 +3,15 @@
 #include <cassert>
 #include <tuple>
 
+
 namespace gamee {
 
+
+#ifdef __ANDROID__
 std::tuple<int, int, int> facesmashGetCameraParams();
+#else
+std::tuple<int, int, int> facesmashGetCameraParams() { return {}; }
+#endif
 
 
 void CameraAndroid::init() {
