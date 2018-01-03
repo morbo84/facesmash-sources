@@ -10,6 +10,7 @@ namespace gamee {
 
 class SceneSystem final {
     void backgroundFrame(Registry &);
+    void gameUI(Registry &);
     void score(Registry &);
     void timer(Registry &);
     void camera(Registry &);

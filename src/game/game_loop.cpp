@@ -66,6 +66,8 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
 #endif
 
+    textureCache.load<SDLTextureLoader>("ui/banner", "png/banner.png", renderer, 1080, 320);
+
     // request the splash screen
 
     registry.attach<SceneChangeRequest>(registry.create(), SceneType::SPLASH_SCREEN);

@@ -28,6 +28,23 @@ void SceneSystem::backgroundFrame(Registry &registry) {
 }
 
 
+void SceneSystem::gameUI(Registry &registry) {
+    auto handle = Locator::TextureCache::ref().handle("ui/banner");
+
+    auto top = registry.create();
+    registry.assign<Sprite>(top, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(top, 0.f, 0.f);
+    registry.assign<Renderable>(top, 0.f, 30);
+
+    auto bottom = registry.create();
+    registry.assign<Sprite>(bottom, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(bottom, 0.f, 1600.f);
+    registry.assign<Renderable>(bottom, 0.f, 30);
+
+    // TODO
+}
+
+
 void SceneSystem::score(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
@@ -181,6 +198,7 @@ void SceneSystem::mainMenu(Registry &registry) {
 
 void SceneSystem::theGame(Registry &registry) {
     backgroundFrame(registry);
+    gameUI(registry);
     score(registry);
     timer(registry);
     spawner(registry);
