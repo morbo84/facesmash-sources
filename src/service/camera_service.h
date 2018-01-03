@@ -14,8 +14,7 @@ struct CameraService {
     virtual int width() const noexcept = 0;
     virtual int height() const noexcept = 0;
 
-    virtual void pixels(std::function<void(const void *)>) const noexcept = 0;
-    virtual int pitch() const noexcept = 0;
+    virtual void frame(std::function<void(const void *, int)>) const noexcept = 0;
 };
 
 
