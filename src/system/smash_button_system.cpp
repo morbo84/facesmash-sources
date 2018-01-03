@@ -38,7 +38,8 @@ void SmashButtonSystem::update(Registry &registry) {
         });
 
         dirty = false;
-    }}
+    }
+}
 
 
 }

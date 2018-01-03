@@ -7,7 +7,6 @@ set(
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
     ${facesmash_SOURCE_DIR}/src/service/audio_service.cpp
-    ${facesmash_SOURCE_DIR}/src/service/camera_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/system/combo_system.cpp
