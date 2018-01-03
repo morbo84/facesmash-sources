@@ -11,14 +11,8 @@ namespace gamee {
 struct GameRenderer;
 
 
-class TimerSystem final {
-    static constexpr UInt16 duration = 30000;
-
-public:
+struct TimerSystem final {
     void update(Registry &, GameRenderer &, delta_type);
-
-private:
-    UInt16 elapsed{0_ui16};
 };
 
 
