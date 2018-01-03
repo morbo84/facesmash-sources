@@ -13,6 +13,7 @@ struct CameraNull final: CameraService {
     int height() const noexcept override;
 
     void pixels(std::function<void(const void *)>) const noexcept override;
+    int pitch() const noexcept override;
 };
 
 

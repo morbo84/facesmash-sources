@@ -22,4 +22,10 @@ void CameraAndroid::pixels(std::function<void(const void *)> func) const noexcep
 }
 
 
+int CameraAndroid::pitch() const noexcept {
+    // TODO
+    return {};
+}
+
+
 }

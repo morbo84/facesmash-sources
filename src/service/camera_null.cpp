@@ -19,4 +19,9 @@ void CameraNull::pixels(std::function<void(const void *)> func) const noexcept {
 }
 
 
+int CameraNull::pitch() const noexcept {
+    return 0;
+}
+
+
 }
