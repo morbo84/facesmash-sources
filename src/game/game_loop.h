@@ -5,6 +5,7 @@
 #include <memory>
 #include "../common/types.h"
 #include "../system/bonus_system.h"
+#include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
@@ -18,6 +19,7 @@
 #include "../system/score_system.h"
 #include "../system/smash_button_system.h"
 #include "../system/sprite_animation_system.h"
+#include "../system/the_game_system.h"
 #include "../system/timer_system.h"
 #include "../system/ui_button_system.h"
 #include "game_env.h"
@@ -44,6 +46,7 @@ private:
     Registry registry;
     // systems
     BonusSystem bonusSystem;
+    CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
     FaceSmashSystem faceSmashSystem;
     FaceSpawnerSystem faceSpawnerSystem;
@@ -59,6 +62,7 @@ private:
     SmashButtonSystem smashButtonSystem;
 #endif // DEBUG};
     SpriteAnimationSystem spriteAnimationSystem;
+    TheGameSystem theGameSystem;
     TimerSystem timerSystem;
     UIButtonSystem uiButtonSystem;
 };

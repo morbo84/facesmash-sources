@@ -37,6 +37,9 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer, 128, 128);
 
+    textureCache.load<SDLTextureLoader>("emoji/pouting", "png/pouting.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/star", "png/star.png", renderer, 128, 128);
+
     textureCache.load<SDLTextureLoader>("icon/end", "png/end.png", renderer, 128, 128);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
@@ -112,12 +115,16 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         accumulator -= msPerUpdate;
     }
 
+    theGameSystem.update(registry, delta);
+
     fadeAnimationSystem.update(registry, delta);
     rotationAnimationSystem.update(registry, delta);
     spriteAnimationSystem.update(registry, delta);
 
     scoreSystem.update(registry, renderer, delta);
     timerSystem.update(registry, renderer, delta);
+
+    cameraSystem.update(registry, delta);
 
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);

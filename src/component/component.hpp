@@ -64,6 +64,12 @@ struct Transform final {
 struct Camera final {};
 
 
+struct CameraShake final {
+    delta_type remaining{250_ui32};
+    UInt8 shake{4_ui8};
+};
+
+
 struct BoundingBox final: SDL_Rect {
     BoundingBox(int x, int y, int w, int h)
         : SDL_Rect{x, y, w, h}

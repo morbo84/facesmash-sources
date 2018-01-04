@@ -25,6 +25,11 @@ void BonusSystem::combo(Registry &registry, SDLTextureHandle comboHandle, SDLTex
     registry.assign<DestroyLater>(scoreEntity, 1500_ui32);
     registry.assign<Sprite>(scoreEntity, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
     registry.assign<Transform>(scoreEntity, logicalWidth / 2.f - scoreHandle->width() / 2.f, bonusTransform.y + comboHandle->height() + scoreHandle->height() * 1.2f);
+
+    // it doesn't make sense otherwise...
+    assert(registry.has<Camera>());
+    // shake the camera
+    registry.attach<CameraShake>(registry.attachee<Camera>());
 }
 
 
