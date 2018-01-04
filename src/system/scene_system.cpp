@@ -32,47 +32,42 @@ void SceneSystem::backgroundFrame(Registry &registry) {
 
 
 void SceneSystem::gameUI(Registry &registry) {
-    auto handle = Locator::TextureCache::ref().handle("game/banner");
+    auto &textureCache = Locator::TextureCache::ref();
 
     auto top = registry.create();
-    registry.assign<Sprite>(top, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    auto bottom = registry.create();
+    auto bannerHandle = textureCache.handle("game/banner");
+
+    registry.assign<Sprite>(top, bannerHandle, bannerHandle->width(), bannerHandle->height(), bannerHandle->width(), bannerHandle->height());
     registry.assign<Transform>(top, 0.f, 0.f);
     registry.assign<Renderable>(top, 0.f, 30);
 
-    auto bottom = registry.create();
-    registry.assign<Sprite>(bottom, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Sprite>(bottom, bannerHandle, bannerHandle->width(), bannerHandle->height(), bannerHandle->width(), bannerHandle->height());
     registry.assign<Transform>(bottom, 0.f, 1600.f);
     registry.assign<Renderable>(bottom, 0.f, 30);
 
-    // TODO
-}
-
-
-void SceneSystem::score(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-    auto label = registry.create<Renderable>();
-    auto handle = textureCache.handle("hud/score");
-    registry.assign<HUD>(label, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(label, 32.f, 32.f);
+    auto scoreLabel = registry.create<Renderable>();
+    auto scoreHandle = textureCache.handle("hud/score");
+    registry.assign<HUD>(scoreLabel, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
+    registry.assign<Transform>(scoreLabel, 32.f, 32.f);
 
     auto score = registry.create<Renderable>();
     registry.attach<PlayerScore>(score);
-    registry.assign<Transform>(score, 32.f + handle->width() + 16.f, 32.f);
-}
+    registry.assign<Transform>(score, 32.f + scoreHandle->width() + 16.f, 32.f);
 
-
-void SceneSystem::timer(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
     auto timer = registry.create<Renderable>();
-    auto handle = textureCache.handle("hud/time");
-
-    registry.assign<HUD>(timer, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(timer, logicalWidth - 2.f * handle->width(), 32.f);
+    auto timerHandle = textureCache.handle("hud/time");
+    registry.assign<HUD>(timer, timerHandle, timerHandle->width(), timerHandle->height(), timerHandle->width(), timerHandle->height());
+    registry.assign<Transform>(timer, logicalWidth - 2.f * timerHandle->width(), 32.f);
 
     auto time = registry.create<Renderable>();
     registry.attach<GameTimer>(time, 60000_ui32);
-    registry.assign<Transform>(time, logicalWidth - handle->width() + 16.f, 32.f);
+    registry.assign<Transform>(time, logicalWidth - timerHandle->width() + 16.f, 32.f);
+
+    auto bonus = registry.create();
+    registry.assign<Renderable>(bonus, 0.f, 200);
+    registry.assign<Transform>(bonus, logicalWidth / 2.f, bannerHandle->height() - 128.f);
+    registry.attach<BonusLabel>(bonus);
 }
 
 
@@ -195,10 +190,11 @@ void SceneSystem::mainMenu(Registry &registry) {
     auto bgSprite = textureCache.handle("menu/bg");
     registry.assign<Renderable>(bg, 0.f, 10);
     registry.assign<Sprite>(bg, bgSprite, bgSprite->width(), bgSprite->height(), bgSprite->width(), bgSprite->height());
+    registry.assign<FadeAnimation>(bg, 0, 255, 600_ui32);
     registry.assign<Transform>(bg, 0.f, 0.f);
 
     registry.assign<Renderable>(entity);
-    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f + emoji->height() * 2);
+    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
     registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
     registry.assign<BoundingBox>(entity, emoji->width(), emoji->height());
     registry.assign<UIButton>(entity, UIButton::Action::PLAY);
@@ -208,8 +204,6 @@ void SceneSystem::mainMenu(Registry &registry) {
 void SceneSystem::theGame(Registry &registry) {
     backgroundFrame(registry);
     gameUI(registry);
-    score(registry);
-    timer(registry);
     spawner(registry);
 
 #if DEBUG

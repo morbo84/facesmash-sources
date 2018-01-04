@@ -157,6 +157,9 @@ struct PlayerScore final {
 };
 
 
+struct BonusLabel final {};
+
+
 }
 
 

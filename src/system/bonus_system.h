@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SYSTEM_COMBO_SYSTEM_H
-#define FACE_SMASH_SYSTEM_COMBO_SYSTEM_H
+#ifndef FACE_SMASH_SYSTEM_BONUS_SYSTEM_H
+#define FACE_SMASH_SYSTEM_BONUS_SYSTEM_H
 
 
 #include "../common/types.h"
@@ -12,7 +12,7 @@ struct FaceSmashEvent;
 struct FaceMissEvent;
 
 
-class ComboSystem final {
+class BonusSystem final {
     static constexpr delta_type interval = 600;
     static constexpr delta_type bonus = 50;
     static constexpr UInt8 max = 5;
@@ -20,8 +20,8 @@ class ComboSystem final {
     void combo(Registry &, SDLTextureHandle, SDLTextureHandle, int);
 
 public:
-    ComboSystem();
-    ~ComboSystem();
+    BonusSystem();
+    ~BonusSystem();
 
     void receive(const FaceSmashEvent &) noexcept;
     void receive(const FaceMissEvent &) noexcept;
@@ -37,4 +37,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SYSTEM_COMBO_SYSTEM_H
+#endif // FACE_SMASH_SYSTEM_BONUS_SYSTEM_H
