@@ -1,3 +1,4 @@
+#include <cassert>
 #include "../component/component.hpp"
 #include "camera_system.h"
 

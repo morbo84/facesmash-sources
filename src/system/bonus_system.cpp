@@ -1,3 +1,4 @@
+#include <cassert>
 #include <algorithm>
 #include "../component/component.hpp"
 #include "../common/constants.h"
@@ -28,6 +29,7 @@ void BonusSystem::combo(Registry &registry, SDLTextureHandle comboHandle, SDLTex
 
     // it doesn't make sense otherwise...
     assert(registry.has<Camera>());
+
     // shake the camera
     registry.attach<CameraShake>(registry.attachee<Camera>());
 }
