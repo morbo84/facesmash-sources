@@ -49,60 +49,50 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 
 
 void FaceSmashSystem::update(Registry &registry) {
-    auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
-    auto &textureCache = Locator::TextureCache::ref();
-    const SDL_Rect screen = logicalScreen;
+    if(registry.has<PlayerScore>()) {
+        auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
+        auto &textureCache = Locator::TextureCache::ref();
+        const SDL_Rect screen = logicalScreen;
 
-    view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
-        const auto area = transform * box;
-        SDL_Point center = { area.x + area.w / 2, area.y + area.h / 2 };
+        view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
+            const auto area = transform * box;
+            SDL_Point center = { area.x + area.w / 2, area.y + area.h / 2 };
 
-        if(movement.velY > 0 && !SDL_HasIntersection(&screen, &area)) {
-            auto score = registry.create();
-            registry.assign<Renderable>(score);
-            registry.assign<Movement>(score, 0.f, 0.f, -.06f);
-            registry.assign<FadeAnimation>(score, 255, 0, 2000_ui32);
-            registry.assign<DestroyLater>(score, 2000_ui32);
+            if(movement.velY > 0 && !SDL_HasIntersection(&screen, &area)) {
+                switch(smash.miss) {
+                case 50:
+                    addScore(registry, textureCache.handle("miss/50"), center);
+                    break;
+                    // TODO other scores ...
+                }
 
-            switch(smash.miss) {
-            case 50:
-                addScore(registry, textureCache.handle("miss/50"), center);
-                break;
-                // TODO other scores ...
-            }
-
-            if(registry.has<PlayerScore>()) {
                 auto &score = registry.get<PlayerScore>();
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
                 Locator::Dispatcher::ref().enqueue<FaceMissEvent>();
-            }
+                registry.destroy(entity);
+            } else if(dirty && smash.type == type) {
+                auto explosion = registry.create();
+                registry.assign<Sprite>(explosion, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
+                registry.assign<Renderable>(explosion, 0.f, 255);
+                registry.assign<Transform>(explosion, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
+                registry.assign<SpriteAnimation>(explosion, 1000_ui32, 0_ui32, false);
+                registry.assign<DestroyLater>(explosion, 1000_ui32);
 
-            registry.destroy(entity);
-        } else if(dirty && smash.type == type) {
-            auto explosion = registry.create();
-            registry.assign<Sprite>(explosion, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
-            registry.assign<Renderable>(explosion, 0.f, 255);
-            registry.assign<Transform>(explosion, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
-            registry.assign<SpriteAnimation>(explosion, 1000_ui32, 0_ui32, false);
-            registry.assign<DestroyLater>(explosion, 1000_ui32);
+                switch(smash.smash) {
+                case 100:
+                    addScore(registry, textureCache.handle("smash/100"), center);
+                    break;
+                    // TODO other scores ...
+                }
 
-            switch(smash.smash) {
-            case 100:
-                addScore(registry, textureCache.handle("smash/100"), center);
-                break;
-                // TODO other scores ...
-            }
-
-            if(registry.has<PlayerScore>()) {
                 registry.get<PlayerScore>().score += smash.smash;
                 Locator::Dispatcher::ref().enqueue<FaceSmashEvent>();
+                registry.destroy(entity);
             }
+        });
 
-            registry.destroy(entity);
-        }
-    });
-
-    dirty = false;
+        dirty = false;
+    }
 }
 
 
