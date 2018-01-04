@@ -201,7 +201,7 @@ void SceneSystem::mainMenu(Registry &registry) {
     registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
     registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
     registry.assign<BoundingBox>(entity, emoji->width(), emoji->height());
-    registry.assign<UIButton>(entity, UIButton::Action::PLAY);
+    registry.assign<UIButton>(entity, UIAction::PLAY);
 }
 
 
@@ -240,7 +240,7 @@ void SceneSystem::gameOver(Registry &registry) {
     registry.assign<Sprite>(reload, reloadHandle, reloadHandle->width(), reloadHandle->height(), reloadHandle->width(), reloadHandle->height());
     registry.assign<Transform>(reload, logicalWidth / 2.f - reloadHandle->width() / 2.f, logicalHeight / 2.f - reloadHandle->height() / 2.f);
     registry.assign<BoundingBox>(reload, reloadHandle->width(), reloadHandle->height());
-    registry.assign<UIButton>(reload, UIButton::Action::PLAY);
+    registry.assign<UIButton>(reload, UIAction::PLAY);
 }
 
 

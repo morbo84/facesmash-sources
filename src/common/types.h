@@ -64,6 +64,12 @@ enum class FaceType: UInt8 {
 };
 
 
+enum class UIAction: UInt8 {
+    PLAY,
+    MENU
+};
+
+
 }
 
 

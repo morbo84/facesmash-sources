@@ -38,10 +38,10 @@ void UIButtonSystem::update(Registry &registry) {
                 }
 
                 switch(button.action) {
-                case UIButton::Action::PLAY:
+                case UIAction::PLAY:
                     registry.attach<SceneChangeRequest>(registry.create(), SceneType::THE_GAME);
                     break;
-                case UIButton::Action::MENU:
+                case UIAction::MENU:
                     registry.attach<SceneChangeRequest>(registry.create(), SceneType::MENU_PAGE);
                     break;
                 }
