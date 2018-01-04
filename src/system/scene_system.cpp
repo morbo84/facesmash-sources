@@ -32,7 +32,7 @@ void SceneSystem::backgroundFrame(Registry &registry) {
 
 
 void SceneSystem::gameUI(Registry &registry) {
-    auto handle = Locator::TextureCache::ref().handle("ui/banner");
+    auto handle = Locator::TextureCache::ref().handle("game/banner");
 
     auto top = registry.create();
     registry.assign<Sprite>(top, handle, handle->width(), handle->height(), handle->width(), handle->height());
@@ -191,8 +191,14 @@ void SceneSystem::mainMenu(Registry &registry) {
     auto entity = registry.create();
     auto emoji = textureCache.handle("emoji/happy");
 
+    auto bg = registry.create();
+    auto bgSprite = textureCache.handle("menu/bg");
+    registry.assign<Renderable>(bg, 0.f, 10);
+    registry.assign<Sprite>(bg, bgSprite, bgSprite->width(), bgSprite->height(), bgSprite->width(), bgSprite->height());
+    registry.assign<Transform>(bg, 0.f, 0.f);
+
     registry.assign<Renderable>(entity);
-    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
+    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f + emoji->height() * 2);
     registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
     registry.assign<BoundingBox>(entity, emoji->width(), emoji->height());
     registry.assign<UIButton>(entity, UIButton::Action::PLAY);
