@@ -61,7 +61,7 @@ void SceneSystem::gameUI(Registry &registry) {
     registry.assign<Transform>(timer, logicalWidth - 2.f * timerHandle->width(), 32.f);
 
     auto time = registry.create<Renderable>();
-    registry.attach<GameTimer>(time, 60000_ui32);
+    registry.attach<GameTimer>(time, 3000_ui32);
     registry.assign<Transform>(time, logicalWidth - timerHandle->width() + 16.f, 32.f);
 
     auto bonus = registry.create();
@@ -134,6 +134,8 @@ void SceneSystem::debug(Registry &registry) {
 
 
 void SceneSystem::splashScreen(Registry &registry) {
+    registry.reset();
+
     auto &textureCache = Locator::TextureCache::ref();
     auto rainbow = textureCache.handle("logo/rainbow");
 
@@ -181,6 +183,8 @@ void SceneSystem::splashScreen(Registry &registry) {
 
 
 void SceneSystem::mainMenu(Registry &registry) {
+    registry.reset();
+
     auto &textureCache = Locator::TextureCache::ref();
 
     auto entity = registry.create();
@@ -202,6 +206,8 @@ void SceneSystem::mainMenu(Registry &registry) {
 
 
 void SceneSystem::theGame(Registry &registry) {
+    registry.reset();
+
     backgroundFrame(registry);
     gameUI(registry);
     spawner(registry);
@@ -213,7 +219,28 @@ void SceneSystem::theGame(Registry &registry) {
 
 
 void SceneSystem::gameOver(Registry &registry) {
-    // TODO
+    auto &textureCache = Locator::TextureCache::ref();
+
+    // reset components
+    registry.reset<SmashButton>();
+    registry.reset<SpriteAnimation>();
+    registry.reset<FadeAnimation>();
+    registry.reset<RotationAnimation>();
+    registry.reset<Movement>();
+    registry.reset<FaceSmash>();
+    registry.reset<SpawnRequest>();
+
+    // remove tags
+    registry.remove<PlayerScore>();
+    registry.remove<GameTimer>();
+
+    auto reload = registry.create();
+    auto reloadHandle = textureCache.handle("end/reload");
+    registry.assign<Renderable>(reload, 0.f, 250);
+    registry.assign<Sprite>(reload, reloadHandle, reloadHandle->width(), reloadHandle->height(), reloadHandle->width(), reloadHandle->height());
+    registry.assign<Transform>(reload, logicalWidth / 2.f - reloadHandle->width() / 2.f, logicalHeight / 2.f - reloadHandle->height() / 2.f);
+    registry.assign<BoundingBox>(reload, reloadHandle->width(), reloadHandle->height());
+    registry.assign<UIButton>(reload, UIButton::Action::PLAY);
 }
 
 
@@ -226,8 +253,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         if(0 == request.remaining) {
             // copy on purpose, we are going to reset the registry after all
             auto scene = request.scene;
-
-            registry.reset();
 
             switch(scene) {
             case SceneType::SPLASH_SCREEN:

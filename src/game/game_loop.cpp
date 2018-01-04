@@ -28,6 +28,7 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("logo/rainbow", "png/rainbow.png", renderer, 748, 33);
 
     textureCache.load<SDLTextureLoader>("game/explosion", "png/explosion.png", renderer, 960, 768);
+
     textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer, 128, 128);
@@ -69,6 +70,8 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("game/banner", "png/banner.png", renderer, 1080, 320);
 
     textureCache.load<SDLTextureLoader>("menu/bg", "png/menu_bg.png", renderer, 1080, 1920);
+
+    textureCache.load<SDLTextureLoader>("end/reload", "png/reload.png", renderer, 128, 128);
 
     // request the splash screen
 
