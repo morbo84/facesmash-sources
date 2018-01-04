@@ -20,8 +20,11 @@ void SceneSystem::backgroundFrame(Registry &registry) {
             registry.assign<Transform>(frame, 0.f, (logicalHeight - handle->height()) / 2.f);
             registry.assign<Renderable>(frame, 0.f, 20);
         } else {
-            registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), handle->height() * logicalWidth / handle->width(), logicalWidth);
-            registry.assign<Transform>(frame, 0.f, (logicalHeight - handle->width()) / 2.f);
+            const int width = handle->width() * logicalWidth / handle->height();
+            const int height = logicalWidth;
+
+            registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
+            registry.assign<Transform>(frame, (height - width) / 2.f, (width - height) / 2.f);
             registry.assign<Renderable>(frame, -90.f, 20);
         }
     }
