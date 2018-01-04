@@ -155,6 +155,14 @@ struct GameTimer final {
 
 struct PlayerScore final {
     int score{0};
+    int hitAngry{0};
+    int hitDisgusted{0};
+    int hitHappy{0};
+    int hitRested{0};
+    int hitSurprised{0};
+    int hitFearful{0};
+    int hitSad{0};
+    int missed{0};
 };
 
 

@@ -67,6 +67,8 @@ void FaceSmashSystem::update(Registry &registry) {
                 }
 
                 auto &score = registry.get<PlayerScore>();
+
+                ++score.missed;
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
                 Locator::Dispatcher::ref().enqueue<FaceMissEvent>();
                 registry.destroy(entity);
@@ -85,7 +87,33 @@ void FaceSmashSystem::update(Registry &registry) {
                     // TODO other scores ...
                 }
 
-                registry.get<PlayerScore>().score += smash.smash;
+                auto &score = registry.get<PlayerScore>();
+
+                switch(smash.type) {
+                case FaceType::ANGRY:
+                    ++score.hitAngry;
+                    break;
+                case FaceType::DISGUSTED:
+                    ++score.hitDisgusted;
+                    break;
+                case FaceType::HAPPY:
+                    ++score.hitHappy;
+                    break;
+                case FaceType::RESTED:
+                    ++score.hitRested;
+                    break;
+                case FaceType::SURPRISED:
+                    ++score.hitSurprised;
+                    break;
+                case FaceType::FEARFUL:
+                    ++score.hitFearful;
+                    break;
+                case FaceType::SAD:
+                    ++score.hitSad;
+                    break;
+                };
+
+                score.score += smash.smash;
                 Locator::Dispatcher::ref().enqueue<FaceSmashEvent>();
                 registry.destroy(entity);
             }
