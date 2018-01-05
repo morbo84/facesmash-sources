@@ -4,6 +4,7 @@
 
 #include <SDL_rect.h>
 #include "../common/types.h"
+#include "../resource/texture_resource.h"
 
 
 namespace gamee {

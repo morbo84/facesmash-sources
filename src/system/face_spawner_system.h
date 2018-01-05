@@ -9,8 +9,13 @@
 namespace gamee {
 
 
+struct SpawnRequest;
+
+
 class FaceSpawnerSystem final {
     static constexpr UInt8 length = 7;
+
+    void spawn(Registry &, const SpawnRequest &, TextureCache::resource_type, FaceType, FaceModifier);
 
 public:
     FaceSpawnerSystem();

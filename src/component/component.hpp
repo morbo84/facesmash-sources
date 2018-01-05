@@ -114,11 +114,14 @@ struct Movement final {
     float gravity;
     float velX;
     float velY;
+    float maxVelY{1.6f};
+    float mod{1.f};
 };
 
 
 struct FaceSmash final {
     FaceType type;
+    FaceModifier modifier{FaceModifier::NONE};
     UInt8 smash{100_ui8};
     UInt8 miss{50_ui8};
 };
@@ -145,6 +148,7 @@ struct SpawnRequest final {
     delta_type yt;
     delta_type interval;
     delta_type elapsed{0_ui32};
+    FaceModifier modifier{FaceModifier::NONE};
 };
 
 

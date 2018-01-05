@@ -106,6 +106,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     faceSmashSystem.update(registry);
     frameSystem.update();
     bonusSystem.update(registry, delta);
+    faceModifierSystem.update(registry, delta);
     faceSpawnerSystem.update(registry, delta);
 
     // invoke systems at 50 fps (but for rendering and few other systems)

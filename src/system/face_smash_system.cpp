@@ -115,6 +115,18 @@ void FaceSmashSystem::update(Registry &registry) {
 
                 score.score += smash.smash;
                 Locator::Dispatcher::ref().enqueue<FaceSmashEvent>();
+
+                switch(smash.modifier) {
+                case FaceModifier::NONE:
+                    break;
+                case FaceModifier::SLOW_DOWN:
+                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SPEED_UP, 2000_ui32);
+                    break;
+                case FaceModifier::SPEED_UP:
+                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SLOW_DOWN, 3000_ui32);
+                    break;
+                };
+
                 registry.destroy(entity);
             }
         });

@@ -46,7 +46,7 @@ using entity_type = typename Registry::entity_type;
 
 
 enum class SceneType: UInt8 {
-    SPLASH_SCREEN,
+    SPLASH_SCREEN = 0,
     MENU_PAGE,
     THE_GAME,
     GAME_OVER
@@ -64,9 +64,16 @@ enum class FaceType: UInt8 {
 };
 
 
+enum class FaceModifier: UInt8 {
+    NONE = 0,
+    SPEED_UP,
+    SLOW_DOWN
+};
+
+
 enum class UIAction: UInt8 {
-    PLAY,
-    MENU
+    MENU = 0,
+    PLAY
 };
 
 

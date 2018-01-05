@@ -7,6 +7,7 @@
 #include "../system/bonus_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
+#include "../system/face_modifier_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/face_spawner_system.h"
 #include "../system/fade_animation_system.h"
@@ -48,6 +49,7 @@ private:
     BonusSystem bonusSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
+    FaceModifierSystem faceModifierSystem;
     FaceSmashSystem faceSmashSystem;
     FaceSpawnerSystem faceSpawnerSystem;
     FadeAnimationSystem fadeAnimationSystem;
