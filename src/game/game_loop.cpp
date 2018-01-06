@@ -115,14 +115,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     }
 
     theGameSystem.update(registry);
-
-    fadeAnimationSystem.update(registry, delta);
-    rotationAnimationSystem.update(registry, delta);
-    spriteAnimationSystem.update(registry, delta);
-
+    animationSystem.update(registry, delta);
     scoreSystem.update(registry, renderer, delta);
     timerSystem.update(registry, renderer, delta);
-
     cameraSystem.update(registry, delta);
 
     renderingSystem.update(registry, renderer);

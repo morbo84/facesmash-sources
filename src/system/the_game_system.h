@@ -26,6 +26,8 @@ class TheGameSystem final {
 
     FaceType next() noexcept;
 
+    void reset();
+
 public:
     TheGameSystem();
 

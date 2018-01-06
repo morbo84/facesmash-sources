@@ -19,6 +19,8 @@ class BonusSystem final {
 
     void combo(Registry &, SDLTextureHandle, SDLTextureHandle, int);
 
+    void reset();
+
 public:
     BonusSystem();
     ~BonusSystem();

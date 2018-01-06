@@ -107,6 +107,18 @@ FaceType TheGameSystem::next() noexcept {
 }
 
 
+void TheGameSystem::reset() {
+    curr = numberOfFaces;
+    remaining55000 = false;
+    remaining50000 = false;
+    remaining40000 = false;
+    remaining30000 = false;
+    remaining15000 = false;
+    remaining5000 = false;
+    nextScoreStep = 2500;
+}
+
+
 TheGameSystem::TheGameSystem()
     : generator{std::random_device{}()},
       faces{
@@ -116,16 +128,10 @@ TheGameSystem::TheGameSystem()
           FaceType::HAPPY,
           FaceType::SAD,
           FaceType::SURPRISED
-      },
-      curr{numberOfFaces},
-      remaining55000{false},
-      remaining50000{false},
-      remaining40000{false},
-      remaining30000{false},
-      remaining15000{false},
-      remaining5000{false},
-      nextScoreStep{2500}
-{}
+      }
+{
+    reset();
+}
 
 
 void TheGameSystem::update(Registry &registry) {
@@ -196,6 +202,8 @@ void TheGameSystem::update(Registry &registry) {
             spawnRight(registry, next(), FaceModifier::NONE);
             nextScoreStep += 2500;
         }
+    } else {
+        reset();
     }
 }
 

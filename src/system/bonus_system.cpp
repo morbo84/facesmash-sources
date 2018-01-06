@@ -27,20 +27,22 @@ void BonusSystem::combo(Registry &registry, SDLTextureHandle comboHandle, SDLTex
     registry.assign<Sprite>(scoreEntity, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
     registry.assign<Transform>(scoreEntity, logicalWidth / 2.f - scoreHandle->width() / 2.f, bonusTransform.y + comboHandle->height() + scoreHandle->height() * 1.2f);
 
-    // it doesn't make sense otherwise...
-    assert(registry.has<Camera>());
-
     // shake the camera
+    registry.remove<CameraShake>();
     registry.attach<CameraShake>(registry.attachee<Camera>());
 }
 
 
-BonusSystem::BonusSystem()
-    : remaining{interval},
-      current{0_ui8}
-{
+void BonusSystem::reset() {
+    remaining = interval;
+    current = 0_ui8;
+}
+
+
+BonusSystem::BonusSystem() {
     Locator::Dispatcher::ref().connect<FaceSmashEvent>(this);
     Locator::Dispatcher::ref().connect<FaceMissEvent>(this);
+    reset();
 }
 
 
@@ -68,6 +70,8 @@ void BonusSystem::update(Registry &registry, delta_type delta) {
     if(registry.has<LetsPlay>()) {
         assert(registry.has<PlayerScore>());
         assert(registry.has<GameTimer>());
+        assert(registry.has<BonusLabel>());
+        assert(registry.has<Camera>());
 
         auto &textureCache = Locator::TextureCache::ref();
 
@@ -97,9 +101,10 @@ void BonusSystem::update(Registry &registry, delta_type delta) {
                 break;
             }
 
-            remaining = interval;
-            current = 0_ui8;
+            reset();
         }
+    } else {
+        reset();
     }
 }
 

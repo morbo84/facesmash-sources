@@ -131,6 +131,8 @@ void FaceSmashSystem::update(Registry &registry) {
         });
 
         dirty = false;
+    } else {
+        dirty = false;
     }
 }
 
