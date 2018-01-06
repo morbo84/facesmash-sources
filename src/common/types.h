@@ -57,7 +57,6 @@ enum class FaceType: UInt8 {
     ANGRY = 0,
     DISGUSTED,
     HAPPY,
-    RESTED,
     SURPRISED,
     FEARFUL,
     SAD

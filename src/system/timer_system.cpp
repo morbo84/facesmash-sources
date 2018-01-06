@@ -11,7 +11,9 @@ namespace gamee {
 
 
 void TimerSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    if(registry.has<GameTimer>()) {
+    if(registry.has<LetsPlay>()) {
+        assert(registry.has<GameTimer>());
+
         auto entity = registry.attachee<GameTimer>();
         auto &timer = registry.get<GameTimer>();
 

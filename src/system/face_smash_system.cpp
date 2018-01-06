@@ -49,7 +49,9 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 
 
 void FaceSmashSystem::update(Registry &registry) {
-    if(registry.has<PlayerScore>()) {
+    if(registry.has<LetsPlay>()) {
+        assert(registry.has<PlayerScore>());
+
         auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
         auto &textureCache = Locator::TextureCache::ref();
         const SDL_Rect screen = logicalScreen;
@@ -99,9 +101,6 @@ void FaceSmashSystem::update(Registry &registry) {
                 case FaceType::HAPPY:
                     ++score.hitHappy;
                     break;
-                case FaceType::RESTED:
-                    ++score.hitRested;
-                    break;
                 case FaceType::SURPRISED:
                     ++score.hitSurprised;
                     break;
@@ -120,10 +119,10 @@ void FaceSmashSystem::update(Registry &registry) {
                 case FaceModifier::NONE:
                     break;
                 case FaceModifier::SLOW_DOWN:
-                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SPEED_UP, 2000_ui32);
+                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SLOW_DOWN, 5000_ui32);
                     break;
                 case FaceModifier::SPEED_UP:
-                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SLOW_DOWN, 3000_ui32);
+                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SPEED_UP, 1000_ui32);
                     break;
                 };
 

@@ -138,20 +138,6 @@ struct SceneChangeRequest final {
 };
 
 
-struct SpawnRequest final {
-    SDL_Rect target;
-    int from;
-    int width;
-    bool horizontal;
-    bool rightBottom;
-    delta_type xt;
-    delta_type yt;
-    delta_type interval;
-    delta_type elapsed{0_ui32};
-    FaceModifier modifier{FaceModifier::NONE};
-};
-
-
 struct GameTimer final {
     delta_type remaining;
 };
@@ -162,7 +148,6 @@ struct PlayerScore final {
     int hitAngry{0};
     int hitDisgusted{0};
     int hitHappy{0};
-    int hitRested{0};
     int hitSurprised{0};
     int hitFearful{0};
     int hitSad{0};
@@ -171,6 +156,9 @@ struct PlayerScore final {
 
 
 struct BonusLabel final {};
+
+
+struct LetsPlay final {};
 
 
 }

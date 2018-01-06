@@ -65,7 +65,10 @@ void BonusSystem::receive(const FaceMissEvent &) noexcept {
 
 
 void BonusSystem::update(Registry &registry, delta_type delta) {
-    if(registry.has<PlayerScore>() && registry.has<BonusLabel>()) {
+    if(registry.has<LetsPlay>()) {
+        assert(registry.has<PlayerScore>());
+        assert(registry.has<GameTimer>());
+
         auto &textureCache = Locator::TextureCache::ref();
 
         remaining -= std::min(delta, remaining);

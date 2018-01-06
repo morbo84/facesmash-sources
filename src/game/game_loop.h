@@ -9,7 +9,6 @@
 #include "../system/destroy_later_system.h"
 #include "../system/face_modifier_system.h"
 #include "../system/face_smash_system.h"
-#include "../system/face_spawner_system.h"
 #include "../system/fade_animation_system.h"
 #include "../system/frame_system.h"
 #include "../system/hud_system.h"
@@ -51,7 +50,6 @@ private:
     DestroyLaterSystem destroyLaterSystem;
     FaceModifierSystem faceModifierSystem;
     FaceSmashSystem faceSmashSystem;
-    FaceSpawnerSystem faceSpawnerSystem;
     FadeAnimationSystem fadeAnimationSystem;
     FrameSystem frameSystem;
     HudSystem hudSystem;

@@ -33,7 +33,6 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/happy", "png/happy.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/rested", "png/rested.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer, 128, 128);
     textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer, 128, 128);
 
@@ -107,7 +106,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     frameSystem.update();
     bonusSystem.update(registry, delta);
     faceModifierSystem.update(registry, delta);
-    faceSpawnerSystem.update(registry, delta);
 
     // invoke systems at 50 fps (but for rendering and few other systems)
     while(accumulator >= msPerUpdate) {
@@ -116,7 +114,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         accumulator -= msPerUpdate;
     }
 
-    theGameSystem.update(registry, delta);
+    theGameSystem.update(registry);
 
     fadeAnimationSystem.update(registry, delta);
     rotationAnimationSystem.update(registry, delta);

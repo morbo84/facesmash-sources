@@ -80,14 +80,6 @@ void SceneSystem::camera(Registry &registry) {
 }
 
 
-void SceneSystem::spawner(Registry &registry) {
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{440, 100, 200, 300}, 140, 800, true, true, 1800_ui32, 1200_ui32, 1800_ui32);
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{490, logicalHeight - 100, 100, 50}, 140, 800, true, false, 2000_ui32, 0xFFFFFFFF_ui32, 4750_ui32);
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{100, logicalHeight - 100, 100, 50}, 200, 400, false, false, 400_ui32, 0xFFFFFFFF_ui32, 2100_ui32);
-    registry.assign<SpawnRequest>(registry.create(), SDL_Rect{logicalWidth - 200, logicalHeight - 100, 100, 50}, 200, 400, false, true, 400_ui32, 0xFFFFFFFF_ui32, 2300_ui32);
-}
-
-
 #if DEBUG
 void SceneSystem::smashButtons(Registry &registry) {
     auto addButton = [](Registry &registry, FaceType type, TextureCache::resource_type emoji, float x, float y) {
@@ -104,14 +96,12 @@ void SceneSystem::smashButtons(Registry &registry) {
 
     const auto x = logicalWidth - 96 - 16;
 
-    auto y = (logicalHeight - 96 * 7 - 32 * 6) / 2;
+    auto y = (logicalHeight - 96 * numberOfFaces - 32 * (numberOfFaces - 1)) / 2;
     addButton(registry, FaceType::ANGRY, "emoji/angry", x, y);
     y += 96 + 32;
     addButton(registry, FaceType::DISGUSTED, "emoji/disgusted", x, y);
     y += 96 + 32;
     addButton(registry, FaceType::HAPPY, "emoji/happy", x, y);
-    y += 96 + 32;
-    addButton(registry, FaceType::RESTED, "emoji/rested", x, y);
     y += 96 + 32;
     addButton(registry, FaceType::SURPRISED, "emoji/surprised", x, y);
     y += 96 + 32;
@@ -210,29 +200,23 @@ void SceneSystem::theGame(Registry &registry) {
 
     backgroundFrame(registry);
     gameUI(registry);
-    spawner(registry);
 
 #if DEBUG
     smashButtons(registry);
 #endif // DEBUG
+
+    registry.attach<LetsPlay>(registry.create());
 }
 
 
 void SceneSystem::gameOver(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    // reset components
-    registry.reset<SmashButton>();
-    registry.reset<SpriteAnimation>();
-    registry.reset<FadeAnimation>();
-    registry.reset<RotationAnimation>();
-    registry.reset<Movement>();
-    registry.reset<FaceSmash>();
-    registry.reset<SpawnRequest>();
+    // stop playing
+    registry.destroy(registry.attachee<LetsPlay>());
 
-    // remove tags
-    registry.remove<PlayerScore>();
-    registry.remove<GameTimer>();
+    // reset components (disable face smashing)
+    registry.reset<FaceSmash>();
 
     auto reload = registry.create();
     auto reloadHandle = textureCache.handle("end/reload");
@@ -251,8 +235,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         request.remaining -= std::min(request.remaining, delta);
 
         if(0 == request.remaining) {
-            // copy on purpose, we are going to reset the registry after all
+            // copy on purpose, we are going to destroy the entity after all
             auto scene = request.scene;
+
+            // remove the scene change request before to serve it
+            registry.destroy(registry.attachee<SceneChangeRequest>());
 
             switch(scene) {
             case SceneType::SPLASH_SCREEN:

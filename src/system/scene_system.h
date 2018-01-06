@@ -12,7 +12,6 @@ class SceneSystem final {
     void backgroundFrame(Registry &);
     void gameUI(Registry &);
     void camera(Registry &);
-    void spawner(Registry &);
 
 #if DEBUG
     void smashButtons(Registry &);
