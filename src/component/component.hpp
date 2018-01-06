@@ -152,12 +152,13 @@ struct PlayerScore final {
     int hitSurprised{0};
     int hitFearful{0};
     int hitSad{0};
-    int missed{0};
     delta_type elapsed{0_ui32};
 };
 
 
-struct BonusLabel final {};
+struct BonusSmash final {
+    bool dirty{false};
+};
 
 
 struct LetsPlay final {

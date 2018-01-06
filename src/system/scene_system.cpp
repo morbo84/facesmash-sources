@@ -67,7 +67,7 @@ void SceneSystem::gameUI(Registry &registry) {
     auto bonus = registry.create();
     registry.assign<Renderable>(bonus, 0.f, 200);
     registry.assign<Transform>(bonus, logicalWidth / 2.f, bannerHandle->height() - 128.f);
-    registry.attach<BonusLabel>(bonus);
+    registry.attach<BonusSmash>(bonus);
 }
 
 

@@ -8,31 +8,8 @@
 namespace gamee {
 
 
-struct FaceSmashEvent;
-struct FaceMissEvent;
-
-
-class BonusSystem final {
-    static constexpr delta_type interval = 600;
-    static constexpr delta_type bonus = 50;
-    static constexpr UInt8 max = 5;
-
-    void combo(Registry &, SDLTextureHandle, SDLTextureHandle, int);
-
-    void reset();
-
-public:
-    BonusSystem();
-    ~BonusSystem();
-
-    void receive(const FaceSmashEvent &) noexcept;
-    void receive(const FaceMissEvent &) noexcept;
-
-    void update(Registry &, delta_type);
-
-private:
-    delta_type remaining;
-    UInt8 current;
+struct BonusSystem final {
+    void update(Registry &);
 };
 
 

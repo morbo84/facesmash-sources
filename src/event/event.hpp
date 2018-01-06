@@ -33,10 +33,6 @@ struct FaceEvent final {
 };
 
 
-struct FaceSmashEvent final {};
-struct FaceMissEvent final {};
-
-
 struct FaceModifierEvent final {
     FaceModifier modifier;
     delta_type duration;

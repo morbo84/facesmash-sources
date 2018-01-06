@@ -52,9 +52,12 @@ void FaceSmashSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
         assert(registry.has<PlayerScore>());
 
+        auto &score = registry.get<PlayerScore>();
         auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
         auto &textureCache = Locator::TextureCache::ref();
         const SDL_Rect screen = logicalScreen;
+        int total = 0;
+        int combo = 0;
 
         view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
             const auto area = transform * box;
@@ -68,11 +71,7 @@ void FaceSmashSystem::update(Registry &registry) {
                     // TODO other scores ...
                 }
 
-                auto &score = registry.get<PlayerScore>();
-
-                ++score.missed;
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
-                Locator::Dispatcher::ref().enqueue<FaceMissEvent>();
                 registry.destroy(entity);
             } else if(dirty && smash.type == type) {
                 auto explosion = registry.create();
@@ -88,8 +87,6 @@ void FaceSmashSystem::update(Registry &registry) {
                     break;
                     // TODO other scores ...
                 }
-
-                auto &score = registry.get<PlayerScore>();
 
                 switch(smash.type) {
                 case FaceType::ANGRY:
@@ -112,8 +109,9 @@ void FaceSmashSystem::update(Registry &registry) {
                     break;
                 };
 
+                ++combo;
+                total += smash.smash;
                 score.score += smash.smash;
-                Locator::Dispatcher::ref().enqueue<FaceSmashEvent>();
 
                 switch(smash.modifier) {
                 case FaceModifier::NONE:
@@ -129,6 +127,30 @@ void FaceSmashSystem::update(Registry &registry) {
                 registry.destroy(entity);
             }
         });
+
+        // check bonuses
+        auto gotIt = [&](auto handle, auto amount) {
+            registry.accomodate<Sprite>(registry.attachee<BonusSmash>(), handle, handle->width(), handle->height(), handle->width(), handle->height());
+            registry.get<BonusSmash>().dirty = true;
+            score.score += amount;
+        };
+
+        if(1 == combo && registry.empty<FaceSmash>()) {
+            // no more faces to smash
+            gotIt(textureCache.handle("bonus/perfect"), total);
+        } else if(2 == combo) {
+            // 2x combo
+            gotIt(textureCache.handle("bonus/x2"), 2 * total);
+        } else if(3 == combo) {
+            // 3x combo
+            gotIt(textureCache.handle("bonus/x3"), 3 * total);
+        } else if(4 == combo) {
+            // 4x combo
+            gotIt(textureCache.handle("bonus/x4"), 4 * total);
+        } else if(5 < combo) {
+            // 5x combo
+            gotIt(textureCache.handle("bonus/x5"), 5 * total);
+        }
 
         dirty = false;
     } else {
