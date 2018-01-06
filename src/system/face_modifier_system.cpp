@@ -50,7 +50,7 @@ void FaceModifierSystem::update(Registry &registry, delta_type delta) {
         update(registry, .3f);
         break;
     case FaceModifier::SPEED_UP:
-        update(registry, 1.2f);
+        update(registry, 1.5f);
         break;
     }
 }
