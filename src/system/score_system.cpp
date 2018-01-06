@@ -15,20 +15,20 @@ void ScoreSystem::update(Registry &registry, GameRenderer &renderer, delta_type 
         auto entity = registry.attachee<PlayerScore>();
         auto &score = registry.get<PlayerScore>();
 
-        elapsed += delta;
+        score.elapsed += delta;
 
-        if(elapsed > interval) {
-            elapsed = 0_ui8;
+        if(score.elapsed > interval) {
+            score.elapsed = 0_ui8;
 
-            if(current < score.score) {
-                current += std::max((score.score - current) / 2, 1);
-            } else if(current > score.score) {
-                current -= std::max((current - score.score) / 2, 1);
+            if(score.current < score.score) {
+                score.current += std::max((score.score - score.current) / 2, 1);
+            } else if(score.current > score.score) {
+                score.current -= std::max((score.current - score.score) / 2, 1);
             }
         }
 
         std::stringstream label;
-        label << current;
+        label << score.current;
         const SDL_Color fg = { 255, 255, 255, 255 };
         auto font = Locator::TTFFontCache::ref().handle("ttf/constant/54");
         auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);

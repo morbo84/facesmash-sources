@@ -16,10 +16,6 @@ class ScoreSystem final {
 
 public:
     void update(Registry &, GameRenderer &, delta_type);
-
-private:
-    UInt8 elapsed{0_ui8};
-    UInt16 current{0_ui16};
 };
 
 

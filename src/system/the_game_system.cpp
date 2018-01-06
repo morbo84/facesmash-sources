@@ -107,18 +107,6 @@ FaceType TheGameSystem::next() noexcept {
 }
 
 
-void TheGameSystem::reset() {
-    curr = numberOfFaces;
-    remaining55000 = false;
-    remaining50000 = false;
-    remaining40000 = false;
-    remaining30000 = false;
-    remaining15000 = false;
-    remaining5000 = false;
-    nextScoreStep = 2500;
-}
-
-
 TheGameSystem::TheGameSystem()
     : generator{std::random_device{}()},
       faces{
@@ -128,10 +116,9 @@ TheGameSystem::TheGameSystem()
           FaceType::HAPPY,
           FaceType::SAD,
           FaceType::SURPRISED
-      }
-{
-    reset();
-}
+      },
+      curr{numberOfFaces}
+{}
 
 
 void TheGameSystem::update(Registry &registry) {
@@ -140,54 +127,55 @@ void TheGameSystem::update(Registry &registry) {
         assert(registry.has<GameTimer>());
 
         const auto &remaining = registry.get<GameTimer>().remaining;
+        auto &play = registry.get<LetsPlay>();
 
         if((remaining > 30000 && registry.size<FaceSmash>() < 1)
                 || (remaining <= 30000 && registry.size<FaceSmash>() < 2)) {
             spawnBottom(registry, next(), FaceModifier::NONE);
         }
 
-        if(remaining < 55000 && !remaining55000) {
+        if(remaining < 55000 && !play.remaining55000) {
             spawnLeft(registry, next(), FaceModifier::NONE);
             spawnLeft(registry, next(), FaceModifier::NONE);
             spawnRight(registry, next(), FaceModifier::NONE);
             spawnRight(registry, next(), FaceModifier::NONE);
             spawnTop(registry, FaceType::HAPPY, FaceModifier::SLOW_DOWN);
-            remaining55000 = true;
+            play.remaining55000 = true;
         }
 
-        if(remaining < 50000 && !remaining50000) {
+        if(remaining < 50000 && !play.remaining50000) {
             spawnBottom(registry, next(), FaceModifier::NONE);
             spawnBottom(registry, next(), FaceModifier::NONE);
             spawnTop(registry, FaceType::ANGRY, FaceModifier::SPEED_UP);
-            remaining50000 = true;
+            play.remaining50000 = true;
         }
 
-        if(remaining < 40000 && !remaining40000) {
+        if(remaining < 40000 && !play.remaining40000) {
             spawnLeft(registry, next(), FaceModifier::NONE);
             spawnRight(registry, next(), FaceModifier::NONE);
             spawnTop(registry, next(), FaceModifier::NONE);
             spawnBottom(registry, FaceType::HAPPY, FaceModifier::SLOW_DOWN);
-            remaining40000 = true;
+            play.remaining40000 = true;
         }
 
-        if(remaining < 30000 && !remaining30000) {
+        if(remaining < 30000 && !play.remaining30000) {
             spawnTop(registry, FaceType::ANGRY, FaceModifier::SPEED_UP);
             spawnTop(registry, FaceType::HAPPY, FaceModifier::SLOW_DOWN);
-            remaining30000 = true;
+            play.remaining30000 = true;
         }
 
-        if(remaining < 15000 && !remaining15000) {
+        if(remaining < 15000 && !play.remaining15000) {
             spawnLeft(registry, next(), FaceModifier::NONE);
             spawnRight(registry, next(), FaceModifier::NONE);
             spawnTop(registry, next(), FaceModifier::NONE);
             spawnBottom(registry, FaceType::HAPPY, FaceModifier::SLOW_DOWN);
-            remaining15000 = true;
+            play.remaining15000 = true;
         }
 
         if(remaining < 5000) {
-            if(!remaining5000) {
+            if(!play.remaining5000) {
                 spawnBottom(registry, FaceType::HAPPY, FaceModifier::SLOW_DOWN);
-                remaining5000 = true;
+                play.remaining5000 = true;
             }
 
             if(registry.size<FaceSmash>() < 10) {
@@ -195,15 +183,11 @@ void TheGameSystem::update(Registry &registry) {
             }
         }
 
-        const auto &score = registry.get<PlayerScore>().score;
-
-        if(false && score > nextScoreStep) {
+        if(registry.get<PlayerScore>().score > play.nextScoreStep) {
             spawnLeft(registry, next(), FaceModifier::NONE);
             spawnRight(registry, next(), FaceModifier::NONE);
-            nextScoreStep += 2500;
+            play.nextScoreStep += 2500;
         }
-    } else {
-        reset();
     }
 }
 

@@ -215,9 +215,6 @@ void SceneSystem::gameOver(Registry &registry) {
     // stop playing
     registry.destroy(registry.attachee<LetsPlay>());
 
-    // reset components (disable face smashing)
-    registry.reset<FaceSmash>();
-
     auto reload = registry.create();
     auto reloadHandle = textureCache.handle("end/reload");
     registry.assign<Renderable>(reload, 0.f, 250);

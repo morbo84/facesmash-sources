@@ -26,8 +26,6 @@ class TheGameSystem final {
 
     FaceType next() noexcept;
 
-    void reset();
-
 public:
     TheGameSystem();
 
@@ -37,15 +35,6 @@ private:
     std::mt19937 generator;
     FaceType faces[numberOfFaces];
     UInt8 curr;
-    // time steps
-    bool remaining55000;
-    bool remaining50000;
-    bool remaining40000;
-    bool remaining30000;
-    bool remaining15000;
-    bool remaining5000;
-    // score steps
-    int nextScoreStep;
 };
 
 

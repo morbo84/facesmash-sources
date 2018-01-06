@@ -13,7 +13,7 @@ constexpr int logicalWidth = 1080;
 constexpr int logicalHeight = 1920;
 constexpr SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 
-constexpr int numberOfFaces = 7;
+constexpr int numberOfFaces = 6;
 
 
 }

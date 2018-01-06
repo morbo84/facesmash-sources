@@ -145,6 +145,7 @@ struct GameTimer final {
 
 struct PlayerScore final {
     int score{0};
+    int current{0};
     int hitAngry{0};
     int hitDisgusted{0};
     int hitHappy{0};
@@ -152,13 +153,24 @@ struct PlayerScore final {
     int hitFearful{0};
     int hitSad{0};
     int missed{0};
+    delta_type elapsed{0_ui32};
 };
 
 
 struct BonusLabel final {};
 
 
-struct LetsPlay final {};
+struct LetsPlay final {
+    // time steps
+    bool remaining55000{false};
+    bool remaining50000{false};
+    bool remaining40000{false};
+    bool remaining30000{false};
+    bool remaining15000{false};
+    bool remaining5000{false};
+    // score steps
+    int nextScoreStep{2500};
+};
 
 
 }
