@@ -39,6 +39,9 @@ struct FaceModifierEvent final {
 };
 
 
+struct FrameAvailableEvent final {};
+
+
 }
 
 

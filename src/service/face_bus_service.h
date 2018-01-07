@@ -3,7 +3,7 @@
 
 
 #include <mutex>
-#include "../common/types.h"
+#include "../event/event.hpp"
 
 
 namespace gamee {
@@ -13,13 +13,16 @@ class FaceBusService {
     static constexpr unsigned int max = 3;
 
 public:
-    void enqueue(FaceType);
+    void enqueue(FaceEvent);
+    void enqueue(FrameAvailableEvent);
     void dequeue();
 
 private:
     std::mutex mutex;
-    FaceType faces[max];
-    unsigned int pos{0u};
+    FaceEvent faces[max];
+    FrameAvailableEvent frames[max];
+    unsigned int posFace{0u};
+    unsigned int posFrame{0u};
 };
 
 

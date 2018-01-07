@@ -3,6 +3,7 @@
 
 
 #include "camera_service.h"
+#include <memory>
 #include <mutex>
 
 
@@ -20,7 +21,7 @@ struct CameraAndroid final: CameraService {
     void setPixels(const void*);
 
 private:
-    char* frame_{nullptr};
+    std::unique_ptr<char[]> frame_;
     mutable std::mutex frameMtx_;
     int width_{-1};
     int height_{-1};

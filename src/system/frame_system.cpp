@@ -1,6 +1,7 @@
 #include <cstring>
 #include <SDL_render.h>
 #include "../common/types.h"
+#include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "frame_system.h"
 
@@ -8,10 +9,22 @@
 namespace gamee {
 
 
+FrameSystem::FrameSystem() noexcept
+    : dirty{false}
+{
+    Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
+}
+
+
+FrameSystem::~FrameSystem() noexcept {
+    Locator::Dispatcher::ref().disconnect<FrameAvailableEvent>(this);
+}
+
+
 void FrameSystem::update() {
     auto handle = Locator::TextureCache::ref().handle("camera/frame");
 
-    if(handle) {
+    if(handle && dirty) {
         Locator::Camera::ref().frame([&](const void *pixels, int size) {
             void *texture;
             int pitch;
@@ -42,7 +55,13 @@ void FrameSystem::update() {
             std::memcpy(texture, pixels, size);
             SDL_UnlockTexture(*handle);
         });
+        dirty = false;
     }
+}
+
+
+void FrameSystem::receive(const FrameAvailableEvent &) noexcept {
+    dirty = true;
 }
 
 

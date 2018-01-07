@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include "common/types.h"
+#include "emotion/emo_detector.h"
 #include "game/game_loop.h"
 #include "input/user_input_handler.h"
 #include "locator/locator.hpp"
@@ -50,10 +51,17 @@ void releasePlatformServices() {
 }
 
 
+static void initEmoDetection(int width, int height) {
+    static gamee::EmoDetector emoDetector{width, height};
+}
+
+
 int main(int , char **) {
     // set up services
     initBasicServices();
     initPlatformServices();
+    if(auto c = gamee::Locator::Camera::get().lock())
+        initEmoDetection(c->width(), c->height());
 
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();

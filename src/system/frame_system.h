@@ -4,9 +4,16 @@
 
 namespace gamee {
 
+class FrameAvailableEvent;
 
 struct FrameSystem final {
+    FrameSystem() noexcept;
+    ~FrameSystem() noexcept;
     void update();
+    void receive(const FrameAvailableEvent &) noexcept;
+
+private:
+    bool dirty;
 };
 
 

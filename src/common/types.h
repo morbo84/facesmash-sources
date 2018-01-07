@@ -56,10 +56,10 @@ enum class SceneType: UInt8 {
 enum class FaceType: UInt8 {
     ANGRY = 0,
     DISGUSTED,
-    HAPPY,
-    SURPRISED,
     FEARFUL,
-    SAD
+    HAPPY,
+    SAD,
+    SURPRISED
 };
 
 

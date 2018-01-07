@@ -3,6 +3,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/game/game_env.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
+    ${facesmash_SOURCE_DIR}/src/emotion/emo_detector.cpp
     ${facesmash_SOURCE_DIR}/src/input/user_input_handler.cpp
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp

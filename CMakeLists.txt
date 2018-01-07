@@ -65,12 +65,29 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(SDL2_ttf REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+set(
+    VISAGE_SDK_LIBRARIES
+    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageVision.a
+    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageAnalyser.a
+)
+
+# this is necessary on archlinux to disable the default Position Independent Executable
+link_libraries("-no-pie")
 
 option(BUILD_TESTING "Disable testing with ctest for EnTT." OFF)
 configure_file(${facesmash_SOURCE_DIR}/cmake/in/EnTT.in ${facesmash_SOURCE_DIR}/deps/EnTT/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY ${facesmash_SOURCE_DIR}/deps/EnTT)
 execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${facesmash_SOURCE_DIR}/deps/EnTT)
-include_directories(${facesmash_SOURCE_DIR}/deps/EnTT/src/src)
+include_directories(
+    ${facesmash_SOURCE_DIR}/deps/EnTT/src/src
+    ${facesmash_SOURCE_DIR}/deps/visageSDK/include
+)
 
 #
 # The Game
@@ -93,7 +110,11 @@ target_link_libraries(
     PRIVATE ${SDL2_IMAGE_LIBRARIES}
     PRIVATE ${SDL2_MIXER_LIBRARIES}
     PRIVATE ${SDL2_TTF_LIBRARIES}
+    PRIVATE ${ZLIB_LIBRARIES}
+    PRIVATE ${VISAGE_SDK_LIBRARIES}
 )
+
+add_definitions(-DVISAGE_STATIC)
 
 #
 # Package
