@@ -143,7 +143,7 @@ void TheGameSystem::update(Registry &registry) {
         if(remaining > 30000 && registry.size<FaceSmash>() < 1) {
             spawnBottom(registry, false, FaceSmash{50_ui8, 10_ui8, next()});
         } else if(remaining <= 30000 && registry.size<FaceSmash>() < 2) {
-            spawnBottom(registry, true, FaceSmash{50_ui8, 10_ui8, next()});
+            spawnBottom(registry, true, FaceSmash{100_ui8, 20_ui8, next()});
         }
 
         if(remaining < 55000 && !play.remaining55000) {

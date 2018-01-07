@@ -150,7 +150,7 @@ void FaceSmashSystem::update(Registry &registry) {
                     Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SLOW_DOWN, 5000_ui32);
                     break;
                 case FaceModifier::SPEED_UP:
-                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SPEED_UP, 1000_ui32);
+                    Locator::Dispatcher::ref().enqueue<FaceModifierEvent>(FaceModifier::SPEED_UP, 3000_ui32);
                     break;
                 };
 
