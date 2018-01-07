@@ -4,7 +4,7 @@
 #include <array>
 
 #ifdef __ANDROID__
-static const char* visageLicense = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
+static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
 static const char* visageDataPath = "/data/data/com.cynny.gamee.facesmash/files/visage/bdtsdata/LBF/vfadata";
 #else
 static const char* visageTrackingCfg = "visage/Facial Features Tracker - High.cfg";
