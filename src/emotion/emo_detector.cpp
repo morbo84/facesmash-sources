@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <array>
 
-#ifdef __ANDROID_
+#ifdef __ANDROID__
 static const char* visageLicense = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
 static const char* visageDataPath = "/data/data/com.cynny.gamee.facesmash/files/visage/bdtsdata/LBF/vfadata";
 #else
