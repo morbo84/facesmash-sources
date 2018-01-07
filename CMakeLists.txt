@@ -66,11 +66,14 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(BLAS REQUIRED)
 find_package(OpenMP)
+
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
+
 set(
     VISAGE_SDK_LIBRARIES
     ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageVision.a
@@ -79,6 +82,7 @@ set(
 
 # this is necessary on archlinux to disable the default Position Independent Executable
 link_libraries("-no-pie")
+link_libraries("${BLAS_LINKER_FLAGS}")
 
 option(BUILD_TESTING "Disable testing with ctest for EnTT." OFF)
 configure_file(${facesmash_SOURCE_DIR}/cmake/in/EnTT.in ${facesmash_SOURCE_DIR}/deps/EnTT/CMakeLists.txt)
@@ -111,6 +115,7 @@ target_link_libraries(
     PRIVATE ${SDL2_MIXER_LIBRARIES}
     PRIVATE ${SDL2_TTF_LIBRARIES}
     PRIVATE ${ZLIB_LIBRARIES}
+    PRIVATE ${BLAS_LIBRARIES}
     PRIVATE ${VISAGE_SDK_LIBRARIES}
 )
 

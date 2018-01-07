@@ -50,18 +50,14 @@ void releasePlatformServices() {
     gamee::Locator::FaceBus::reset();
 }
 
-
-static void initEmoDetection(int width, int height) {
-    static gamee::EmoDetector emoDetector{width, height};
-}
-
-
 int main(int , char **) {
     // set up services
     initBasicServices();
     initPlatformServices();
-    if(auto c = gamee::Locator::Camera::get().lock())
-        initEmoDetection(c->width(), c->height());
+
+    const auto &camera = gamee::Locator::Camera::ref();
+    // initialize the emo detector
+    auto emoDetector = std::make_unique<gamee::EmoDetector>(camera.width(), camera.height());
 
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();
@@ -71,6 +67,9 @@ int main(int , char **) {
 
     // destroy the loop
     loop.reset();
+
+    // reset the emo detector before to shutdown all the other services
+    emoDetector.reset();
 
     // tear down services
     releasePlatformServices();

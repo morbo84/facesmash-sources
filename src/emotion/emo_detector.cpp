@@ -22,10 +22,11 @@ EmoDetector::EmoDetector(int width, int height)
 
 
 EmoDetector::~EmoDetector() {
+    std::unique_lock lck{mtx_};
     Locator::Dispatcher::ref().disconnect<FrameAvailableEvent>(this);
     end_ = true;
-    std::lock_guard lck{mtx_};
     dirty_ = true;
+    lck.unlock();
     cv_.notify_one();
     t_.join();
 }
