@@ -17,14 +17,14 @@ void SceneSystem::backgroundFrame(Registry &registry) {
 
         if(cameraService.height() > cameraService.width()) {
             registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), logicalWidth, handle->height() * logicalWidth / handle->width());
-            registry.assign<Transform>(frame, 0.f, (logicalHeight - handle->height()) / 2.f);
+            registry.assign<Transform>(frame, frame, 0.f, (logicalHeight - handle->height()) / 2.f);
             registry.assign<Renderable>(frame, 0.f, 20);
         } else {
             const int width = handle->width() * logicalWidth / handle->height();
             const int height = logicalWidth;
 
             registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
-            registry.assign<Transform>(frame, (height - width) / 2.f, (width - height) / 2.f);
+            registry.assign<Transform>(frame, frame, (height - width) / 2.f, (width - height) / 2.f);
             registry.assign<Renderable>(frame, -90.f, 20);
         }
     }
@@ -39,34 +39,34 @@ void SceneSystem::gameUI(Registry &registry) {
     auto bannerHandle = textureCache.handle("game/banner");
 
     registry.assign<Sprite>(top, bannerHandle, bannerHandle->width(), bannerHandle->height(), bannerHandle->width(), bannerHandle->height());
-    registry.assign<Transform>(top, 0.f, 0.f);
+    registry.assign<Transform>(top, top, 0.f, 0.f);
     registry.assign<Renderable>(top, 0.f, 30);
 
     registry.assign<Sprite>(bottom, bannerHandle, bannerHandle->width(), bannerHandle->height(), bannerHandle->width(), bannerHandle->height());
-    registry.assign<Transform>(bottom, 0.f, 1600.f);
+    registry.assign<Transform>(bottom, bottom, 0.f, 1600.f);
     registry.assign<Renderable>(bottom, 0.f, 30);
 
     auto scoreLabel = registry.create<Renderable>();
     auto scoreHandle = textureCache.handle("hud/score");
     registry.assign<HUD>(scoreLabel, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
-    registry.assign<Transform>(scoreLabel, 32.f, 32.f);
+    registry.assign<Transform>(scoreLabel, scoreLabel, 32.f, 32.f);
 
     auto score = registry.create<Renderable>();
     registry.attach<PlayerScore>(score);
-    registry.assign<Transform>(score, 32.f + scoreHandle->width() + 16.f, 32.f);
+    registry.assign<Transform>(score, score, 32.f + scoreHandle->width() + 16.f, 32.f);
 
     auto timer = registry.create<Renderable>();
     auto timerHandle = textureCache.handle("hud/time");
     registry.assign<HUD>(timer, timerHandle, timerHandle->width(), timerHandle->height(), timerHandle->width(), timerHandle->height());
-    registry.assign<Transform>(timer, logicalWidth - 2.f * timerHandle->width(), 32.f);
+    registry.assign<Transform>(timer, timer, logicalWidth - 2.f * timerHandle->width(), 32.f);
 
     auto time = registry.create<Renderable>();
     registry.attach<GameTimer>(time, 60999_ui32);
-    registry.assign<Transform>(time, logicalWidth - timerHandle->width() + 16.f, 32.f);
+    registry.assign<Transform>(time, time, logicalWidth - timerHandle->width() + 16.f, 32.f);
 
     auto bonus = registry.create();
     registry.assign<Renderable>(bonus, 0.f, 200);
-    registry.assign<Transform>(bonus, logicalWidth / 2.f, bannerHandle->height() - 128.f);
+    registry.assign<Transform>(bonus, bonus, logicalWidth / 2.f, bannerHandle->height() - 128.f);
     registry.attach<BonusSmash>(bonus);
 }
 
@@ -74,7 +74,7 @@ void SceneSystem::gameUI(Registry &registry) {
 void SceneSystem::camera(Registry &registry) {
     if(!registry.has<Camera>()) {
         auto camera = registry.create();
-        registry.assign<Transform>(camera, 0.f, 0.f);
+        registry.assign<Transform>(camera, camera, 0.f, 0.f);
         registry.attach<Camera>(camera);
     }
 }
@@ -88,7 +88,7 @@ void SceneSystem::smashButtons(Registry &registry) {
         auto handle = textureCache.handle(emoji);
 
         registry.assign<SmashButton>(button, type);
-        registry.assign<Transform>(button, x, y);
+        registry.assign<Transform>(button, button, x, y);
         registry.assign<Sprite>(button, handle, handle->width(), handle->height(), 96, 96);
         registry.assign<Renderable>(button);
         registry.assign<BoundingBox>(button, 96, 96);
@@ -131,41 +131,41 @@ void SceneSystem::splashScreen(Registry &registry) {
 
     auto orange = registry.create<Renderable>();
     registry.assign<Sprite>(orange, rainbow, 150, 33, 80, 20, 0, 0);
-    registry.assign<Transform>(orange, logicalWidth / 2.f - 200, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(orange, orange, logicalWidth / 2.f - 200, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(orange, 0, 255, 400_ui32);
 
     auto yellow = registry.create<Renderable>();
     registry.assign<Sprite>(yellow, rainbow, 150, 33, 80, 20, 150, 0);
-    registry.assign<Transform>(yellow, logicalWidth / 2.f - 120, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(yellow, yellow, logicalWidth / 2.f - 120, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(yellow, 0, 255, 800_ui32);
 
     auto green = registry.create<Renderable>();
     registry.assign<Sprite>(green, rainbow, 150, 33, 80, 20, 300, 0);
-    registry.assign<Transform>(green, logicalWidth / 2.f - 40, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(green, green, logicalWidth / 2.f - 40, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(green, 0, 255, 1200_ui32);
 
     auto blue = registry.create<Renderable>();
     registry.assign<Sprite>(blue, rainbow, 150, 33, 80, 20, 450, 0);
-    registry.assign<Transform>(blue, logicalWidth / 2.f + 40, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(blue, blue, logicalWidth / 2.f + 40, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(blue, 0, 255, 1600_ui32);
 
     auto purple = registry.create<Renderable>();
     registry.assign<Sprite>(purple, rainbow, 150, 33, 80, 20, 600, 0);
-    registry.assign<Transform>(purple, logicalWidth / 2.f + 120, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(purple, purple, logicalWidth / 2.f + 120, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(purple, 0, 255, 2000_ui32);
 
     auto gamee = Locator::TextureCache::ref().handle("logo/gamee");
 
     auto company = registry.create<Renderable>();
     registry.assign<Sprite>(company, gamee, gamee->width(), gamee->height(), gamee->width(), gamee->height());
-    registry.assign<Transform>(company, logicalWidth / 2.f - gamee->width() / 2.f, logicalHeight / 2.f - 60);
+    registry.assign<Transform>(company, company, logicalWidth / 2.f - gamee->width() / 2.f, logicalHeight / 2.f - 60);
     registry.assign<FadeAnimation>(company, 0, 255, 2000_ui32);
 
     auto division = Locator::TextureCache::ref().handle("logo/division");
 
     auto dep = registry.create<Renderable>();
     registry.assign<Sprite>(dep, division, division->width(), division->height(), division->width(), division->height());
-    registry.assign<Transform>(dep, logicalWidth / 2.f - division->width() / 2.f, logicalHeight / 2.f + 60);
+    registry.assign<Transform>(dep, dep, logicalWidth / 2.f - division->width() / 2.f, logicalHeight / 2.f + 60);
     registry.assign<FadeAnimation>(dep, 0, 255, 2000_ui32);
 
     registry.attach<SceneChangeRequest>(registry.create(), SceneType::MENU_PAGE, 3000_ui32);
@@ -181,7 +181,7 @@ void SceneSystem::mainMenu(Registry &registry) {
     auto emoji = textureCache.handle("emoji/happy");
 
     registry.assign<Renderable>(entity);
-    registry.assign<Transform>(entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
+    registry.assign<Transform>(entity, entity, logicalWidth / 2.f - emoji->width() / 2, logicalHeight / 2.f - emoji->height() / 2);
     registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
     registry.assign<BoundingBox>(entity, emoji->width(), emoji->height());
     registry.assign<UIButton>(entity, UIAction::PLAY);
@@ -212,7 +212,7 @@ void SceneSystem::gameOver(Registry &registry) {
     auto reloadHandle = textureCache.handle("end/reload");
     registry.assign<Renderable>(reload, 0.f, 250);
     registry.assign<Sprite>(reload, reloadHandle, reloadHandle->width(), reloadHandle->height(), reloadHandle->width(), reloadHandle->height());
-    registry.assign<Transform>(reload, logicalWidth / 2.f - reloadHandle->width() / 2.f, logicalHeight / 2.f - reloadHandle->height() / 2.f);
+    registry.assign<Transform>(reload, reload, logicalWidth / 2.f - reloadHandle->width() / 2.f, logicalHeight / 2.f - reloadHandle->height() / 2.f);
     registry.assign<BoundingBox>(reload, reloadHandle->width(), reloadHandle->height());
     registry.assign<UIButton>(reload, UIAction::PLAY);
 }

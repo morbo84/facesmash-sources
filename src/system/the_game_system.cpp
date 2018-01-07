@@ -44,7 +44,7 @@ void TheGameSystem::spawn(Registry &registry, float x, float y, float impulseX, 
     auto handle = toHandle(smash);
     auto entity = registry.create<Renderable>();
 
-    registry.assign<Transform>(entity, x, y);
+    registry.assign<Transform>(entity, entity, x, y);
     registry.assign<Movement>(entity, gravity, impulseX, impulseY);
     registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
     registry.assign<BoundingBox>(entity, handle->width(), handle->height());

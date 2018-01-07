@@ -1,3 +1,4 @@
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -29,8 +30,8 @@ void SmashButtonSystem::update(Registry &registry) {
     if(dirty) {
         auto view = registry.view<SmashButton, Transform, BoundingBox>();
 
-        view.each([this](auto, auto &button, auto &transform, auto &box) {
-            auto area = transform * box;
+        view.each([&, this](auto entity, auto &button, auto &transform, auto &box) {
+            auto area = transformToPosition(registry, entity, transform) * box;
 
             if(SDL_PointInRect(&coord, &area)) {
                 Locator::Dispatcher::ref().enqueue<FaceEvent>(button.type);

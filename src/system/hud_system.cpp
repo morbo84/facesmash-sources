@@ -2,6 +2,7 @@
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include "../common/constants.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../game/game_renderer.h"
 #include "../locator/locator.hpp"
@@ -29,7 +30,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
 
         auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
         registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
-        registry.accomodate<Transform>(timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
+        registry.accomodate<Transform>(timeEntity, timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
 
         if(registry.has<FPSDebug>()) {
             auto fpsEntity = registry.attachee<FPSDebug>();
@@ -40,7 +41,7 @@ void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type del
 
             auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
             registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
-            registry.accomodate<Transform>(fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
+            registry.accomodate<Transform>(fpsEntity, fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
         }
     }
 }
@@ -55,7 +56,9 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
     auto view = registry.persistent<Transform, Renderable, HUD>();
     view.sort<Renderable>();
 
-    view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &hud) {
+    view.each([&](auto entity, const auto &transform, const auto &renderable, const auto &hud) {
+        const auto position = transformToPosition(registry, entity, transform);
+
         SDL_Rect src;
         src.w = hud.width;
         src.h = hud.height;
@@ -65,8 +68,8 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         SDL_Rect dst;
         dst.w = hud.w;
         dst.h = hud.h;
-        dst.x = transform.x;
-        dst.y = transform.y;
+        dst.x = position.x;
+        dst.y = position.y;
 
         SDL_Texture *texture = hud.handle.get();
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -75,7 +78,7 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
 
 #if DEBUG
         if(registry.has<BoundingBox>(entity)) {
-            SDL_Rect rect = registry.get<BoundingBox>(entity) * transform;
+            SDL_Rect rect = registry.get<BoundingBox>(entity) * position;
             SDL_SetRenderDrawColor(renderer, 128_ui8, 128_ui8, 128_ui8, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rect);
         }

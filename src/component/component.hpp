@@ -56,6 +56,7 @@ struct Renderable final {
 
 
 struct Transform final {
+    entity_type parent;
     float x;
     float y;
 };

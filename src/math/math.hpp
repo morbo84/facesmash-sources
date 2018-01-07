@@ -45,22 +45,22 @@ inline float clamp(float value, float lim) {
 }
 
 
-inline SDL_Rect operator *(const BoundingBox &box, const Transform &transform) {
-    return details::operator *(box, transform);
+inline SDL_Rect operator *(const BoundingBox &box, const SDL_Point &position) {
+    return details::operator *(box, position);
 }
 
 
-inline SDL_Rect operator *(const Transform &transform, const BoundingBox &box) {
-    return details::operator *(box, transform);
+inline SDL_Rect operator *(const SDL_Point &position, const BoundingBox &box) {
+    return details::operator *(box, position);
 }
 
 
-inline Transform operator +(const Transform &lhs, const Transform &rhs) {
+inline SDL_Point operator +(const SDL_Point &lhs, const SDL_Point &rhs) {
     return details::operator +(lhs, rhs);
 }
 
 
-inline Transform operator -(const Transform &lhs, const Transform &rhs) {
+inline SDL_Point operator -(const SDL_Point &lhs, const SDL_Point &rhs) {
     return details::operator -(lhs, rhs);
 }
 

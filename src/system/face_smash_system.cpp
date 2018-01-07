@@ -1,5 +1,6 @@
 #include <SDL_rect.h>
 #include "../common/constants.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -19,7 +20,7 @@ void FaceSmashSystem::addScore(Registry &registry, SDLTextureHandle handle, SDL_
     registry.assign<DestroyLater>(entity, 2000_ui32);
     registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
 
-    auto &transform = registry.assign<Transform>(entity, 1.f * pos.x - handle->width() / 2, 1.f * pos.y - handle->height() / 2);
+    auto &transform = registry.assign<Transform>(entity, entity, 1.f * pos.x - handle->width() / 2, 1.f * pos.y - handle->height() / 2);
     const auto left = transform.x;
     const auto right = transform.x + handle->width();
     const auto bottom = transform.y + handle->height();
@@ -62,7 +63,7 @@ void FaceSmashSystem::update(Registry &registry) {
         auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
 
         view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
-            const auto area = transform * box;
+            const auto area = transformToPosition(registry, entity, transform) * box;
             SDL_Point center = { area.x + area.w / 2, area.y + area.h / 2 };
 
             if(movement.velY > 0 && !SDL_HasIntersection(&screen, &area)) {
@@ -96,7 +97,7 @@ void FaceSmashSystem::update(Registry &registry) {
                 auto explosion = registry.create();
                 registry.assign<Sprite>(explosion, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
                 registry.assign<Renderable>(explosion, 0.f, 255);
-                registry.assign<Transform>(explosion, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
+                registry.assign<Transform>(explosion, explosion, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
                 registry.assign<SpriteAnimation>(explosion, 1000_ui32, 0_ui32, false);
                 registry.assign<DestroyLater>(explosion, 1000_ui32);
 

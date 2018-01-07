@@ -5,6 +5,7 @@
 #include <SDL_pixels.h>
 #include "../common/constants.h"
 #include "../common/types.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../game/game_renderer.h"
 #include "../math/math.hpp"
@@ -22,15 +23,15 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
     // it doesn't make sense otherwise...
     assert(registry.has<Camera>());
 
-    const auto &offset = registry.get<Transform>(registry.attachee<Camera>());
+    const auto offset = transformToPosition(registry, registry.attachee<Camera>(), registry.get<Transform>(registry.attachee<Camera>()));
     auto view = registry.persistent<Transform, Renderable, Sprite>();
     const SDL_Rect screen = logicalScreen;
 
     view.sort<Renderable>();
 
-    view.each([&]([[maybe_unused]] auto entity, const auto &transform, const auto &renderable, const auto &sprite) {
+    view.each([&](auto entity, const auto &transform, const auto &renderable, const auto &sprite) {
         // move objects according to camera position
-        const auto position = transform - offset;
+        const auto position = transformToPosition(registry, entity, transform) - offset;
 
         SDL_Rect src;
         SDL_Rect dst;

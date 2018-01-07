@@ -1,3 +1,4 @@
+#include "../common/util.h"
 #include "../event/event.hpp"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
@@ -29,8 +30,8 @@ void UIButtonSystem::update(Registry &registry) {
     if(dirty) {
         auto view = registry.view<UIButton, Transform, BoundingBox>();
 
-        view.each([&, this](auto, auto &button, auto &transform, auto &box) {
-            auto area = transform * box;
+        view.each([&, this](auto entity, auto &button, auto &transform, auto &box) {
+            auto area = transformToPosition(registry, entity, transform) * box;
 
             if(SDL_PointInRect(&coord, &area)) {
                 if(registry.has<SceneChangeRequest>()) {
