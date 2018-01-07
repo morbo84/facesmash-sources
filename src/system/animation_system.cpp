@@ -56,10 +56,46 @@ void AnimationSystem::spriteAnimation(Registry &registry, delta_type delta) {
 }
 
 
+void AnimationSystem::horizontalAnimation(Registry &registry, delta_type delta) {
+    auto view = registry.view<HorizontalAnimation, Transform>();
+
+    view.each([delta, &registry](auto entity, auto &animation, auto &transform) {
+        animation.elapsed += delta;
+
+        if(animation.elapsed < animation.duration) {
+            const float mul = 1.f * animation.elapsed / animation.duration;
+            transform.x = animation.from + (mul * (animation.to - animation.from));
+        } else {
+            transform.x = animation.to;
+            registry.remove<HorizontalAnimation>(entity);
+        }
+    });
+}
+
+
+void AnimationSystem::verticalAnimation(Registry &registry, delta_type delta) {
+    auto view = registry.view<VerticalAnimation, Transform>();
+
+    view.each([delta, &registry](auto entity, auto &animation, auto &transform) {
+        animation.elapsed += delta;
+
+        if(animation.elapsed < animation.duration) {
+            const float mul = 1.f * animation.elapsed / animation.duration;
+            transform.y = animation.from + (mul * (animation.to - animation.from));
+        } else {
+            transform.y = animation.to;
+            registry.remove<VerticalAnimation>(entity);
+        }
+    });
+}
+
+
 void AnimationSystem::update(Registry &registry, delta_type delta) {
     fadeAnimation(registry, delta);
     rotationAnimation(registry, delta);
     spriteAnimation(registry, delta);
+    horizontalAnimation(registry, delta);
+    verticalAnimation(registry, delta);
 }
 
 

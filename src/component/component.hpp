@@ -105,6 +105,22 @@ struct RotationAnimation final {
 };
 
 
+struct HorizontalAnimation final {
+    int from;
+    int to;
+    delta_type duration;
+    delta_type elapsed;
+};
+
+
+struct VerticalAnimation final {
+    int from;
+    int to;
+    delta_type duration;
+    delta_type elapsed;
+};
+
+
 struct UIButton final {
     UIAction action;
 };
