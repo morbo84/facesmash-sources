@@ -25,21 +25,19 @@ void GameLoop::init(GameRenderer &renderer) {
 
     textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("ttf/roboto/condensed/48"), bannerColor);
     textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), bannerColor);
-    textureCache.load<SDLTextureLoader>("logo/rainbow", "png/rainbow.png", renderer, 748, 33);
+    textureCache.load<SDLTextureLoader>("logo/rainbow", "png/logo/rainbow.png", renderer, 748, 33);
 
-    textureCache.load<SDLTextureLoader>("game/explosion", "png/explosion.png", renderer, 960, 768);
+    textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
 
-    textureCache.load<SDLTextureLoader>("emoji/angry", "png/angry.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/disgusted.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/fearful.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/happy", "png/happy.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/sad", "png/sad.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/surprised.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/angry", "png/emoji/angry.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/emoji/disgusted.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/emoji/fearful.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/happy", "png/emoji/happy.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/sad", "png/emoji/sad.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/emoji/surprised.png", renderer, 128, 128);
 
-    textureCache.load<SDLTextureLoader>("emoji/pouting", "png/pouting.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/star", "png/star.png", renderer, 128, 128);
-
-    textureCache.load<SDLTextureLoader>("icon/end", "png/end.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/pouting", "png/emoji/pouting.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/star", "png/emoji/star.png", renderer, 128, 128);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
@@ -71,11 +69,9 @@ void GameLoop::init(GameRenderer &renderer) {
     textureCache.load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
 #endif
 
-    textureCache.load<SDLTextureLoader>("game/banner", "png/banner.png", renderer, 1080, 320);
+    textureCache.load<SDLTextureLoader>("game/banner", "png/gui/banner.png", renderer, 1080, 320);
 
-    textureCache.load<SDLTextureLoader>("menu/bg", "png/menu_bg.png", renderer, 1080, 1920);
-
-    textureCache.load<SDLTextureLoader>("end/reload", "png/reload.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("end/reload", "png/gui/reload.png", renderer, 128, 128);
 
     // request the splash screen
 
