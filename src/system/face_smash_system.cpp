@@ -67,10 +67,21 @@ void FaceSmashSystem::update(Registry &registry) {
 
             if(movement.velY > 0 && !SDL_HasIntersection(&screen, &area)) {
                 switch(smash.miss) {
+                case 10:
+                    addScore(registry, textureCache.handle("miss/10"), center);
+                    break;
+                case 20:
+                    addScore(registry, textureCache.handle("miss/20"), center);
+                    break;
                 case 50:
                     addScore(registry, textureCache.handle("miss/50"), center);
                     break;
-                    // TODO other scores ...
+                case 100:
+                    addScore(registry, textureCache.handle("miss/100"), center);
+                    break;
+                default:
+                    // does nothing (ie value = 0)
+                    break;
                 }
 
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
@@ -90,10 +101,21 @@ void FaceSmashSystem::update(Registry &registry) {
                 registry.assign<DestroyLater>(explosion, 1000_ui32);
 
                 switch(smash.smash) {
+                case 50:
+                    addScore(registry, textureCache.handle("smash/50"), center);
+                    break;
                 case 100:
                     addScore(registry, textureCache.handle("smash/100"), center);
                     break;
-                    // TODO other scores ...
+                case 200:
+                    addScore(registry, textureCache.handle("smash/200"), center);
+                    break;
+                case 250:
+                    addScore(registry, textureCache.handle("smash/250"), center);
+                    break;
+                default:
+                    // does nothing (ie value = 0)
+                    break;
                 }
 
                 switch(smash.type) {

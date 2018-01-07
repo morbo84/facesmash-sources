@@ -44,8 +44,14 @@ void GameLoop::init(GameRenderer &renderer) {
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
 
+    textureCache.load<TTFFontTextureLoader>("miss/10", "10", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
+    textureCache.load<TTFFontTextureLoader>("miss/20", "20", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
     textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
+    textureCache.load<TTFFontTextureLoader>("miss/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
+    textureCache.load<TTFFontTextureLoader>("smash/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
     textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("smash/200", "200", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("smash/250", "250", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
 
     const SDL_Color comboColor{120_ui8, 230_ui8, 120_ui8, 255_ui8};
 

@@ -10,6 +10,9 @@
 namespace gamee {
 
 
+struct FaceSmash;
+
+
 class TheGameSystem final {
     static constexpr float gravity = .0005f;
     static constexpr float bottomImpulseX = .12f;
@@ -17,12 +20,12 @@ class TheGameSystem final {
     static constexpr float sideImpulseX = .5f;
     static constexpr float sideImpulseY = .4f;
 
-    void spawn(Registry &, float, float, float, float, FaceType, FaceModifier);
+    void spawn(Registry &, float, float, float, float, bool, const FaceSmash &);
 
-    void spawnBottom(Registry &, FaceType, FaceModifier);
-    void spawnTop(Registry &, FaceType, FaceModifier);
-    void spawnLeft(Registry &, FaceType, FaceModifier);
-    void spawnRight(Registry &, FaceType, FaceModifier);
+    void spawnBottom(Registry &, bool, const FaceSmash &);
+    void spawnTop(Registry &, bool, const FaceSmash &);
+    void spawnLeft(Registry &, bool, const FaceSmash &);
+    void spawnRight(Registry &, bool, const FaceSmash &);
 
     FaceType next() noexcept;
 

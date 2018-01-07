@@ -61,7 +61,7 @@ void SceneSystem::gameUI(Registry &registry) {
     registry.assign<Transform>(timer, logicalWidth - 2.f * timerHandle->width(), 32.f);
 
     auto time = registry.create<Renderable>();
-    registry.attach<GameTimer>(time, 60000_ui32);
+    registry.attach<GameTimer>(time, 60999_ui32);
     registry.assign<Transform>(time, logicalWidth - timerHandle->width() + 16.f, 32.f);
 
     auto bonus = registry.create();

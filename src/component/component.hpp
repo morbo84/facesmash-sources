@@ -120,10 +120,10 @@ struct Movement final {
 
 
 struct FaceSmash final {
+    UInt8 smash;
+    UInt8 miss;
     FaceType type;
     FaceModifier modifier{FaceModifier::NONE};
-    UInt8 smash{100_ui8};
-    UInt8 miss{50_ui8};
 };
 
 
@@ -170,7 +170,7 @@ struct LetsPlay final {
     bool remaining40000{false};
     bool remaining30000{false};
     bool remaining15000{false};
-    bool remaining5000{false};
+    bool remaining7500{false};
     // score steps
     int nextScoreStep{2500};
 };
