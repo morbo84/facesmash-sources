@@ -3,6 +3,29 @@
 #include <algorithm>
 #include <array>
 
+#ifdef __ANDROID__
+static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
+static const char* visageDataPath = "/data/data/com.cynny.gamee.facesmash/files/visage/bdtsdata/LBF/vfadata";
+#else
+static const char* visageTrackingCfg = "visage/Facial Features Tracker - High.cfg";
+static const char* visageDataPath = "visage/bdtsdata/LBF/vfadata";
+static const char* visageLicense = "visage/578-496-411-691-522-273-235-359-916-935-253.vlc";
+
+// neccessary prototype declaration for licensing
+namespace VisageSDK {
+    void initializeLicenseManager(const char *licenseKeyFileName);
+}
+
+struct DummyVisageInitializer {
+    DummyVisageInitializer() noexcept {
+        //initialize licensing
+        VisageSDK::initializeLicenseManager(visageLicense);
+    }
+};
+
+static DummyVisageInitializer dummy_;
+#endif
+
 
 namespace gamee {
 
@@ -10,13 +33,13 @@ namespace gamee {
 EmoDetector::EmoDetector(int width, int height)
     : width_{width}
     , height_{height}
-    , tracker_{"/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg"}
+    , tracker_{visageTrackingCfg}
     , image_{vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3)}
     , dirty_{false}
     , end_{false}
     , t_{&EmoDetector::analyzeCurrentFrame, this}
 {
-    analyzer_.init("/data/data/com.cynny.gamee.facesmash/files/visage/bdtsdata/LBF/vfadata");
+    analyzer_.init(visageDataPath);
     Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
 }
 
