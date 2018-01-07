@@ -52,12 +52,14 @@ void FaceSmashSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
         assert(registry.has<PlayerScore>());
 
+        const auto &play = registry.get<LetsPlay>();
         auto &score = registry.get<PlayerScore>();
-        auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
         auto &textureCache = Locator::TextureCache::ref();
         const SDL_Rect screen = logicalScreen;
         int total = 0;
         int combo = 0;
+
+        auto view = registry.view<FaceSmash, Transform, Movement, BoundingBox>();
 
         view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &movement, const auto &box) {
             const auto area = transform * box;
@@ -73,7 +75,13 @@ void FaceSmashSystem::update(Registry &registry) {
 
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
                 registry.destroy(entity);
-            } else if(dirty && smash.type == type) {
+            } else if(// an emotion has been detected in the meantime
+                      dirty &&
+                      // the types match each with the other
+                      smash.type == type &&
+                      // the face is within the smash area
+                      SDL_HasIntersection(&play.smashArea, &area))
+            {
                 auto explosion = registry.create();
                 registry.assign<Sprite>(explosion, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
                 registry.assign<Renderable>(explosion, 0.f, 255);

@@ -147,4 +147,5 @@ add_custom_target(
         AUTHORS
         LICENSE
         README.md
+        TODO
 )

@@ -162,6 +162,8 @@ struct BonusSmash final {
 
 
 struct LetsPlay final {
+    // smash area
+    SDL_Rect smashArea;
     // time steps
     bool remaining55000{false};
     bool remaining50000{false};

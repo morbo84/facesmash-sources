@@ -205,7 +205,7 @@ void SceneSystem::theGame(Registry &registry) {
     smashButtons(registry);
 #endif // DEBUG
 
-    registry.attach<LetsPlay>(registry.create());
+    registry.attach<LetsPlay>(registry.create(), SDL_Rect{logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8});
 }
 
 
