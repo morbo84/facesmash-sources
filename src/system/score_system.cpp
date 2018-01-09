@@ -11,7 +11,7 @@ namespace gamee {
 
 
 void ScoreSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    if(registry.has<PlayerScore>()) {
+    if(registry.has<LetsPlay>()) {
         auto entity = registry.attachee<PlayerScore>();
         auto &score = registry.get<PlayerScore>();
 

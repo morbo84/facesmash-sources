@@ -14,7 +14,7 @@ namespace gamee {
 void FaceSmashSystem::addScore(Registry &registry, SDLTextureHandle handle, SDL_Point pos) {
     auto entity = registry.create();
 
-    registry.assign<Renderable>(entity);
+    registry.assign<Renderable>(entity, 0.f, 190);
     registry.assign<Movement>(entity, 0.f, 0.f, -.06f);
     registry.assign<FadeAnimation>(entity, 255, 0, 2000_ui32);
     registry.assign<DestroyLater>(entity, 2000_ui32);
@@ -51,8 +51,6 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 
 void FaceSmashSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
-        assert(registry.has<PlayerScore>());
-
         const auto &play = registry.get<LetsPlay>();
         auto &score = registry.get<PlayerScore>();
         auto &textureCache = Locator::TextureCache::ref();

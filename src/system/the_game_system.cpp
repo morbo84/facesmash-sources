@@ -40,10 +40,31 @@ static auto toHandle(const FaceSmash &smash) {
 }
 
 
+static auto toZ(const FaceSmash &smash) {
+    switch(smash.type) {
+    case FaceType::HAPPY:
+        return 186;
+    case FaceType::ANGRY:
+        return 185;
+    case FaceType::SURPRISED:
+        return 184;
+    case FaceType::SAD:
+        return 183;
+    case FaceType::DISGUSTED:
+        return 182;
+    case FaceType::FEARFUL:
+        return 181;
+    default:
+        return 180;
+    }
+}
+
+
 void TheGameSystem::spawn(Registry &registry, float x, float y, float impulseX, float impulseY, bool rotation, const FaceSmash &smash) {
     auto handle = toHandle(smash);
-    auto entity = registry.create<Renderable>();
+    auto entity = registry.create();
 
+    registry.assign<Renderable>(entity, 0.f, toZ(smash));
     registry.assign<Transform>(entity, entity, x, y);
     registry.assign<Movement>(entity, gravity, impulseX, impulseY);
     registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
@@ -134,9 +155,6 @@ TheGameSystem::TheGameSystem()
 
 void TheGameSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
-        assert(registry.has<PlayerScore>());
-        assert(registry.has<GameTimer>());
-
         const auto &remaining = registry.get<GameTimer>().remaining;
         auto &play = registry.get<LetsPlay>();
 

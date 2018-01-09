@@ -14,4 +14,9 @@ void AudioSdl::release() {
 }
 
 
+bool AudioSdl::isMute() {
+    return false;
+}
+
+
 }

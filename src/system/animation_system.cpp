@@ -1,3 +1,4 @@
+#include <cmath>
 #include "../component/component.hpp"
 #include "animation_system.h"
 
@@ -63,8 +64,7 @@ void AnimationSystem::horizontalAnimation(Registry &registry, delta_type delta) 
         animation.elapsed += delta;
 
         if(animation.elapsed < animation.duration) {
-            const float mul = 1.f * animation.elapsed / animation.duration;
-            transform.x = animation.from + (mul * (animation.to - animation.from));
+            transform.x = animation.ease(animation.elapsed, animation.duration, animation.from, animation.to);
         } else {
             transform.x = animation.to;
             registry.remove<HorizontalAnimation>(entity);
@@ -80,8 +80,7 @@ void AnimationSystem::verticalAnimation(Registry &registry, delta_type delta) {
         animation.elapsed += delta;
 
         if(animation.elapsed < animation.duration) {
-            const float mul = 1.f * animation.elapsed / animation.duration;
-            transform.y = animation.from + (mul * (animation.to - animation.from));
+            transform.y = animation.ease(animation.elapsed, animation.duration, animation.from, animation.to);
         } else {
             transform.y = animation.to;
             registry.remove<VerticalAnimation>(entity);

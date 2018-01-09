@@ -16,6 +16,11 @@ constexpr SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 constexpr int numberOfFaces = 6;
 
 
+#ifdef __ANDROID__
+#define CAMERA_FRAME_AVAILABLE
+#endif // __ANDROID__
+
+
 }
 
 

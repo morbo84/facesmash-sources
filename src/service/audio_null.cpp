@@ -4,13 +4,12 @@
 namespace gamee {
 
 
-void AudioNull::init() {
-    // TODO
-}
+void AudioNull::init() {}
+void AudioNull::release() {}
 
 
-void AudioNull::release() {
-    // TODO
+bool AudioNull::isMute() {
+    return true;
 }
 
 

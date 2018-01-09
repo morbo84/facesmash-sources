@@ -1,5 +1,6 @@
 #include <sstream>
 #include <algorithm>
+#include <SDL_pixels.h>
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../game/game_renderer.h"
@@ -12,8 +13,6 @@ namespace gamee {
 
 void TimerSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
     if(registry.has<LetsPlay>()) {
-        assert(registry.has<GameTimer>());
-
         auto entity = registry.attachee<GameTimer>();
         auto &timer = registry.get<GameTimer>();
 
@@ -27,11 +26,7 @@ void TimerSystem::update(Registry &registry, GameRenderer &renderer, delta_type 
         registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
 
         if(0 == timer.remaining) {
-            if(registry.has<SceneChangeRequest>()) {
-                registry.destroy(registry.attachee<SceneChangeRequest>());
-            }
-
-            registry.attach<SceneChangeRequest>(registry.create(), SceneType::GAME_OVER);
+            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
         }
     }
 }

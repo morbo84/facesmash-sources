@@ -2,15 +2,22 @@
 #define FACE_SMASH_SYSTEM_FRAME_SYSTEM_H
 
 
+#include "../common/types.h"
+
+
 namespace gamee {
 
+
 class FrameAvailableEvent;
+
 
 struct FrameSystem final {
     FrameSystem() noexcept;
     ~FrameSystem() noexcept;
-    void update();
+
     void receive(const FrameAvailableEvent &) noexcept;
+
+    void update(Registry &);
 
 private:
     bool dirty;

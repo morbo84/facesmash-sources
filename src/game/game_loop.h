@@ -32,7 +32,27 @@ struct GameRenderer;
 class GameLoop final: public GameEnv {
     static constexpr delta_type msPerUpdate = 20;
 
+    void loadResources(GameRenderer &);
+
+    void createSplashScreen();
+    void createTopPatch();
+    void createBottomPatch();
+    void createMenuTopPanel();
+    void createMenuBottomPanel();
+    void createPlayButton();
+    void createCameraFrame();
+    void createGameTopPanel(GameRenderer &);
+    void createGameBottomPanel();
+    void createGameOverPanel();
+    void createCamera();
+
+#ifdef DEBUG
+    void createSmashButtons();
+    void createDebugStuff();
+#endif // DEBUG
+
     void init(GameRenderer &) override;
+
     void close() override;
 
     void update(GameRenderer &, delta_type) override;

@@ -1,4 +1,3 @@
-#include <cassert>
 #include "util.h"
 
 
@@ -13,7 +12,7 @@ SDL_Point transformToPosition(const Registry &registry, entity_type entity, cons
     const auto *component = &transform;
 
     while(component->parent != entity) {
-        assert(registry.has<Transform>(component->parent));
+        entity = component->parent;
         component = &registry.get<Transform>(component->parent);
         position.x += component->x;
         position.y += component->y;

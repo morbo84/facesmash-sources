@@ -3,6 +3,8 @@
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
+#include "../service/audio_null.h"
+#include "../service/audio_sdl.h"
 #include "ui_button_system.h"
 
 
@@ -16,6 +18,22 @@ UIButtonSystem::UIButtonSystem(): dirty{false} {
 
 UIButtonSystem::~UIButtonSystem() {
     Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
+}
+
+
+void UIButtonSystem::switchAudio(Registry &registry, entity_type entity) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto &audio = Locator::Audio::ref();
+
+    if(audio.isMute()) {
+        auto &sprite = registry.get<Sprite>(entity);
+        sprite.handle = textureCache.handle("button/sound");
+        Locator::Audio::set<AudioSdl>();
+    } else {
+        auto &sprite = registry.get<Sprite>(entity);
+        sprite.handle = textureCache.handle("button/mute");
+        Locator::Audio::set<AudioNull>();
+    }
 }
 
 
@@ -34,16 +52,19 @@ void UIButtonSystem::update(Registry &registry) {
             auto area = transformToPosition(registry, entity, transform) * box;
 
             if(SDL_PointInRect(&coord, &area)) {
-                if(registry.has<SceneChangeRequest>()) {
-                    registry.destroy(registry.attachee<SceneChangeRequest>());
-                }
-
                 switch(button.action) {
+                case UIAction::RELOAD:
                 case UIAction::PLAY:
-                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::THE_GAME);
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case UIAction::MENU:
-                    registry.attach<SceneChangeRequest>(registry.create(), SceneType::MENU_PAGE);
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    break;
+                case UIAction::SHARE:
+                    // TODO
+                    break;
+                case UIAction::SWITCH_AUDIO:
+                    switchAudio(registry, entity);
                     break;
                 }
             }

@@ -15,35 +15,31 @@ namespace gamee {
 
 #if DEBUG
 void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    if(registry.has<TimeDebug>()) {
-        const SDL_Color fg = { 255, 255, 255, 255 };
-        auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
+    const SDL_Color fg = { 255, 255, 255, 255 };
+    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
 
-        auto &timeDebug = registry.get<TimeDebug>();
-        auto timeEntity = registry.attachee<TimeDebug>();
+    auto &timeDebug = registry.get<TimeDebug>();
+    auto timeEntity = registry.attachee<TimeDebug>();
 
-        timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
+    timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
 
-        std::stringstream time;
-        time.precision(3);
-        time << "TIME: " << timeDebug.average;
+    std::stringstream time;
+    time.precision(3);
+    time << "TIME: " << timeDebug.average;
 
-        auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
-        registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
-        registry.accomodate<Transform>(timeEntity, timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
+    auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
+    registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+    registry.accomodate<Transform>(timeEntity, timeEntity, 150.f, 0.f + logicalHeight - timeHandle->height());
 
-        if(registry.has<FPSDebug>()) {
-            auto fpsEntity = registry.attachee<FPSDebug>();
+    auto fpsEntity = registry.attachee<FPSDebug>();
 
-            std::stringstream fps;
-            fps.precision(2);
-            fps << "FPS: " << (1000.f / timeDebug.average);
+    std::stringstream fps;
+    fps.precision(2);
+    fps << "FPS: " << (1000.f / timeDebug.average);
 
-            auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
-            registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
-            registry.accomodate<Transform>(fpsEntity, fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
-        }
-    }
+    auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
+    registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
+    registry.accomodate<Transform>(fpsEntity, fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
 }
 #endif // DEBUG
 

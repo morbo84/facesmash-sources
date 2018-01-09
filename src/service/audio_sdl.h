@@ -12,6 +12,8 @@ struct AudioSdl: AudioService {
     void init() override;
     void release() override;
 
+    bool isMute() override;
+
     // TODO
 };
 

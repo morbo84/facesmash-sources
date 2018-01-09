@@ -8,23 +8,36 @@
 namespace gamee {
 
 
+struct SceneChangeEvent;
+
+
 class SceneSystem final {
-    void backgroundFrame(Registry &);
-    void gameUI(Registry &);
-    void camera(Registry &);
+    void discardSplashScreen(Registry &);
+    void disableUIControls(Registry &);
+    void enableUIControls(Registry &);
 
-#if DEBUG
-    void smashButtons(Registry &);
-    void debug(Registry &);
-#endif // DEBUG
+    delta_type menuPageTransition(Registry &, delta_type);
+    delta_type theGameTransition(Registry &);
+    delta_type gameOverTransition(Registry &);
 
-    void splashScreen(Registry &);
-    void mainMenu(Registry &);
+    void splashScreen();
+    void menuPage(Registry &);
     void theGame(Registry &);
     void gameOver(Registry &);
 
 public:
+    SceneSystem();
+    ~SceneSystem();
+
+    void receive(const SceneChangeEvent &) noexcept;
+
     void update(Registry &, delta_type);
+
+public:
+    SceneType curr;
+    SceneType next;
+    delta_type remaining;
+    bool isTransitioning;
 };
 
 

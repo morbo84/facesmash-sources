@@ -28,6 +28,11 @@ struct TouchEvent final {
 };
 
 
+struct SceneChangeEvent final {
+    SceneType scene;
+};
+
+
 struct FaceEvent final {
     FaceType type;
 };

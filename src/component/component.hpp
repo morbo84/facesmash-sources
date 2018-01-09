@@ -3,6 +3,8 @@
 
 
 #include <SDL_rect.h>
+#include "../common/constants.h"
+#include "../common/ease.h"
 #include "../common/types.h"
 #include "../resource/texture_resource.h"
 
@@ -107,18 +109,22 @@ struct RotationAnimation final {
 
 
 struct HorizontalAnimation final {
+    using ease_type = float(*)(float, float, float, float);
     int from;
     int to;
     delta_type duration;
-    delta_type elapsed;
+    delta_type elapsed{0_ui32};
+    ease_type ease{&linear};
 };
 
 
 struct VerticalAnimation final {
+    using ease_type = float(*)(float, float, float, float);
     int from;
     int to;
     delta_type duration;
-    delta_type elapsed;
+    delta_type elapsed{0_ui32};
+    ease_type ease{&linear};
 };
 
 
@@ -149,14 +155,8 @@ struct DestroyLater final {
 };
 
 
-struct SceneChangeRequest final {
-    SceneType scene;
-    delta_type remaining{0_ui32};
-};
-
-
 struct GameTimer final {
-    delta_type remaining;
+    delta_type remaining{60999_ui32};
 };
 
 
@@ -180,7 +180,7 @@ struct BonusSmash final {
 
 struct LetsPlay final {
     // smash area
-    SDL_Rect smashArea;
+    SDL_Rect smashArea{logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8};
     // time steps
     bool remaining55000{false};
     bool remaining50000{false};
@@ -191,6 +191,20 @@ struct LetsPlay final {
     // score steps
     int nextScoreStep{2500};
 };
+
+
+struct Panel final {
+    int w;
+    int h;
+    PanelType type;
+};
+
+
+struct CameraFrame final {
+    bool acquire{false};
+};
+
+struct PlayButton final {};
 
 
 }

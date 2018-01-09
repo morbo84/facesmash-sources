@@ -1,6 +1,7 @@
 #include <cstring>
 #include <SDL_render.h>
 #include "../common/types.h"
+#include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "frame_system.h"
@@ -21,11 +22,18 @@ FrameSystem::~FrameSystem() noexcept {
 }
 
 
-void FrameSystem::update() {
-    auto handle = Locator::TextureCache::ref().handle("camera/frame");
+void FrameSystem::receive(const FrameAvailableEvent &) noexcept {
+    dirty = true;
+}
 
-    if(handle && dirty) {
+
+void FrameSystem::update(Registry &registry) {
+    const bool acquire = registry.has<CameraFrame>() &&
+            registry.get<CameraFrame>().acquire;
+
+    if(acquire && dirty) {
         Locator::Camera::ref().frame([&](const void *pixels, int size) {
+            auto handle = Locator::TextureCache::ref().handle("camera/frame");
             void *texture;
             int pitch;
 
@@ -55,13 +63,9 @@ void FrameSystem::update() {
             std::memcpy(texture, pixels, size);
             SDL_UnlockTexture(*handle);
         });
+
         dirty = false;
     }
-}
-
-
-void FrameSystem::receive(const FrameAvailableEvent &) noexcept {
-    dirty = true;
 }
 
 

@@ -1,5 +1,3 @@
-#include <cassert>
-#include <vector>
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_pixels.h>
@@ -19,9 +17,6 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
     registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
         return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
     });
-
-    // it doesn't make sense otherwise...
-    assert(registry.has<Camera>());
 
     const auto offset = transformToPosition(registry, registry.attachee<Camera>(), registry.get<Transform>(registry.attachee<Camera>()));
     auto view = registry.persistent<Transform, Renderable, Sprite>();
