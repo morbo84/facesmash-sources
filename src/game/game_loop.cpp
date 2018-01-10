@@ -33,15 +33,15 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
 
-    textureCache.load<SDLTextureLoader>("emoji/angry", "png/emoji/angry.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/emoji/disgusted.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/emoji/fearful.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/happy", "png/emoji/happy.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/sad", "png/emoji/sad.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/emoji/surprised.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/angry", "png/emoji/angry.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/emoji/disgusted.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/emoji/fearful.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/happy", "png/emoji/happy.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/sad", "png/emoji/sad.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/emoji/surprised.png", renderer, 180, 180);
 
-    textureCache.load<SDLTextureLoader>("emoji/pouting", "png/emoji/pouting.png", renderer, 128, 128);
-    textureCache.load<SDLTextureLoader>("emoji/star", "png/emoji/star.png", renderer, 128, 128);
+    textureCache.load<SDLTextureLoader>("emoji/malus", "png/emoji/malus.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("emoji/bonus", "png/emoji/bonus.png", renderer, 180, 180);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};

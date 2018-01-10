@@ -31,9 +31,9 @@ static auto toHandle(const FaceSmash &smash) {
             assert(false); // suppress warnings
         }
     case FaceModifier::SLOW_DOWN:
-        return Locator::TextureCache::ref().handle("emoji/star");
+        return Locator::TextureCache::ref().handle("emoji/bonus");
     case FaceModifier::SPEED_UP:
-        return Locator::TextureCache::ref().handle("emoji/pouting");
+        return Locator::TextureCache::ref().handle("emoji/malus");
     default:
         assert(false); // suppress warnings
     }
