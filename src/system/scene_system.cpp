@@ -101,7 +101,6 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
     enableCameraFrame(registry);
 
     registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
-    registry.attach<Countdown>(registry.create(), duration);
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {

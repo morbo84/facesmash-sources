@@ -7,7 +7,6 @@
 #include "../system/animation_system.h"
 #include "../system/bonus_system.h"
 #include "../system/camera_system.h"
-#include "../system/countdown_system.h"
 #include "../system/destroy_later_system.h"
 #include "../system/face_modifier_system.h"
 #include "../system/face_smash_system.h"
@@ -67,7 +66,6 @@ private:
     AnimationSystem animationSystem;
     BonusSystem bonusSystem;
     CameraSystem cameraSystem;
-    CountdownSystem countdownSystem;
     DestroyLaterSystem destroyLaterSystem;
     FaceModifierSystem faceModifierSystem;
     FaceSmashSystem faceSmashSystem;

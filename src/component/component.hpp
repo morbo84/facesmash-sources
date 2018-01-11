@@ -210,13 +210,6 @@ struct CameraFrame final {
 struct PlayButton final {};
 
 
-struct Countdown final {
-    delta_type duration;
-    delta_type elapsed{0_ui32};
-    UInt8 step{0};
-};
-
-
 }
 
 

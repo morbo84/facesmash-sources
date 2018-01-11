@@ -76,12 +76,6 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer, 160, 160);
 
-    const SDL_Color countdownColor{205_ui8, 205_ui8, 205_ui8, 255_ui8};
-
-    textureCache.load<TTFFontTextureLoader>("countdown/use", "USE", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), countdownColor);
-    textureCache.load<TTFFontTextureLoader>("countdown/your", "YOUR", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), countdownColor);
-    textureCache.load<TTFFontTextureLoader>("countdown/face", "FACE", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), countdownColor);
-
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
     textureCache.load<SDLTextureLoader>("gui/patch", "png/gui/patch.png", renderer, 1080, 960);
@@ -407,7 +401,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 #endif // DEBUG
 
     destroyLaterSystem.update(registry, delta);
-    countdownSystem.update(registry, delta);
     faceSmashSystem.update(registry);
     bonusSystem.update(registry);
     faceModifierSystem.update(registry, delta);
