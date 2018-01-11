@@ -213,14 +213,14 @@ void GameLoop::createCameraFrame() {
     if(cameraService.height() > cameraService.width()) {
         registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), logicalWidth, handle->height() * logicalWidth / handle->width());
         registry.assign<Transform>(frame, frame, 0.f, (logicalHeight - handle->height()) / 2.f);
-        registry.assign<Renderable>(frame, 0.f, 90);
+        registry.assign<Renderable>(frame, 0.f, 90, 0);
     } else {
         const int width = handle->width() * logicalWidth / handle->height();
         const int height = logicalWidth;
 
         registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
         registry.assign<Transform>(frame, frame, (height - width) / 2.f, (width - height) / 2.f);
-        registry.assign<Renderable>(frame, -90.f, 90);
+        registry.assign<Renderable>(frame, -90.f, 90, 0);
     }
 #endif // CAMERA_FRAME_AVAILABLE
 }

@@ -15,6 +15,8 @@ class SceneSystem final {
     void discardSplashScreen(Registry &);
     void disableUIControls(Registry &);
     void enableUIControls(Registry &);
+    void disableCameraFrame(Registry &);
+    void enableCameraFrame(Registry &);
 
     delta_type menuPageTransition(Registry &, delta_type);
     delta_type theGameTransition(Registry &);

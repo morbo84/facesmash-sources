@@ -42,6 +42,22 @@ void SceneSystem::enableUIControls(Registry &registry) {
 }
 
 
+void SceneSystem::disableCameraFrame(Registry &registry) {
+    if(registry.has<CameraFrame>()) {
+        registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 0;
+        registry.get<CameraFrame>().acquire = false;
+    }
+}
+
+
+void SceneSystem::enableCameraFrame(Registry &registry) {
+    if(registry.has<CameraFrame>()) {
+        registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 255;
+        registry.get<CameraFrame>().acquire = true;
+    }
+}
+
+
 delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type duration) {
     registry.view<Panel, Transform>().each([&registry, duration](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -82,12 +98,10 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
     static constexpr delta_type transition = 1000_ui32;
     static constexpr delta_type duration = 3000_ui32;
 
+    enableCameraFrame(registry);
+
     registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
     registry.attach<Countdown>(registry.create(), duration);
-
-    if(registry.has<CameraFrame>()) {
-        registry.get<CameraFrame>().acquire = true;
-    }
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -182,9 +196,7 @@ void SceneSystem::theGame(Registry &registry) {
 
 
 void SceneSystem::gameOver(Registry &registry) {
-    if(registry.has<CameraFrame>()) {
-        registry.get<CameraFrame>().acquire = false;
-    }
+    disableCameraFrame(registry);
 }
 
 
