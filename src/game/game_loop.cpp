@@ -33,15 +33,16 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
 
-    textureCache.load<SDLTextureLoader>("emoji/angry", "png/emoji/angry.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/disgusted", "png/emoji/disgusted.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/fearful", "png/emoji/fearful.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/happy", "png/emoji/happy.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/sad", "png/emoji/sad.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/surprised", "png/emoji/surprised.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/angry.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/disgusted.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/fearful.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/happy.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/sad.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/surprised.png", renderer, 180, 180);
 
-    textureCache.load<SDLTextureLoader>("emoji/malus", "png/emoji/malus.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("emoji/bonus", "png/emoji/bonus.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("modifier/fire", "png/emoji/fire.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("modifier/hourglass", "png/emoji/hourglass.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("modifier/pill", "png/emoji/pill.png", renderer, 180, 180);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
@@ -186,11 +187,11 @@ void GameLoop::createPlayButton() {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto entity = registry.create();
-    auto emoji = textureCache.handle("emoji/happy");
+    auto face = textureCache.handle("face/happy");
 
     registry.assign<Renderable>(entity, 0.f, 160, 0);
-    registry.assign<Transform>(entity, entity, logicalWidth / 2.f - emoji->width() / 2.f, logicalHeight / 2.f - emoji->height() / 2.f);
-    registry.assign<Sprite>(entity, emoji, emoji->width(), emoji->height(), emoji->width(), emoji->height());
+    registry.assign<Transform>(entity, entity, logicalWidth / 2.f - face->width() / 2.f, logicalHeight / 2.f - face->height() / 2.f);
+    registry.assign<Sprite>(entity, face, face->width(), face->height(), face->width(), face->height());
     registry.assign<UIButton>(entity, UIAction::PLAY);
     registry.attach<PlayButton>(entity);
 }
@@ -326,10 +327,10 @@ void GameLoop::createSmashButtons() {
     registry.assign<Transform>(panel, panel, logicalWidth + 96.f, logicalHeight / 2.f - 368.f);
     registry.assign<Panel>(panel, 96, 736, PanelType::SMASH_BUTTONS_PANEL);
 
-    auto addButton = [this, panel](FaceType type, TextureCache::resource_type emoji, int idx) {
+    auto addButton = [this, panel](FaceType type, TextureCache::resource_type face, int idx) {
         auto &textureCache = Locator::TextureCache::ref();
         auto button = registry.create();
-        auto handle = textureCache.handle(emoji);
+        auto handle = textureCache.handle(face);
 
         registry.assign<SmashButton>(button, type);
         registry.assign<Transform>(button, panel, 0.f, idx * (96.f + 32.f));
@@ -338,12 +339,12 @@ void GameLoop::createSmashButtons() {
         registry.assign<BoundingBox>(button, 96, 96);
     };
 
-    addButton(FaceType::ANGRY, "emoji/angry", 0);
-    addButton(FaceType::DISGUSTED, "emoji/disgusted", 1);
-    addButton(FaceType::HAPPY, "emoji/happy", 2);
-    addButton(FaceType::SURPRISED, "emoji/surprised", 3);
-    addButton(FaceType::FEARFUL, "emoji/fearful", 4);
-    addButton(FaceType::SAD, "emoji/sad", 5);
+    addButton(FaceType::ANGRY, "face/angry", 0);
+    addButton(FaceType::DISGUSTED, "face/disgusted", 1);
+    addButton(FaceType::HAPPY, "face/happy", 2);
+    addButton(FaceType::SURPRISED, "face/surprised", 3);
+    addButton(FaceType::FEARFUL, "face/fearful", 4);
+    addButton(FaceType::SAD, "face/sad", 5);
 }
 
 

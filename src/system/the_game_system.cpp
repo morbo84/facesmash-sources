@@ -16,24 +16,24 @@ static auto toHandle(const FaceSmash &smash) {
     case FaceModifier::NONE:
         switch(smash.type) {
         case FaceType::ANGRY:
-            return Locator::TextureCache::ref().handle("emoji/angry");
+            return Locator::TextureCache::ref().handle("face/angry");
         case FaceType::DISGUSTED:
-            return Locator::TextureCache::ref().handle("emoji/disgusted");
+            return Locator::TextureCache::ref().handle("face/disgusted");
         case FaceType::FEARFUL:
-            return Locator::TextureCache::ref().handle("emoji/fearful");
+            return Locator::TextureCache::ref().handle("face/fearful");
         case FaceType::HAPPY:
-            return Locator::TextureCache::ref().handle("emoji/happy");
+            return Locator::TextureCache::ref().handle("face/happy");
         case FaceType::SAD:
-            return Locator::TextureCache::ref().handle("emoji/sad");
+            return Locator::TextureCache::ref().handle("face/sad");
         case FaceType::SURPRISED:
-            return Locator::TextureCache::ref().handle("emoji/surprised");
+            return Locator::TextureCache::ref().handle("face/surprised");
         default:
             assert(false); // suppress warnings
         }
     case FaceModifier::SLOW_DOWN:
-        return Locator::TextureCache::ref().handle("emoji/bonus");
+        return Locator::TextureCache::ref().handle("modifier/hourglass");
     case FaceModifier::SPEED_UP:
-        return Locator::TextureCache::ref().handle("emoji/malus");
+        return Locator::TextureCache::ref().handle("modifier/fire");
     default:
         assert(false); // suppress warnings
     }

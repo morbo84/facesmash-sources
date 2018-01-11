@@ -95,8 +95,7 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
 
 
 delta_type SceneSystem::theGameTransition(Registry &registry) {
-    static constexpr delta_type transition = 1000_ui32;
-    static constexpr delta_type duration = 3000_ui32;
+    static constexpr delta_type duration = 1000_ui32;
 
     enableCameraFrame(registry);
 
@@ -105,29 +104,29 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - 320), transition, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - 320), duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 320, transition, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 320, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, transition, 0_ui32, &easeInCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::MENU_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, transition, 0_ui32, &easeInCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, transition, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::GAME_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, transition, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::GAME_OVER_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, transition, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::SMASH_BUTTONS_PANEL:
 #if DEBUG
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, transition / 2, 0_ui32, &easeOutCubic);
+            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration/ 2, 0_ui32, &easeOutCubic);
 #endif // DEBUG
             break;
         default:
