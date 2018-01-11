@@ -2,6 +2,7 @@
 #define FACE_SMASH_EVENT_EVENT_HPP
 
 
+#include <SDL_rect.h>
 #include "../common/types.h"
 
 
@@ -22,10 +23,7 @@ struct EnvEvent final {
 };
 
 
-struct TouchEvent final {
-    const float x;
-    const float y;
-};
+struct TouchEvent final: SDL_Point {};
 
 
 struct SceneChangeEvent final {
@@ -35,12 +33,6 @@ struct SceneChangeEvent final {
 
 struct FaceEvent final {
     FaceType type;
-};
-
-
-struct FaceModifierEvent final {
-    FaceModifier modifier;
-    delta_type duration;
 };
 
 

@@ -11,11 +11,8 @@ namespace gamee {
 struct GameRenderer;
 
 
-class ScoreSystem final {
-    static constexpr UInt8 interval = 50;
-
-public:
-    void update(Registry &, GameRenderer &, delta_type);
+struct ScoreSystem final {
+    void update(Registry &, GameRenderer &);
 };
 
 

@@ -1,225 +1,83 @@
 #include <cassert>
-#include "../common/constants.h"
 #include "../component/component.hpp"
-#include "../locator/locator.hpp"
+#include "../factory/factory.h"
 #include "the_game_system.h"
 
 
 namespace gamee {
 
 
-static auto toHandle(const FaceSmash &smash) {
-    // unfortunately we have not (yet) modifiers for all the faces
-    // therefore modifiers come before the face type here
-
-    switch(smash.modifier) {
-    case FaceModifier::NONE:
-        switch(smash.type) {
-        case FaceType::ANGRY:
-            return Locator::TextureCache::ref().handle("face/angry");
-        case FaceType::DISGUSTED:
-            return Locator::TextureCache::ref().handle("face/disgusted");
-        case FaceType::FEARFUL:
-            return Locator::TextureCache::ref().handle("face/fearful");
-        case FaceType::HAPPY:
-            return Locator::TextureCache::ref().handle("face/happy");
-        case FaceType::SAD:
-            return Locator::TextureCache::ref().handle("face/sad");
-        case FaceType::SURPRISED:
-            return Locator::TextureCache::ref().handle("face/surprised");
-        default:
-            assert(false); // suppress warnings
-        }
-    case FaceModifier::SLOW_DOWN:
-        return Locator::TextureCache::ref().handle("modifier/hourglass");
-    case FaceModifier::SPEED_UP:
-        return Locator::TextureCache::ref().handle("modifier/fire");
-    default:
-        assert(false); // suppress warnings
-    }
-}
-
-
-static auto toZ(const FaceSmash &smash) {
-    switch(smash.type) {
-    case FaceType::HAPPY:
-        return 186;
-    case FaceType::ANGRY:
-        return 185;
-    case FaceType::SURPRISED:
-        return 184;
-    case FaceType::SAD:
-        return 183;
-    case FaceType::DISGUSTED:
-        return 182;
-    case FaceType::FEARFUL:
-        return 181;
-    default:
-        return 180;
-    }
-}
-
-
-void TheGameSystem::spawn(Registry &registry, float x, float y, float impulseX, float impulseY, bool rotation, const FaceSmash &smash) {
-    auto handle = toHandle(smash);
-    auto entity = registry.create();
-
-    registry.assign<Renderable>(entity, 0.f, toZ(smash));
-    registry.assign<Transform>(entity, entity, x, y);
-    registry.assign<Movement>(entity, gravity, impulseX, impulseY);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<BoundingBox>(entity, handle->width(), handle->height());
-    registry.assign<FaceSmash>(entity, smash);
-
-    if(rotation) {
-        delta_type duration = 10000_ui32 + generator() % 10000_ui32;
-
-        if(generator() > (generator.max() / 2)) {
-            registry.assign<RotationAnimation>(entity, 0.f, 360.f, duration);
-        } else {
-            registry.assign<RotationAnimation>(entity, 360.f, 0.f, duration);
-        }
-    }
-}
-
-
-void TheGameSystem::spawnBottom(Registry &registry, bool rotation, const FaceSmash &smash) {
-    const int x = (generator() % (logicalWidth / 4)) + (3 * logicalWidth / 8) - (toHandle(smash)->width() / 2);
-    const int y = logicalHeight;
-
-    const float impulseX = bottomImpulseX * (2.f * generator() / generator.max() - 1.f);
-    const float impulseY = -1.f * bottomImpulseY * (generator() / (4.f * generator.max()) + .65f);
-
-    spawn(registry, x, y, impulseX, impulseY, rotation, smash);
-}
-
-
-void TheGameSystem::spawnTop(Registry &registry, bool rotation, const FaceSmash &smash) {
-    auto handle = toHandle(smash);
-
-    const int x = (generator() % (logicalWidth / 4)) + (3 * logicalWidth / 8) - (handle->width() / 2);
-    const int y = -handle->height() + 1;
-
-    const float impulseX = bottomImpulseX * (2.f * generator() / generator.max() - 1.f);
-    const float impulseY = gravity / 1000;
-
-    spawn(registry, x, y, impulseX, impulseY, rotation, smash);
-}
-
-
-void TheGameSystem::spawnLeft(Registry &registry, bool rotation, const FaceSmash &smash) {
-    const int x = -toHandle(smash)->width();
-    const int y = (generator() % (logicalHeight / 4)) + (logicalHeight / 4);
-
-    const float impulseX = sideImpulseX * (generator() / (4.f * generator.max()) + .65f);
-    const float impulseY = -1.f * sideImpulseY * (generator() / (4.f * generator.max()) + .65f);
-
-    spawn(registry, x, y, impulseX, impulseY, rotation, smash);
-}
-
-
-void TheGameSystem::spawnRight(Registry &registry, bool rotation, const FaceSmash &smash) {
-    const int x = logicalWidth;
-    const int y = (generator() % (logicalHeight / 4)) + (logicalHeight / 4);
-
-    const float impulseX = -sideImpulseX * (generator() / (4.f * generator.max()) + .65f);
-    const float impulseY = -1.f * sideImpulseY * (generator() / (4.f * generator.max()) + .65f);
-
-    spawn(registry, x, y, impulseX, impulseY, rotation, smash);
-}
-
-
-FaceType TheGameSystem::next() noexcept {
-    if(curr == numberOfFaces) {
-        std::shuffle(faces, faces+numberOfFaces, generator);
-        curr = 0_ui8;
-    }
-
-    return faces[curr++];
-}
-
-
-TheGameSystem::TheGameSystem()
-    : generator{std::random_device{}()},
-      faces{
-          FaceType::ANGRY,
-          FaceType::DISGUSTED,
-          FaceType::FEARFUL,
-          FaceType::HAPPY,
-          FaceType::SAD,
-          FaceType::SURPRISED
-      },
-      curr{numberOfFaces}
-{}
-
-
-void TheGameSystem::update(Registry &registry) {
+void TheGameSystem::update(Registry &registry, Factory &factory) {
     if(registry.has<LetsPlay>()) {
         const auto &remaining = registry.get<GameTimer>().remaining;
         auto &play = registry.get<LetsPlay>();
 
-        if(remaining > 30000 && registry.size<FaceSmash>() < 1) {
-            spawnBottom(registry, false, FaceSmash{50_ui8, 10_ui8, next()});
-        } else if(remaining <= 30000 && registry.size<FaceSmash>() < 2) {
-            spawnBottom(registry, true, FaceSmash{100_ui8, 20_ui8, next()});
+        if(remaining > 30000 && registry.size<Face>() < 1) {
+            factory.spawnFaceBottom(registry, 50_ui8, 10_ui8);
+        } else if(remaining <= 30000 && registry.size<Face>() < 2) {
+            factory.spawnFaceBottom(registry, 100_ui8, 20_ui8);
         }
 
         if(remaining < 55000 && !play.remaining55000) {
-            spawnLeft(registry, false, FaceSmash{50_ui8, 10_ui8, next()});
-            spawnLeft(registry, true, FaceSmash{50_ui8, 10_ui8, next()});
-            spawnRight(registry, false, FaceSmash{50_ui8, 10_ui8, next()});
-            spawnRight(registry, true, FaceSmash{50_ui8, 10_ui8, next()});
-            spawnTop(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::HAPPY, FaceModifier::SLOW_DOWN});
+            factory.spawnFaceLeft(registry, 50_ui8, 10_ui8);
+            factory.spawnFaceLeft(registry, 50_ui8, 10_ui8);
+            factory.spawnFaceRight(registry, 50_ui8, 10_ui8);
+            factory.spawnFaceRight(registry, 50_ui8, 10_ui8);
+            factory.spawnItemTop(registry);
             play.remaining55000 = true;
         }
 
         if(remaining < 50000 && !play.remaining50000) {
-            spawnBottom(registry, true, FaceSmash{200_ui8, 50_ui8, next()});
-            spawnBottom(registry, true, FaceSmash{200_ui8, 50_ui8, next()});
-            spawnTop(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::ANGRY, FaceModifier::SPEED_UP});
+            factory.spawnFaceBottom(registry, 200_ui8, 50_ui8);
+            factory.spawnFaceBottom(registry, 200_ui8, 50_ui8);
+            factory.spawnItemTop(registry);
+            factory.spawnItemTop(registry);
             play.remaining50000 = true;
         }
 
         if(remaining < 40000 && !play.remaining40000) {
-            spawnLeft(registry, false, FaceSmash{100_ui8, 20_ui8, next()});
-            spawnRight(registry, false, FaceSmash{100_ui8, 20_ui8, next()});
-            spawnTop(registry, true, FaceSmash{200_ui8, 50_ui8, next()});
-            spawnBottom(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::HAPPY, FaceModifier::SLOW_DOWN});
+            factory.spawnFaceLeft(registry, 100_ui8, 20_ui8);
+            factory.spawnFaceRight(registry, 100_ui8, 20_ui8);
+            factory.spawnFaceTop(registry, 200_ui8, 50_ui8);
+            factory.spawnItemBottom(registry);
+            factory.spawnItemBottom(registry);
             play.remaining40000 = true;
         }
 
         if(remaining < 30000 && !play.remaining30000) {
-            spawnTop(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::ANGRY, FaceModifier::SPEED_UP});
-            spawnTop(registry, true, FaceSmash{0_ui8, 0_ui8, FaceType::HAPPY, FaceModifier::SLOW_DOWN});
+            factory.spawnItemTop(registry);
+            factory.spawnItemTop(registry);
             play.remaining30000 = true;
         }
 
         if(remaining < 15000 && !play.remaining15000) {
-            spawnLeft(registry, true, FaceSmash{100_ui8, 20_ui8, next()});
-            spawnRight(registry, true, FaceSmash{100_ui8, 20_ui8, next()});
-            spawnTop(registry, false, FaceSmash{200_ui8, 50_ui8, next()});
-            spawnBottom(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::HAPPY, FaceModifier::SLOW_DOWN});
+            factory.spawnFaceLeft(registry, 100_ui8, 20_ui8);
+            factory.spawnFaceRight(registry, 100_ui8, 20_ui8);
+            factory.spawnFaceTop(registry, 200_ui8, 50_ui8);
+            factory.spawnItemBottom(registry);
             play.remaining15000 = true;
         }
 
         if(remaining < 7500) {
             if(!play.remaining7500) {
-                spawnBottom(registry, false, FaceSmash{0_ui8, 0_ui8, FaceType::HAPPY, FaceModifier::SLOW_DOWN});
+                factory.spawnItemBottom(registry);
                 play.remaining7500 = true;
             }
 
-            if(registry.size<FaceSmash>() < 10) {
-                spawnBottom(registry, false, FaceSmash{250_ui8, 100_ui8, next()});
+            if(registry.size<Face>() < 3) {
+                factory.spawnFaceBottom(registry, 250_ui8, 100_ui8);
             }
         }
 
-        if(registry.get<PlayerScore>().score > play.nextScoreStep) {
+        const auto &score = registry.get<PlayerScore>();
+
+        if(score.score > play.nextScoreStep) {
             if(play.nextScoreStep > 5000) {
-                spawnLeft(registry, true, FaceSmash{200_ui8, 100_ui8, next()});
-                spawnRight(registry, true, FaceSmash{200_ui8, 100_ui8, next()});
+                factory.spawnFaceLeft(registry, 200_ui8, 100_ui8);
+                factory.spawnFaceRight(registry, 200_ui8, 100_ui8);
             } else {
-                spawnLeft(registry, false, FaceSmash{100_ui8, 100_ui8, next()});
-                spawnRight(registry, false, FaceSmash{100_ui8, 100_ui8, next()});
+                factory.spawnFaceLeft(registry, 100_ui8, 100_ui8);
+                factory.spawnFaceRight(registry, 100_ui8, 100_ui8);
             }
 
             play.nextScoreStep += 2500;

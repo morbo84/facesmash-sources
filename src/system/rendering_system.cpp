@@ -61,9 +61,8 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 
 #if DEBUG
     if(registry.has<LetsPlay>()) {
-        const auto &play = registry.get<LetsPlay>();
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &play.smashArea);
+        SDL_RenderDrawRect(renderer, &smashArea);
     }
 #endif // DEBUG
 }

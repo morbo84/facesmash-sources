@@ -4,16 +4,17 @@
 
 #include <memory>
 #include "../common/types.h"
+#include "../factory/factory.h"
 #include "../system/animation_system.h"
-#include "../system/bonus_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
-#include "../system/face_modifier_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/frame_system.h"
 #include "../system/hud_system.h"
+#include "../system/item_system.h"
 #include "../system/movement_system.h"
 #include "../system/rendering_system.h"
+#include "../system/reward_system.h"
 #include "../system/scene_system.h"
 #include "../system/score_system.h"
 #include "../system/smash_button_system.h"
@@ -30,7 +31,8 @@ struct GameRenderer;
 
 
 class GameLoop final: public GameEnv {
-    static constexpr delta_type msPerUpdate = 20;
+    static constexpr delta_type msPerUpdate50FPS = 20;
+    static constexpr delta_type msPerUpdate20FPS = 50;
 
     void loadResources(GameRenderer &);
 
@@ -59,15 +61,18 @@ class GameLoop final: public GameEnv {
 
 private:
     // tracking value
-    delta_type accumulator{0_ui32};
+    delta_type accumulator50FPS{0_ui32};
+    delta_type accumulator20FPS{0_ui32};
     // entity-component system
     Registry registry;
+    // factory of game objects
+    Factory factory;
     // systems
     AnimationSystem animationSystem;
-    BonusSystem bonusSystem;
+    RewardSystem rewardSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
-    FaceModifierSystem faceModifierSystem;
+    ItemSystem itemSystem;
     FaceSmashSystem faceSmashSystem;
     FrameSystem frameSystem;
     HudSystem hudSystem;

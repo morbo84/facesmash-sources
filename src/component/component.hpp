@@ -144,12 +144,19 @@ struct Movement final {
 };
 
 
-struct FaceSmash final {
+struct Face final {
     UInt8 smash;
     UInt8 miss;
     FaceType type;
-    FaceModifier modifier{FaceModifier::NONE};
 };
+
+
+struct Item final {
+    ItemType type;
+};
+
+
+struct Destroyable final {};
 
 
 struct DestroyLater final {
@@ -171,18 +178,15 @@ struct PlayerScore final {
     int hitSurprised{0};
     int hitFearful{0};
     int hitSad{0};
-    delta_type elapsed{0_ui32};
 };
 
 
-struct BonusSmash final {
+struct Reward final {
     bool dirty{false};
 };
 
 
 struct LetsPlay final {
-    // smash area
-    SDL_Rect smashArea{logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8};
     // time steps
     bool remaining55000{false};
     bool remaining50000{false};

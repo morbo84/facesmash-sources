@@ -10,9 +10,6 @@
 namespace gamee {
 
 
-struct Transform;
-
-
 SDL_Point transformToPosition(const Registry &, entity_type entity, const Transform &);
 
 

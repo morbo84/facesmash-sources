@@ -11,18 +11,16 @@ namespace gamee {
 
 
 struct FaceEvent;
+struct Factory;
 
 
-class FaceSmashSystem final {
-    void addScore(Registry &, SDLTextureHandle, SDL_Point);
-
-public:
+struct FaceSmashSystem final {
     FaceSmashSystem();
     ~FaceSmashSystem();
 
     void receive(const FaceEvent &) noexcept;
 
-    void update(Registry &);
+    void update(Registry &, Factory &);
 
 private:
     FaceType type;

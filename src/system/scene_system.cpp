@@ -142,6 +142,7 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.destroy(registry.attachee<LetsPlay>());
+    registry.reset<Destroyable>();
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {

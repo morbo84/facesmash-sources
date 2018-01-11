@@ -27,15 +27,13 @@ void UserInputHandler::handle(const SDL_Event &event) noexcept {
 
 
 void UserInputHandler::mousebutton(const SDL_MouseButtonEvent &event) noexcept {
-    float x = event.x;
-    float y = event.y;
-    Locator::Dispatcher::ref().enqueue<TouchEvent>(x, y);
+    Locator::Dispatcher::ref().enqueue<TouchEvent>(event.x, event.y);
 }
 
 
 void UserInputHandler::touchfinger(const SDL_TouchFingerEvent &event) noexcept {
-    auto x = event.x * logicalWidth;
-    auto y = event.y * logicalHeight;
+    const int x = event.x * logicalWidth;
+    const int y = event.y * logicalHeight;
     Locator::Dispatcher::ref().enqueue<TouchEvent>(x, y);
 }
 

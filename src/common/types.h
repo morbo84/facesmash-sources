@@ -64,8 +64,8 @@ enum class FaceType: UInt8 {
 };
 
 
-enum class FaceModifier: UInt8 {
-    NONE = 0,
+enum class ItemType: UInt8 {
+    FOUNTAIN = 0,
     SPEED_UP,
     SLOW_DOWN
 };

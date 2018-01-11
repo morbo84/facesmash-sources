@@ -2,6 +2,7 @@ set(
     FACE_SMASH_SOURCES
     ${facesmash_SOURCE_DIR}/src/common/ease.cpp
     ${facesmash_SOURCE_DIR}/src/common/util.cpp
+    ${facesmash_SOURCE_DIR}/src/factory/factory.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_env.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
@@ -15,15 +16,15 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/camera_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/bonus_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/face_modifier_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/frame_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/item_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/reward_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/score_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp

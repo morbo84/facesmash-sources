@@ -38,8 +38,7 @@ void UIButtonSystem::switchAudio(Registry &registry, entity_type entity) {
 
 
 void UIButtonSystem::receive(const TouchEvent &event) noexcept {
-    coord.x = event.x;
-    coord.y = event.y;
+    coord = event;
     dirty = true;
 }
 

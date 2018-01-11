@@ -40,9 +40,9 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/sad.png", renderer, 180, 180);
     textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/surprised.png", renderer, 180, 180);
 
-    textureCache.load<SDLTextureLoader>("modifier/fire", "png/emoji/fire.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("modifier/hourglass", "png/emoji/hourglass.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("modifier/pill", "png/emoji/pill.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/fire.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/hourglass.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/pill.png", renderer, 180, 180);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
@@ -58,11 +58,11 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     const SDL_Color comboColor{120_ui8, 230_ui8, 120_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("bonus/perfect", "PERFECT", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("bonus/x2", "2x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("bonus/x3", "3x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("bonus/x4", "4x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("bonus/x5", "5x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/perfect", "PERFECT", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x2", "2x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x3", "3x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x4", "4x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x5", "5x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
 
     const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
@@ -258,10 +258,10 @@ void GameLoop::createGameTopPanel(GameRenderer &renderer) {
     registry.assign<Transform>(time, panel, logicalWidth - timeLabelHandle->width() + 16.f, 32.f);
     registry.assign<HUD>(time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
 
-    auto bonus = registry.create();
-    registry.assign<Renderable>(bonus, 0.f, 160);
-    registry.assign<Transform>(bonus, bonus, logicalWidth / 2.f, 152.f);
-    registry.attach<BonusSmash>(bonus);
+    auto reward = registry.create();
+    registry.assign<Renderable>(reward, 0.f, 160);
+    registry.assign<Transform>(reward, reward, logicalWidth / 2.f, 152.f);
+    registry.attach<Reward>(reward);
 }
 
 
@@ -392,7 +392,8 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     renderer.clear();
 
     // sum what remains from the previous step
-    accumulator += delta;
+    accumulator50FPS += delta;
+    accumulator20FPS += delta;
 
     sceneSystem.update(registry, delta);
     uiButtonSystem.update(registry);
@@ -401,25 +402,31 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     smashButtonSystem.update(registry);
 #endif // DEBUG
 
-    destroyLaterSystem.update(registry, delta);
-    faceSmashSystem.update(registry);
-    bonusSystem.update(registry);
-    faceModifierSystem.update(registry, delta);
+    itemSystem.update(registry, factory, delta);
+    faceSmashSystem.update(registry, factory);
+    rewardSystem.update(registry);
 
-    // invoke systems at 50 fps (but for rendering and few other systems)
-    while(accumulator >= msPerUpdate) {
-        movementSystem.update(registry, msPerUpdate);
+    destroyLaterSystem.update(registry, delta);
+
+    // invoke systems at 50 fps
+    while(accumulator50FPS >= msPerUpdate50FPS) {
+        movementSystem.update(registry, msPerUpdate50FPS);
+        frameSystem.update(registry);
         // consume a token
-        accumulator -= msPerUpdate;
+        accumulator50FPS -= msPerUpdate50FPS;
     }
 
-    theGameSystem.update(registry);
-    animationSystem.update(registry, delta);
-    scoreSystem.update(registry, renderer, delta);
-    timerSystem.update(registry, renderer, delta);
-    cameraSystem.update(registry, delta);
+    // invoke systems at 20 fps
+    while(accumulator20FPS >= msPerUpdate20FPS) {
+        scoreSystem.update(registry, renderer);
+        timerSystem.update(registry, renderer, msPerUpdate20FPS);
+        cameraSystem.update(registry, msPerUpdate20FPS);
+        // consume a token
+        accumulator20FPS -= msPerUpdate20FPS;
+    }
 
-    frameSystem.update(registry);
+    theGameSystem.update(registry, factory);
+    animationSystem.update(registry, delta);
 
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);

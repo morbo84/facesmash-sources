@@ -3,28 +3,28 @@
 #include "../common/constants.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
-#include "bonus_system.h"
+#include "reward_system.h"
 
 
 namespace gamee {
 
 
-void BonusSystem::update(Registry &registry) {
+void RewardSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
-        auto &bonus = registry.get<BonusSmash>();
+        auto &reward = registry.get<Reward>();
 
-        if(bonus.dirty) {
-            auto entity = registry.attachee<BonusSmash>();
+        if(reward.dirty) {
+            auto entity = registry.attachee<Reward>();
 
-            // update bonus label and show it
+            // update reward label and show it
             registry.accomodate<FadeAnimation>(entity, 255, 0, 2000_ui32);
-            registry.get<Transform>(entity).x = logicalWidth / 2.f - registry.get<Sprite>(entity).handle->width() / 2.f;
+            registry.get<Transform>(entity).x = logicalWidth / 2.f - registry.get<HUD>(entity).handle->width() / 2.f;
 
             // shake the camera
             registry.remove<CameraShake>();
             registry.attach<CameraShake>(registry.attachee<Camera>());
 
-            bonus.dirty = false;
+            reward.dirty = false;
         }
     }
 }

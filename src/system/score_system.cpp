@@ -10,21 +10,15 @@
 namespace gamee {
 
 
-void ScoreSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
+void ScoreSystem::update(Registry &registry, GameRenderer &renderer) {
     if(registry.has<LetsPlay>()) {
         auto entity = registry.attachee<PlayerScore>();
         auto &score = registry.get<PlayerScore>();
 
-        score.elapsed += delta;
-
-        if(score.elapsed > interval) {
-            score.elapsed = 0_ui8;
-
-            if(score.current < score.score) {
-                score.current += std::max((score.score - score.current) / 2, 1);
-            } else if(score.current > score.score) {
-                score.current -= std::max((score.current - score.score) / 2, 1);
-            }
+        if(score.current < score.score) {
+            score.current += std::max((score.score - score.current) / 2, 1);
+        } else if(score.current > score.score) {
+            score.current -= std::max((score.current - score.score) / 2, 1);
         }
 
         std::stringstream label;

@@ -20,8 +20,7 @@ SmashButtonSystem::~SmashButtonSystem() {
 
 
 void SmashButtonSystem::receive(const TouchEvent &event) noexcept {
-    coord.x = event.x;
-    coord.y = event.y;
+    coord = event;
     dirty = true;
 }
 
