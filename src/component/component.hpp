@@ -91,20 +91,22 @@ struct SpriteAnimation final {
 };
 
 
-struct FadeAnimation final {
-    int from;
-    int to;
-    delta_type duration;
-    delta_type elapsed{0_ui32};
-};
-
-
 struct RotationAnimation final {
     float from;
     float to;
     delta_type duration;
     delta_type elapsed{0_ui32};
     bool repeat{true};
+};
+
+
+struct FadeAnimation final {
+    using ease_type = float(*)(float, float, float, float);
+    int from;
+    int to;
+    delta_type duration;
+    delta_type elapsed{0_ui32};
+    ease_type ease{&linear};
 };
 
 
@@ -204,7 +206,15 @@ struct CameraFrame final {
     bool acquire{false};
 };
 
+
 struct PlayButton final {};
+
+
+struct Countdown final {
+    delta_type duration;
+    delta_type elapsed{0_ui32};
+    UInt8 step{0};
+};
 
 
 }

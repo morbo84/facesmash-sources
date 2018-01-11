@@ -13,8 +13,7 @@ void AnimationSystem::fadeAnimation(Registry &registry, delta_type delta) {
         animation.elapsed += delta;
 
         if(animation.elapsed < animation.duration) {
-            const float mul = 1.f * animation.elapsed / animation.duration;
-            renderable.alpha = animation.from + (mul * (animation.to - animation.from));
+            renderable.alpha = animation.ease(animation.elapsed, animation.duration, animation.from, animation.to);
         } else {
             renderable.alpha = animation.to;
             registry.remove<FadeAnimation>(entity);

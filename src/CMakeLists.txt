@@ -17,6 +17,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/bonus_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/countdown_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_modifier_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
