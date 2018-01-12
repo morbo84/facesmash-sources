@@ -29,7 +29,10 @@ void CameraAndroid::init() {
     auto pitch = (static_cast<size_t>(bitsPerPixel) * static_cast<size_t>(width_)) / 8;
     assert(pitch * 8U == static_cast<size_t>(bitsPerPixel * width_));
     size_ = pitch * height_;
-    frame_ = std::make_unique<char[]>(size_);
+    frame0_ = std::make_unique<char[]>(size_);
+    frame1_ = std::make_unique<char[]>(size_);
+    p0_ = frame0_.get();
+    p1_ = frame1_.get();
     cameraAndroidReady = true;
 }
 
@@ -61,16 +64,21 @@ CameraAndroid::CameraAndroid() {
 
 void CameraAndroid::setPixels(const void *buf) {
     auto cbuf = static_cast<const char *>(buf);
-    std::unique_lock lck{frameMtx_};
-    std::copy(cbuf, cbuf + size_, frame_.get());
-    lck.unlock();
+    std::copy(cbuf, cbuf + size_, p0_);
+    swapPtrs();
     Locator::FaceBus::ref().enqueue(FrameAvailableEvent{});
 }
 
 
 void CameraAndroid::frame(std::function<void(const void *, int)> func) const noexcept {
+    std::unique_lock lck{frameMtx_};
+    func(p1_, size_);
+}
+
+
+void CameraAndroid::swapPtrs() {
     std::lock_guard lck{frameMtx_};
-    func(frame_.get(), size_);
+    std::swap(p0_, p1_);
 }
 
 

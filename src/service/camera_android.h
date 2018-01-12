@@ -24,7 +24,12 @@ struct CameraAndroid final: CameraService {
     void setPixels(const void*);
 
 private:
-    std::unique_ptr<char[]> frame_;
+    void swapPtrs();
+
+    std::unique_ptr<char[]> frame0_;
+    std::unique_ptr<char[]> frame1_;
+    char* p0_;
+    char* p1_;
     mutable std::mutex frameMtx_;
     int width_{-1};
     int height_{-1};
