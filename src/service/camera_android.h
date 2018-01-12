@@ -14,6 +14,9 @@ struct CameraAndroid final: CameraService {
     CameraAndroid();
     void init();
 
+    void start() override;
+    void stop() override;
+
     int width() const noexcept override;
     int height() const noexcept override;
     void frame(std::function<void(const void *, int)>) const noexcept override;
