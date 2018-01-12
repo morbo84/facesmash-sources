@@ -11,6 +11,9 @@ namespace gamee {
 struct CameraService {
     virtual ~CameraService() = default;
 
+    virtual void start() = 0;
+    virtual void stop() = 0;
+
     virtual int width() const noexcept = 0;
     virtual int height() const noexcept = 0;
 

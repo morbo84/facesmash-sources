@@ -9,6 +9,9 @@ namespace gamee {
 
 
 struct CameraNull final: CameraService {
+    void start() override;
+    void stop() override;
+
     int width() const noexcept override;
     int height() const noexcept override;
 

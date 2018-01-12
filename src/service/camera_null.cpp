@@ -4,6 +4,12 @@
 namespace gamee {
 
 
+void CameraNull::start() {}
+
+
+void CameraNull::stop() {}
+
+
 int CameraNull::width() const noexcept {
     return 0;
 }

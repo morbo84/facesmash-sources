@@ -34,6 +34,16 @@ void CameraAndroid::init() {
 }
 
 
+void CameraAndroid::start() {
+    // TODO
+}
+
+
+void CameraAndroid::stop() {
+    // TODO
+}
+
+
 int CameraAndroid::width() const noexcept {
     return width_;
 }

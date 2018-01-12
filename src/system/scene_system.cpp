@@ -97,6 +97,7 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
 delta_type SceneSystem::theGameTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
+    Locator::Camera::ref().start();
     enableCameraFrame(registry);
 
     registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
@@ -195,6 +196,7 @@ void SceneSystem::theGame(Registry &registry) {
 
 
 void SceneSystem::gameOver(Registry &registry) {
+    Locator::Camera::ref().stop();
     disableCameraFrame(registry);
 }
 
