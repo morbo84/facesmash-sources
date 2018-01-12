@@ -2,7 +2,6 @@
 #include "../locator/locator.hpp"
 #include <algorithm>
 #include <array>
-#include <android/log.h>
 
 #ifdef __ANDROID__
 static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
@@ -86,7 +85,6 @@ void EmoDetector::analyzeCurrentFrame() {
         }
 
         auto* statuses = tracker_.track(image_->width, image_->height, image_->imageData, &faceData, VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
-        __android_log_print(ANDROID_LOG_DEBUG, "EmoDetector", "Emotion detected!");
         if(statuses[0] == TRACK_STAT_OK) {
             std::array<float, 7> prob;
             if(analyzer_.estimateEmotion(image_, &faceData, prob.data())) {

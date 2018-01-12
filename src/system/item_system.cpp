@@ -63,7 +63,7 @@ void ItemSystem::update(Registry &registry, Factory &factory, delta_type delta) 
         const auto area = transformToPosition(registry, entity, transform) * box;
 
         if(SDL_HasIntersection(&screen, &area)) {
-            if(dirty && SDL_PointInRect(&coord, &area)) {
+            if(dirty && registry.has<Destroyable>(entity) && SDL_PointInRect(&coord, &area)) {
                 curr = item.type;
                 remaining = toRemaining(curr);
 
