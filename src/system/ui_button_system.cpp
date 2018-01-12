@@ -52,6 +52,9 @@ void UIButtonSystem::update(Registry &registry) {
 
             if(SDL_PointInRect(&coord, &area)) {
                 switch(button.action) {
+                case UIAction::TUTORIAL:
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TUTORIAL);
+                    break;
                 case UIAction::RELOAD:
                 case UIAction::PLAY:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);

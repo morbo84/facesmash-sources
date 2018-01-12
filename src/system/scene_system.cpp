@@ -73,6 +73,11 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
         case PanelType::MENU_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeOutCubic);
             break;
+        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::SMASH_BUTTONS_PANEL:
+            // they are already out of scene
+            break;
         case PanelType::GAME_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
@@ -80,10 +85,41 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
         case PanelType::GAME_OVER_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
             break;
+        default:
+            assert(false);
+        }
+    });
+
+    return duration;
+}
+
+
+delta_type SceneSystem::tutorialTransition(Registry &registry) {
+    static constexpr delta_type duration = 2400_ui32;
+
+    registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::TOP_PATCH:
+        case PanelType::BOTTOM_PATCH:
+        case PanelType::GAME_TOP_PANEL:
+        case PanelType::GAME_BOTTOM_PANEL:
+        case PanelType::GAME_OVER_PANEL:
         case PanelType::SMASH_BUTTONS_PANEL:
-#if DEBUG
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeInCubic);
-#endif // DEBUG
+            // they are already out of scene
+            break;
+        case PanelType::MENU_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::MENU_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TUTORIAL_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration / 3, 0_ui32, &easeOutElastic);
             break;
         default:
             assert(false);
@@ -100,8 +136,6 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
     Locator::Camera::ref().start();
     enableCameraFrame(registry);
 
-    registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
-
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
@@ -111,9 +145,13 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 320, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
+        case PanelType::MENU_BOTTOM_PANEL:
+            // they are already out of scene
+            break;
+        case PanelType::TUTORIAL_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_TOP_PANEL:
@@ -155,8 +193,8 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
-            // they are already out of scene
-            break;
+        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
         case PanelType::GAME_BOTTOM_PANEL:
             // they should stay where they are
@@ -185,6 +223,11 @@ void SceneSystem::splashScreen() {
 
 void SceneSystem::menuPage(Registry &registry) {
     registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 255;
+}
+
+
+void SceneSystem::tutorial(Registry &registry) {
+    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
 }
 
 
@@ -228,19 +271,22 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             remaining = delta > remaining ? 0_ui32 : (remaining - delta);
 
             if(!remaining) {
-                enableUIControls(registry);
-
                 switch(next) {
                 case SceneType::SPLASH_SCREEN:
                     splashScreen();
                     break;
                 case SceneType::MENU_PAGE:
+                    enableUIControls(registry);
                     menuPage(registry);
+                    break;
+                case SceneType::TUTORIAL:
+                    tutorial(registry);
                     break;
                 case SceneType::THE_GAME:
                     theGame(registry);
                     break;
                 case SceneType::GAME_OVER:
+                    enableUIControls(registry);
                     gameOver(registry);
                     break;
                 default:
@@ -262,6 +308,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = (curr == SceneType::SPLASH_SCREEN)
                         ? (discardSplashScreen(registry), menuPageTransition(registry, 0_ui32))
                         : menuPageTransition(registry, 1000_ui32);
+                break;
+            case SceneType::TUTORIAL:
+                remaining = tutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
                 remaining = theGameTransition(registry);

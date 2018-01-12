@@ -78,6 +78,8 @@ void ItemSystem::update(Registry &registry, Factory &factory, delta_type delta) 
         }
     });
 
+    dirty = false;
+
     remaining = delta > remaining ? 0_ui32 : (remaining - delta);
 
     if(remaining) {

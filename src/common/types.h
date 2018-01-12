@@ -49,6 +49,7 @@ enum class SceneType: UInt8 {
     UNKNOWN = 0,
     SPLASH_SCREEN,
     MENU_PAGE,
+    TUTORIAL,
     THE_GAME,
     GAME_OVER
 };
@@ -73,6 +74,7 @@ enum class ItemType: UInt8 {
 
 enum class UIAction: UInt8 {
     MENU = 0,
+    TUTORIAL,
     RELOAD,
     PLAY,
     SHARE,
@@ -86,6 +88,8 @@ enum class PanelType: UInt8 {
     BOTTOM_PATCH,
     MENU_TOP_PANEL,
     MENU_BOTTOM_PANEL,
+    TUTORIAL_TOP_PANEL,
+    TUTORIAL_BOTTOM_PANEL,
     GAME_TOP_PANEL,
     GAME_BOTTOM_PANEL,
     GAME_OVER_PANEL,

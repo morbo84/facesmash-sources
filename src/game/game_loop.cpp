@@ -74,8 +74,14 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
 #endif // CAMERA_FRAME_AVAILABLE
 
+    textureCache.load<SDLTextureLoader>("button/empty", "png/gui/button.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer, 160, 160);
+
+    const SDL_Color tutorialColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
+
+    textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
+    textureCache.load<TTFFontTextureLoader>("tutorial/touch", "TOUCH ME", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
 
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
@@ -192,7 +198,7 @@ void GameLoop::createPlayButton() {
     registry.assign<Renderable>(entity, 0.f, 160, 0);
     registry.assign<Transform>(entity, entity, logicalWidth / 2.f - face->width() / 2.f, logicalHeight / 2.f - face->height() / 2.f);
     registry.assign<Sprite>(entity, face, face->width(), face->height(), face->width(), face->height());
-    registry.assign<UIButton>(entity, UIAction::PLAY);
+    registry.assign<UIButton>(entity, UIAction::TUTORIAL);
     registry.attach<PlayButton>(entity);
 }
 
@@ -218,6 +224,83 @@ void GameLoop::createCameraFrame() {
         registry.assign<Renderable>(frame, -90.f, 90, 0);
     }
 #endif // CAMERA_FRAME_AVAILABLE
+}
+
+
+void GameLoop::createTutorialTopPanel() {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto refHandle = textureCache.handle("button/empty");
+
+    auto panel = registry.create();
+    registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
+    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::TUTORIAL_TOP_PANEL);
+
+    auto addButton = [this, panel, &textureCache](TextureCache::resource_type face, int idx) {
+        auto button = registry.create();
+        auto buttonHandle = textureCache.handle("button/empty");
+        const auto buttonOffset = (logicalWidth - (numberOfFaces * buttonHandle->width() + (numberOfFaces - 1) * 10)) / 2;
+
+        registry.assign<Renderable>(button, 0.f, 150);
+        registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
+        registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), logicalHeight / 2.f - 3.f * buttonHandle->height() / 2.f);
+
+        auto emoji = registry.create();
+        auto emojiHandle = textureCache.handle(face);
+
+        registry.assign<Renderable>(emoji, 0.f, 160);
+        registry.assign<Sprite>(emoji, emojiHandle, emojiHandle->width(), emojiHandle->height(), 3 * buttonHandle->width() / 5, 3 * buttonHandle->height() / 5);
+        registry.assign<Transform>(emoji, button, buttonHandle->width() / 5.f, buttonHandle->height() / 5.f);
+    };
+
+    addButton("face/angry", 0);
+    addButton("face/disgusted", 1);
+    addButton("face/happy", 2);
+    addButton("face/surprised", 3);
+    addButton("face/fearful", 4);
+    addButton("face/sad", 5);
+
+    auto entity = registry.create();
+    auto handle = textureCache.handle("tutorial/face");
+    registry.assign<Renderable>(entity, 0.f, 150);
+    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(entity, panel, logicalWidth / 2.f - handle->width() / 2.f, logicalHeight / 2.f - 3.f * refHandle->height() / 2.f - handle->height() - 10.f);
+}
+
+
+void GameLoop::createTutorialBottomPanel() {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto refHandle = textureCache.handle("button/empty");
+
+    auto panel = registry.create();
+    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
+    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::TUTORIAL_BOTTOM_PANEL);
+
+    auto addButton = [this, panel, &textureCache](TextureCache::resource_type face, int idx) {
+        auto button = registry.create();
+        auto buttonHandle = textureCache.handle("button/empty");
+        const auto buttonOffset = (logicalWidth - (numberOfItems * buttonHandle->width() + (numberOfItems - 1) * 10)) / 2;
+
+        registry.assign<Renderable>(button, 0.f, 150);
+        registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
+        registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), buttonHandle->height() / 2.f);
+
+        auto emoji = registry.create();
+        auto emojiHandle = textureCache.handle(face);
+
+        registry.assign<Renderable>(emoji, 0.f, 160);
+        registry.assign<Sprite>(emoji, emojiHandle, emojiHandle->width(), emojiHandle->height(), 3 * buttonHandle->width() / 5, 3 * buttonHandle->height() / 5);
+        registry.assign<Transform>(emoji, button, buttonHandle->width() / 5.f, buttonHandle->height() / 5.f);
+    };
+
+    addButton("item/speed_up", 0);
+    addButton("item/slow_down", 1);
+    addButton("item/fountain", 2);
+
+    auto entity = registry.create();
+    auto handle = textureCache.handle("tutorial/touch");
+    registry.assign<Renderable>(entity, 0.f, 150);
+    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<Transform>(entity, panel, logicalWidth / 2.f - handle->width() / 2.f, 3.f * refHandle->height() / 2.f + 10.f);
 }
 
 
@@ -365,6 +448,8 @@ void GameLoop::init(GameRenderer &renderer) {
     createMenuBottomPanel();
     createPlayButton();
     createCameraFrame();
+    createTutorialTopPanel();
+    createTutorialBottomPanel();
     createGameTopPanel(renderer);
     createGameBottomPanel();
     createGameOverPanel();
