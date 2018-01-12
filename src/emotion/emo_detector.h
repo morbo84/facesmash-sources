@@ -5,6 +5,7 @@
 #include <condition_variable>
 #include <atomic>
 #include <thread>
+#include <memory>
 #include <optional>
 #include "VisageTracker.h"
 #include "VisageFaceAnalyser.h"
@@ -36,6 +37,7 @@ private:
     VisageSDK::VisageTracker tracker_;
     VisageSDK::VisageFaceAnalyser analyzer_;
     VsImage* image_;
+    std::unique_ptr<unsigned char[]> yuv_;
     std::mutex mtx_;
     std::condition_variable cv_;
     std::atomic_bool dirty_;

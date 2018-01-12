@@ -2,6 +2,7 @@
 #include "../locator/locator.hpp"
 #include <algorithm>
 #include <array>
+#include <android/log.h>
 
 #ifdef __ANDROID__
 static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
@@ -35,6 +36,7 @@ EmoDetector::EmoDetector(int width, int height)
     , height_{height}
     , tracker_{visageTrackingCfg}
     , image_{vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3)}
+    , yuv_{std::make_unique<unsigned char[]>((width * height * 3) / 2)}
     , dirty_{false}
     , end_{false}
     , t_{&EmoDetector::analyzeCurrentFrame, this}
@@ -58,15 +60,11 @@ EmoDetector::~EmoDetector() {
 void EmoDetector::receive(const FrameAvailableEvent &) noexcept {
     // TODO: height_ >= width_ is constant...
     if (dirty_) return;
-    std::unique_lock lck{mtx_};
     Locator::Camera::ref().frame([this](const void *yuv, int) {
-        if (height_ >= width_)
-            yuvN21toRGB(static_cast<const unsigned char *>(yuv), *image_, width_, height_);
-        else
-            yuvN21toRGBRotated(static_cast<const unsigned char *>(yuv), *image_, width_, height_);
+        auto frame = static_cast<const unsigned char*>(yuv);
+        std::copy(frame, frame + (height_ * width_ * 3) / 2, yuv_.get());
     });
     dirty_ = true;
-    lck.unlock();
     cv_.notify_one();
 }
 
@@ -79,7 +77,16 @@ void EmoDetector::analyzeCurrentFrame() {
             cv_.wait(lck, [this] { return bool{dirty_}; });
 
         if(end_) return;
+
+        if (height_ >= width_) {
+            yuvN21toRGB(yuv_.get(), *image_, width_, height_);
+        }
+        else {
+            yuvN21toRGBRotated(yuv_.get(), *image_, width_, height_);
+        }
+
         auto* statuses = tracker_.track(image_->width, image_->height, image_->imageData, &faceData, VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
+        __android_log_print(ANDROID_LOG_DEBUG, "EmoDetector", "Emotion detected!");
         if(statuses[0] == TRACK_STAT_OK) {
             std::array<float, 7> prob;
             if(analyzer_.estimateEmotion(image_, &faceData, prob.data())) {
