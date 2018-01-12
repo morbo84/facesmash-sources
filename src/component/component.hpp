@@ -165,7 +165,7 @@ struct DestroyLater final {
 
 
 struct GameTimer final {
-    delta_type remaining{1999_ui32};
+    delta_type remaining{60999_ui32};
 };
 
 
