@@ -13,21 +13,17 @@ struct SceneChangeEvent;
 
 class SceneSystem final {
     void discardSplashScreen(Registry &);
+    void showMenuControls(Registry &);
     void disableUIControls(Registry &);
     void enableUIControls(Registry &);
     void disableCameraFrame(Registry &);
     void enableCameraFrame(Registry &);
+    void resetGame(Registry &);
 
     delta_type menuPageTransition(Registry &, delta_type);
     delta_type gameTutorialTransition(Registry &);
     delta_type theGameTransition(Registry &);
     delta_type gameOverTransition(Registry &);
-
-    void splashScreen();
-    void menuPage(Registry &);
-    void gameTutorial(Registry &);
-    void theGame(Registry &);
-    void gameOver(Registry &);
 
 public:
     SceneSystem();

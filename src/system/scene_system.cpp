@@ -27,6 +27,11 @@ void SceneSystem::discardSplashScreen(Registry &registry) {
 }
 
 
+void SceneSystem::showMenuControls(Registry &registry) {
+    registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 255;
+}
+
+
 void SceneSystem::disableUIControls(Registry &registry) {
     for(auto entity: registry.view<UIButton, BoundingBox>()) {
         registry.remove<BoundingBox>(entity);
@@ -55,6 +60,13 @@ void SceneSystem::enableCameraFrame(Registry &registry) {
         registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 255;
         registry.get<CameraFrame>().acquire = true;
     }
+}
+
+
+void SceneSystem::resetGame(Registry &registry) {
+    registry.get<PlayerScore>() = {};
+    registry.get<GameTimer>() = {};
+    registry.attach<LetsPlay>(registry.create());
 }
 
 
@@ -132,9 +144,6 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
 
 delta_type SceneSystem::theGameTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
-
-    Locator::Camera::ref().start();
-    enableCameraFrame(registry);
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -216,34 +225,6 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
 }
 
 
-void SceneSystem::splashScreen() {
-    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-}
-
-
-void SceneSystem::menuPage(Registry &registry) {
-    registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 255;
-}
-
-
-void SceneSystem::gameTutorial(Registry &registry) {
-    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
-}
-
-
-void SceneSystem::theGame(Registry &registry) {
-    registry.get<PlayerScore>() = {};
-    registry.get<GameTimer>() = {};
-    registry.attach<LetsPlay>(registry.create());
-}
-
-
-void SceneSystem::gameOver(Registry &registry) {
-    Locator::Camera::ref().stop();
-    disableCameraFrame(registry);
-}
-
-
 SceneSystem::SceneSystem()
     : curr{SceneType::UNKNOWN},
       next{SceneType::UNKNOWN},
@@ -273,21 +254,22 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             if(!remaining) {
                 switch(next) {
                 case SceneType::SPLASH_SCREEN:
-                    splashScreen();
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
                 case SceneType::MENU_PAGE:
                     enableUIControls(registry);
-                    menuPage(registry);
+                    showMenuControls(registry);
+                    Locator::Camera::ref().stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
-                    gameTutorial(registry);
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case SceneType::THE_GAME:
-                    theGame(registry);
+                    resetGame(registry);
                     break;
                 case SceneType::GAME_OVER:
+                    disableCameraFrame(registry);
                     enableUIControls(registry);
-                    gameOver(registry);
                     break;
                 default:
                     assert(false);
@@ -311,9 +293,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 remaining = gameTutorialTransition(registry);
+                Locator::Camera::ref().start();
                 break;
             case SceneType::THE_GAME:
                 remaining = theGameTransition(registry);
+                enableCameraFrame(registry);
                 break;
             case SceneType::GAME_OVER:
                 remaining = gameOverTransition(registry);
