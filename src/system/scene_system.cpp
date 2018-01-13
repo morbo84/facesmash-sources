@@ -162,10 +162,10 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
             // they are already out of scene
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
@@ -285,7 +285,7 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
             // they are already out of scene
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
