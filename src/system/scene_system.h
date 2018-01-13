@@ -19,13 +19,13 @@ class SceneSystem final {
     void enableCameraFrame(Registry &);
 
     delta_type menuPageTransition(Registry &, delta_type);
-    delta_type tutorialTransition(Registry &);
+    delta_type gameTutorialTransition(Registry &);
     delta_type theGameTransition(Registry &);
     delta_type gameOverTransition(Registry &);
 
     void splashScreen();
     void menuPage(Registry &);
-    void tutorial(Registry &);
+    void gameTutorial(Registry &);
     void theGame(Registry &);
     void gameOver(Registry &);
 

@@ -94,7 +94,7 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
 }
 
 
-delta_type SceneSystem::tutorialTransition(Registry &registry) {
+delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 2400_ui32;
 
     registry.get<Renderable>(registry.attachee<PlayButton>()).alpha = 0;
@@ -226,7 +226,7 @@ void SceneSystem::menuPage(Registry &registry) {
 }
 
 
-void SceneSystem::tutorial(Registry &registry) {
+void SceneSystem::gameTutorial(Registry &registry) {
     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
 }
 
@@ -279,8 +279,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIControls(registry);
                     menuPage(registry);
                     break;
-                case SceneType::TUTORIAL:
-                    tutorial(registry);
+                case SceneType::GAME_TUTORIAL:
+                    gameTutorial(registry);
                     break;
                 case SceneType::THE_GAME:
                     theGame(registry);
@@ -309,8 +309,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                         ? (discardSplashScreen(registry), menuPageTransition(registry, 0_ui32))
                         : menuPageTransition(registry, 1000_ui32);
                 break;
-            case SceneType::TUTORIAL:
-                remaining = tutorialTransition(registry);
+            case SceneType::GAME_TUTORIAL:
+                remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
                 remaining = theGameTransition(registry);

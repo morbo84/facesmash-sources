@@ -49,7 +49,7 @@ enum class SceneType: UInt8 {
     UNKNOWN = 0,
     SPLASH_SCREEN,
     MENU_PAGE,
-    TUTORIAL,
+    GAME_TUTORIAL,
     THE_GAME,
     GAME_OVER
 };
@@ -74,7 +74,7 @@ enum class ItemType: UInt8 {
 
 enum class UIAction: UInt8 {
     MENU = 0,
-    TUTORIAL,
+    GAME_TUTORIAL,
     RELOAD,
     PLAY,
     SHARE,

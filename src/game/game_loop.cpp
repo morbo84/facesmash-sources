@@ -81,7 +81,7 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     const SDL_Color tutorialColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
-    textureCache.load<TTFFontTextureLoader>("tutorial/touch", "TOUCH ME", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
+    textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
 
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
@@ -147,7 +147,8 @@ void GameLoop::createTopPatch() {
     auto &textureCache = Locator::TextureCache::ref();
     auto patchHandle = textureCache.handle("gui/patch");
 
-    auto patch = registry.create<Renderable>();
+    auto patch = registry.create();
+    registry.assign<Renderable>(patch, 180.f);
     registry.assign<Sprite>(patch, patchHandle, patchHandle->width(), patchHandle->height(), patchHandle->width(), patchHandle->height());
     registry.assign<Transform>(patch, patch, 0.f, -logicalHeight / 2.f);
     registry.assign<Panel>(patch, logicalWidth, logicalHeight / 2, PanelType::TOP_PATCH);
@@ -198,7 +199,7 @@ void GameLoop::createPlayButton() {
     registry.assign<Renderable>(entity, 0.f, 160, 0);
     registry.assign<Transform>(entity, entity, logicalWidth / 2.f - face->width() / 2.f, logicalHeight / 2.f - face->height() / 2.f);
     registry.assign<Sprite>(entity, face, face->width(), face->height(), face->width(), face->height());
-    registry.assign<UIButton>(entity, UIAction::TUTORIAL);
+    registry.assign<UIButton>(entity, UIAction::GAME_TUTORIAL);
     registry.attach<PlayButton>(entity);
 }
 
@@ -240,7 +241,7 @@ void GameLoop::createTutorialTopPanel() {
         auto buttonHandle = textureCache.handle("button/empty");
         const auto buttonOffset = (logicalWidth - (numberOfFaces * buttonHandle->width() + (numberOfFaces - 1) * 10)) / 2;
 
-        registry.assign<Renderable>(button, 0.f, 150);
+        registry.assign<Renderable>(button, 0.f, 150, 180);
         registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
         registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), logicalHeight / 2.f - 3.f * buttonHandle->height() / 2.f);
 
@@ -280,7 +281,7 @@ void GameLoop::createTutorialBottomPanel() {
         auto buttonHandle = textureCache.handle("button/empty");
         const auto buttonOffset = (logicalWidth - (numberOfItems * buttonHandle->width() + (numberOfItems - 1) * 10)) / 2;
 
-        registry.assign<Renderable>(button, 0.f, 150);
+        registry.assign<Renderable>(button, 0.f, 150, 180);
         registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
         registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), buttonHandle->height() / 2.f);
 
