@@ -51,7 +51,9 @@ enum class SceneType: UInt8 {
     MENU_PAGE,
     GAME_TUTORIAL,
     THE_GAME,
-    GAME_OVER
+    GAME_OVER,
+    TRAINING_TUTORIAL,
+    TRAINING
 };
 
 
@@ -75,8 +77,8 @@ enum class ItemType: UInt8 {
 enum class UIAction: UInt8 {
     MENU = 0,
     GAME_TUTORIAL,
+    TRAINING_TUTORIAL,
     RELOAD,
-    PLAY,
     SHARE,
     SWITCH_AUDIO
 };
@@ -93,6 +95,8 @@ enum class PanelType: UInt8 {
     GAME_TOP_PANEL,
     GAME_BOTTOM_PANEL,
     GAME_OVER_PANEL,
+    TRAINING_TOP_PANEL,
+    TRAINING_BOTTOM_PANEL,
     SMASH_BUTTONS_PANEL
 };
 

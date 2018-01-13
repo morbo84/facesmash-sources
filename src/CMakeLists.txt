@@ -30,6 +30,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/the_game_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/timer_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/training_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/ui_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/time/clock.cpp
     ${facesmash_SOURCE_DIR}/src/main.cpp

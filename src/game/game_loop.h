@@ -20,6 +20,7 @@
 #include "../system/smash_button_system.h"
 #include "../system/the_game_system.h"
 #include "../system/timer_system.h"
+#include "../system/training_system.h"
 #include "../system/ui_button_system.h"
 #include "game_env.h"
 
@@ -41,13 +42,14 @@ class GameLoop final: public GameEnv {
     void createBottomPatch();
     void createMenuTopPanel();
     void createMenuBottomPanel();
-    void createPlayButton();
     void createCameraFrame();
     void createTutorialTopPanel();
     void createTutorialBottomPanel();
     void createGameTopPanel(GameRenderer &);
     void createGameBottomPanel();
     void createGameOverPanel();
+    void createTrainingTopPanel();
+    void createTrainingBottomPanel();
     void createCamera();
 
 #ifdef DEBUG
@@ -87,6 +89,7 @@ private:
 #endif // DEBUG};
     TheGameSystem theGameSystem;
     TimerSystem timerSystem;
+    TrainingSystem trainingSystem;
     UIButtonSystem uiButtonSystem;
 };
 

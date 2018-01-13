@@ -211,9 +211,6 @@ struct CameraFrame final {
 };
 
 
-struct PlayButton final {};
-
-
 }
 
 

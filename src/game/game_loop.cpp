@@ -180,6 +180,22 @@ void GameLoop::createMenuTopPanel() {
     registry.assign<Renderable>(audioButton, 0.f, 150);
     registry.assign<Transform>(audioButton, panel, logicalWidth - 3.f * audioButtonHandle->width() / 2.f, audioButtonHandle->height() / 2.f);
     registry.assign<UIButton>(audioButton, UIAction::SWITCH_AUDIO);
+
+    auto theGameButton = registry.create();
+    auto theGameHandle = textureCache.handle("face/happy");
+
+    registry.assign<Renderable>(theGameButton, 0.f, 160);
+    registry.assign<Transform>(theGameButton, panel, logicalWidth / 4.f - theGameHandle->width() / 2.f, logicalHeight / 4.f - theGameHandle->height() / 2.f);
+    registry.assign<Sprite>(theGameButton, theGameHandle, theGameHandle->width(), theGameHandle->height(), theGameHandle->width(), theGameHandle->height());
+    registry.assign<UIButton>(theGameButton, UIAction::GAME_TUTORIAL);
+
+    auto trainingButton = registry.create();
+    auto trainingHandle = textureCache.handle("face/surprised");
+
+    registry.assign<Renderable>(trainingButton, 0.f, 160);
+    registry.assign<Transform>(trainingButton, panel, 3.f * logicalWidth / 4.f - theGameHandle->width() / 2.f, logicalHeight / 4.f - theGameHandle->height() / 2.f);
+    registry.assign<Sprite>(trainingButton, trainingHandle, trainingHandle->width(), trainingHandle->height(), trainingHandle->width(), trainingHandle->height());
+    registry.assign<UIButton>(trainingButton, UIAction::TRAINING_TUTORIAL);
 }
 
 
@@ -187,20 +203,6 @@ void GameLoop::createMenuBottomPanel() {
     auto panel = registry.create();
     registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
     registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::MENU_BOTTOM_PANEL);
-}
-
-
-void GameLoop::createPlayButton() {
-    auto &textureCache = Locator::TextureCache::ref();
-
-    auto entity = registry.create();
-    auto face = textureCache.handle("face/happy");
-
-    registry.assign<Renderable>(entity, 0.f, 160, 0);
-    registry.assign<Transform>(entity, entity, logicalWidth / 2.f - face->width() / 2.f, logicalHeight / 2.f - face->height() / 2.f);
-    registry.assign<Sprite>(entity, face, face->width(), face->height(), face->width(), face->height());
-    registry.assign<UIButton>(entity, UIAction::GAME_TUTORIAL);
-    registry.attach<PlayButton>(entity);
 }
 
 
@@ -398,6 +400,16 @@ void GameLoop::createGameOverPanel() {
 }
 
 
+void GameLoop::createTrainingTopPanel() {
+    // TODO
+}
+
+
+void GameLoop::createTrainingBottomPanel() {
+    // TODO
+}
+
+
 void GameLoop::createCamera() {
     auto camera = registry.create();
     registry.assign<Transform>(camera, camera, 0.f, 0.f);
@@ -447,13 +459,14 @@ void GameLoop::init(GameRenderer &renderer) {
     createBottomPatch();
     createMenuTopPanel();
     createMenuBottomPanel();
-    createPlayButton();
     createCameraFrame();
     createTutorialTopPanel();
     createTutorialBottomPanel();
     createGameTopPanel(renderer);
     createGameBottomPanel();
     createGameOverPanel();
+    createTrainingTopPanel();
+    createTrainingBottomPanel();
     createCamera();
 
 #ifdef DEBUG
@@ -512,6 +525,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     }
 
     theGameSystem.update(registry, factory);
+    trainingSystem.update(registry, factory, delta);
     animationSystem.update(registry, delta);
 
     renderingSystem.update(registry, renderer);

@@ -55,8 +55,10 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::GAME_TUTORIAL:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
+                case UIAction::TRAINING_TUTORIAL:
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_TUTORIAL);
+                    break;
                 case UIAction::RELOAD:
-                case UIAction::PLAY:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case UIAction::MENU:
