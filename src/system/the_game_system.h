@@ -2,6 +2,7 @@
 #define FACE_SMASH_SYSTEM_THE_GAME_SYSTEM_H
 
 
+#include "../common/bag.h"
 #include "../common/types.h"
 
 
@@ -13,6 +14,10 @@ class Factory;
 
 struct TheGameSystem final {
     void update(Registry &, Factory &);
+
+private:
+    FaceBag faceBag;
+    ItemBag itemBag;
 };
 
 

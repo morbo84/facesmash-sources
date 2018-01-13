@@ -18,8 +18,10 @@ void ItemSystem::movement(Registry &registry, float mod) {
 
 
 void ItemSystem::fountain(Registry &registry, Factory &factory) {
-    if(registry.size<Face>() < 5) {
-        factory.spawnFaceBottom(registry, 100_ui8, 100_ui8);
+    const auto face = faceBag.get();
+
+    while(registry.size<Face>() < 5) {
+        factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
     }
 }
 

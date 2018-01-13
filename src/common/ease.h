@@ -2,9 +2,6 @@
 #define FACE_SMASH_COMMON_EASE_H
 
 
-#include <cmath>
-
-
 namespace gamee {
 
 

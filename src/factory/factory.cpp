@@ -74,26 +74,6 @@ int Factory::toZ(ItemType type) {
 }
 
 
-ItemType Factory::nextItem() noexcept {
-    if(item == numberOfItems) {
-        std::shuffle(items, items+numberOfItems, generator);
-        item = 0_ui8;
-    }
-
-    return items[item++];
-}
-
-
-FaceType Factory::nextFace() noexcept {
-    if(face == numberOfFaces) {
-        std::shuffle(faces, faces+numberOfFaces, generator);
-        face = 0_ui8;
-    }
-
-    return faces[face++];
-}
-
-
 void Factory::addScore(Registry &registry, SDLTextureHandle handle, float x, float y) {
     auto entity = registry.create();
 
@@ -114,62 +94,47 @@ void Factory::addScore(Registry &registry, SDLTextureHandle handle, float x, flo
 
 
 Factory::Factory()
-    : generator{std::random_device{}()},
-      items{
-          ItemType::SLOW_DOWN,
-          ItemType::SPEED_UP,
-          ItemType::FOUNTAIN
-      },
-      faces{
-          FaceType::ANGRY,
-          FaceType::DISGUSTED,
-          FaceType::FEARFUL,
-          FaceType::HAPPY,
-          FaceType::SAD,
-          FaceType::SURPRISED
-      },
-      item{numberOfItems},
-      face{numberOfFaces}
+    : generator{std::random_device{}()}
 {}
 
 
-void Factory::spawnFaceBottom(Registry &registry, UInt8 smash, UInt8 miss) {
-    spawnFaceOrItemBottom(registry, Face{smash, miss, nextFace()});
+void Factory::spawnFaceBottom(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+    spawnFaceOrItemBottom(registry, Face{smash, miss, face});
 }
 
 
-void Factory::spawnFaceTop(Registry &registry, UInt8 smash, UInt8 miss) {
-    spawnFaceOrItemTop(registry, Face{smash, miss, nextFace()});
+void Factory::spawnFaceTop(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+    spawnFaceOrItemTop(registry, Face{smash, miss, face});
 }
 
 
-void Factory::spawnFaceLeft(Registry &registry, UInt8 smash, UInt8 miss) {
-    spawnFaceOrItemLeft(registry, Face{smash, miss, nextFace()});
+void Factory::spawnFaceLeft(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+    spawnFaceOrItemLeft(registry, Face{smash, miss, face});
 }
 
 
-void Factory::spawnFaceRight(Registry &registry, UInt8 smash, UInt8 miss) {
-    spawnFaceOrItemRight(registry, Face{smash, miss, nextFace()});
+void Factory::spawnFaceRight(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+    spawnFaceOrItemRight(registry, Face{smash, miss, face});
 }
 
 
-void Factory::spawnItemBottom(Registry &registry) {
-    spawnFaceOrItemBottom(registry, Item{nextItem()});
+void Factory::spawnItemBottom(Registry &registry, ItemType item) {
+    spawnFaceOrItemBottom(registry, Item{item});
 }
 
 
-void Factory::spawnItemTop(Registry &registry) {
-    spawnFaceOrItemTop(registry, Item{nextItem()});
+void Factory::spawnItemTop(Registry &registry, ItemType item) {
+    spawnFaceOrItemTop(registry, Item{item});
 }
 
 
-void Factory::spawnItemLeft(Registry &registry) {
-    spawnFaceOrItemLeft(registry, Item{nextItem()});
+void Factory::spawnItemLeft(Registry &registry, ItemType item) {
+    spawnFaceOrItemLeft(registry, Item{item});
 }
 
 
-void Factory::spawnItemRight(Registry &registry) {
-    spawnFaceOrItemRight(registry, Item{nextItem()});
+void Factory::spawnItemRight(Registry &registry, ItemType item) {
+    spawnFaceOrItemRight(registry, Item{item});
 }
 
 

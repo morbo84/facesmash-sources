@@ -1,5 +1,6 @@
 set(
     FACE_SMASH_SOURCES
+    ${facesmash_SOURCE_DIR}/src/common/bag.cpp
     ${facesmash_SOURCE_DIR}/src/common/ease.cpp
     ${facesmash_SOURCE_DIR}/src/common/util.cpp
     ${facesmash_SOURCE_DIR}/src/factory/factory.cpp

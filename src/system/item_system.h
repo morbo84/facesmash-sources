@@ -3,6 +3,7 @@
 
 
 #include <SDL_rect.h>
+#include "../common/bag.h"
 #include "../common/types.h"
 
 
@@ -32,6 +33,7 @@ private:
     bool dirty;
     ItemType curr;
     delta_type remaining;
+    FaceBag faceBag;
 };
 
 

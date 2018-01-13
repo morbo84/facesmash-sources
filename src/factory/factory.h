@@ -25,9 +25,6 @@ class Factory final {
     int toZ(FaceType);
     int toZ(ItemType);
 
-    ItemType nextItem() noexcept;
-    FaceType nextFace() noexcept;
-
     void addScore(Registry &, SDLTextureHandle, float, float);
 
     template<typename Component>
@@ -101,15 +98,15 @@ class Factory final {
 public:
     Factory();
 
-    void spawnFaceBottom(Registry &, UInt8, UInt8);
-    void spawnFaceTop(Registry &, UInt8, UInt8);
-    void spawnFaceLeft(Registry &, UInt8, UInt8);
-    void spawnFaceRight(Registry &, UInt8, UInt8);
+    void spawnFaceBottom(Registry &, UInt8, UInt8, FaceType);
+    void spawnFaceTop(Registry &, UInt8, UInt8, FaceType);
+    void spawnFaceLeft(Registry &, UInt8, UInt8, FaceType);
+    void spawnFaceRight(Registry &, UInt8, UInt8, FaceType);
 
-    void spawnItemBottom(Registry &);
-    void spawnItemTop(Registry &);
-    void spawnItemLeft(Registry &);
-    void spawnItemRight(Registry &);
+    void spawnItemBottom(Registry &, ItemType);
+    void spawnItemTop(Registry &, ItemType);
+    void spawnItemLeft(Registry &, ItemType);
+    void spawnItemRight(Registry &, ItemType);
 
     void spawnSmashScore(Registry &, UInt8, float, float);
     void spawnMissScore(Registry &, UInt8, float, float);
@@ -117,10 +114,6 @@ public:
 
 private:
     std::mt19937 generator;
-    ItemType items[numberOfItems];
-    FaceType faces[numberOfFaces];
-    UInt8 item;
-    UInt8 face;
 };
 
 
