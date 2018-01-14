@@ -386,6 +386,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::MENU_PAGE:
                     enableUIControls(registry);
+                    Locator::Camera::ref().stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
@@ -424,26 +425,26 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::MENU_PAGE:
                 remaining = (curr == SceneType::SPLASH_SCREEN)
                         ? (discardSplashScreen(registry), menuPageTransition(registry, 0_ui32))
-                        : (Locator::Camera::ref().stop(), menuPageTransition(registry, 1000_ui32));
+                        : menuPageTransition(registry, 1000_ui32);
                 break;
             case SceneType::GAME_TUTORIAL:
-                Locator::Camera::ref().start();
                 remaining = gameTutorialTransition(registry);
+                Locator::Camera::ref().start();
                 break;
             case SceneType::THE_GAME:
-                enableCameraFrame(registry);
                 remaining = theGameTransition(registry);
+                enableCameraFrame(registry);
                 break;
             case SceneType::GAME_OVER:
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
-                Locator::Camera::ref().start();
                 remaining = trainingTutorialTransition(registry);
+                Locator::Camera::ref().start();
                 break;
             case SceneType::TRAINING:
-                enableCameraFrame(registry);
                 remaining = trainingTransition(registry);
+                enableCameraFrame(registry);
                 break;
             default:
                 assert(false);
