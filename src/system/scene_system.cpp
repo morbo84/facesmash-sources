@@ -77,13 +77,13 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::MENU_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeInCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::CREDITS_PANEL:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
@@ -176,7 +176,7 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeOutElastic);
             break;
         case PanelType::TUTORIAL_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration / 3, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeOutElastic);
             break;
         default:
             assert(false);
@@ -193,10 +193,10 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - 320), duration, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - patchHeight), duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 320, duration, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - patchHeight, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
@@ -215,7 +215,7 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeInCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
@@ -246,7 +246,7 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeOutCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
@@ -317,10 +317,10 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - 320), duration, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - patchHeight), duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 320, duration, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - patchHeight, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
@@ -338,7 +338,7 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeInCubic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::SMASH_BUTTONS_PANEL:
 #if DEBUG

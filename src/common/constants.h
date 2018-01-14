@@ -14,6 +14,8 @@ constexpr int logicalHeight = 1920;
 constexpr SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 constexpr SDL_Rect smashArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
 
+constexpr int patchHeight = 320;
+
 constexpr int numberOfItems = 3;
 constexpr int numberOfFaces = 6;
 
