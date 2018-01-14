@@ -5,6 +5,7 @@
 #include <entt/locator/locator.hpp>
 #include "../common/types.h"
 #include "../input/input_handler.h"
+#include "../service/ads_service.h"
 #include "../service/audio_service.h"
 #include "../service/camera_service.h"
 #include "../service/face_bus_service.h"
@@ -20,6 +21,7 @@ struct Locator final {
     using Dispatcher = entt::ServiceLocator<gamee::Dispatcher>;
     using InputHandler = entt::ServiceLocator<gamee::InputHandler>;
     // actual services
+    using Ads = entt::ServiceLocator<gamee::AdsService>;
     using Camera = entt::ServiceLocator<gamee::CameraService>;
     using Audio = entt::ServiceLocator<gamee::AudioService>;
     using FaceBus = entt::ServiceLocator<gamee::FaceBusService>;

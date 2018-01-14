@@ -6,6 +6,8 @@
 #include "game/game_loop.h"
 #include "input/user_input_handler.h"
 #include "locator/locator.hpp"
+#include "service/ads_android.h"
+#include "service/ads_null.h"
 #include "service/audio_null.h"
 #include "service/audio_sdl.h"
 #include "service/camera_android.h"
@@ -34,8 +36,10 @@ void initPlatformServices() {
 
 #ifdef __ANDROID__
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
+    gamee::Locator::Ads::set<gamee::AdsAndroid>();
 #else
     gamee::Locator::Camera::set<gamee::CameraNull>();
+    gamee::Locator::Ads::set<gamee::AdsNull>();
 #endif
 
     gamee::Locator::Audio::ref().init();
@@ -45,6 +49,7 @@ void initPlatformServices() {
 void releasePlatformServices() {
     gamee::Locator::Audio::ref().release();
 
+    gamee::Locator::Ads::reset();
     gamee::Locator::Camera::reset();
     gamee::Locator::Audio::reset();
     gamee::Locator::FaceBus::reset();

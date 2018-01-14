@@ -384,6 +384,8 @@ void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
 void SceneSystem::receive(const KeyboardEvent &event) noexcept {
     // inputs from keyboard are filtered out during transitions
     if(curr == next && event.type == KeyboardEvent::Type::BACK) {
+        auto &dispatcher = Locator::Dispatcher::ref();
+
         switch(curr) {
         case SceneType::TRAINING_TUTORIAL:
         case SceneType::GAME_TUTORIAL:
@@ -393,13 +395,13 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::CREDITS_PAGE:
         case SceneType::TRAINING:
         case SceneType::GAME_OVER:
-            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
             break;
         case SceneType::MENU_PAGE:
-            Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+            dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
             break;
         case SceneType::THE_GAME:
-            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
             break;
         default:
             assert(false);
@@ -411,33 +413,41 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 
 void SceneSystem::update(Registry &registry, delta_type delta) {
     if(curr != next) {
+        auto &dispatcher = Locator::Dispatcher::ref();
+        auto &camera = Locator::Camera::ref();
+        auto &ads = Locator::Ads::ref();
+
         if(isTransitioning) {
             remaining = delta > remaining ? 0_ui32 : (remaining - delta);
 
             if(!remaining) {
                 switch(next) {
                 case SceneType::SPLASH_SCREEN:
-                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    ads.show(AdsType::BANNER);
                     break;
                 case SceneType::CREDITS_PAGE:
                     enableUIControls(registry);
                     break;
                 case SceneType::MENU_PAGE:
                     enableUIControls(registry);
-                    Locator::Camera::ref().stop();
+                    camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
-                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::THE_GAME);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case SceneType::THE_GAME:
+                    ads.load(AdsType::INTERSTITIAL);
                     resetGame(registry);
                     break;
                 case SceneType::GAME_OVER:
                     disableCameraFrame(registry);
-                    enableUIControls(registry);
+                    ads.isLoaded(AdsType::INTERSTITIAL)
+                            ? (ads.show(AdsType::INTERSTITIAL), enableUIControls(registry))
+                            : enableUIControls(registry);
                     break;
                 case SceneType::TRAINING_TUTORIAL:
-                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
                     break;
                 case SceneType::TRAINING:
                     resetTraining(registry);
@@ -466,23 +476,23 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                         : menuPageTransition(registry, 1000_ui32);
                 break;
             case SceneType::GAME_TUTORIAL:
+                camera.start();
                 remaining = gameTutorialTransition(registry);
-                Locator::Camera::ref().start();
                 break;
             case SceneType::THE_GAME:
-                remaining = theGameTransition(registry);
                 enableCameraFrame(registry);
+                remaining = theGameTransition(registry);
                 break;
             case SceneType::GAME_OVER:
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
+                camera.start();
                 remaining = trainingTutorialTransition(registry);
-                Locator::Camera::ref().start();
                 break;
             case SceneType::TRAINING:
-                remaining = trainingTransition(registry);
                 enableCameraFrame(registry);
+                remaining = trainingTransition(registry);
                 break;
             default:
                 assert(false);

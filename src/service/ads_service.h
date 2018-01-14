@@ -6,7 +6,11 @@
 namespace gamee {
 
 
-enum class AdsType { BANNER, INTERSTITIAL };
+enum class AdsType {
+    BANNER,
+    INTERSTITIAL
+};
+
 
 struct AdsService {
     virtual ~AdsService() = default;
