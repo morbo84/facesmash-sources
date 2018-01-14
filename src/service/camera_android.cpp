@@ -12,16 +12,20 @@ namespace gamee {
 
 #ifdef __ANDROID__
 extern std::atomic_bool cameraAndroidReady;
-std::tuple<int, int, int> facesmashGetCameraParams();
+std::tuple<int, int, int> bindingGetCameraParams();
+void bindingStartCamera();
+void bindingStopCamera();
 #else
 static std::atomic_bool cameraAndroidReady{false};
-std::tuple<int, int, int> facesmashGetCameraParams() { return {}; }
+std::tuple<int, int, int> bindingGetCameraParams() { return {}; }
+void bindingStartCamera() {}
+void bindingStopCamera() {}
 #endif
 
 
 void CameraAndroid::init() {
     std::lock_guard lck{frameMtx_};
-    auto params = facesmashGetCameraParams();
+    auto params = bindingGetCameraParams();
     width_ = std::get<0>(params);
     height_ = std::get<1>(params);
     auto bitsPerPixel = std::get<2>(params);
@@ -38,12 +42,12 @@ void CameraAndroid::init() {
 
 
 void CameraAndroid::start() {
-    // TODO
+    bindingStartCamera();
 }
 
 
 void CameraAndroid::stop() {
-    // TODO
+    bindingStopCamera();
 }
 
 
