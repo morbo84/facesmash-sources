@@ -77,12 +77,14 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("button/empty", "png/gui/button.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer, 160, 160);
+    textureCache.load<SDLTextureLoader>("button/credits", "png/gui/info.png", renderer, 160, 160);
 
     const SDL_Color tutorialColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
     textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
 
+    textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
     textureCache.load<SDLTextureLoader>("gui/patch", "png/gui/patch.png", renderer, 1080, 960);
@@ -181,6 +183,13 @@ void GameLoop::createMenuTopPanel() {
     registry.assign<Transform>(audioButton, panel, logicalWidth - 3.f * audioButtonHandle->width() / 2.f, audioButtonHandle->height() / 2.f);
     registry.assign<UIButton>(audioButton, UIAction::SWITCH_AUDIO);
 
+    auto creditsButton = registry.create();
+    auto creditsButtonHandle = textureCache.handle("button/credits");
+    registry.assign<Sprite>(creditsButton, creditsButtonHandle, creditsButtonHandle->width(), creditsButtonHandle->height(), creditsButtonHandle->width(), creditsButtonHandle->height());
+    registry.assign<Renderable>(creditsButton, 0.f, 150);
+    registry.assign<Transform>(creditsButton, panel, creditsButtonHandle->width() / 2.f, creditsButtonHandle->height() / 2.f);
+    registry.assign<UIButton>(creditsButton, UIAction::CREDITS);
+
     auto theGameButton = registry.create();
     auto theGameHandle = textureCache.handle("face/happy");
 
@@ -227,6 +236,28 @@ void GameLoop::createCameraFrame() {
         registry.assign<Renderable>(frame, -90.f, 90, 0);
     }
 #endif // CAMERA_FRAME_AVAILABLE
+}
+
+
+void GameLoop::createCreditsPanel() {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto panel = registry.create();
+    registry.assign<Transform>(panel, panel, -720.f, logicalHeight / 2.f - 475.f);
+    registry.assign<Panel>(panel, 720, 950, PanelType::CREDITS_PANEL);
+
+    auto window = registry.create();
+    auto windowHandle = textureCache.handle("gui/window");
+    registry.assign<Renderable>(window, 0.f, 210);
+    registry.assign<Sprite>(window, windowHandle, windowHandle->width(), windowHandle->height(), windowHandle->width(), windowHandle->height());
+    registry.assign<Transform>(window, panel, 0.f, 0.f);
+
+    auto menu = registry.create();
+    auto menuHandle = textureCache.handle("button/menu");
+    registry.assign<Renderable>(menu, 0.f, 220);
+    registry.assign<Sprite>(menu, menuHandle, menuHandle->width(), menuHandle->height(), menuHandle->width(), menuHandle->height());
+    registry.assign<Transform>(menu, panel, windowHandle->width() / 2.f - menuHandle->width() / 2.f, windowHandle->height() - 2.f * menuHandle->height() / 3.f);
+    registry.assign<UIButton>(menu, UIAction::MENU);
 }
 
 
@@ -460,6 +491,7 @@ void GameLoop::init(GameRenderer &renderer) {
     createMenuTopPanel();
     createMenuBottomPanel();
     createCameraFrame();
+    createCreditsPanel();
     createTutorialTopPanel();
     createTutorialBottomPanel();
     createGameTopPanel(renderer);

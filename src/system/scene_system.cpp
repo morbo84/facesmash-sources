@@ -85,6 +85,9 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
         case PanelType::MENU_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight / 2, duration, 0_ui32, &easeInCubic);
             break;
+        case PanelType::CREDITS_PANEL:
+            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
         case PanelType::TUTORIAL_TOP_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::SMASH_BUTTONS_PANEL:
@@ -108,6 +111,41 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
 }
 
 
+delta_type SceneSystem::creditsTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::TOP_PATCH:
+        case PanelType::BOTTOM_PATCH:
+        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::GAME_TOP_PANEL:
+        case PanelType::GAME_BOTTOM_PANEL:
+        case PanelType::GAME_OVER_PANEL:
+        case PanelType::TRAINING_TOP_PANEL:
+        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::SMASH_BUTTONS_PANEL:
+            // they are already out of scene
+            break;
+        case PanelType::CREDITS_PANEL:
+            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth / 2 - panel.w / 2, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::MENU_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::MENU_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeOutCubic);
+            break;
+        default:
+            assert(false);
+        }
+    });
+
+    return duration;
+}
+
+
 delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 3000_ui32;
 
@@ -115,6 +153,7 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
         case PanelType::BOTTOM_PATCH:
+        case PanelType::CREDITS_PANEL:
         case PanelType::GAME_TOP_PANEL:
         case PanelType::GAME_BOTTOM_PANEL:
         case PanelType::GAME_OVER_PANEL:
@@ -157,6 +196,7 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::CREDITS_PANEL:
         case PanelType::TRAINING_TOP_PANEL:
         case PanelType::TRAINING_BOTTOM_PANEL:
             // they are already out of scene
@@ -206,6 +246,7 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::CREDITS_PANEL:
         case PanelType::TUTORIAL_TOP_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
@@ -238,6 +279,7 @@ delta_type SceneSystem::trainingTutorialTransition(Registry &registry) {
         switch(panel.type) {
         case PanelType::TOP_PATCH:
         case PanelType::BOTTOM_PATCH:
+        case PanelType::CREDITS_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
         case PanelType::GAME_BOTTOM_PANEL:
@@ -278,6 +320,7 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::CREDITS_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
         case PanelType::GAME_BOTTOM_PANEL:
@@ -338,6 +381,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::SPLASH_SCREEN:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
+                case SceneType::CREDITS_PAGE:
+                    enableUIControls(registry);
+                    break;
                 case SceneType::MENU_PAGE:
                     enableUIControls(registry);
                     Locator::Camera::ref().stop();
@@ -372,6 +418,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             switch(next) {
             case SceneType::SPLASH_SCREEN:
                 remaining = 3000_ui32;
+                break;
+            case SceneType::CREDITS_PAGE:
+                remaining = creditsTransition(registry);
                 break;
             case SceneType::MENU_PAGE:
                 remaining = (curr == SceneType::SPLASH_SCREEN)

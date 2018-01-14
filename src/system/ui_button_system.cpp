@@ -64,6 +64,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::MENU:
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
+                case UIAction::CREDITS:
+                    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);
+                    break;
                 case UIAction::SHARE:
                     // TODO
                     break;

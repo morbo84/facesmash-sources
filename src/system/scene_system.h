@@ -21,6 +21,7 @@ class SceneSystem final {
     void resetTutorial(Registry &);
 
     delta_type menuPageTransition(Registry &, delta_type);
+    delta_type creditsTransition(Registry &);
     delta_type gameTutorialTransition(Registry &);
     delta_type theGameTransition(Registry &);
     delta_type gameOverTransition(Registry &);
