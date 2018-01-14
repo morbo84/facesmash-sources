@@ -7,7 +7,7 @@ namespace gamee {
 void AdsNull::load(AdsType) {}
 
 
-void AdsNull::isLoaded(AdsType) {}
+bool AdsNull::isLoaded(AdsType) { return false; }
 
 
 void AdsNull::show(AdsType) {}

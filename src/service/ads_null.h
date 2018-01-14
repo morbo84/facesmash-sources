@@ -10,7 +10,7 @@ namespace gamee {
 
 struct AdsNull : AdsService {
     void load(AdsType) override;
-    void isLoaded(AdsType) override;
+    bool isLoaded(AdsType) override;
     void show(AdsType) override;
 };
 
