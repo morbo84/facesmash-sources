@@ -1,6 +1,9 @@
 #include "ads_android.h"
 
 
+namespace gamee {
+
+
 #ifdef __ANDROID__
 void bindingLoadIntestitialAd();
 bool bindingIsLoadedIntestitialAd();
@@ -16,9 +19,6 @@ void bindingLoadBannerAd() {}
 bool bindingIsLoadedBannerAd() { return false; }
 void bindingShowBannerAd() {}
 #endif
-
-
-namespace gamee {
 
 
 void AdsAndroid::load(AdsType t) {
