@@ -23,6 +23,16 @@ struct EnvEvent final {
 };
 
 
+struct KeyboardEvent final {
+    enum class Type: UInt8 {
+        ESCAPE,
+        BACK
+    };
+
+    const Type type;
+};
+
+
 struct TouchEvent final: SDL_Point {};
 
 

@@ -9,6 +9,7 @@ namespace gamee {
 
 
 struct SceneChangeEvent;
+struct KeyboardEvent;
 
 
 class SceneSystem final {
@@ -18,7 +19,7 @@ class SceneSystem final {
     void disableCameraFrame(Registry &);
     void enableCameraFrame(Registry &);
     void resetGame(Registry &);
-    void resetTutorial(Registry &);
+    void resetTraining(Registry &);
 
     delta_type menuPageTransition(Registry &, delta_type);
     delta_type creditsTransition(Registry &);
@@ -33,6 +34,7 @@ public:
     ~SceneSystem();
 
     void receive(const SceneChangeEvent &) noexcept;
+    void receive(const KeyboardEvent &) noexcept;
 
     void update(Registry &, delta_type);
 

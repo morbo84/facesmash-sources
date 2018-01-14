@@ -65,7 +65,7 @@ void SceneSystem::resetGame(Registry &registry) {
 }
 
 
-void SceneSystem::resetTutorial(Registry &registry) {
+void SceneSystem::resetTraining(Registry &registry) {
     // TODO
 }
 
@@ -90,7 +90,6 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
             // they are already out of scene
             break;
         case PanelType::GAME_TOP_PANEL:
@@ -101,6 +100,11 @@ delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type durati
         case PanelType::GAME_OVER_PANEL:
         case PanelType::TRAINING_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::SMASH_BUTTONS_PANEL:
+#if DEBUG
+            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+#endif // DEBUG
             break;
         default:
             assert(false);
@@ -357,17 +361,51 @@ SceneSystem::SceneSystem()
       isTransitioning{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
+    Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
 }
 
 
 SceneSystem::~SceneSystem() {
+    Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
 }
 
 
 void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
     assert(!isTransitioning);
-    next = event.scene;
+
+    // events are filtered out during transitions
+    if(curr == next) {
+        next = event.scene;
+    }
+}
+
+
+void SceneSystem::receive(const KeyboardEvent &event) noexcept {
+    // inputs from keyboard are filtered out during transitions
+    if(curr == next && event.type == KeyboardEvent::Type::BACK) {
+        switch(curr) {
+        case SceneType::TRAINING_TUTORIAL:
+        case SceneType::GAME_TUTORIAL:
+        case SceneType::SPLASH_SCREEN:
+            // back is not allowed in these scenes
+            break;
+        case SceneType::CREDITS_PAGE:
+        case SceneType::TRAINING:
+        case SceneType::GAME_OVER:
+            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+            break;
+        case SceneType::MENU_PAGE:
+            Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+            break;
+        case SceneType::THE_GAME:
+            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
+            break;
+        default:
+            assert(false);
+            break;
+        }
+    }
 }
 
 
@@ -402,7 +440,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING);
                     break;
                 case SceneType::TRAINING:
-                    resetTutorial(registry);
+                    resetTraining(registry);
                     break;
                 default:
                     assert(false);

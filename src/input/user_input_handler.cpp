@@ -41,7 +41,11 @@ void UserInputHandler::touchfinger(const SDL_TouchFingerEvent &event) noexcept {
 void UserInputHandler::keyboard(const SDL_KeyboardEvent &event) noexcept {
     switch(event.keysym.sym) {
     case SDLK_ESCAPE:
-        Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+        Locator::Dispatcher::ref().enqueue<KeyboardEvent>(KeyboardEvent::Type::ESCAPE);
+        break;
+    case SDLK_BACKSPACE:
+    case SDLK_AC_BACK:
+        Locator::Dispatcher::ref().enqueue<KeyboardEvent>(KeyboardEvent::Type::BACK);
         break;
     default:
         // silent warnings

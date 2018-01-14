@@ -11,6 +11,7 @@
 namespace gamee {
 
 
+struct KeyboardEvent;
 struct EnvEvent;
 
 
@@ -45,7 +46,9 @@ public:
     bool valid() const noexcept;
     ErrorCode error() const noexcept;
 
+    void receive(const KeyboardEvent &) noexcept;
     void receive(const EnvEvent &) noexcept;
+
     int exec() noexcept;
 
 private:

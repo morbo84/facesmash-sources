@@ -83,6 +83,7 @@ GameEnv::GameEnv() noexcept
         // set event filter on SDL events
         SDL_SetEventFilter(&appEventFilter, nullptr);
         // bind services to the surrounding environment
+        Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
         Locator::Dispatcher::ref().connect<EnvEvent>(this);
     }
 }
@@ -90,6 +91,7 @@ GameEnv::GameEnv() noexcept
 
 GameEnv::~GameEnv() noexcept {
     Locator::Dispatcher::ref().disconnect<EnvEvent>(this);
+    Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     SDL_SetEventFilter(nullptr, nullptr);
     if(TTF_WasInit()) { TTF_Quit(); }
     if(IMG_WasInit) { IMG_Quit(); }
@@ -105,6 +107,18 @@ bool GameEnv::valid() const noexcept {
 
 GameEnv::ErrorCode GameEnv::error() const noexcept {
     return errcode;
+}
+
+
+void GameEnv::receive(const KeyboardEvent &event) noexcept {
+    switch(event.type) {
+    case KeyboardEvent::Type::ESCAPE:
+        Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+        break;
+    default:
+        // does nothing (suppress warnings)
+        break;
+    }
 }
 
 
