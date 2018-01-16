@@ -123,7 +123,6 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer, 1080, 320);
     textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer, 1080, 320);
     textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/ontheroad/bg_bottom.png", renderer, 1080, 320);
-    textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/ontheroad/separator.png", renderer, 900, 8);
 
     textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
