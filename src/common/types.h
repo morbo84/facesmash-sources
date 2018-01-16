@@ -88,8 +88,8 @@ enum class UIAction: UInt8 {
 
 enum class PanelType: UInt8 {
     SPLASH_SCREEN = 0,
-    TOP_PATCH,
-    BOTTOM_PATCH,
+    BACKGROUND_TOP_PANEL,
+    BACKGROUND_BOTTOM_PANEL,
     MENU_TOP_PANEL,
     MENU_BOTTOM_PANEL,
     CREDITS_PANEL,

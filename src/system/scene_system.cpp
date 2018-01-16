@@ -73,10 +73,10 @@ void SceneSystem::resetTraining(Registry &registry) {
 delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type duration) {
     registry.view<Panel, Transform>().each([&registry, duration](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
+        case PanelType::BACKGROUND_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::BOTTOM_PATCH:
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP_PANEL:
@@ -120,8 +120,8 @@ delta_type SceneSystem::creditsTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
-        case PanelType::BOTTOM_PATCH:
+        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
         case PanelType::TUTORIAL_TOP_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
@@ -155,8 +155,8 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
-        case PanelType::BOTTOM_PATCH:
+        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
         case PanelType::CREDITS_PANEL:
         case PanelType::GAME_TOP_PANEL:
         case PanelType::GAME_BOTTOM_PANEL:
@@ -192,11 +192,11 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - patchHeight), duration, 0_ui32, &easeOutElastic);
+        case PanelType::BACKGROUND_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 6), duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - patchHeight, duration, 0_ui32, &easeOutElastic);
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 5 * logicalHeight / 6, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
@@ -242,10 +242,10 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
+        case PanelType::BACKGROUND_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::BOTTOM_PATCH:
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP_PANEL:
@@ -281,8 +281,8 @@ delta_type SceneSystem::trainingTutorialTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
-        case PanelType::BOTTOM_PATCH:
+        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
         case PanelType::CREDITS_PANEL:
         case PanelType::TUTORIAL_BOTTOM_PANEL:
         case PanelType::GAME_TOP_PANEL:
@@ -316,11 +316,11 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::TOP_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - patchHeight), duration, 0_ui32, &easeOutElastic);
+        case PanelType::BACKGROUND_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 6), duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::BOTTOM_PATCH:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - patchHeight, duration, 0_ui32, &easeOutElastic);
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 5 * logicalHeight / 6, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:

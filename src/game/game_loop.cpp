@@ -84,10 +84,14 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
     textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
 
+    textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer, 1080, 320);
+    textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer, 1080, 320);
+    textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/ontheroad/bg_bottom.png", renderer, 1080, 320);
+    textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/ontheroad/separator.png", renderer, 900, 8);
+
     textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
-    textureCache.load<SDLTextureLoader>("gui/patch", "png/gui/patch.png", renderer, 1080, 960);
 
     textureCache.load<SDLTextureLoader>("button/reload", "png/gui/reload.png", renderer, 160, 160);
     textureCache.load<SDLTextureLoader>("button/share", "png/gui/share.png", renderer, 160, 160);
@@ -145,26 +149,41 @@ void GameLoop::createSplashScreen() {
 }
 
 
-void GameLoop::createTopPatch() {
+void GameLoop::createBackgroundTopPanel() {
     auto &textureCache = Locator::TextureCache::ref();
-    auto patchHandle = textureCache.handle("gui/patch");
+    auto topHandle = textureCache.handle("palette/bg_top");
 
-    auto patch = registry.create();
-    registry.assign<Renderable>(patch, 180.f);
-    registry.assign<Sprite>(patch, patchHandle, patchHandle->width(), patchHandle->height(), patchHandle->width(), patchHandle->height());
-    registry.assign<Transform>(patch, patch, 0.f, -logicalHeight / 2.f);
-    registry.assign<Panel>(patch, logicalWidth, logicalHeight / 2, PanelType::TOP_PATCH);
+    auto panel = registry.create();
+    registry.assign<Transform>(panel, panel, 0.f, -1.f * (logicalHeight - topHandle->height()));
+    registry.assign<Panel>(panel, logicalWidth, logicalHeight - topHandle->height(), PanelType::BACKGROUND_TOP_PANEL);
+
+    for(auto idx = 0, cnt = (logicalHeight / topHandle->height()) - 2; idx < cnt; ++idx) {
+        auto top = registry.create();
+        registry.assign<Renderable>(top);
+        registry.assign<Sprite>(top, topHandle, topHandle->width(), topHandle->height(), topHandle->width(), topHandle->height());
+        registry.assign<Transform>(top, panel, 0.f, 1.f * topHandle->height() * idx);
+    }
+
+    auto middle = registry.create();
+    auto middleHandle = textureCache.handle("palette/bg_middle");
+    registry.assign<Renderable>(middle);
+    registry.assign<Sprite>(middle, middleHandle, middleHandle->width(), middleHandle->height(), middleHandle->width(), middleHandle->height());
+    registry.assign<Transform>(middle, panel, 0.f, 1.f * logicalHeight - 2 * middleHandle->height());
 }
 
 
-void GameLoop::createBottomPatch() {
+void GameLoop::createBackgroundBottomPanel() {
     auto &textureCache = Locator::TextureCache::ref();
-    auto patchHandle = textureCache.handle("gui/patch");
+    auto bottomHandle = textureCache.handle("palette/bg_bottom");
 
-    auto patch = registry.create<Renderable>();
-    registry.assign<Sprite>(patch, patchHandle, patchHandle->width(), patchHandle->height(), patchHandle->width(), patchHandle->height());
-    registry.assign<Transform>(patch, patch, 0.f, 1.f * logicalHeight);
-    registry.assign<Panel>(patch, logicalWidth, logicalHeight / 2, PanelType::BOTTOM_PATCH);
+    auto panel = registry.create();
+    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
+    registry.assign<Panel>(panel, logicalWidth, bottomHandle->height(), PanelType::BACKGROUND_BOTTOM_PANEL);
+
+    auto bottom = registry.create();
+    registry.assign<Renderable>(bottom);
+    registry.assign<Sprite>(bottom, bottomHandle, bottomHandle->width(), bottomHandle->height(), bottomHandle->width(), bottomHandle->height());
+    registry.assign<Transform>(bottom, panel, 0.f, 0.f);
 }
 
 
@@ -180,21 +199,21 @@ void GameLoop::createMenuTopPanel() {
     auto audioButtonHandle = audioService.isMute() ? textureCache.handle("button/mute") : textureCache.handle("button/sound");
     registry.assign<Sprite>(audioButton, audioButtonHandle, audioButtonHandle->width(), audioButtonHandle->height(), audioButtonHandle->width(), audioButtonHandle->height());
     registry.assign<Renderable>(audioButton, 0.f, 150);
-    registry.assign<Transform>(audioButton, panel, logicalWidth - 3.f * audioButtonHandle->width() / 2.f, audioButtonHandle->height() / 2.f);
+    registry.assign<Transform>(audioButton, panel, logicalWidth - 3.f * audioButtonHandle->width() / 2.f, 350.f + audioButtonHandle->height() / 2.f);
     registry.assign<UIButton>(audioButton, UIAction::SWITCH_AUDIO);
 
     auto creditsButton = registry.create();
     auto creditsButtonHandle = textureCache.handle("button/credits");
     registry.assign<Sprite>(creditsButton, creditsButtonHandle, creditsButtonHandle->width(), creditsButtonHandle->height(), creditsButtonHandle->width(), creditsButtonHandle->height());
     registry.assign<Renderable>(creditsButton, 0.f, 150);
-    registry.assign<Transform>(creditsButton, panel, creditsButtonHandle->width() / 2.f, creditsButtonHandle->height() / 2.f);
+    registry.assign<Transform>(creditsButton, panel, creditsButtonHandle->width() / 2.f, 350.f + creditsButtonHandle->height() / 2.f);
     registry.assign<UIButton>(creditsButton, UIAction::CREDITS);
 
     auto theGameButton = registry.create();
     auto theGameHandle = textureCache.handle("face/happy");
 
     registry.assign<Renderable>(theGameButton, 0.f, 160);
-    registry.assign<Transform>(theGameButton, panel, logicalWidth / 4.f - theGameHandle->width() / 2.f, logicalHeight / 4.f - theGameHandle->height() / 2.f);
+    registry.assign<Transform>(theGameButton, panel, logicalWidth / 4.f - theGameHandle->width() / 2.f, 350.f + logicalHeight / 4.f - theGameHandle->height() / 2.f);
     registry.assign<Sprite>(theGameButton, theGameHandle, theGameHandle->width(), theGameHandle->height(), theGameHandle->width(), theGameHandle->height());
     registry.assign<UIButton>(theGameButton, UIAction::GAME_TUTORIAL);
 
@@ -202,7 +221,7 @@ void GameLoop::createMenuTopPanel() {
     auto trainingHandle = textureCache.handle("face/surprised");
 
     registry.assign<Renderable>(trainingButton, 0.f, 160);
-    registry.assign<Transform>(trainingButton, panel, 3.f * logicalWidth / 4.f - theGameHandle->width() / 2.f, logicalHeight / 4.f - theGameHandle->height() / 2.f);
+    registry.assign<Transform>(trainingButton, panel, 3.f * logicalWidth / 4.f - theGameHandle->width() / 2.f, 350.f + logicalHeight / 4.f - theGameHandle->height() / 2.f);
     registry.assign<Sprite>(trainingButton, trainingHandle, trainingHandle->width(), trainingHandle->height(), trainingHandle->width(), trainingHandle->height());
     registry.assign<UIButton>(trainingButton, UIAction::TRAINING_TUTORIAL);
 }
@@ -486,8 +505,8 @@ void GameLoop::init(GameRenderer &renderer) {
     loadResources(renderer);
 
     createSplashScreen();
-    createTopPatch();
-    createBottomPatch();
+    createBackgroundTopPanel();
+    createBackgroundBottomPanel();
     createMenuTopPanel();
     createMenuBottomPanel();
     createCameraFrame();

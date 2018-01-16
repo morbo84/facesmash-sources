@@ -38,8 +38,8 @@ class GameLoop final: public GameEnv {
     void loadResources(GameRenderer &);
 
     void createSplashScreen();
-    void createTopPatch();
-    void createBottomPatch();
+    void createBackgroundTopPanel();
+    void createBackgroundBottomPanel();
     void createMenuTopPanel();
     void createMenuBottomPanel();
     void createCameraFrame();
