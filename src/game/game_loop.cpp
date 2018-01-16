@@ -17,32 +17,31 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    ttfFontCache.load<TTFFontLoader>("ttf/roboto/condensed/small", "font/roboto-condensed.ttf", 48);
-    ttfFontCache.load<TTFFontLoader>("ttf/roboto/regular/large", "font/roboto.ttf", 108);
+    ttfFontCache.load<TTFFontLoader>("font/default/small", "font/roboto-condensed.ttf", 48);
+    ttfFontCache.load<TTFFontLoader>("font/default/large", "font/roboto.ttf", 108);
 
-    ttfFontCache.load<TTFFontLoader>("font/debug/tiny", "font/one_constant.ttf", 36);
     ttfFontCache.load<TTFFontLoader>("font/debug/small", "font/one_constant.ttf", 54);
     ttfFontCache.load<TTFFontLoader>("font/debug/normal", "font/one_constant.ttf", 72);
     ttfFontCache.load<TTFFontLoader>("font/debug/large", "font/one_constant.ttf", 90);
 
     const SDL_Color bannerColor{205_ui8, 205_ui8, 205_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("ttf/roboto/condensed/small"), bannerColor);
-    textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("ttf/roboto/regular/large"), bannerColor);
+    textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("font/default/small"), bannerColor);
+    textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("font/default/large"), bannerColor);
     textureCache.load<SDLTextureLoader>("logo/rainbow", "png/logo/rainbow.png", renderer, 748, 33);
 
     textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
 
-    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/angry.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/disgusted.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/fearful.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/happy.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/sad.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/surprised.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/emojitwo/angry.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/emojitwo/disgusted.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/emojitwo/fearful.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/emojitwo/happy.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/emojitwo/sad.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/emojitwo/surprised.png", renderer, 180, 180);
 
-    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/fire.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/hourglass.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/pill.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/emojitwo/fire.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/emojitwo/hourglass.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/emojitwo/pill.png", renderer, 180, 180);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
