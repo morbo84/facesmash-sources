@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <sstream>
 #include "../component/component.hpp"
+#include "../common/util.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../game/game_renderer.h"
@@ -10,23 +10,31 @@
 namespace gamee {
 
 
-void ScoreSystem::update(Registry &registry, GameRenderer &renderer) {
+void ScoreSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
-        auto entity = registry.attachee<PlayerScore>();
-        auto &score = registry.get<PlayerScore>();
+        auto &textureCache = Locator::TextureCache::ref();
+        auto &playerScore = registry.get<PlayerScore>();
+        auto symEmptyHandle = textureCache.handle("label/debug/small/ ");
 
-        if(score.current < score.score) {
-            score.current += std::max((score.score - score.current) / 2, 1);
-        } else if(score.current > score.score) {
-            score.current -= std::max((score.current - score.score) / 2, 1);
+        if(playerScore.current < playerScore.score) {
+            playerScore.current += std::max((playerScore.score - playerScore.current) / 2, 1);
+        } else if(playerScore.current > playerScore.score) {
+            playerScore.current -= std::max((playerScore.current - playerScore.score) / 2, 1);
         }
 
-        std::stringstream label;
-        label << score.current;
-        const SDL_Color fg = { 255, 255, 255, 255 };
-        auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
-        auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);
-        registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+        const int last = std::extent<decltype(PlayerScore::entities)>::value;
+        auto score = playerScore.current;
+        const int offset = numOfDigits(score);
+
+        for(auto i = offset; i < last; ++i) {
+            registry.accomodate<HUD>(playerScore.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+        }
+
+        for(auto i = offset; i > 0; --i) {
+            auto handle = toLabelDebugSmall(score % 10);
+            registry.accomodate<HUD>(playerScore.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+            score /= 10;
+        }
     }
 }
 

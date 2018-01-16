@@ -1,4 +1,4 @@
-#include <sstream>
+#include <type_traits>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include "../common/constants.h"
@@ -14,32 +14,26 @@ namespace gamee {
 
 
 #if DEBUG
-void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type delta) {
-    const SDL_Color fg = { 255, 255, 255, 255 };
-    auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
-
+void HudSystem::debug(Registry &registry, delta_type delta) {
     auto &timeDebug = registry.get<TimeDebug>();
-    auto timeEntity = registry.attachee<TimeDebug>();
 
     timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
+    int time = 10 * timeDebug.average;
 
-    std::stringstream time;
-    time.precision(3);
-    time << "TIME: " << timeDebug.average;
+    for(auto i = std::extent<decltype(TimeDebug::entities)>::value; i > 0u; --i) {
+        auto handle = toLabelDebugSmall(time % 10);
+        registry.accomodate<HUD>(timeDebug.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+        time /= 10;
+    }
 
-    auto timeHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(time.str().c_str(), renderer, font.get(), fg);
-    registry.accomodate<HUD>(timeEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
-    registry.accomodate<Transform>(timeEntity, timeEntity, 180.f, 0.f + logicalHeight - timeHandle->height());
+    const auto &fpsDebug = registry.get<FPSDebug>();
+    int fps = timeDebug.average ? (1000.f / timeDebug.average) : 0;
 
-    auto fpsEntity = registry.attachee<FPSDebug>();
-
-    std::stringstream fps;
-    fps.precision(2);
-    fps << "FPS: " << (1000.f / timeDebug.average);
-
-    auto fpsHandle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(fps.str().c_str(), renderer, font.get(), fg);
-    registry.accomodate<HUD>(fpsEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
-    registry.accomodate<Transform>(fpsEntity, fpsEntity, 0.f, 0.f + logicalHeight - fpsHandle->height());
+    for(auto i = std::extent<decltype(FPSDebug::entities)>::value; i > 0u; --i) {
+        auto handle = toLabelDebugSmall(fps % 10);
+        registry.accomodate<HUD>(fpsDebug.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+        fps /= 10;
+    }
 }
 #endif // DEBUG
 
@@ -86,7 +80,7 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
 void HudSystem::update(Registry &registry, GameRenderer &renderer, [[maybe_unused]] delta_type delta) {
 #if DEBUG
     // update debug information
-    debug(registry, renderer, delta);
+    debug(registry, delta);
 #endif // DEBUG
 
     // render out hud

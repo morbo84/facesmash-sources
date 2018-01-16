@@ -12,7 +12,7 @@ struct GameRenderer;
 
 
 struct ScoreSystem final {
-    void update(Registry &, GameRenderer &);
+    void update(Registry &);
 };
 
 

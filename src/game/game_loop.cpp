@@ -1,6 +1,7 @@
-#include <sstream>
+#include <type_traits>
 #include <SDL_pixels.h>
 #include "../common/constants.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -23,6 +24,42 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     ttfFontCache.load<TTFFontLoader>("font/debug/small", "font/one_constant.ttf", 54);
     ttfFontCache.load<TTFFontLoader>("font/debug/normal", "font/one_constant.ttf", 72);
     ttfFontCache.load<TTFFontLoader>("font/debug/large", "font/one_constant.ttf", 90);
+
+    const SDL_Color labelDefaultSmallColor{52_ui8, 61_ui8, 58_ui8, 255_ui8};
+
+    textureCache.load<TTFFontTextureLoader>("label/default/small/0", "0", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/1", "1", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/2", "2", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/3", "3", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/4", "4", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/5", "5", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/6", "6", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/7", "7", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/8", "8", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/9", "9", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/ ", " ", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/default/small/.", ".", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
+
+#if DEBUG
+    // const SDL_Color labelDebugSmallColor{241_ui8, 231_ui8, 222_ui8, 255_ui8};
+    const SDL_Color labelDebugSmallColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
+
+    textureCache.load<TTFFontTextureLoader>("hud/fps", "FPS", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("hud/time", "Time", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/0", "0", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/1", "1", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/2", "2", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/3", "3", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/4", "4", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/5", "5", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/6", "6", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/7", "7", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/8", "8", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/9", "9", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/ ", " ", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+    textureCache.load<TTFFontTextureLoader>("label/debug/small/.", ".", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
+#endif // DEBUG
 
     const SDL_Color bannerColor{205_ui8, 205_ui8, 205_ui8, 255_ui8};
 
@@ -65,8 +102,8 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
-    textureCache.load<TTFFontTextureLoader>("hud/time", "TIME:", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/timer", "TIME", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
 
 #ifdef CAMERA_FRAME_AVAILABLE
     auto &cameraService = Locator::Camera::ref();
@@ -356,46 +393,59 @@ void GameLoop::createTutorialBottomPanel() {
 }
 
 
-void GameLoop::createGameTopPanel(GameRenderer &renderer) {
+void GameLoop::createGameTopPanel() {
     auto &textureCache = Locator::TextureCache::ref();
-    auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
+    auto sym0Handle = toLabelDebugSmall(0);
+    auto symEmptyHandle = textureCache.handle("label/default/small/ ");
+    auto scoreHandle = textureCache.handle("hud/score");
+    auto timerHandle = textureCache.handle("hud/timer");
+
+    float offset = 0.f;
 
     auto panel = registry.create();
     registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
     registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::GAME_TOP_PANEL);
 
-    auto scoreLabel = registry.create();
-    auto scoreLabelHandle = textureCache.handle("hud/score");
-    registry.assign<Renderable>(scoreLabel, 0.f, 160);
-    registry.assign<HUD>(scoreLabel, scoreLabelHandle, scoreLabelHandle->width(), scoreLabelHandle->height(), scoreLabelHandle->width(), scoreLabelHandle->height());
-    registry.assign<Transform>(scoreLabel, panel, 32.f, 32.f);
+    auto playerScoreEntity = registry.create();
+    registry.assign<Renderable>(playerScoreEntity, 0.f, 160);
+    auto &playerScore = registry.attach<PlayerScore>(playerScoreEntity);
+    registry.accomodate<HUD>(playerScoreEntity, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
+    registry.accomodate<Transform>(playerScoreEntity, panel, offset + .2f * scoreHandle->width(), .2f * scoreHandle->height());
+    offset = registry.get<Transform>(playerScoreEntity).x + 1.2f * scoreHandle->width();
 
-    auto score = registry.create();
+    for(auto i = 0u; i < std::extent<decltype(PlayerScore::entities)>::value; ++i) {
+        auto entity = registry.create();
+        auto handle = i ? symEmptyHandle : sym0Handle;
+        playerScore.entities[i] = entity;
+        registry.assign<Renderable>(entity, 0.f, 160);
+        registry.assign<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+        registry.assign<Transform>(entity, panel, offset, .2f * scoreHandle->height());
+        offset += sym0Handle->width();
+    }
 
-    std::stringstream scoreStream;
-    scoreStream << (registry.attach<PlayerScore>(score).score);
-    auto scoreHandle = textureCache.temp<TTFFontTextureLoader>(scoreStream.str().c_str(), renderer, font.get(), SDL_Color{ 255, 255, 255, 255 });
-    registry.assign<Renderable>(score, 0.f, 160);
-    registry.assign<Transform>(score, panel, 32.f + scoreLabelHandle->width() + 16.f, 32.f);
-    registry.assign<HUD>(score, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
+    offset = logicalWidth - .2f * scoreHandle->width() - 2 * sym0Handle->width() - 1.4f * timerHandle->width();
 
-    auto timeLabel = registry.create();
-    auto timeLabelHandle = textureCache.handle("hud/time");
-    registry.assign<Renderable>(timeLabel, 0.f, 160);
-    registry.assign<HUD>(timeLabel, timeLabelHandle, timeLabelHandle->width(), timeLabelHandle->height(), timeLabelHandle->width(), timeLabelHandle->height());
-    registry.assign<Transform>(timeLabel, panel, logicalWidth - 2.f * timeLabelHandle->width(), 32.f);
+    auto gamerTimerEntity = registry.create();
+    registry.assign<Renderable>(gamerTimerEntity, 0.f, 160);
+    auto &gameTimer = registry.attach<GameTimer>(gamerTimerEntity);
+    registry.accomodate<HUD>(gamerTimerEntity, timerHandle, timerHandle->width(), timerHandle->height(), timerHandle->width(), timerHandle->height());
+    registry.accomodate<Transform>(gamerTimerEntity, panel, offset, .2f * scoreHandle->height());
+    offset = registry.get<Transform>(gamerTimerEntity).x + 1.2f * timerHandle->width();
 
-    auto time = registry.create();
-    std::stringstream timeStream;
-    timeStream << (registry.attach<GameTimer>(time).remaining / 1000);
-    auto timeHandle = textureCache.temp<TTFFontTextureLoader>(timeStream.str().c_str(), renderer, font.get(), SDL_Color{ 255, 255, 255, 255 });
-    registry.assign<Renderable>(time, 0.f, 160);
-    registry.assign<Transform>(time, panel, logicalWidth - timeLabelHandle->width() + 16.f, 32.f);
-    registry.assign<HUD>(time, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+    for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
+        auto entity = registry.create();
+        auto handle = i ? symEmptyHandle : sym0Handle;
+        gameTimer.entities[i] = entity;
+        registry.assign<Renderable>(entity, 0.f, 160);
+        registry.assign<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+        registry.assign<Transform>(entity, panel, offset, .2f * scoreHandle->height());
+        offset += sym0Handle->width();
+    }
 
     auto reward = registry.create();
+    auto perfetHandle = textureCache.handle("reward/perfect");
     registry.assign<Renderable>(reward, 0.f, 160);
-    registry.assign<Transform>(reward, reward, logicalWidth / 2.f, 152.f);
+    registry.assign<Transform>(reward, reward, logicalWidth / 2.f, logicalWidth / 6.f - 1.2f * perfetHandle->width());
     registry.attach<Reward>(reward);
 }
 
@@ -472,10 +522,9 @@ void GameLoop::createSmashButtons() {
     registry.assign<Transform>(panel, panel, logicalWidth + 96.f, logicalHeight / 2.f - 368.f);
     registry.assign<Panel>(panel, 96, 736, PanelType::SMASH_BUTTONS_PANEL);
 
-    auto addButton = [this, panel](FaceType type, TextureCache::resource_type face, int idx) {
-        auto &textureCache = Locator::TextureCache::ref();
+    auto addButton = [this, panel](FaceType type, int idx) {
         auto button = registry.create();
-        auto handle = textureCache.handle(face);
+        auto handle = toHandle(type);
 
         registry.assign<SmashButton>(button, type);
         registry.assign<Transform>(button, panel, 0.f, idx * (96.f + 32.f));
@@ -484,18 +533,74 @@ void GameLoop::createSmashButtons() {
         registry.assign<BoundingBox>(button, 96, 96);
     };
 
-    addButton(FaceType::ANGRY, "face/angry", 0);
-    addButton(FaceType::DISGUSTED, "face/disgusted", 1);
-    addButton(FaceType::HAPPY, "face/happy", 2);
-    addButton(FaceType::SURPRISED, "face/surprised", 3);
-    addButton(FaceType::FEARFUL, "face/fearful", 4);
-    addButton(FaceType::SAD, "face/sad", 5);
+    int pos = 0;
+
+    addButton(FaceType::ANGRY, pos++);
+    addButton(FaceType::DISGUSTED, pos++);
+    addButton(FaceType::HAPPY, pos++);
+    addButton(FaceType::SURPRISED, pos++);
+    addButton(FaceType::FEARFUL, pos++);
+    addButton(FaceType::SAD, pos++);
 }
 
 
 void GameLoop::createDebugStuff() {
-    registry.attach<TimeDebug>(registry.create(Renderable{0.f, 255}));
-    registry.attach<FPSDebug>(registry.create(Renderable{0.f, 255}));
+    auto &textureCache = Locator::TextureCache::ref();
+    auto sym0Handle = toLabelDebugSmall(0);
+    float offset = 0.f;
+
+    auto fpsDebugEntity = registry.create();
+    auto fpsHandle = textureCache.handle("hud/fps");
+    registry.assign<Renderable>(fpsDebugEntity, 0.f, 255);
+    auto &fpsDebug = registry.attach<FPSDebug>(fpsDebugEntity);
+    registry.accomodate<HUD>(fpsDebugEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
+    registry.accomodate<Transform>(fpsDebugEntity, fpsDebugEntity, offset + .2f * fpsHandle->width(), logicalHeight - 1.2f * fpsHandle->height());
+    offset = registry.get<Transform>(fpsDebugEntity).x + 1.2f * fpsHandle->width();
+
+    for(auto i = 0u; i < std::extent<decltype(FPSDebug::entities)>::value; ++i) {
+        auto entity = registry.create();
+        fpsDebug.entities[i] = entity;
+        registry.assign<Renderable>(entity, 0.f, 255);
+        registry.assign<HUD>(entity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
+        registry.assign<Transform>(entity, entity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+        offset += sym0Handle->width();
+    }
+
+    auto timeDebugEntity = registry.create();
+    auto timeHandle = textureCache.handle("hud/time");
+    registry.assign<Renderable>(timeDebugEntity, 0.f, 255);
+    auto &timeDebug = registry.attach<TimeDebug>(timeDebugEntity);
+    registry.accomodate<HUD>(timeDebugEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
+    registry.accomodate<Transform>(timeDebugEntity, timeDebugEntity, offset + .5f * timeHandle->width(), logicalHeight - .2f * fpsHandle->height() - timeHandle->height());
+    offset = registry.get<Transform>(timeDebugEntity).x + 1.2f * timeHandle->width();
+
+    auto timeDebugFirstEntity = registry.create();
+    timeDebug.entities[0] = timeDebugFirstEntity;
+    registry.assign<Renderable>(timeDebugFirstEntity, 0.f, 255);
+    registry.assign<HUD>(timeDebugFirstEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
+    registry.assign<Transform>(timeDebugFirstEntity, timeDebugFirstEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    auto timeDebugSecondEntity = registry.create();
+    timeDebug.entities[1] = timeDebugSecondEntity;
+    registry.assign<Renderable>(timeDebugSecondEntity, 0.f, 255);
+    registry.assign<HUD>(timeDebugSecondEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
+    registry.assign<Transform>(timeDebugSecondEntity, timeDebugSecondEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    auto timeDebugDotEntity = registry.create();
+    auto symDotHandle = textureCache.handle("label/debug/small/.");
+    registry.assign<Renderable>(timeDebugDotEntity, 0.f, 255);
+    registry.assign<HUD>(timeDebugDotEntity, symDotHandle, symDotHandle->width(), symDotHandle->height(), symDotHandle->width(), symDotHandle->height());
+    registry.assign<Transform>(timeDebugDotEntity, timeDebugDotEntity, offset, logicalHeight - .2f * fpsHandle->height() - symDotHandle->height());
+    offset += symDotHandle->width();
+
+    auto timeDebugThirdEntity = registry.create();
+    timeDebug.entities[2] = timeDebugThirdEntity;
+    registry.assign<Renderable>(timeDebugThirdEntity, 0.f, 255);
+    registry.assign<HUD>(timeDebugThirdEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
+    registry.assign<Transform>(timeDebugThirdEntity, timeDebugThirdEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
 }
 #endif // DEBUG
 
@@ -512,7 +617,7 @@ void GameLoop::init(GameRenderer &renderer) {
     createCreditsPanel();
     createTutorialTopPanel();
     createTutorialBottomPanel();
-    createGameTopPanel(renderer);
+    createGameTopPanel();
     createGameBottomPanel();
     createGameOverPanel();
     createTrainingTopPanel();
@@ -567,8 +672,8 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 
     // invoke systems at 20 fps
     while(accumulator20FPS >= msPerUpdate20FPS) {
-        scoreSystem.update(registry, renderer);
-        timerSystem.update(registry, renderer, msPerUpdate20FPS);
+        scoreSystem.update(registry);
+        timerSystem.update(registry, msPerUpdate20FPS);
         cameraSystem.update(registry, msPerUpdate20FPS);
         // consume a token
         accumulator20FPS -= msPerUpdate20FPS;

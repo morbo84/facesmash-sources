@@ -5,6 +5,7 @@
 #include <random>
 #include "../common/types.h"
 #include "../common/constants.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 
 
@@ -18,9 +19,6 @@ class Factory final {
     static constexpr float sideImpulseX = .5f;
     static constexpr float sideImpulseY = .4f;
     static constexpr float scoreDrift = -.06f;
-
-    SDLTextureHandle toHandle(FaceType);
-    SDLTextureHandle toHandle(ItemType);
 
     int toZ(FaceType);
     int toZ(ItemType);

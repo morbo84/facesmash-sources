@@ -12,7 +12,7 @@ struct GameRenderer;
 
 
 struct TimerSystem final {
-    void update(Registry &, GameRenderer &, delta_type);
+    void update(Registry &, delta_type);
 };
 
 

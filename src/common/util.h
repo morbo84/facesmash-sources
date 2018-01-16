@@ -10,7 +10,17 @@
 namespace gamee {
 
 
+int numOfDigits(int);
+
+
 SDL_Point transformToPosition(const Registry &, entity_type entity, const Transform &);
+SDLTextureHandle toHandle(FaceType);
+SDLTextureHandle toHandle(ItemType);
+SDLTextureHandle toLabelDefaultSmall(int);
+
+#ifdef DEBUG
+SDLTextureHandle toLabelDebugSmall(int);
+#endif // DEBUG
 
 
 }

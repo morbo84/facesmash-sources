@@ -1,6 +1,7 @@
-#include <sstream>
 #include <algorithm>
+#include <type_traits>
 #include <SDL_pixels.h>
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../game/game_renderer.h"
@@ -11,21 +12,29 @@
 namespace gamee {
 
 
-void TimerSystem::update(Registry &registry, GameRenderer &renderer, delta_type delta) {
+void TimerSystem::update(Registry &registry, delta_type delta) {
     if(registry.has<LetsPlay>()) {
-        auto entity = registry.attachee<GameTimer>();
-        auto &timer = registry.get<GameTimer>();
+        auto &textureCache = Locator::TextureCache::ref();
+        auto &gameTimer = registry.get<GameTimer>();
+        auto symEmptyHandle = textureCache.handle("label/debug/small/ ");
 
-        timer.remaining -= std::min(timer.remaining, delta);
+        gameTimer.remaining -= std::min(gameTimer.remaining, delta);
 
-        std::stringstream label;
-        label << (timer.remaining / 1000);
-        const SDL_Color fg = { 255, 255, 255, 255 };
-        auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
-        auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);
-        registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+        const int last = std::extent<decltype(GameTimer::entities)>::value;
+        auto remaining = gameTimer.remaining / 1000;
+        const int offset = numOfDigits(remaining);
 
-        if(0 == timer.remaining) {
+        for(auto i = offset; i < last; ++i) {
+            registry.accomodate<HUD>(gameTimer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+        }
+
+        for(auto i = offset; i > 0; --i) {
+            auto handle = toLabelDebugSmall(remaining % 10);
+            registry.accomodate<HUD>(gameTimer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+            remaining /= 10;
+        }
+
+        if(0 == gameTimer.remaining) {
             Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
         }
     }

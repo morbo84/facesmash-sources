@@ -46,7 +46,7 @@ class GameLoop final: public GameEnv {
     void createCreditsPanel();
     void createTutorialTopPanel();
     void createTutorialBottomPanel();
-    void createGameTopPanel(GameRenderer &);
+    void createGameTopPanel();
     void createGameBottomPanel();
     void createGameOverPanel();
     void createTrainingTopPanel();

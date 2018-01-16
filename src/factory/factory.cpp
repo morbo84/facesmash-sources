@@ -6,40 +6,6 @@
 namespace gamee {
 
 
-SDLTextureHandle Factory::toHandle(FaceType type) {
-    switch(type) {
-    case FaceType::ANGRY:
-        return Locator::TextureCache::ref().handle("face/angry");
-    case FaceType::DISGUSTED:
-        return Locator::TextureCache::ref().handle("face/disgusted");
-    case FaceType::FEARFUL:
-        return Locator::TextureCache::ref().handle("face/fearful");
-    case FaceType::HAPPY:
-        return Locator::TextureCache::ref().handle("face/happy");
-    case FaceType::SAD:
-        return Locator::TextureCache::ref().handle("face/sad");
-    case FaceType::SURPRISED:
-        return Locator::TextureCache::ref().handle("face/surprised");
-    default:
-        assert(false); // suppress warnings
-    }
-}
-
-
-SDLTextureHandle Factory::toHandle(ItemType type) {
-    switch(type) {
-    case ItemType::FOUNTAIN:
-        return Locator::TextureCache::ref().handle("item/fountain");
-    case ItemType::SLOW_DOWN:
-        return Locator::TextureCache::ref().handle("item/slow_down");
-    case ItemType::SPEED_UP:
-        return Locator::TextureCache::ref().handle("item/speed_up");
-    default:
-        assert(false); // suppress warnings
-    }
-}
-
-
 int Factory::toZ(FaceType type) {
     switch(type) {
     case FaceType::HAPPY:

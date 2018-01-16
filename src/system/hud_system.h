@@ -13,7 +13,7 @@ struct GameRenderer;
 
 class HudSystem final {
 #if DEBUG
-    void debug(Registry &, GameRenderer &, delta_type);
+    void debug(Registry &, delta_type);
 #endif // DEBUG
 
     void update(Registry &, GameRenderer &);

@@ -59,8 +59,22 @@ void SceneSystem::enableCameraFrame(Registry &registry) {
 
 
 void SceneSystem::resetGame(Registry &registry) {
-    registry.get<PlayerScore>() = {};
-    registry.get<GameTimer>() = {};
+    auto &playerScore = registry.get<PlayerScore>();
+    auto oldPlayerScore = playerScore;
+    playerScore = {};
+
+    for(auto i = 0u; i < std::extent<decltype(PlayerScore::entities)>::value; ++i) {
+        playerScore.entities[i] = oldPlayerScore.entities[i];
+    }
+
+    auto &gameTimer = registry.get<GameTimer>();
+    auto oldGameTimer = gameTimer;
+    gameTimer = {};
+
+    for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
+        gameTimer.entities[i] = oldGameTimer.entities[i];
+    }
+
     registry.attach<LetsPlay>(registry.create());
 }
 
