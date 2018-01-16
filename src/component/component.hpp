@@ -13,11 +13,14 @@ namespace gamee {
 
 
 struct TimeDebug final {
-    float average;
+    entity_type entities[3];
+    float average{0.f};
 };
 
 
-struct FPSDebug final {};
+struct FPSDebug final {
+    entity_type entities[2];
+};
 
 
 struct SmashButton final {
@@ -165,11 +168,13 @@ struct DestroyLater final {
 
 
 struct GameTimer final {
+    entity_type entities[2];
     delta_type remaining{60999_ui32};
 };
 
 
 struct PlayerScore final {
+    entity_type entities[5];
     int score{0};
     int current{0};
     int hitAngry{0};

@@ -24,7 +24,7 @@ void ScoreSystem::update(Registry &registry, GameRenderer &renderer) {
         std::stringstream label;
         label << score.current;
         const SDL_Color fg = { 255, 255, 255, 255 };
-        auto font = Locator::TTFFontCache::ref().handle("ttf/constant/54");
+        auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
         auto handle = Locator::TextureCache::ref().temp<TTFFontTextureLoader>(label.str().c_str(), renderer, font.get(), fg);
         registry.accomodate<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
     }

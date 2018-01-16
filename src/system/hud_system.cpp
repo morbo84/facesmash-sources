@@ -16,7 +16,7 @@ namespace gamee {
 #if DEBUG
 void HudSystem::debug(Registry &registry, GameRenderer &renderer, delta_type delta) {
     const SDL_Color fg = { 255, 255, 255, 255 };
-    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/36");
+    auto font = Locator::TTFFontCache::ref().handle("font/debug/tiny");
 
     auto &timeDebug = registry.get<TimeDebug>();
     auto timeEntity = registry.attachee<TimeDebug>();

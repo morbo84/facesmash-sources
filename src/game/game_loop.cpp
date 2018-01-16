@@ -17,18 +17,18 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    ttfFontCache.load<TTFFontLoader>("ttf/roboto/condensed/48", "font/roboto-condensed.ttf", 48);
-    ttfFontCache.load<TTFFontLoader>("ttf/roboto/regular/108", "font/roboto.ttf", 108);
+    ttfFontCache.load<TTFFontLoader>("ttf/roboto/condensed/small", "font/roboto-condensed.ttf", 48);
+    ttfFontCache.load<TTFFontLoader>("ttf/roboto/regular/large", "font/roboto.ttf", 108);
 
-    ttfFontCache.load<TTFFontLoader>("ttf/constant/36", "font/one_constant.ttf", 36);
-    ttfFontCache.load<TTFFontLoader>("ttf/constant/54", "font/one_constant.ttf", 54);
-    ttfFontCache.load<TTFFontLoader>("ttf/constant/72", "font/one_constant.ttf", 72);
-    ttfFontCache.load<TTFFontLoader>("ttf/constant/90", "font/one_constant.ttf", 90);
+    ttfFontCache.load<TTFFontLoader>("font/debug/tiny", "font/one_constant.ttf", 36);
+    ttfFontCache.load<TTFFontLoader>("font/debug/small", "font/one_constant.ttf", 54);
+    ttfFontCache.load<TTFFontLoader>("font/debug/normal", "font/one_constant.ttf", 72);
+    ttfFontCache.load<TTFFontLoader>("font/debug/large", "font/one_constant.ttf", 90);
 
     const SDL_Color bannerColor{205_ui8, 205_ui8, 205_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("ttf/roboto/condensed/48"), bannerColor);
-    textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("ttf/roboto/regular/108"), bannerColor);
+    textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("ttf/roboto/condensed/small"), bannerColor);
+    textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("ttf/roboto/regular/large"), bannerColor);
     textureCache.load<SDLTextureLoader>("logo/rainbow", "png/logo/rainbow.png", renderer, 748, 33);
 
     textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
@@ -47,27 +47,27 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("miss/10", "10", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
-    textureCache.load<TTFFontTextureLoader>("miss/20", "20", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
-    textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
-    textureCache.load<TTFFontTextureLoader>("miss/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), missColor);
-    textureCache.load<TTFFontTextureLoader>("smash/50", "50", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
-    textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
-    textureCache.load<TTFFontTextureLoader>("smash/200", "200", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
-    textureCache.load<TTFFontTextureLoader>("smash/250", "250", renderer, *ttfFontCache.handle("ttf/constant/72"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("miss/10", "10", renderer, *ttfFontCache.handle("font/debug/normal"), missColor);
+    textureCache.load<TTFFontTextureLoader>("miss/20", "20", renderer, *ttfFontCache.handle("font/debug/normal"), missColor);
+    textureCache.load<TTFFontTextureLoader>("miss/50", "50", renderer, *ttfFontCache.handle("font/debug/normal"), missColor);
+    textureCache.load<TTFFontTextureLoader>("miss/100", "100", renderer, *ttfFontCache.handle("font/debug/normal"), missColor);
+    textureCache.load<TTFFontTextureLoader>("smash/50", "50", renderer, *ttfFontCache.handle("font/debug/normal"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("smash/100", "100", renderer, *ttfFontCache.handle("font/debug/normal"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("smash/200", "200", renderer, *ttfFontCache.handle("font/debug/normal"), smashColor);
+    textureCache.load<TTFFontTextureLoader>("smash/250", "250", renderer, *ttfFontCache.handle("font/debug/normal"), smashColor);
 
     const SDL_Color comboColor{120_ui8, 230_ui8, 120_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("reward/perfect", "PERFECT", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("reward/x2", "2x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("reward/x3", "3x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("reward/x4", "4x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
-    textureCache.load<TTFFontTextureLoader>("reward/x5", "5x COMBO", renderer, *ttfFontCache.handle("ttf/constant/90"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/perfect", "PERFECT", renderer, *ttfFontCache.handle("font/debug/large"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x2", "2x COMBO", renderer, *ttfFontCache.handle("font/debug/large"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x3", "3x COMBO", renderer, *ttfFontCache.handle("font/debug/large"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x4", "4x COMBO", renderer, *ttfFontCache.handle("font/debug/large"), comboColor);
+    textureCache.load<TTFFontTextureLoader>("reward/x5", "5x COMBO", renderer, *ttfFontCache.handle("font/debug/large"), comboColor);
 
     const SDL_Color hudColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
-    textureCache.load<TTFFontTextureLoader>("hud/time", "TIME:", renderer, *ttfFontCache.handle("ttf/constant/54"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/score", "SCORE:", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
+    textureCache.load<TTFFontTextureLoader>("hud/time", "TIME:", renderer, *ttfFontCache.handle("font/debug/small"), hudColor);
 
 #ifdef CAMERA_FRAME_AVAILABLE
     auto &cameraService = Locator::Camera::ref();
@@ -81,8 +81,8 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     const SDL_Color tutorialColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
-    textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
-    textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("ttf/constant/90"), tutorialColor);
+    textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("font/debug/large"), tutorialColor);
+    textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("font/debug/large"), tutorialColor);
 
     textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer, 1080, 320);
     textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer, 1080, 320);
@@ -359,7 +359,7 @@ void GameLoop::createTutorialBottomPanel() {
 
 void GameLoop::createGameTopPanel(GameRenderer &renderer) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto font = Locator::TTFFontCache::ref().handle("ttf/constant/54");
+    auto font = Locator::TTFFontCache::ref().handle("font/debug/small");
 
     auto panel = registry.create();
     registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
@@ -495,7 +495,7 @@ void GameLoop::createSmashButtons() {
 
 
 void GameLoop::createDebugStuff() {
-    registry.attach<TimeDebug>(registry.create(Renderable{0.f, 255}), 0.f);
+    registry.attach<TimeDebug>(registry.create(Renderable{0.f, 255}));
     registry.attach<FPSDebug>(registry.create(Renderable{0.f, 255}));
 }
 #endif // DEBUG
