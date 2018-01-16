@@ -9,7 +9,11 @@ namespace gamee {
 
 
 struct AvMuxerNull : AvMuxerService {
+    void start(int width, int height) override;
+    void frame(void*) override;
+    void stop() override;
     bool isRecording() const noexcept override;
+    std::string filePath() const noexcept override;
 };
 
 
