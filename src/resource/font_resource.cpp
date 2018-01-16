@@ -43,11 +43,6 @@ std::shared_ptr<SDLTextureResource> TTFFontTextureLoader::load(const char *text,
 
         if(texture) {
             ret = std::make_shared<SDLTextureResource>(texture);
-
-            int w, h;
-            TTF_SizeText(font, text, &w, &h);
-            ret->width(w);
-            ret->height(h);
         }
     }
 

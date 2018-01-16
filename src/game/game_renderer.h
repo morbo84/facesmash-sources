@@ -19,6 +19,9 @@ struct GameRenderer final {
     void present() noexcept;
     void clear() noexcept;
 
+    void target(SDL_Texture *) noexcept;
+    void reset() noexcept;
+
     explicit operator bool() const noexcept;
     operator SDL_Renderer * () const noexcept;
 

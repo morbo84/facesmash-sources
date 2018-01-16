@@ -41,8 +41,7 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("label/default/small/.", ".", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
 
 #if DEBUG
-    // const SDL_Color labelDebugSmallColor{241_ui8, 231_ui8, 222_ui8, 255_ui8};
-    const SDL_Color labelDebugSmallColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
+    const SDL_Color labelDebugSmallColor{241_ui8, 231_ui8, 222_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("hud/fps", "FPS", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
     textureCache.load<TTFFontTextureLoader>("hud/time", "Time", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
@@ -65,20 +64,20 @@ void GameLoop::loadResources(GameRenderer &renderer) {
 
     textureCache.load<TTFFontTextureLoader>("logo/division", "Cynny Game Division", renderer, *ttfFontCache.handle("font/default/small"), bannerColor);
     textureCache.load<TTFFontTextureLoader>("logo/gamee", "GAMEE", renderer, *ttfFontCache.handle("font/default/large"), bannerColor);
-    textureCache.load<SDLTextureLoader>("logo/rainbow", "png/logo/rainbow.png", renderer, 748, 33);
+    textureCache.load<SDLTextureLoader>("logo/rainbow", "png/logo/rainbow.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer, 960, 768);
+    textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/emojitwo/angry.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/emojitwo/disgusted.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/emojitwo/fearful.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/emojitwo/happy.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/emojitwo/sad.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/emojitwo/surprised.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/emojitwo/angry.png", renderer);
+    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/emojitwo/disgusted.png", renderer);
+    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/emojitwo/fearful.png", renderer);
+    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/emojitwo/happy.png", renderer);
+    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/emojitwo/sad.png", renderer);
+    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/emojitwo/surprised.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/emojitwo/fire.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/emojitwo/hourglass.png", renderer, 180, 180);
-    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/emojitwo/pill.png", renderer, 180, 180);
+    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/emojitwo/fire.png", renderer);
+    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/emojitwo/hourglass.png", renderer);
+    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/emojitwo/pill.png", renderer);
 
     const SDL_Color missColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
     const SDL_Color smashColor{0_ui8, 204_ui8, 0_ui8, 255_ui8};
@@ -110,27 +109,28 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
 #endif // CAMERA_FRAME_AVAILABLE
 
-    textureCache.load<SDLTextureLoader>("button/empty", "png/gui/button.png", renderer, 160, 160);
-    textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer, 160, 160);
-    textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer, 160, 160);
-    textureCache.load<SDLTextureLoader>("button/credits", "png/gui/info.png", renderer, 160, 160);
+    textureCache.load<SDLTextureLoader>("button/empty", "png/gui/button.png", renderer);
+    textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer);
+    textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer);
+    textureCache.load<SDLTextureLoader>("button/credits", "png/gui/info.png", renderer);
 
     const SDL_Color tutorialColor{255_ui8, 255_ui8, 255_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("font/debug/large"), tutorialColor);
     textureCache.load<TTFFontTextureLoader>("tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("font/debug/large"), tutorialColor);
 
-    textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer, 1080, 320);
-    textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer, 1080, 320);
-    textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/ontheroad/bg_bottom.png", renderer, 1080, 320);
+    textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer);
+    textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer);
+    textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/ontheroad/bg_bottom.png", renderer);
+    textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/ontheroad/separator.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer, 720, 870);
-    textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer, 720, 870);
-    textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer, 900, 360);
+    textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer);
+    textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer);
+    textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("button/reload", "png/gui/reload.png", renderer, 160, 160);
-    textureCache.load<SDLTextureLoader>("button/share", "png/gui/share.png", renderer, 160, 160);
-    textureCache.load<SDLTextureLoader>("button/menu", "png/gui/menu.png", renderer, 160, 160);
+    textureCache.load<SDLTextureLoader>("button/reload", "png/gui/reload.png", renderer);
+    textureCache.load<SDLTextureLoader>("button/share", "png/gui/share.png", renderer);
+    textureCache.load<SDLTextureLoader>("button/menu", "png/gui/menu.png", renderer);
 }
 
 

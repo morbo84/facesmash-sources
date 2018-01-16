@@ -7,7 +7,7 @@ namespace gamee {
 
 
 SDLTextureResource::SDLTextureResource(SDL_Texture *texture) noexcept
-    : texture{texture}, w{0u}, h{0u}
+    : texture{texture}
 {}
 
 
@@ -22,26 +22,20 @@ SDLTextureResource::operator SDL_Texture *() const noexcept {
 
 
 int SDLTextureResource::width() const noexcept {
-    return w;
+    int width;
+    SDL_QueryTexture(texture, nullptr, nullptr, &width, nullptr);
+    return width;
 }
 
 
 int SDLTextureResource::height() const noexcept {
-    return h;
+    int height;
+    SDL_QueryTexture(texture, nullptr, nullptr, nullptr, &height);
+    return height;
 }
 
 
-void SDLTextureResource::width(int value) noexcept {
-    w = value;
-}
-
-
-void SDLTextureResource::height(int value) noexcept {
-    h = value;
-}
-
-
-std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_Renderer *renderer, int w, int h) const {
+std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_Renderer *renderer) const {
     std::shared_ptr<SDLTextureResource> ret;
     SDL_Surface *surface = IMG_Load(res);
 
@@ -51,8 +45,6 @@ std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_
 
         if(texture) {
             ret = std::make_shared<SDLTextureResource>(texture);
-            ret->width(w);
-            ret->height(h);
         }
     }
 
@@ -66,8 +58,6 @@ std::shared_ptr<SDLTextureResource> SDLStreamingTextureLoader::load(SDL_Renderer
 
     if(texture) {
         ret = std::make_shared<SDLTextureResource>(texture);
-        ret->width(w);
-        ret->height(h);
     }
 
     return ret;

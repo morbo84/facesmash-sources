@@ -47,6 +47,16 @@ void GameRenderer::clear() noexcept {
 }
 
 
+void GameRenderer::target(SDL_Texture *texture) noexcept {
+    SDL_SetRenderTarget(renderer, texture);
+}
+
+
+void GameRenderer::reset() noexcept {
+    SDL_SetRenderTarget(renderer, nullptr);
+}
+
+
 GameRenderer::operator bool() const noexcept {
     return (window && renderer);
 }

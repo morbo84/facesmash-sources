@@ -25,8 +25,8 @@ struct TTFFontResource final {
 
     ~TTFFontResource() noexcept;
 
-    TTFFontResource& operator=(const TTFFontResource &) = delete;
-    TTFFontResource& operator=(TTFFontResource &&) = delete;
+    TTFFontResource & operator=(const TTFFontResource &) = delete;
+    TTFFontResource & operator=(TTFFontResource &&) = delete;
 
     operator TTF_Font *() const noexcept;
 
