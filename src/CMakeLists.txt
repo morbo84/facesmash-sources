@@ -15,6 +15,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/ads_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/audio_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/audio_sdl.cpp
+    ${facesmash_SOURCE_DIR}/src/service/av_muxer_android.cpp
+    ${facesmash_SOURCE_DIR}/src/service/av_muxer_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
