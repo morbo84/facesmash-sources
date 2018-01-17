@@ -7,6 +7,7 @@
 #include "../input/input_handler.h"
 #include "../service/ads_service.h"
 #include "../service/audio_service.h"
+#include "../service/av_muxer_service.h"
 #include "../service/camera_service.h"
 #include "../service/face_bus_service.h"
 
@@ -25,6 +26,7 @@ struct Locator final {
     using Camera = entt::ServiceLocator<gamee::CameraService>;
     using Audio = entt::ServiceLocator<gamee::AudioService>;
     using FaceBus = entt::ServiceLocator<gamee::FaceBusService>;
+    using AvMuxer = entt::ServiceLocator<gamee::AvMuxerService>;
 };
 
 

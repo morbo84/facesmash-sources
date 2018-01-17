@@ -2,21 +2,20 @@
 #define FACE_SMASH_SERVICE_MUXER_ANDROID_H
 
 
-#include "av_muxer_service.h"
+#include <mutex>
 #include <thread>
 #include <condition_variable>
-#include <mutex>
+#include "av_muxer_service.h"
 
 
 namespace gamee {
 
 
-struct AvMuxerAndroid : AvMuxerService {
-    void start(int width, int height) override;
-    void frame(void*) override;
+struct AvMuxerAndroid: AvMuxerService {
+    void start(int, int) override;
+    void frame(std::unique_ptr<FrameTexture>) override;
     void stop() override;
-    bool isRecording() const noexcept override;
-    std::string filePath() const noexcept override;
+    bool recording() const noexcept override;
 
 private:
     std::thread t_;

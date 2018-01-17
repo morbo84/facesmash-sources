@@ -19,12 +19,6 @@ GameRenderer::GameRenderer()
     int init = SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
 
     if(0 == init) {
-        UInt32 format = SDL_GetWindowPixelFormat(window);
-
-        if(format == SDL_PIXELFORMAT_UNKNOWN) {
-            format = SDL_PIXELFORMAT_RGBA8888;
-        }
-
         SDL_RenderSetLogicalSize(renderer, logicalWidth, logicalHeight);
     }
 }

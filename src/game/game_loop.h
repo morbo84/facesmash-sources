@@ -62,6 +62,7 @@ class GameLoop final: public GameEnv {
 
     void close() override;
 
+    void tick(GameRenderer &, delta_type);
     void update(GameRenderer &, delta_type) override;
 
 private:

@@ -1,10 +1,13 @@
+#include <memory>
 #include <type_traits>
 #include <SDL_pixels.h>
+#include <SDL_render.h>
 #include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
+#include "../resource/frame_resource.h"
 #include "game_renderer.h"
 #include "game_loop.h"
 
@@ -41,7 +44,7 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("label/default/small/.", ".", renderer, *ttfFontCache.handle("font/default/small"), labelDefaultSmallColor);
 
 #if DEBUG
-    const SDL_Color labelDebugSmallColor{241_ui8, 231_ui8, 222_ui8, 255_ui8};
+    const SDL_Color labelDebugSmallColor{255_ui8, 0_ui8, 0_ui8, 255_ui8};
 
     textureCache.load<TTFFontTextureLoader>("hud/fps", "FPS", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
     textureCache.load<TTFFontTextureLoader>("hud/time", "Time", renderer, *ttfFontCache.handle("font/debug/small"), labelDebugSmallColor);
@@ -122,7 +125,6 @@ void GameLoop::loadResources(GameRenderer &renderer) {
     textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/ontheroad/bg_top.png", renderer);
     textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/ontheroad/bg_middle.png", renderer);
     textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/ontheroad/bg_bottom.png", renderer);
-    textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/ontheroad/separator.png", renderer);
 
     textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer);
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer);
@@ -641,7 +643,7 @@ void GameLoop::close() {
 }
 
 
-void GameLoop::update(GameRenderer &renderer, delta_type delta) {
+void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
     renderer.clear();
 
     // sum what remains from the previous step
@@ -685,7 +687,24 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);
 
-    renderer.present();
+    renderer.present();}
+
+
+void GameLoop::update(GameRenderer &renderer, delta_type delta) {
+    auto &avMuxer = Locator::AvMuxer::ref();
+
+    if(avMuxer.recording()) {
+        auto frame = std::make_unique<FrameTexture>(static_cast<SDL_Renderer *>(renderer), logicalWidth, logicalHeight);
+
+        renderer.target(*frame);
+        tick(renderer, delta);
+        renderer.reset();
+
+        SDL_RenderCopy(renderer, *frame, nullptr, nullptr);
+        avMuxer.frame(std::move(frame));
+    } else {
+        tick(renderer, delta);
+    }
 }
 
 

@@ -1,3 +1,4 @@
+#include <SDL_render.h>
 #include "av_muxer_android.h"
 
 
@@ -9,8 +10,11 @@ void AvMuxerAndroid::start(int width, int height) {
 }
 
 
-void AvMuxerAndroid::frame(void*) {
+void AvMuxerAndroid::frame(std::unique_ptr<FrameTexture> frame) {
+    SDL_Texture *texture = *frame;
+
     // TODO
+    (void)texture;
 }
 
 
@@ -19,13 +23,8 @@ void AvMuxerAndroid::stop() {
 }
 
 
-bool AvMuxerAndroid::isRecording() const noexcept {
+bool AvMuxerAndroid::recording() const noexcept {
     return true; // TODO
-}
-
-
-std::string AvMuxerAndroid::filePath() const noexcept {
-    return {}; // TODO
 }
 
 

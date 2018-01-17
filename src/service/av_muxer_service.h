@@ -2,7 +2,8 @@
 #define FACE_SMASH_SERVICE_AV_MUXER_SERVICE_H
 
 
-#include <string>
+#include <memory>
+#include "../resource/frame_resource.h"
 
 
 namespace gamee {
@@ -11,11 +12,10 @@ namespace gamee {
 struct AvMuxerService {
     virtual ~AvMuxerService() = default;
 
-    virtual void start(int width, int height) = 0;
-    virtual void frame(void*) = 0;
+    virtual void start(int, int) = 0;
+    virtual void frame(std::unique_ptr<FrameTexture>) = 0;
     virtual void stop() = 0;
-    virtual bool isRecording() const noexcept = 0;
-    virtual std::string filePath() const noexcept = 0;
+    virtual bool recording() const noexcept = 0;
 };
 
 

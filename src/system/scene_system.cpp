@@ -428,6 +428,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 void SceneSystem::update(Registry &registry, delta_type delta) {
     if(curr != next) {
         auto &dispatcher = Locator::Dispatcher::ref();
+        auto &avMuxer = Locator::AvMuxer::ref();
         auto &camera = Locator::Camera::ref();
         auto &ads = Locator::Ads::ref();
 
@@ -455,6 +456,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     resetGame(registry);
                     break;
                 case SceneType::GAME_OVER:
+                    avMuxer.stop();
                     disableCameraFrame(registry);
                     ads.isLoaded(AdsType::INTERSTITIAL)
                             ? (ads.show(AdsType::INTERSTITIAL), enableUIControls(registry))
@@ -491,6 +493,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 camera.start();
+                avMuxer.start(logicalWidth, logicalHeight);
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
