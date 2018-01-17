@@ -1,12 +1,12 @@
 #include "../component/component.hpp"
-#include "../factory/factory.h"
+#include "../factory/play_factory.h"
 #include "the_game_system.h"
 
 
 namespace gamee {
 
 
-void TheGameSystem::update(Registry &registry, Factory &factory) {
+void TheGameSystem::update(Registry &registry, PlayFactory &factory) {
     if(registry.has<LetsPlay>()) {
         const auto &remaining = registry.get<GameTimer>().remaining;
         auto &play = registry.get<LetsPlay>();

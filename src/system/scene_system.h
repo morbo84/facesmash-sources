@@ -21,7 +21,8 @@ class SceneSystem final {
     void resetGame(Registry &);
     void resetTraining(Registry &);
 
-    delta_type menuPageTransition(Registry &, delta_type);
+    delta_type splashScreenTransition(Registry &);
+    delta_type menuPageTransition(Registry &);
     delta_type creditsTransition(Registry &);
     delta_type gameTutorialTransition(Registry &);
     delta_type theGameTransition(Registry &);

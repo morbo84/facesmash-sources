@@ -17,7 +17,8 @@ void SceneSystem::discardSplashScreen(Registry &registry) {
         if(panel.type == PanelType::SPLASH_SCREEN) {
             registry.view<Transform>().each([parent, &registry](auto child, const auto &transform) {
                 if(child != parent && transform.parent == parent) {
-                    registry.destroy(child);
+                    registry.assign<DestroyLater>(child, 1000_ui32);
+                    registry.get<Transform>(child).parent = child;
                 }
             });
 
@@ -84,8 +85,44 @@ void SceneSystem::resetTraining(Registry &registry) {
 }
 
 
-delta_type SceneSystem::menuPageTransition(Registry &registry, delta_type duration) {
-    registry.view<Panel, Transform>().each([&registry, duration](auto entity, const auto &panel, const auto &transform) {
+delta_type SceneSystem::splashScreenTransition(Registry &registry) {
+    static constexpr delta_type duration = 3000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::BACKGROUND_TOP_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), - 4 * panel.h / 5, duration / 3, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::BACKGROUND_BOTTOM_PANEL:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::MENU_TOP_PANEL:
+        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::CREDITS_PANEL:
+        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::GAME_TOP_PANEL:
+        case PanelType::TRAINING_TOP_PANEL:
+        case PanelType::GAME_BOTTOM_PANEL:
+        case PanelType::GAME_OVER_PANEL:
+        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::SMASH_BUTTONS_PANEL:
+            // they are already out of scene
+            break;
+        case PanelType::SPLASH_SCREEN:
+            registry.accomodate<Transform>(entity, entity, 0.f, 0.f);
+            break;
+        }
+    });
+
+    return duration;
+}
+
+
+delta_type SceneSystem::menuPageTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
@@ -439,6 +476,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 switch(next) {
                 case SceneType::SPLASH_SCREEN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    discardSplashScreen(registry);
                     ads.show(AdsType::BANNER);
                     break;
                 case SceneType::CREDITS_PAGE:
@@ -481,15 +519,13 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
 
             switch(next) {
             case SceneType::SPLASH_SCREEN:
-                remaining = 3000_ui32;
+                remaining = splashScreenTransition(registry);
                 break;
             case SceneType::CREDITS_PAGE:
                 remaining = creditsTransition(registry);
                 break;
             case SceneType::MENU_PAGE:
-                remaining = (curr == SceneType::SPLASH_SCREEN)
-                        ? (discardSplashScreen(registry), menuPageTransition(registry, 0_ui32))
-                        : menuPageTransition(registry, 1000_ui32);
+                remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
                 camera.start();

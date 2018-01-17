@@ -14,7 +14,7 @@ void ScoreSystem::update(Registry &registry) {
     if(registry.has<LetsPlay>()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto &playerScore = registry.get<PlayerScore>();
-        auto symEmptyHandle = textureCache.handle("label/debug/small/ ");
+        auto symEmptyHandle = textureCache.handle("str/hud/ ");
 
         if(playerScore.current < playerScore.score) {
             playerScore.current += std::max((playerScore.score - playerScore.current) / 2, 1);
@@ -31,7 +31,7 @@ void ScoreSystem::update(Registry &registry) {
         }
 
         for(auto i = offset; i > 0; --i) {
-            auto handle = toLabelDebugSmall(score % 10);
+            auto handle = toStrHud(score % 10);
             registry.accomodate<HUD>(playerScore.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
             score /= 10;
         }

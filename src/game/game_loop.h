@@ -4,7 +4,7 @@
 
 #include <memory>
 #include "../common/types.h"
-#include "../factory/factory.h"
+#include "../factory/play_factory.h"
 #include "../system/animation_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
@@ -35,29 +35,6 @@ class GameLoop final: public GameEnv {
     static constexpr delta_type msPerUpdate50FPS = 20;
     static constexpr delta_type msPerUpdate20FPS = 50;
 
-    void loadResources(GameRenderer &);
-
-    void createSplashScreen();
-    void createBackgroundTopPanel();
-    void createBackgroundBottomPanel();
-    void createMenuTopPanel();
-    void createMenuBottomPanel();
-    void createCameraFrame();
-    void createCreditsPanel();
-    void createTutorialTopPanel();
-    void createTutorialBottomPanel();
-    void createGameTopPanel();
-    void createGameBottomPanel();
-    void createGameOverPanel();
-    void createTrainingTopPanel();
-    void createTrainingBottomPanel();
-    void createCamera();
-
-#ifdef DEBUG
-    void createSmashButtons();
-    void createDebugStuff();
-#endif // DEBUG
-
     void init(GameRenderer &) override;
 
     void close() override;
@@ -72,7 +49,7 @@ private:
     // entity-component system
     Registry registry;
     // factory of game objects
-    Factory factory;
+    PlayFactory factory;
     // systems
     AnimationSystem animationSystem;
     RewardSystem rewardSystem;

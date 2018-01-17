@@ -3,12 +3,14 @@ set(
     ${facesmash_SOURCE_DIR}/src/common/bag.cpp
     ${facesmash_SOURCE_DIR}/src/common/ease.cpp
     ${facesmash_SOURCE_DIR}/src/common/util.cpp
-    ${facesmash_SOURCE_DIR}/src/factory/factory.cpp
+    ${facesmash_SOURCE_DIR}/src/factory/game_factory.cpp
+    ${facesmash_SOURCE_DIR}/src/factory/play_factory.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_env.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp
     ${facesmash_SOURCE_DIR}/src/emotion/emo_detector.cpp
     ${facesmash_SOURCE_DIR}/src/input/user_input_handler.cpp
+    ${facesmash_SOURCE_DIR}/src/resource/assets.cpp
     ${facesmash_SOURCE_DIR}/src/resource/font_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/frame_resource.cpp
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp

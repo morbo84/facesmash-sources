@@ -9,11 +9,11 @@
 namespace gamee {
 
 
-class Factory;
+class PlayFactory;
 
 
 struct TheGameSystem final {
-    void update(Registry &, Factory &);
+    void update(Registry &, PlayFactory &);
 
 private:
     FaceBag faceBag;

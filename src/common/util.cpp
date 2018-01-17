@@ -69,28 +69,28 @@ SDLTextureHandle toHandle(ItemType type) {
 }
 
 
-SDLTextureHandle toLabelDefaultSmall(int value) {
+SDLTextureHandle toStrHud(int value) {
     switch (value) {
     case 0:
-        return Locator::TextureCache::ref().handle("label/default/small/0");
+        return Locator::TextureCache::ref().handle("str/hud/0");
     case 1:
-        return Locator::TextureCache::ref().handle("label/default/small/1");
+        return Locator::TextureCache::ref().handle("str/hud/1");
     case 2:
-        return Locator::TextureCache::ref().handle("label/default/small/2");
+        return Locator::TextureCache::ref().handle("str/hud/2");
     case 3:
-        return Locator::TextureCache::ref().handle("label/default/small/3");
+        return Locator::TextureCache::ref().handle("str/hud/3");
     case 4:
-        return Locator::TextureCache::ref().handle("label/default/small/4");
+        return Locator::TextureCache::ref().handle("str/hud/4");
     case 5:
-        return Locator::TextureCache::ref().handle("label/default/small/5");
+        return Locator::TextureCache::ref().handle("str/hud/5");
     case 6:
-        return Locator::TextureCache::ref().handle("label/default/small/6");
+        return Locator::TextureCache::ref().handle("str/hud/6");
     case 7:
-        return Locator::TextureCache::ref().handle("label/default/small/7");
+        return Locator::TextureCache::ref().handle("str/hud/7");
     case 8:
-        return Locator::TextureCache::ref().handle("label/default/small/8");
+        return Locator::TextureCache::ref().handle("str/hud/8");
     case 9:
-        return Locator::TextureCache::ref().handle("label/default/small/9");
+        return Locator::TextureCache::ref().handle("str/hud/9");
     default:
         assert(false); // suppress warnings
     }
@@ -98,28 +98,28 @@ SDLTextureHandle toLabelDefaultSmall(int value) {
 
 
 #ifdef DEBUG
-SDLTextureHandle toLabelDebugSmall(int value) {
+SDLTextureHandle toStrDebug(int value) {
     switch (value) {
     case 0:
-        return Locator::TextureCache::ref().handle("label/debug/small/0");
+        return Locator::TextureCache::ref().handle("str/debug/0");
     case 1:
-        return Locator::TextureCache::ref().handle("label/debug/small/1");
+        return Locator::TextureCache::ref().handle("str/debug/1");
     case 2:
-        return Locator::TextureCache::ref().handle("label/debug/small/2");
+        return Locator::TextureCache::ref().handle("str/debug/2");
     case 3:
-        return Locator::TextureCache::ref().handle("label/debug/small/3");
+        return Locator::TextureCache::ref().handle("str/debug/3");
     case 4:
-        return Locator::TextureCache::ref().handle("label/debug/small/4");
+        return Locator::TextureCache::ref().handle("str/debug/4");
     case 5:
-        return Locator::TextureCache::ref().handle("label/debug/small/5");
+        return Locator::TextureCache::ref().handle("str/debug/5");
     case 6:
-        return Locator::TextureCache::ref().handle("label/debug/small/6");
+        return Locator::TextureCache::ref().handle("str/debug/6");
     case 7:
-        return Locator::TextureCache::ref().handle("label/debug/small/7");
+        return Locator::TextureCache::ref().handle("str/debug/7");
     case 8:
-        return Locator::TextureCache::ref().handle("label/debug/small/8");
+        return Locator::TextureCache::ref().handle("str/debug/8");
     case 9:
-        return Locator::TextureCache::ref().handle("label/debug/small/9");
+        return Locator::TextureCache::ref().handle("str/debug/9");
     default:
         assert(false); // suppress warnings
     }

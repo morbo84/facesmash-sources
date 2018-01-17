@@ -16,10 +16,10 @@ int numOfDigits(int);
 SDL_Point transformToPosition(const Registry &, entity_type entity, const Transform &);
 SDLTextureHandle toHandle(FaceType);
 SDLTextureHandle toHandle(ItemType);
-SDLTextureHandle toLabelDefaultSmall(int);
+SDLTextureHandle toStrHud(int);
 
 #ifdef DEBUG
-SDLTextureHandle toLabelDebugSmall(int);
+SDLTextureHandle toStrDebug(int);
 #endif // DEBUG
 
 

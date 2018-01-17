@@ -1,7 +1,7 @@
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
-#include "../factory/factory.h"
+#include "../factory/play_factory.h"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
 #include "item_system.h"
@@ -17,7 +17,7 @@ void ItemSystem::movement(Registry &registry, float mod) {
 }
 
 
-void ItemSystem::fountain(Registry &registry, Factory &factory) {
+void ItemSystem::fountain(Registry &registry, PlayFactory &factory) {
     const auto face = faceBag.get();
 
     while(registry.size<Face>() < 5) {
@@ -56,7 +56,7 @@ void ItemSystem::receive(const TouchEvent &event) noexcept {
 }
 
 
-void ItemSystem::update(Registry &registry, Factory &factory, delta_type delta) {
+void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type delta) {
     const SDL_Rect screen = logicalScreen;
 
     auto view = registry.view<Item, Transform, BoundingBox>();

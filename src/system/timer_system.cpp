@@ -16,7 +16,7 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
     if(registry.has<LetsPlay>()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto &gameTimer = registry.get<GameTimer>();
-        auto symEmptyHandle = textureCache.handle("label/debug/small/ ");
+        auto symEmptyHandle = textureCache.handle("str/hud/ ");
 
         gameTimer.remaining -= std::min(gameTimer.remaining, delta);
 
@@ -29,7 +29,7 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
         }
 
         for(auto i = offset; i > 0; --i) {
-            auto handle = toLabelDebugSmall(remaining % 10);
+            auto handle = toStrHud(remaining % 10);
             registry.accomodate<HUD>(gameTimer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
             remaining /= 10;
         }

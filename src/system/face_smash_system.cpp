@@ -2,7 +2,7 @@
 #include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
-#include "../factory/factory.h"
+#include "../factory/play_factory.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
@@ -31,7 +31,7 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 }
 
 
-void FaceSmashSystem::update(Registry &registry, Factory &factory) {
+void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
     auto &score = registry.get<PlayerScore>();
     auto &textureCache = Locator::TextureCache::ref();
     const SDL_Rect screen = logicalScreen;
@@ -100,19 +100,19 @@ void FaceSmashSystem::update(Registry &registry, Factory &factory) {
 
     if(1 == combo && registry.empty<Face>()) {
         // no more faces to smash
-        gotIt(textureCache.handle("reward/perfect"), total);
+        gotIt(textureCache.handle("str/reward/perfect"), total);
     } else if(2 == combo) {
         // 2x combo
-        gotIt(textureCache.handle("reward/x2"), 2 * total);
+        gotIt(textureCache.handle("str/reward/x2"), 2 * total);
     } else if(3 == combo) {
         // 3x combo
-        gotIt(textureCache.handle("reward/x3"), 3 * total);
+        gotIt(textureCache.handle("str/reward/x3"), 3 * total);
     } else if(4 == combo) {
         // 4x combo
-        gotIt(textureCache.handle("reward/x4"), 4 * total);
+        gotIt(textureCache.handle("str/reward/x4"), 4 * total);
     } else if(5 < combo) {
         // 5x combo
-        gotIt(textureCache.handle("reward/x5"), 5 * total);
+        gotIt(textureCache.handle("str/reward/x5"), 5 * total);
     }
 }
 

@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_FACTORY_FACTORY_H
-#define FACE_SMASH_FACTORY_FACTORY_H
+#ifndef FACE_SMASH_FACTORY_PLAY_FACTORY_H
+#define FACE_SMASH_FACTORY_PLAY_FACTORY_H
 
 
 #include <random>
@@ -12,7 +12,7 @@
 namespace gamee {
 
 
-class Factory final {
+class PlayFactory final {
     static constexpr float gravity = .0005f;
     static constexpr float bottomImpulseX = .12f;
     static constexpr float bottomImpulseY = 1.4f;
@@ -94,7 +94,7 @@ class Factory final {
     }
 
 public:
-    Factory();
+    PlayFactory();
 
     void spawnFaceBottom(Registry &, UInt8, UInt8, FaceType);
     void spawnFaceTop(Registry &, UInt8, UInt8, FaceType);
@@ -118,4 +118,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_FACTORY_FACTORY_H
+#endif // FACE_SMASH_FACTORY_PLAY_FACTORY_H
