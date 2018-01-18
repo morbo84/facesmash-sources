@@ -154,8 +154,8 @@ void createCreditsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, -720.f, logicalHeight / 2.f - 475.f);
-    registry.assign<Panel>(panel, 720, 950, PanelType::CREDITS_PANEL);
+    registry.assign<Transform>(panel, panel, 1.f * logicalWidth, 0.f);
+    registry.assign<Panel>(panel, logicalWidth, logicalHeight, PanelType::CREDITS_PANEL);
 
     auto window = registry.create();
     auto windowHandle = textureCache.handle("gui/window");
@@ -317,8 +317,8 @@ void createGameOverPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, logicalWidth / 2.f - 450.f, 1.f * logicalHeight);
-    registry.assign<Panel>(panel, 900, 1130, PanelType::GAME_OVER_PANEL);
+    registry.assign<Transform>(panel, panel, 1.f * logicalWidth, 0.f);
+    registry.assign<Panel>(panel, logicalWidth, logicalHeight, PanelType::GAME_OVER_PANEL);
 
     auto ribbon = registry.create();
     auto ribbonHandle = textureCache.handle("gui/ribbon");
