@@ -23,6 +23,11 @@ struct EnvEvent final {
 };
 
 
+struct DebugEvent final {
+    delta_type delta;
+};
+
+
 struct KeyboardEvent final {
     enum class Type: UInt8 {
         ESCAPE,

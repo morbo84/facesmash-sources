@@ -122,6 +122,7 @@ void loadDebugFont(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/debug/8", "8", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/debug/9", "9", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/debug/.", ".", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/debug//", "/", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
 }
 
 

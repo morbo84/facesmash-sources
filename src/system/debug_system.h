@@ -8,8 +8,19 @@
 namespace gamee {
 
 
+struct DebugEvent;
+
+
 struct DebugSystem final {
+    DebugSystem();
+    ~DebugSystem();
+
+    void receive(const DebugEvent &) noexcept;
+
     void update(Registry &, delta_type);
+
+private:
+    delta_type last;
 };
 
 

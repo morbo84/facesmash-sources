@@ -196,6 +196,12 @@ int GameEnv::exec() noexcept {
 
             // sleep for a while to save the users' battery
             current = clock.ticks();
+
+#if DEBUG
+            // notify about remaining time
+            Locator::Dispatcher::ref().trigger<DebugEvent>(current - previous);
+#endif // DEBUG
+
             if(previous + msPerFrame > current) {
                 clock.delay(previous + msPerFrame - current);
             }

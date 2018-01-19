@@ -382,6 +382,26 @@ void createDebugHUD(Registry &registry) {
     timeDebug.entities[2] = createHUD(registry, sym0Handle, 255);
     setPos(registry, timeDebug.entities[2], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
+
+    auto timeDebugSlashEntity = createHUD(registry, textureCache.handle("str/debug//"), 255);
+    setPos(registry, timeDebugSlashEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    timeDebug.entities[3] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[3], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    timeDebug.entities[4] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[4], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    auto spentDebugDotEntity = createHUD(registry, textureCache.handle("str/debug/."), 255);
+    setPos(registry, spentDebugDotEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
+    timeDebug.entities[5] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[5], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
 }
 
 
