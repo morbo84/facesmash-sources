@@ -6,7 +6,6 @@
 #include "../factory/game_factory.h"
 #include "../locator/locator.hpp"
 #include "../resource/assets.h"
-#include "../resource/frame_resource.h"
 #include "game_renderer.h"
 #include "game_loop.h"
 
@@ -116,14 +115,22 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     auto &avMuxer = Locator::AvMuxer::ref();
 
     if(avMuxer.recording()) {
-        auto frame = std::make_unique<FrameTexture>(static_cast<SDL_Renderer *>(renderer), logicalWidth, logicalHeight);
+        constexpr auto format = SDL_PIXELFORMAT_RGBA32;
+        constexpr auto size = logicalWidth * logicalHeight * SDL_BYTESPERPIXEL(format);
+        constexpr auto pitch = logicalWidth * SDL_BYTESPERPIXEL(format);
 
-        renderer.target(*frame);
+        auto texture = SDL_CreateTexture(renderer, format, SDL_TEXTUREACCESS_TARGET, logicalWidth, logicalHeight);
+
+        renderer.target(texture);
         tick(renderer, delta);
-        renderer.reset();
 
-        SDL_RenderCopy(renderer, *frame, nullptr, nullptr);
+        std::unique_ptr<unsigned char[]> frame{new unsigned char[size]};
+        SDL_RenderReadPixels(renderer, nullptr, format, frame.get(), pitch);
         avMuxer.frame(std::move(frame), delta);
+
+        renderer.reset();
+        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+        SDL_DestroyTexture(texture);
     } else {
         tick(renderer, delta);
     }
