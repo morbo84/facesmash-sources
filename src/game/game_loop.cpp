@@ -106,6 +106,8 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
 
     renderer.present();
 
+    // update the scene for the next tick (if required)
+    // this way recording starts correctly from frame 0
     sceneSystem.update(registry, delta);
 }
 
