@@ -5,6 +5,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/common/util.cpp
     ${facesmash_SOURCE_DIR}/src/factory/game_factory.cpp
     ${facesmash_SOURCE_DIR}/src/factory/play_factory.cpp
+    ${facesmash_SOURCE_DIR}/src/factory/ui_factory.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_env.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_loop.cpp
     ${facesmash_SOURCE_DIR}/src/game/game_renderer.cpp

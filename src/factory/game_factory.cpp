@@ -3,6 +3,7 @@
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
+#include "ui_factory.h"
 #include "game_factory.h"
 
 
@@ -10,16 +11,14 @@ namespace gamee {
 
 
 void createSplashScreen(Registry &registry) {
-    auto panel = registry.create();
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight, PanelType::SPLASH_SCREEN);
-    registry.assign<Transform>(panel, panel, -1.f * logicalWidth, 0.f);
+    auto &textureCache = Locator::TextureCache::ref();
 
-    auto gamee = Locator::TextureCache::ref().handle("str/gamee");
-    auto company = registry.create();
-    registry.assign<Renderable>(company, 0.f, 20);
-    registry.assign<Sprite>(company, gamee, gamee->width(), gamee->height(), gamee->width(), gamee->height());
-    registry.assign<Transform>(company, panel, logicalWidth / 2.f - gamee->width() / 2.f, logicalHeight / 2.f - gamee->height() / 2.f);
-    registry.assign<FadeAnimation>(company, 0, 255, 2000_ui32);
+    auto panel = createPanel(registry, PanelType::SPLASH_SCREEN, -1.f * logicalWidth, 0.f, logicalWidth, logicalHeight);
+
+    auto gameeHandle = textureCache.handle("str/gamee");
+    auto gamee = createSprite(registry, panel, gameeHandle, 20);
+    setPos(registry, gamee, logicalWidth / 2.f - gameeHandle->width() / 2.f, logicalHeight / 2.f - gameeHandle->height() / 2.f);
+    registry.assign<FadeAnimation>(gamee, 0, 255, 2000_ui32);
 }
 
 
@@ -27,22 +26,16 @@ void createBackgroundTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     auto topHandle = textureCache.handle("palette/bg_top");
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, -1.f * (logicalHeight - topHandle->height()));
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight - topHandle->height(), PanelType::BACKGROUND_TOP_PANEL);
+    auto panel = createPanel(registry, PanelType::BACKGROUND_TOP_PANEL, 0.f, -1.f * (logicalHeight - topHandle->height()), logicalWidth, logicalHeight - topHandle->height());
 
     for(auto idx = 0, cnt = (logicalHeight / topHandle->height()) - 2; idx < cnt; ++idx) {
-        auto top = registry.create();
-        registry.assign<Renderable>(top);
-        registry.assign<Sprite>(top, topHandle, topHandle->width(), topHandle->height(), topHandle->width(), topHandle->height());
-        registry.assign<Transform>(top, panel, 0.f, 1.f * topHandle->height() * idx);
+        auto top = createSprite(registry, panel, topHandle, 127);
+        setPos(registry, top, 0.f, 1.f * topHandle->height() * idx);
     }
 
-    auto middle = registry.create();
     auto middleHandle = textureCache.handle("palette/bg_middle");
-    registry.assign<Renderable>(middle);
-    registry.assign<Sprite>(middle, middleHandle, middleHandle->width(), middleHandle->height(), middleHandle->width(), middleHandle->height());
-    registry.assign<Transform>(middle, panel, 0.f, 1.f * logicalHeight - 2 * middleHandle->height());
+    auto middle = createSprite(registry, panel, middleHandle, 127);
+    setPos(registry, middle, 0.f, 1.f * logicalHeight - 2 * middleHandle->height());
 }
 
 
@@ -50,26 +43,16 @@ void createBackgroundBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     auto bottomHandle = textureCache.handle("palette/bg_bottom");
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
-    registry.assign<Panel>(panel, logicalWidth, bottomHandle->height(), PanelType::BACKGROUND_BOTTOM_PANEL);
+    auto panel = createPanel(registry, PanelType::BACKGROUND_BOTTOM_PANEL, 0.f, 1.f * logicalHeight, logicalWidth, bottomHandle->height());
 
-    auto bottom = registry.create();
-    registry.assign<Renderable>(bottom);
-    registry.assign<Sprite>(bottom, bottomHandle, bottomHandle->width(), bottomHandle->height(), bottomHandle->width(), bottomHandle->height());
-    registry.assign<Transform>(bottom, panel, 0.f, 0.f);
+    createSprite(registry, panel, bottomHandle, 127);
 }
 
 
 void createMenuTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto &audioService = Locator::Audio::ref();
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::MENU_TOP_PANEL);
-
-    // textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/mario/separator.png", renderer);
+    auto panel = createPanel(registry, PanelType::MENU_TOP_PANEL, 0.f, -logicalHeight / 2.f, logicalWidth, 5 * logicalHeight / 6);
 
     SDLTextureHandle facesmashHandle[9] = {
         textureCache.handle("str/facesmash/red/F"),
@@ -86,115 +69,88 @@ void createMenuTopPanel(Registry &registry) {
     auto x = logicalWidth / 2.f - 2.f * facesmashHandle[0]->width();
 
     for(auto i = 0; i < 4; ++i) {
-        auto entity = registry.create();
-        auto handle = facesmashHandle[i];
-        registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.assign<Renderable>(entity, 0.f, 150);
-        registry.assign<Transform>(entity, panel, x, .2f * handle->height());
-        x += handle->width();
+        auto entity = createSprite(registry, panel, facesmashHandle[i], 150);
+        setPos(registry, entity, x, .2f * facesmashHandle[i]->height());
+        x += facesmashHandle[i]->width();
     }
 
     x = logicalWidth / 2.f - 2.5f * facesmashHandle[0]->width();
 
     for(auto i = 4; i < 9; ++i) {
-        auto entity = registry.create();
-        auto handle = facesmashHandle[i];
-        registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.assign<Renderable>(entity, 0.f, 150);
-        registry.assign<Transform>(entity, panel, x, 1.4f * handle->height());
-        x += handle->width();
+        auto entity = createSprite(registry, panel, facesmashHandle[i], 150);
+        setPos(registry, entity, x, 1.4f * facesmashHandle[i]->height());
+        x += facesmashHandle[i]->width();
     }
 
-    auto separator = registry.create();
-    auto separatorHandle = textureCache.handle("palette/separator");
-    registry.assign<Sprite>(separator, separatorHandle, separatorHandle->width(), separatorHandle->height(), separatorHandle->width(), separatorHandle->height());
-    registry.assign<Renderable>(separator, 0.f, 150);
-    registry.assign<Transform>(separator, panel, logicalWidth /2.f - separatorHandle->width() / 2.f, 2.6f * facesmashHandle[0]->height());
+    auto theGameButtonHandle = textureCache.handle("face/happy");
+    auto theGameButton = createUIButton(registry, panel, theGameButtonHandle, UIAction::GAME_TUTORIAL, 160);
+    setPos(registry, theGameButton, logicalWidth / 4.f - theGameButtonHandle->width() / 2.f, 350.f + logicalHeight / 4.f - theGameButtonHandle->height() / 2.f);
 
-    auto audioButton = registry.create();
-    auto audioButtonHandle = audioService.isMute() ? textureCache.handle("button/mute") : textureCache.handle("button/sound");
-    registry.assign<Sprite>(audioButton, audioButtonHandle, audioButtonHandle->width(), audioButtonHandle->height(), audioButtonHandle->width(), audioButtonHandle->height());
-    registry.assign<Renderable>(audioButton, 0.f, 150);
-    registry.assign<Transform>(audioButton, panel, logicalWidth - 3.f * audioButtonHandle->width() / 2.f, 350.f + audioButtonHandle->height() / 2.f);
-    registry.assign<UIButton>(audioButton, UIAction::SWITCH_AUDIO);
-
-    auto creditsButton = registry.create();
-    auto creditsButtonHandle = textureCache.handle("button/credits");
-    registry.assign<Sprite>(creditsButton, creditsButtonHandle, creditsButtonHandle->width(), creditsButtonHandle->height(), creditsButtonHandle->width(), creditsButtonHandle->height());
-    registry.assign<Renderable>(creditsButton, 0.f, 150);
-    registry.assign<Transform>(creditsButton, panel, creditsButtonHandle->width() / 2.f, 350.f + creditsButtonHandle->height() / 2.f);
-    registry.assign<UIButton>(creditsButton, UIAction::CREDITS);
-
-    auto theGameButton = registry.create();
-    auto theGameHandle = textureCache.handle("face/happy");
-
-    registry.assign<Renderable>(theGameButton, 0.f, 160);
-    registry.assign<Transform>(theGameButton, panel, logicalWidth / 4.f - theGameHandle->width() / 2.f, 350.f + logicalHeight / 4.f - theGameHandle->height() / 2.f);
-    registry.assign<Sprite>(theGameButton, theGameHandle, theGameHandle->width(), theGameHandle->height(), theGameHandle->width(), theGameHandle->height());
-    registry.assign<UIButton>(theGameButton, UIAction::GAME_TUTORIAL);
-
-    auto trainingButton = registry.create();
-    auto trainingHandle = textureCache.handle("face/surprised");
-
-    registry.assign<Renderable>(trainingButton, 0.f, 160);
-    registry.assign<Transform>(trainingButton, panel, 3.f * logicalWidth / 4.f - theGameHandle->width() / 2.f, 350.f + logicalHeight / 4.f - theGameHandle->height() / 2.f);
-    registry.assign<Sprite>(trainingButton, trainingHandle, trainingHandle->width(), trainingHandle->height(), trainingHandle->width(), trainingHandle->height());
-    registry.assign<UIButton>(trainingButton, UIAction::TRAINING_TUTORIAL);
+    auto trainingButtonHandle = textureCache.handle("face/surprised");
+    auto trainingButton = createUIButton(registry, panel, trainingButtonHandle, UIAction::TRAINING_TUTORIAL, 160);
+    setPos(registry, trainingButton, 3.f * logicalWidth / 4.f - trainingButtonHandle->width() / 2.f, 350.f + logicalHeight / 4.f - trainingButtonHandle->height() / 2.f);
 }
 
 
 void createMenuBottomPanel(Registry &registry) {
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::MENU_BOTTOM_PANEL);
+    constexpr auto buttonSize = 192;
+
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto panel = createPanel(registry, PanelType::MENU_BOTTOM_PANEL, 0.f, 1.f * logicalHeight, logicalWidth, logicalHeight / 6);
+
+    auto creditsButtonHandle = textureCache.handle("bt/empty");
+    auto creditsButton = createUIButton(registry, panel, creditsButtonHandle, UIAction::CREDITS, 150);
+    setPos(registry, creditsButton, 1.f * logicalWidth / 5.f, logicalHeight / 6.f - creditsButtonHandle->height() / 2.f);
+    setSpriteSize(registry, creditsButton, buttonSize, buttonSize);
+
+    auto exitButtonHandle = textureCache.handle("bt/empty");
+    auto exitButton = createUIButton(registry, panel, exitButtonHandle, UIAction::EXIT, 150);
+    setPos(registry, exitButton, 2.f * logicalWidth / 5.f, logicalHeight / 6.f - exitButtonHandle->height() / 2.f);
+    setSpriteSize(registry, exitButton, buttonSize, buttonSize);
+
+    auto audioButtonHandle = textureCache.handle("bt/empty");
+    auto audioButton = createUIButton(registry, panel, audioButtonHandle, UIAction::SWITCH_AUDIO, 150);
+    setPos(registry, audioButton, 3.f * logicalWidth / 5.f, logicalHeight / 6.f - audioButtonHandle->height() / 2.f);
+    setSpriteSize(registry, audioButton, buttonSize, buttonSize);
 }
 
 
 void createCreditsPanel(Registry &registry) {
+    constexpr auto buttonSize = 192;
+
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 1.f * logicalWidth, 0.f);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight, PanelType::CREDITS_PANEL);
+    auto panel = createPanel(registry, PanelType::CREDITS_PANEL, 1.f * logicalWidth, 0.f, logicalWidth, logicalHeight);
 
-    auto window = registry.create();
     auto windowHandle = textureCache.handle("gui/window");
-    registry.assign<Renderable>(window, 0.f, 210);
-    registry.assign<Sprite>(window, windowHandle, windowHandle->width(), windowHandle->height(), windowHandle->width(), windowHandle->height());
-    registry.assign<Transform>(window, panel, 0.f, 0.f);
+    createSprite(registry, panel, windowHandle, 210);
 
-    auto menu = registry.create();
-    auto menuHandle = textureCache.handle("button/menu");
-    registry.assign<Renderable>(menu, 0.f, 220);
-    registry.assign<Sprite>(menu, menuHandle, menuHandle->width(), menuHandle->height(), menuHandle->width(), menuHandle->height());
-    registry.assign<Transform>(menu, panel, windowHandle->width() / 2.f - menuHandle->width() / 2.f, windowHandle->height() - 2.f * menuHandle->height() / 3.f);
-    registry.assign<UIButton>(menu, UIAction::MENU);
+    auto menuHandle = textureCache.handle("bt/empty");
+    auto menu = createUIButton(registry, panel, menuHandle, UIAction::MENU, 220);
+    setPos(registry, menu, windowHandle->width() / 2.f - menuHandle->width() / 2.f, windowHandle->height() - 2.f * menuHandle->height() / 3.f);
+    setSpriteSize(registry, menu, buttonSize, buttonSize);
 }
 
 
 void createTutorialTopPanel(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-    auto refHandle = textureCache.handle("button/empty");
+    constexpr auto buttonSize = 144;
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::TUTORIAL_TOP_PANEL);
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto panel = createPanel(registry, PanelType::TUTORIAL_TOP_PANEL, 0.f, -logicalHeight / 2.f, logicalWidth, logicalHeight / 2);
 
     auto addButton = [panel, &textureCache, &registry](TextureCache::resource_type face, int idx) {
-        auto button = registry.create();
-        auto buttonHandle = textureCache.handle("button/empty");
-        const auto buttonOffset = (logicalWidth - (numberOfFaces * buttonHandle->width() + (numberOfFaces - 1) * 10)) / 2;
+        auto buttonHandle = textureCache.handle("bt/empty");
+        auto button = createSprite(registry, panel, buttonHandle, 150);
+        const auto buttonOffset = (logicalWidth - (numberOfFaces * buttonSize + (numberOfFaces - 1) * 10)) / 2;
+        setPos(registry, button, buttonOffset + idx * (buttonSize + 10.f), logicalHeight / 2.f - 3.f * buttonSize / 2.f);
+        setSpriteSize(registry, button, buttonSize, buttonSize);
 
-        registry.assign<Renderable>(button, 0.f, 150, 180);
-        registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
-        registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), logicalHeight / 2.f - 3.f * buttonHandle->height() / 2.f);
-
-        auto emoji = registry.create();
         auto emojiHandle = textureCache.handle(face);
-
-        registry.assign<Renderable>(emoji, 0.f, 160);
-        registry.assign<Sprite>(emoji, emojiHandle, emojiHandle->width(), emojiHandle->height(), 3 * buttonHandle->width() / 5, 3 * buttonHandle->height() / 5);
-        registry.assign<Transform>(emoji, button, buttonHandle->width() / 5.f, buttonHandle->height() / 5.f);
+        auto emoji = createSprite(registry, button, emojiHandle, 160);
+        setSpriteSize(registry, emoji, 3 * buttonSize / 5, 3 * buttonSize / 5);
+        setPos(registry, emoji, buttonSize / 5.f, buttonSize / 5.f);
     };
 
     addButton("face/angry", 0);
@@ -204,48 +160,39 @@ void createTutorialTopPanel(Registry &registry) {
     addButton("face/fearful", 4);
     addButton("face/sad", 5);
 
-    auto entity = registry.create();
-    auto handle = textureCache.handle("str/tutorial/face");
-    registry.assign<Renderable>(entity, 0.f, 150);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(entity, panel, logicalWidth / 2.f - handle->width() / 2.f, logicalHeight / 2.f - 3.f * refHandle->height() / 2.f - handle->height() - 10.f);
+    auto tutorialHandle = textureCache.handle("str/tutorial/face");
+    auto tutorial = createSprite(registry, panel, tutorialHandle, 150);
+    setPos(registry, tutorial, logicalWidth / 2.f - tutorialHandle->width() / 2.f, logicalHeight / 2.f - 1.8f * buttonSize - tutorialHandle->height());
 }
 
 
 void createTutorialBottomPanel(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-    auto refHandle = textureCache.handle("button/empty");
+    constexpr auto buttonSize = 144;
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::TUTORIAL_BOTTOM_PANEL);
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto panel = createPanel(registry, PanelType::TUTORIAL_BOTTOM_PANEL, 0.f, 1.f * logicalHeight, logicalWidth, logicalHeight / 2);
 
     auto addButton = [panel, &textureCache, &registry](TextureCache::resource_type face, int idx) {
-        auto button = registry.create();
-        auto buttonHandle = textureCache.handle("button/empty");
-        const auto buttonOffset = (logicalWidth - (numberOfItems * buttonHandle->width() + (numberOfItems - 1) * 10)) / 2;
+        auto buttonHandle = textureCache.handle("bt/empty");
+        auto button = createSprite(registry, panel, buttonHandle, 150);
+        const auto buttonOffset = (logicalWidth - (numberOfItems * buttonSize + (numberOfItems - 1) * 10)) / 2;
+        setPos(registry, button, buttonOffset + idx * (buttonSize + 10.f), buttonSize / 2.f);
+        setSpriteSize(registry, button, buttonSize, buttonSize);
 
-        registry.assign<Renderable>(button, 0.f, 150, 180);
-        registry.assign<Sprite>(button, buttonHandle, buttonHandle->width(), buttonHandle->height(), buttonHandle->width(), buttonHandle->height());
-        registry.assign<Transform>(button, panel, buttonOffset + idx * (buttonHandle->width() + 10.f), buttonHandle->height() / 2.f);
-
-        auto emoji = registry.create();
         auto emojiHandle = textureCache.handle(face);
-
-        registry.assign<Renderable>(emoji, 0.f, 160);
-        registry.assign<Sprite>(emoji, emojiHandle, emojiHandle->width(), emojiHandle->height(), 3 * buttonHandle->width() / 5, 3 * buttonHandle->height() / 5);
-        registry.assign<Transform>(emoji, button, buttonHandle->width() / 5.f, buttonHandle->height() / 5.f);
+        auto emoji = createSprite(registry, button, emojiHandle, 160);
+        setSpriteSize(registry, emoji, 3 * buttonSize / 5, 3 * buttonSize / 5);
+        setPos(registry, emoji, buttonSize / 5.f, buttonSize / 5.f);
     };
 
     addButton("item/speed_up", 0);
     addButton("item/slow_down", 1);
     addButton("item/fountain", 2);
 
-    auto entity = registry.create();
-    auto handle = textureCache.handle("str/tutorial/touch");
-    registry.assign<Renderable>(entity, 0.f, 150);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(entity, panel, logicalWidth / 2.f - handle->width() / 2.f, 3.f * refHandle->height() / 2.f + 10.f);
+    auto tutorialHandle = textureCache.handle("str/tutorial/touch");
+    auto tutorial = createSprite(registry, panel, tutorialHandle, 150);
+    setPos(registry, tutorial, logicalWidth / 2.f - tutorialHandle->width() / 2.f, 1.8f * buttonSize);
 }
 
 
@@ -258,100 +205,78 @@ void createGameTopPanel(Registry &registry) {
 
     float offset = 0.f;
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, -logicalHeight / 2.f);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::GAME_TOP_PANEL);
+    auto panel = createPanel(registry, PanelType::GAME_TOP_PANEL, 0.f, -logicalHeight / 2.f, logicalWidth, logicalHeight / 6);
 
-    auto playerScoreEntity = registry.create();
-    registry.assign<Renderable>(playerScoreEntity, 0.f, 160);
+    auto playerScoreEntity = createHUD(registry, panel, scoreHandle, 160);
     auto &playerScore = registry.attach<PlayerScore>(playerScoreEntity);
-    registry.accomodate<HUD>(playerScoreEntity, scoreHandle, scoreHandle->width(), scoreHandle->height(), scoreHandle->width(), scoreHandle->height());
-    registry.accomodate<Transform>(playerScoreEntity, panel, offset + .2f * scoreHandle->width(), .4f * scoreHandle->height());
+    setPos(registry, playerScoreEntity, offset + .2f * scoreHandle->width(), .4f * scoreHandle->height());;
     offset = registry.get<Transform>(playerScoreEntity).x + 1.2f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(PlayerScore::entities)>::value; ++i) {
-        auto entity = registry.create();
         auto handle = i ? symEmptyHandle : sym0Handle;
-        playerScore.entities[i] = entity;
-        registry.assign<Renderable>(entity, 0.f, 160);
-        registry.assign<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.assign<Transform>(entity, panel, offset, .4f * scoreHandle->height());
+        playerScore.entities[i] = createHUD(registry, panel, handle, 160);
+        setPos(registry, playerScore.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
 
     offset = logicalWidth - .4f * scoreHandle->width() - 2 * sym0Handle->width() - 1.f * timerHandle->width();
 
-    auto gamerTimerEntity = registry.create();
-    registry.assign<Renderable>(gamerTimerEntity, 0.f, 160);
-    auto &gameTimer = registry.attach<GameTimer>(gamerTimerEntity);
-    registry.accomodate<HUD>(gamerTimerEntity, timerHandle, timerHandle->width(), timerHandle->height(), timerHandle->width(), timerHandle->height());
-    registry.accomodate<Transform>(gamerTimerEntity, panel, offset, .4f * scoreHandle->height());
-    offset = registry.get<Transform>(gamerTimerEntity).x + timerHandle->width() + .2f * scoreHandle->width();
+    auto gameTimerEntity = createHUD(registry, panel, timerHandle, 160);
+    auto &gameTimer = registry.attach<GameTimer>(gameTimerEntity);
+    setPos(registry, gameTimerEntity, offset, .4f * scoreHandle->height());;
+    offset = registry.get<Transform>(gameTimerEntity).x + timerHandle->width() + .2f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
-        auto entity = registry.create();
         auto handle = i ? symEmptyHandle : sym0Handle;
-        gameTimer.entities[i] = entity;
-        registry.assign<Renderable>(entity, 0.f, 160);
-        registry.assign<HUD>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.assign<Transform>(entity, panel, offset, .4f * scoreHandle->height());
+        gameTimer.entities[i] = createHUD(registry, panel, handle, 160);
+        setPos(registry, gameTimer.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
 
-    auto reward = registry.create();
-    auto perfectHandle = textureCache.handle("str/reward/perfect");
-    registry.assign<Renderable>(reward, 0.f, 160);
-    registry.assign<Transform>(reward, reward, logicalWidth / 2.f, logicalHeight / 6.f - 1.4f * perfectHandle->height());
+    auto rewardHandle = textureCache.handle("str/reward/perfect");
+    auto reward = createHUD(registry, panel, rewardHandle, 160);
+    setPos(registry, reward, logicalWidth / 2.f - rewardHandle->width() / 2.f, logicalHeight / 6.f - 1.4f * rewardHandle->height());
+    registry.get<Renderable>(reward).alpha = 0;
     registry.attach<Reward>(reward);
 }
 
 
 void createGameBottomPanel(Registry &registry) {
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 0.f, 1.f * logicalHeight);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight / 2, PanelType::GAME_BOTTOM_PANEL);
+    auto panel = createPanel(registry, PanelType::GAME_BOTTOM_PANEL, 0.f, 1.f * logicalHeight, logicalWidth, logicalHeight / 6);
+    // TODO
+    (void)panel;
 }
 
 
 void createGameOverPanel(Registry &registry) {
+    constexpr auto buttonSize = 192;
+
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, 1.f * logicalWidth, 0.f);
-    registry.assign<Panel>(panel, logicalWidth, logicalHeight, PanelType::GAME_OVER_PANEL);
+    auto panel = createPanel(registry, PanelType::GAME_OVER_PANEL, 1.f * logicalWidth, 0.f, logicalWidth, logicalHeight);
 
-    auto ribbon = registry.create();
     auto ribbonHandle = textureCache.handle("gui/ribbon");
-    registry.assign<Renderable>(ribbon, 0.f, 220);
-    registry.assign<Sprite>(ribbon, ribbonHandle, ribbonHandle->width(), ribbonHandle->height(), ribbonHandle->width(), ribbonHandle->height());
-    registry.assign<Transform>(ribbon, panel, 0.f, 0.f);
+    createSprite(registry, panel, ribbonHandle, 220);
 
-    auto popup = registry.create();
     auto popupHandle = textureCache.handle("gui/popup");
-    registry.assign<Renderable>(popup, 0.f, 210);
-    registry.assign<Sprite>(popup, popupHandle, popupHandle->width(), popupHandle->height(), popupHandle->width(), popupHandle->height());
-    const auto &popupTransform = registry.assign<Transform>(popup, panel, ribbonHandle->width() / 2.f - popupHandle->width() / 2.f, ribbonHandle->height() / 2.f);
+    auto popup = createSprite(registry, panel, popupHandle, 210);
+    setPos(registry, popup, ribbonHandle->width() / 2.f - popupHandle->width() / 2.f, ribbonHandle->height() / 2.f);
+    const auto &popupTransform = registry.get<Transform>(popup);
 
-    auto menu = registry.create();
-    auto menuHandle = textureCache.handle("button/menu");
-    registry.assign<Renderable>(menu, 0.f, 220);
-    registry.assign<Sprite>(menu, menuHandle, menuHandle->width(), menuHandle->height(), menuHandle->width(), menuHandle->height());
-    registry.assign<Transform>(menu, panel, popupTransform.x + popupHandle->width() / 4.f - menuHandle->width() / 2.f, ribbonHandle->height() / 2.f + popupHandle->height() - 2.f * menuHandle->height() / 3.f);
-    registry.assign<UIButton>(menu, UIAction::MENU);
+    auto menuHandle = textureCache.handle("bt/empty");
+    auto menu = createUIButton(registry, panel, menuHandle, UIAction::MENU, 220);
+    setPos(registry, menu, popupTransform.x + popupHandle->width() / 4.f - menuHandle->width() / 2.f, ribbonHandle->height() / 2.f + popupHandle->height() - 2.f * menuHandle->height() / 3.f);
+    setSpriteSize(registry, menu, buttonSize, buttonSize);
 
-    auto share = registry.create();
-    auto shareHandle = textureCache.handle("button/share");
-    registry.assign<Renderable>(share, 0.f, 220);
-    registry.assign<Sprite>(share, shareHandle, shareHandle->width(), shareHandle->height(), shareHandle->width(), shareHandle->height());
-    registry.assign<Transform>(share, panel, popupTransform.x + popupHandle->width() / 2.f - shareHandle->width() / 2.f, popupTransform.y + popupHandle->height() - 2.f * shareHandle->height() / 3.f);
-    registry.assign<UIButton>(share, UIAction::SHARE);
+    auto shareHandle = textureCache.handle("bt/empty");
+    auto share = createUIButton(registry, panel, shareHandle, UIAction::SHARE, 220);
+    setPos(registry, share, popupTransform.x + popupHandle->width() / 2.f - shareHandle->width() / 2.f, popupTransform.y + popupHandle->height() - 2.f * shareHandle->height() / 3.f);
+    setSpriteSize(registry, share, buttonSize, buttonSize);
 
-    auto reload = registry.create();
-    auto reloadHandle = textureCache.handle("button/reload");
-    registry.assign<Renderable>(reload, 0.f, 220);
-    registry.assign<Sprite>(reload, reloadHandle, reloadHandle->width(), reloadHandle->height(), reloadHandle->width(), reloadHandle->height());
-    registry.assign<Transform>(reload, panel, popupTransform.x + 3.f * popupHandle->width() / 4.f - reloadHandle->width() / 2.f, popupTransform.y + popupHandle->height() - 2.f * reloadHandle->height() / 3.f);
-    registry.assign<UIButton>(reload, UIAction::RELOAD);
+    auto reloadHandle = textureCache.handle("bt/empty");
+    auto reload = createUIButton(registry, panel, reloadHandle, UIAction::RELOAD, 220);
+    setPos(registry, reload, popupTransform.x + 3.f * popupHandle->width() / 4.f - reloadHandle->width() / 2.f, popupTransform.y + popupHandle->height() - 2.f * reloadHandle->height() / 3.f);
+    setSpriteSize(registry, reload, buttonSize, buttonSize);
 }
 
 
@@ -398,19 +323,14 @@ void createCameraFrame(Registry &registry) {
 
 #ifdef DEBUG
 void createSmashButtons(Registry &registry) {
-    auto panel = registry.create();
-    registry.assign<Transform>(panel, panel, logicalWidth + 96.f, logicalHeight / 2.f - 368.f);
-    registry.assign<Panel>(panel, 96, 736, PanelType::SMASH_BUTTONS_PANEL);
+    auto panel = createPanel(registry, PanelType::SMASH_BUTTONS_PANEL, logicalWidth + 96.f, logicalHeight / 2.f - 368.f, 96, 736);
 
     auto addButton = [panel, &registry](FaceType type, int idx) {
-        auto button = registry.create();
         auto handle = toHandle(type);
-
-        registry.assign<SmashButton>(button, type);
-        registry.assign<Transform>(button, panel, 0.f, idx * (96.f + 32.f));
-        registry.assign<Sprite>(button, handle, handle->width(), handle->height(), 96, 96);
-        registry.assign<Renderable>(button, 0.f, 220);
-        registry.assign<BoundingBox>(button, 96, 96);
+        auto button = createSmashButton(registry, panel, handle, type, 220);
+        setPos(registry, button, 0.f, idx * (96.f + 32.f));
+        setSpriteSize(registry, button, 96, 96);
+        setBoundingBox(registry, button, 0, 0, 96, 96);
     };
 
     int pos = 0;
@@ -429,57 +349,38 @@ void createDebugHUD(Registry &registry) {
     auto sym0Handle = toStrDebug(0);
     float offset = 0.f;
 
-    auto fpsDebugEntity = registry.create();
     auto fpsHandle = textureCache.handle("str/debug/fps");
-    registry.assign<Renderable>(fpsDebugEntity, 0.f, 255);
+    auto fpsDebugEntity = createHUD(registry, fpsHandle, 255);
     auto &fpsDebug = registry.attach<FPSDebug>(fpsDebugEntity);
-    registry.accomodate<HUD>(fpsDebugEntity, fpsHandle, fpsHandle->width(), fpsHandle->height(), fpsHandle->width(), fpsHandle->height());
-    registry.accomodate<Transform>(fpsDebugEntity, fpsDebugEntity, offset + .2f * fpsHandle->width(), logicalHeight - 1.2f * fpsHandle->height());
+    setPos(registry, fpsDebugEntity, offset + .2f * fpsHandle->width(), logicalHeight - 1.2f * fpsHandle->height());
     offset = registry.get<Transform>(fpsDebugEntity).x + 1.2f * fpsHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(FPSDebug::entities)>::value; ++i) {
-        auto entity = registry.create();
-        fpsDebug.entities[i] = entity;
-        registry.assign<Renderable>(entity, 0.f, 255);
-        registry.assign<HUD>(entity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
-        registry.assign<Transform>(entity, entity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+        fpsDebug.entities[i] = createHUD(registry, sym0Handle, 255);
+        setPos(registry, fpsDebug.entities[i], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
         offset += sym0Handle->width();
     }
 
-    auto timeDebugEntity = registry.create();
     auto timeHandle = textureCache.handle("str/debug/time");
-    registry.assign<Renderable>(timeDebugEntity, 0.f, 255);
+    auto timeDebugEntity = createHUD(registry, timeHandle, 255);
     auto &timeDebug = registry.attach<TimeDebug>(timeDebugEntity);
-    registry.accomodate<HUD>(timeDebugEntity, timeHandle, timeHandle->width(), timeHandle->height(), timeHandle->width(), timeHandle->height());
-    registry.accomodate<Transform>(timeDebugEntity, timeDebugEntity, offset + .5f * timeHandle->width(), logicalHeight - .2f * fpsHandle->height() - timeHandle->height());
+    setPos(registry, timeDebugEntity, offset + .5f * timeHandle->width(), logicalHeight - .2f * fpsHandle->height() - timeHandle->height());
     offset = registry.get<Transform>(timeDebugEntity).x + 1.2f * timeHandle->width();
 
-    auto timeDebugFirstEntity = registry.create();
-    timeDebug.entities[0] = timeDebugFirstEntity;
-    registry.assign<Renderable>(timeDebugFirstEntity, 0.f, 255);
-    registry.assign<HUD>(timeDebugFirstEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
-    registry.assign<Transform>(timeDebugFirstEntity, timeDebugFirstEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    timeDebug.entities[0] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[0], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 
-    auto timeDebugSecondEntity = registry.create();
-    timeDebug.entities[1] = timeDebugSecondEntity;
-    registry.assign<Renderable>(timeDebugSecondEntity, 0.f, 255);
-    registry.assign<HUD>(timeDebugSecondEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
-    registry.assign<Transform>(timeDebugSecondEntity, timeDebugSecondEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    timeDebug.entities[1] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[1], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 
-    auto timeDebugDotEntity = registry.create();
-    auto symDotHandle = textureCache.handle("str/debug/.");
-    registry.assign<Renderable>(timeDebugDotEntity, 0.f, 255);
-    registry.assign<HUD>(timeDebugDotEntity, symDotHandle, symDotHandle->width(), symDotHandle->height(), symDotHandle->width(), symDotHandle->height());
-    registry.assign<Transform>(timeDebugDotEntity, timeDebugDotEntity, offset, logicalHeight - .2f * fpsHandle->height() - symDotHandle->height());
-    offset += symDotHandle->width();
+    auto timeDebugDotEntity = createHUD(registry, textureCache.handle("str/debug/."), 255);
+    setPos(registry, timeDebugDotEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
 
-    auto timeDebugThirdEntity = registry.create();
-    timeDebug.entities[2] = timeDebugThirdEntity;
-    registry.assign<Renderable>(timeDebugThirdEntity, 0.f, 255);
-    registry.assign<HUD>(timeDebugThirdEntity, sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
-    registry.assign<Transform>(timeDebugThirdEntity, timeDebugThirdEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    timeDebug.entities[2] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[2], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 }
 #endif // DEBUG

@@ -46,7 +46,7 @@ using entity_type = typename Registry::entity_type;
 
 
 enum class SceneType: UInt8 {
-    UNKNOWN = 0,
+    UNKNOWN,
     SPLASH_SCREEN,
     MENU_PAGE,
     CREDITS_PAGE,
@@ -59,7 +59,7 @@ enum class SceneType: UInt8 {
 
 
 enum class FaceType: UInt8 {
-    ANGRY = 0,
+    ANGRY,
     DISGUSTED,
     FEARFUL,
     HAPPY,
@@ -69,14 +69,15 @@ enum class FaceType: UInt8 {
 
 
 enum class ItemType: UInt8 {
-    FOUNTAIN = 0,
+    FOUNTAIN,
     SPEED_UP,
     SLOW_DOWN
 };
 
 
 enum class UIAction: UInt8 {
-    MENU = 0,
+    EXIT,
+    MENU,
     CREDITS,
     GAME_TUTORIAL,
     TRAINING_TUTORIAL,
@@ -87,7 +88,7 @@ enum class UIAction: UInt8 {
 
 
 enum class PanelType: UInt8 {
-    SPLASH_SCREEN = 0,
+    SPLASH_SCREEN,
     BACKGROUND_TOP_PANEL,
     BACKGROUND_BOTTOM_PANEL,
     MENU_TOP_PANEL,

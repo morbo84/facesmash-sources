@@ -11,14 +11,21 @@ namespace gamee {
 
 
 void ItemSystem::movement(Registry &registry, float mod) {
-    registry.view<Movement>().each([mod](auto, auto &movement) {
-        movement.mod = mod;
-    });
+    for(auto entity: registry.view<Face, Movement>()) {
+        registry.get<Movement>(entity).mod = mod;
+    };
+
+    for(auto entity: registry.view<Item, Movement>()) {
+        registry.get<Movement>(entity).mod = mod;
+    };
 }
 
 
 void ItemSystem::fountain(Registry &registry, PlayFactory &factory) {
     const auto face = faceBag.get();
+
+    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
 
     while(registry.size<Face>() < 5) {
         factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);

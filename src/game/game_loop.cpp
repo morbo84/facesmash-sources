@@ -61,13 +61,13 @@ void GameLoop::close() {
 
 
 void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
-    renderer.clear();
-
     // sum what remains from the previous step
     accumulator50FPS += delta;
     accumulator20FPS += delta;
 
-    sceneSystem.update(registry, delta);
+    // do the best to invoke systems at 60 fps
+
+    destroyLaterSystem.update(registry, delta);
     uiButtonSystem.update(registry);
 
 #ifdef DEBUG
@@ -77,8 +77,6 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
     itemSystem.update(registry, factory, delta);
     faceSmashSystem.update(registry, factory);
     rewardSystem.update(registry);
-
-    destroyLaterSystem.update(registry, delta);
 
     // invoke systems at 50 fps
     while(accumulator50FPS >= msPerUpdate50FPS) {
@@ -101,10 +99,14 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
     trainingSystem.update(registry, factory, delta);
     animationSystem.update(registry, delta);
 
+    renderer.clear();
+
     renderingSystem.update(registry, renderer);
     hudSystem.update(registry, renderer, delta);
 
     renderer.present();
+
+    sceneSystem.update(registry, delta);
 }
 
 

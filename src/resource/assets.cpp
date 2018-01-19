@@ -79,26 +79,18 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/hud/score", "SCORE", renderer, *ttfFontCache.handle("font/default/small"), colorRed);
     textureCache.load<TTFFontTextureLoader>("str/hud/timer", "TIME", renderer, *ttfFontCache.handle("font/default/small"), colorRed);
 
-    textureCache.load<SDLTextureLoader>("button/empty", "png/gui/button.png", renderer);
-    textureCache.load<SDLTextureLoader>("button/sound", "png/gui/sound.png", renderer);
-    textureCache.load<SDLTextureLoader>("button/mute", "png/gui/mute.png", renderer);
-    textureCache.load<SDLTextureLoader>("button/credits", "png/gui/info.png", renderer);
-
     textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("font/default/normal"), colorRed);
     textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("font/default/normal"), colorRed);
 
     textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/mario/bg_top.png", renderer);
     textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/mario/bg_middle.png", renderer);
     textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/mario/bg_bottom.png", renderer);
-    textureCache.load<SDLTextureLoader>("palette/separator", "png/palette/mario/separator.png", renderer);
+
+    textureCache.load<SDLTextureLoader>("bt/empty", "png/gui/bt_empty.png", renderer);
 
     textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer);
     textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer);
     textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer);
-
-    textureCache.load<SDLTextureLoader>("button/reload", "png/gui/reload.png", renderer);
-    textureCache.load<SDLTextureLoader>("button/share", "png/gui/share.png", renderer);
-    textureCache.load<SDLTextureLoader>("button/menu", "png/gui/menu.png", renderer);
 }
 
 

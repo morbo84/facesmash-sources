@@ -37,8 +37,8 @@ void SceneSystem::disableUIControls(Registry &registry) {
 
 void SceneSystem::enableUIControls(Registry &registry) {
     for(auto entity: registry.view<UIButton, Sprite>()) {
-        const auto handle = registry.get<Sprite>(entity).handle;
-        registry.assign<BoundingBox>(entity, handle->width(), handle->height());
+        const auto &sprite = registry.get<Sprite>(entity);
+        registry.assign<BoundingBox>(entity, sprite.w, sprite.h);
     }
 }
 
@@ -94,7 +94,7 @@ delta_type SceneSystem::splashScreenTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), - 4 * panel.h / 5, duration / 3, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP_PANEL:
         case PanelType::MENU_BOTTOM_PANEL:
