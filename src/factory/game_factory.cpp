@@ -300,7 +300,6 @@ void createCamera(Registry &registry) {
 }
 
 
-#ifdef CAMERA_FRAME_AVAILABLE
 void createCameraFrame(Registry &registry) {
     auto handle = Locator::TextureCache::ref().handle("camera/frame");
     auto &cameraService = Locator::Camera::ref();
@@ -310,21 +309,19 @@ void createCameraFrame(Registry &registry) {
 
     if(cameraService.height() > cameraService.width()) {
         registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), logicalWidth, handle->height() * logicalWidth / handle->width());
-        registry.assign<Transform>(frame, frame, 0, (logicalHeight - handle->height()) / 2);
-        registry.assign<Renderable>(frame, 0, 90, 0);
+        registry.assign<Transform>(frame, frame, 0.f, (logicalHeight - handle->height()) / 2.f);
+        registry.assign<Renderable>(frame, 0.f, 90, 0);
     } else {
         const int width = handle->width() * logicalWidth / handle->height();
         const int height = logicalWidth;
 
         registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
-        registry.assign<Transform>(frame, frame, (height - width) / 2, (width - height) / 2);
-        registry.assign<Renderable>(frame, -90, 90, 0);
+        registry.assign<Transform>(frame, frame, (height - width) / 2.f, (width - height) / 2.f);
+        registry.assign<Renderable>(frame, -90.f, 90, 0);
     }
 }
-#endif // CAMERA_FRAME_AVAILABLE
 
 
-#ifdef DEBUG
 void createSmashButtons(Registry &registry) {
     auto panel = createPanel(registry, PanelType::SMASH_BUTTONS_PANEL, logicalWidth + 96, logicalHeight / 2 - 368, 96, 736);
 
@@ -386,7 +383,6 @@ void createDebugHUD(Registry &registry) {
     setPos(registry, timeDebug.entities[2], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 }
-#endif // DEBUG
 
 
 }

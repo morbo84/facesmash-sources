@@ -17,10 +17,7 @@ SDL_Point transformToPosition(const Registry &, entity_type entity, const Transf
 SDLTextureHandle toHandle(FaceType);
 SDLTextureHandle toHandle(ItemType);
 SDLTextureHandle toStrHud(int);
-
-#ifdef DEBUG
 SDLTextureHandle toStrDebug(int);
-#endif // DEBUG
 
 
 }

@@ -11,15 +11,8 @@ namespace gamee {
 struct GameRenderer;
 
 
-class HudSystem final {
-#if DEBUG
-    void debug(Registry &, delta_type);
-#endif // DEBUG
-
+struct HudSystem final {
     void update(Registry &, GameRenderer &);
-
-public:
-    void update(Registry &, GameRenderer &, delta_type);
 };
 
 

@@ -25,6 +25,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/camera_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp

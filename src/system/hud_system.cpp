@@ -1,5 +1,3 @@
-#include <type_traits>
-#include <SDL_pixels.h>
 #include <SDL_render.h>
 #include "../common/constants.h"
 #include "../common/util.h"
@@ -11,31 +9,6 @@
 
 
 namespace gamee {
-
-
-#if DEBUG
-void HudSystem::debug(Registry &registry, delta_type delta) {
-    auto &timeDebug = registry.get<TimeDebug>();
-
-    timeDebug.average = (timeDebug.average * .9f) + (delta * .1f);
-    int time = 10 * timeDebug.average;
-
-    for(auto i = std::extent<decltype(TimeDebug::entities)>::value; i > 0u; --i) {
-        auto handle = toStrDebug(time % 10);
-        registry.accomodate<HUD>(timeDebug.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
-        time /= 10;
-    }
-
-    const auto &fpsDebug = registry.get<FPSDebug>();
-    int fps = timeDebug.average ? (1000.f / timeDebug.average) : 0;
-
-    for(auto i = std::extent<decltype(FPSDebug::entities)>::value; i > 0u; --i) {
-        auto handle = toStrDebug(fps % 10);
-        registry.accomodate<HUD>(fpsDebug.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
-        fps /= 10;
-    }
-}
-#endif // DEBUG
 
 
 void HudSystem::update(Registry &registry, GameRenderer &renderer) {
@@ -74,17 +47,6 @@ void HudSystem::update(Registry &registry, GameRenderer &renderer) {
         }
 #endif // DEBUG
     });
-}
-
-
-void HudSystem::update(Registry &registry, GameRenderer &renderer, [[maybe_unused]] delta_type delta) {
-#if DEBUG
-    // update debug information
-    debug(registry, delta);
-#endif // DEBUG
-
-    // render out hud
-    update(registry, renderer);
 }
 
 

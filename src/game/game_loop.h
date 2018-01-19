@@ -3,9 +3,11 @@
 
 
 #include <memory>
+
 #include "../common/types.h"
 #include "../factory/play_factory.h"
 #include "../system/animation_system.h"
+#include "../system/debug_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
 #include "../system/face_smash_system.h"
@@ -52,7 +54,7 @@ private:
     PlayFactory factory;
     // systems
     AnimationSystem animationSystem;
-    RewardSystem rewardSystem;
+    DebugSystem debugSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
     ItemSystem itemSystem;
@@ -61,11 +63,10 @@ private:
     HudSystem hudSystem;
     MovementSystem movementSystem;
     RenderingSystem renderingSystem;
+    RewardSystem rewardSystem;
     SceneSystem sceneSystem;
     ScoreSystem scoreSystem;
-#if DEBUG
     SmashButtonSystem smashButtonSystem;
-#endif // DEBUG};
     TheGameSystem theGameSystem;
     TimerSystem timerSystem;
     TrainingSystem trainingSystem;

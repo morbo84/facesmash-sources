@@ -22,17 +22,9 @@ void createGameOverPanel(Registry &);
 void createTrainingTopPanel(Registry &);
 void createTrainingBottomPanel(Registry &);
 void createCamera(Registry &);
-
-
-#ifdef CAMERA_FRAME_AVAILABLE
 void createCameraFrame(Registry &);
-#endif // CAMERA_FRAME_AVAILABLE
-
-
-#ifdef DEBUG
 void createSmashButtons(Registry &);
 void createDebugHUD(Registry &);
-#endif // DEBUG
 
 
 }

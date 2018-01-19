@@ -94,15 +94,12 @@ void loadGameStuff(GameRenderer &renderer) {
 }
 
 
-#ifdef CAMERA_FRAME_AVAILABLE
 void loadCameraFrame(GameRenderer &renderer) {
     const auto &cameraService = Locator::Camera::ref();
-    Locator::TTFFontCache::ref().load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
+    Locator::TextureCache::ref().load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
 }
-#endif // CAMERA_FRAME_AVAILABLE
 
 
-#if DEBUG
 void loadDebugFont(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
@@ -126,7 +123,6 @@ void loadDebugFont(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/debug/9", "9", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/debug/.", ".", renderer, *ttfFontCache.handle("font/debug/small"), colorWhite);
 }
-#endif // DEBUG
 
 
 }

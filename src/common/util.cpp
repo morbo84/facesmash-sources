@@ -50,7 +50,9 @@ SDLTextureHandle toHandle(FaceType type) {
     case FaceType::SURPRISED:
         return Locator::TextureCache::ref().handle("face/surprised");
     default:
-        assert(false); // suppress warnings
+        assert(false);
+        // suppress warnings
+        return Locator::TextureCache::ref().handle("face/angry");
     }
 }
 
@@ -64,7 +66,9 @@ SDLTextureHandle toHandle(ItemType type) {
     case ItemType::SPEED_UP:
         return Locator::TextureCache::ref().handle("item/speed_up");
     default:
-        assert(false); // suppress warnings
+        assert(false);
+        // suppress warnings
+        return Locator::TextureCache::ref().handle("item/speed_up");
     }
 }
 
@@ -92,12 +96,13 @@ SDLTextureHandle toStrHud(int value) {
     case 9:
         return Locator::TextureCache::ref().handle("str/hud/9");
     default:
-        assert(false); // suppress warnings
+        assert(false);
+        // suppress warnings
+        return Locator::TextureCache::ref().handle("str/hud/?");
     }
 }
 
 
-#ifdef DEBUG
 SDLTextureHandle toStrDebug(int value) {
     switch (value) {
     case 0:
@@ -121,10 +126,11 @@ SDLTextureHandle toStrDebug(int value) {
     case 9:
         return Locator::TextureCache::ref().handle("str/debug/9");
     default:
-        assert(false); // suppress warnings
+        assert(false);
+        // suppress warnings
+        return Locator::TextureCache::ref().handle("str/debug/?");
     }
 }
-#endif // DEBUG
 
 
 }

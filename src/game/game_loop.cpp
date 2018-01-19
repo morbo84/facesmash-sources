@@ -69,10 +69,7 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
 
     destroyLaterSystem.update(registry, delta);
     uiButtonSystem.update(registry);
-
-#ifdef DEBUG
     smashButtonSystem.update(registry);
-#endif // DEBUG
 
     itemSystem.update(registry, factory, delta);
     faceSmashSystem.update(registry, factory);
@@ -102,9 +99,12 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
     renderer.clear();
 
     renderingSystem.update(registry, renderer);
-    hudSystem.update(registry, renderer, delta);
+    hudSystem.update(registry, renderer);
 
     renderer.present();
+
+    // approximate remaining time and update debug information
+    debugSystem.update(registry, delta);
 
     // update the scene for the next tick (if required)
     // this way recording starts correctly from frame 0

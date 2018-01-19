@@ -140,6 +140,7 @@ delta_type SceneSystem::menuPageTransition(Registry &registry) {
             break;
         case PanelType::GAME_OVER_PANEL:
         case PanelType::CREDITS_PANEL:
+        case PanelType::SMASH_BUTTONS_PANEL:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
@@ -153,11 +154,6 @@ delta_type SceneSystem::menuPageTransition(Registry &registry) {
         case PanelType::GAME_BOTTOM_PANEL:
         case PanelType::TRAINING_BOTTOM_PANEL:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::SMASH_BUTTONS_PANEL:
-#if DEBUG
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
-#endif // DEBUG
             break;
         default:
             assert(false);
@@ -272,9 +268,7 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::SMASH_BUTTONS_PANEL:
-#if DEBUG
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
-#endif // DEBUG
             break;
         default:
             assert(false);
@@ -314,9 +308,7 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::SMASH_BUTTONS_PANEL:
-#if DEBUG
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
-#endif // DEBUG
             break;
         default:
             assert(false);
@@ -390,9 +382,7 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::SMASH_BUTTONS_PANEL:
-#if DEBUG
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
-#endif // DEBUG
             break;
         default:
             assert(false);
