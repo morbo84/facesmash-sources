@@ -10,7 +10,7 @@ namespace gamee {
 
 struct AvMuxerNull: AvMuxerService {
     void start(int, int) override;
-    void frame(std::unique_ptr<FrameTexture>) override;
+    void frame(std::unique_ptr<FrameTexture>, delta_type) override;
     void stop() override;
     bool recording() const noexcept override;
 };

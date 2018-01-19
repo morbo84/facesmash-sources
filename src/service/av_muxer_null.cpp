@@ -7,7 +7,7 @@ namespace gamee {
 void AvMuxerNull::start(int, int) {}
 
 
-void AvMuxerNull::frame(std::unique_ptr<FrameTexture>) {}
+void AvMuxerNull::frame(std::unique_ptr<FrameTexture>, delta_type) {}
 
 
 void AvMuxerNull::stop() {}

@@ -3,6 +3,7 @@
 
 
 #include <memory>
+#include "../common/types.h"
 #include "../resource/frame_resource.h"
 
 
@@ -13,7 +14,7 @@ struct AvMuxerService {
     virtual ~AvMuxerService() = default;
 
     virtual void start(int, int) = 0;
-    virtual void frame(std::unique_ptr<FrameTexture>) = 0;
+    virtual void frame(std::unique_ptr<FrameTexture>, delta_type) = 0;
     virtual void stop() = 0;
     virtual bool recording() const noexcept = 0;
 };

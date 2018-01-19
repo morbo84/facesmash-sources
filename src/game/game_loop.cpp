@@ -121,7 +121,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         renderer.reset();
 
         SDL_RenderCopy(renderer, *frame, nullptr, nullptr);
-        avMuxer.frame(std::move(frame));
+        avMuxer.frame(std::move(frame), delta);
     } else {
         tick(renderer, delta);
     }

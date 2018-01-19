@@ -10,11 +10,12 @@ void AvMuxerAndroid::start(int width, int height) {
 }
 
 
-void AvMuxerAndroid::frame(std::unique_ptr<FrameTexture> frame) {
+void AvMuxerAndroid::frame(std::unique_ptr<FrameTexture> frame, delta_type delta) {
     SDL_Texture *texture = *frame;
 
     // TODO
     (void)texture;
+    (void)delta;
 }
 
 
