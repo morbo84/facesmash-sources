@@ -35,6 +35,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
     auto &score = registry.get<PlayerScore>();
     auto &textureCache = Locator::TextureCache::ref();
     const SDL_Rect screen = logicalScreen;
+    const SDL_Rect smashArea = playArea;
     int total = 0;
     int combo = 0;
 
@@ -47,7 +48,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
             const auto x = area.x + area.w / 2;
             const auto y = area.y + area.h / 2;
 
-            if(SDL_HasIntersection(&screen, &area)) {
+            if(SDL_HasIntersection(&smashArea, &area)) {
                 if(dirty && smash.type == type) {
                     factory.spawnExplosion(registry, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
                     factory.spawnSmashScore(registry, smash.smash, x, y);
@@ -79,7 +80,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
 
                     registry.destroy(entity);
                 }
-            } else {
+            } else if(!SDL_HasIntersection(&screen, &area)) {
                 factory.spawnMissScore(registry, smash.miss, x, y);
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
                 registry.destroy(entity);

@@ -24,9 +24,6 @@ void ItemSystem::movement(Registry &registry, float mod) {
 void ItemSystem::fountain(Registry &registry, PlayFactory &factory) {
     const auto face = faceBag.get();
 
-    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
-    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
-
     while(registry.size<Face>() < 5) {
         factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
     }
