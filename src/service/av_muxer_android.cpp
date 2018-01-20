@@ -10,9 +10,9 @@ void AvMuxerAndroid::start(int width, int height) {
 }
 
 
-void AvMuxerAndroid::frame(std::unique_ptr<unsigned char[]> frame, delta_type delta) {
+void AvMuxerAndroid::frame(std::unique_ptr<unsigned char[]> pixels, delta_type delta) {
     // TODO
-    (void)frame;
+    (void)pixels;
     (void)delta;
 }
 

@@ -15,6 +15,7 @@
 #include "../system/hud_system.h"
 #include "../system/item_system.h"
 #include "../system/movement_system.h"
+#include "../system/recording_system.h"
 #include "../system/rendering_system.h"
 #include "../system/reward_system.h"
 #include "../system/scene_system.h"
@@ -38,10 +39,7 @@ class GameLoop final: public GameEnv {
     static constexpr delta_type msPerUpdate20FPS = 50;
 
     void init(GameRenderer &) override;
-
     void close() override;
-
-    void tick(GameRenderer &, delta_type);
     void update(GameRenderer &, delta_type) override;
 
 private:
@@ -62,6 +60,7 @@ private:
     FrameSystem frameSystem;
     HudSystem hudSystem;
     MovementSystem movementSystem;
+    RecordingSystem recordingSystem;
     RenderingSystem renderingSystem;
     RewardSystem rewardSystem;
     SceneSystem sceneSystem;

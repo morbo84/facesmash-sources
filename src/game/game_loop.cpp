@@ -59,12 +59,14 @@ void GameLoop::close() {
 }
 
 
-void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
+void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // sum what remains from the previous step
     accumulator50FPS += delta;
     accumulator20FPS += delta;
 
     // do the best to invoke systems at 60 fps
+
+    sceneSystem.update(registry, delta);
 
     destroyLaterSystem.update(registry, delta);
     uiButtonSystem.update(registry);
@@ -94,6 +96,7 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
     theGameSystem.update(registry, factory);
     trainingSystem.update(registry, factory, delta);
     animationSystem.update(registry, delta);
+    debugSystem.update(registry, delta);
 
     renderer.clear();
 
@@ -102,38 +105,7 @@ void GameLoop::tick(GameRenderer &renderer, delta_type delta) {
 
     renderer.present();
 
-    // approximate remaining time and update debug information
-    debugSystem.update(registry, delta);
-
-    // update the scene for the next tick (if required)
-    // this way recording starts correctly from frame 0
-    sceneSystem.update(registry, delta);
-}
-
-
-void GameLoop::update(GameRenderer &renderer, delta_type delta) {
-    auto &avMuxer = Locator::AvMuxer::ref();
-
-    if(avMuxer.recording()) {
-        constexpr auto format = SDL_PIXELFORMAT_RGBA32;
-        constexpr auto size = logicalWidth * logicalHeight * SDL_BYTESPERPIXEL(format);
-        constexpr auto pitch = logicalWidth * SDL_BYTESPERPIXEL(format);
-
-        auto texture = SDL_CreateTexture(renderer, format, SDL_TEXTUREACCESS_TARGET, logicalWidth, logicalHeight);
-
-        renderer.target(texture);
-        tick(renderer, delta);
-
-        std::unique_ptr<unsigned char[]> frame{new unsigned char[size]};
-        SDL_RenderReadPixels(renderer, nullptr, format, frame.get(), pitch);
-        avMuxer.frame(std::move(frame), delta);
-
-        renderer.reset();
-        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-        SDL_DestroyTexture(texture);
-    } else {
-        tick(renderer, delta);
-    }
+    recordingSystem.update(renderer, delta);
 }
 
 

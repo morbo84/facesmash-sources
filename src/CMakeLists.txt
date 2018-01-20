@@ -32,6 +32,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/item_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/recording_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/reward_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
