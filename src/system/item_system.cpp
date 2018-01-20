@@ -61,14 +61,12 @@ void ItemSystem::receive(const TouchEvent &event) noexcept {
 
 
 void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type delta) {
-    const SDL_Rect screen = logicalScreen;
-
     auto view = registry.view<Item, Transform, BoundingBox>();
 
     view.each([&, this](auto entity, const auto &item, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
 
-        if(SDL_HasIntersection(&screen, &area)) {
+        if(SDL_HasIntersection(&logicalScreen, &area)) {
             if(dirty && registry.has<Destroyable>(entity) && SDL_PointInRect(&coord, &area)) {
                 curr = item.type;
                 remaining = toRemaining(curr);

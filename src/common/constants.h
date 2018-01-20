@@ -12,8 +12,8 @@ namespace gamee {
 
 constexpr int logicalWidth = 1080;
 constexpr int logicalHeight = 1920;
-constexpr SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
-constexpr SDL_Rect playArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
+const SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
+const SDL_Rect playArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
 
 constexpr int numberOfItems = 3;
 constexpr int numberOfFaces = 6;

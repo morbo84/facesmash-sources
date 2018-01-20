@@ -20,7 +20,6 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 
     const auto offset = transformToPosition(registry, registry.attachee<Camera>(), registry.get<Transform>(registry.attachee<Camera>()));
     auto view = registry.persistent<Transform, Renderable, Sprite>();
-    const SDL_Rect screen = logicalScreen;
 
     view.sort<Renderable>();
 
@@ -43,7 +42,7 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
         dst.x = position.x;
         dst.y = position.y;
 
-        if(SDL_HasIntersection(&screen, &dst)) {
+        if(SDL_HasIntersection(&logicalScreen, &dst)) {
             SDL_Texture *texture = sprite.handle.get();
             SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
             SDL_SetTextureAlphaMod(texture, renderable.alpha);
@@ -62,7 +61,7 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
 #if DEBUG
     if(registry.has<LetsPlay>()) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &smashArea);
+        SDL_RenderDrawRect(renderer, &playArea);
     }
 #endif // DEBUG
 }
