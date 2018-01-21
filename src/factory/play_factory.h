@@ -96,18 +96,18 @@ class PlayFactory final {
 public:
     PlayFactory();
 
-    void spawnFaceBottom(Registry &, UInt8, UInt8, FaceType);
-    void spawnFaceTop(Registry &, UInt8, UInt8, FaceType);
-    void spawnFaceLeft(Registry &, UInt8, UInt8, FaceType);
-    void spawnFaceRight(Registry &, UInt8, UInt8, FaceType);
+    void spawnFaceBottom(Registry &, Uint8, Uint8, FaceType);
+    void spawnFaceTop(Registry &, Uint8, Uint8, FaceType);
+    void spawnFaceLeft(Registry &, Uint8, Uint8, FaceType);
+    void spawnFaceRight(Registry &, Uint8, Uint8, FaceType);
 
     void spawnItemBottom(Registry &, ItemType);
     void spawnItemTop(Registry &, ItemType);
     void spawnItemLeft(Registry &, ItemType);
     void spawnItemRight(Registry &, ItemType);
 
-    void spawnSmashScore(Registry &, UInt8, float, float);
-    void spawnMissScore(Registry &, UInt8, float, float);
+    void spawnSmashScore(Registry &, Uint8, float, float);
+    void spawnMissScore(Registry &, Uint8, float, float);
     void spawnExplosion(Registry &, float, float);
 
 private:

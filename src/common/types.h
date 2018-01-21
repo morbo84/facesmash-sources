@@ -14,27 +14,17 @@
 namespace gamee {
 
 
-using UInt8 = Uint8;
-using SInt8 = Sint8;
-using UInt16 = Uint16;
-using SInt16 = Sint16;
-using UInt32 = Uint32;
-using SInt32 = Sint32;
-using UInt64 = Uint64;
-using SInt64 = Sint64;
+constexpr Uint8 operator"" _ui8 (unsigned long long ull) { return Uint8(ull); }
+constexpr Sint8 operator"" _si8 (unsigned long long ull) { return Sint8(ull); }
+constexpr Uint16 operator"" _ui16 (unsigned long long ull) { return Uint16(ull); }
+constexpr Sint16 operator"" _si16 (unsigned long long ull) { return Sint16(ull); }
+constexpr Uint32 operator"" _ui32 (unsigned long long ull) { return Uint32(ull); }
+constexpr Sint32 operator"" _si32 (unsigned long long ull) { return Sint32(ull); }
+constexpr Uint64 operator"" _ui64 (unsigned long long ull) { return Uint64(ull); }
+constexpr Sint64 operator"" _si64 (unsigned long long ull) { return Sint64(ull); }
 
 
-constexpr UInt8 operator"" _ui8 (unsigned long long ull) { return UInt8(ull); }
-constexpr SInt8 operator"" _si8 (unsigned long long ull) { return SInt8(ull); }
-constexpr UInt16 operator"" _ui16 (unsigned long long ull) { return UInt16(ull); }
-constexpr SInt16 operator"" _si16 (unsigned long long ull) { return SInt16(ull); }
-constexpr UInt32 operator"" _ui32 (unsigned long long ull) { return UInt32(ull); }
-constexpr SInt32 operator"" _si32 (unsigned long long ull) { return SInt32(ull); }
-constexpr UInt64 operator"" _ui64 (unsigned long long ull) { return UInt64(ull); }
-constexpr SInt64 operator"" _si64 (unsigned long long ull) { return SInt64(ull); }
-
-
-using delta_type = UInt32;
+using delta_type = Uint32;
 
 using TextureCache = entt::ResourceCache<SDLTextureResource>;
 using TTFFontCache = entt::ResourceCache<TTFFontResource>;
@@ -45,7 +35,7 @@ using Registry = entt::DefaultRegistry;
 using entity_type = typename Registry::entity_type;
 
 
-enum class SceneType: UInt8 {
+enum class SceneType: Uint8 {
     UNKNOWN,
     SPLASH_SCREEN,
     MENU_PAGE,
@@ -58,7 +48,7 @@ enum class SceneType: UInt8 {
 };
 
 
-enum class FaceType: UInt8 {
+enum class FaceType: Uint8 {
     ANGRY,
     DISGUSTED,
     FEARFUL,
@@ -68,14 +58,14 @@ enum class FaceType: UInt8 {
 };
 
 
-enum class ItemType: UInt8 {
+enum class ItemType: Uint8 {
     FOUNTAIN,
     SPEED_UP,
     SLOW_DOWN
 };
 
 
-enum class UIAction: UInt8 {
+enum class UIAction: Uint8 {
     EXIT,
     MENU,
     CREDITS,
@@ -87,7 +77,7 @@ enum class UIAction: UInt8 {
 };
 
 
-enum class PanelType: UInt8 {
+enum class PanelType: Uint8 {
     SPLASH_SCREEN,
     BACKGROUND_TOP_PANEL,
     BACKGROUND_BOTTOM_PANEL,

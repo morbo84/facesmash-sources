@@ -46,18 +46,18 @@ void loadGameStuff(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    textureCache.load<SDLTextureLoader>("game/explosion", "png/gui/explosion.png", renderer);
+    textureCache.load<AssetTextureLoader>("game/explosion", "png/gui/explosion.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("face/angry", "png/emoji/emojitwo/angry.png", renderer);
-    textureCache.load<SDLTextureLoader>("face/disgusted", "png/emoji/emojitwo/disgusted.png", renderer);
-    textureCache.load<SDLTextureLoader>("face/fearful", "png/emoji/emojitwo/fearful.png", renderer);
-    textureCache.load<SDLTextureLoader>("face/happy", "png/emoji/emojitwo/happy.png", renderer);
-    textureCache.load<SDLTextureLoader>("face/sad", "png/emoji/emojitwo/sad.png", renderer);
-    textureCache.load<SDLTextureLoader>("face/surprised", "png/emoji/emojitwo/surprised.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/angry", "png/emoji/emojitwo/angry.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/disgusted", "png/emoji/emojitwo/disgusted.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/fearful", "png/emoji/emojitwo/fearful.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/happy", "png/emoji/emojitwo/happy.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/sad", "png/emoji/emojitwo/sad.png", renderer);
+    textureCache.load<AssetTextureLoader>("face/surprised", "png/emoji/emojitwo/surprised.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("item/speed_up", "png/emoji/emojitwo/fire.png", renderer);
-    textureCache.load<SDLTextureLoader>("item/slow_down", "png/emoji/emojitwo/hourglass.png", renderer);
-    textureCache.load<SDLTextureLoader>("item/fountain", "png/emoji/emojitwo/pill.png", renderer);
+    textureCache.load<AssetTextureLoader>("item/speed_up", "png/emoji/emojitwo/fire.png", renderer);
+    textureCache.load<AssetTextureLoader>("item/slow_down", "png/emoji/emojitwo/hourglass.png", renderer);
+    textureCache.load<AssetTextureLoader>("item/fountain", "png/emoji/emojitwo/pill.png", renderer);
 
     textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *ttfFontCache.handle("font/default/huge"), colorWhite);
 
@@ -82,21 +82,21 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *ttfFontCache.handle("font/default/normal"), colorRed);
     textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "USE YOUR FINGER", renderer, *ttfFontCache.handle("font/default/normal"), colorRed);
 
-    textureCache.load<SDLTextureLoader>("palette/bg_top", "png/palette/mario/bg_top.png", renderer);
-    textureCache.load<SDLTextureLoader>("palette/bg_middle", "png/palette/mario/bg_middle.png", renderer);
-    textureCache.load<SDLTextureLoader>("palette/bg_bottom", "png/palette/mario/bg_bottom.png", renderer);
+    textureCache.load<AssetTextureLoader>("palette/bg_top", "png/palette/mario/bg_top.png", renderer);
+    textureCache.load<AssetTextureLoader>("palette/bg_middle", "png/palette/mario/bg_middle.png", renderer);
+    textureCache.load<AssetTextureLoader>("palette/bg_bottom", "png/palette/mario/bg_bottom.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("bt/empty", "png/gui/bt_empty.png", renderer);
+    textureCache.load<AssetTextureLoader>("bt/empty", "png/gui/bt_empty.png", renderer);
 
-    textureCache.load<SDLTextureLoader>("gui/window", "png/gui/window.png", renderer);
-    textureCache.load<SDLTextureLoader>("gui/popup", "png/gui/popup.png", renderer);
-    textureCache.load<SDLTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer);
+    textureCache.load<AssetTextureLoader>("gui/window", "png/gui/window.png", renderer);
+    textureCache.load<AssetTextureLoader>("gui/popup", "png/gui/popup.png", renderer);
+    textureCache.load<AssetTextureLoader>("gui/ribbon", "png/gui/ribbon.png", renderer);
 }
 
 
 void loadCameraFrame(GameRenderer &renderer) {
     const auto &cameraService = Locator::Camera::ref();
-    Locator::TextureCache::ref().load<SDLStreamingTextureLoader>("camera/frame", renderer, cameraService.width(), cameraService.height());
+    Locator::TextureCache::ref().load<SDLTextureLoader>("camera/frame", renderer, SDL_PIXELFORMAT_NV21, SDL_TEXTUREACCESS_STREAMING, cameraService.width(), cameraService.height());
 }
 
 

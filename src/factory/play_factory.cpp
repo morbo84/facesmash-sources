@@ -64,22 +64,22 @@ PlayFactory::PlayFactory()
 {}
 
 
-void PlayFactory::spawnFaceBottom(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+void PlayFactory::spawnFaceBottom(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
     spawnFaceOrItemBottom(registry, Face{smash, miss, face});
 }
 
 
-void PlayFactory::spawnFaceTop(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+void PlayFactory::spawnFaceTop(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
     spawnFaceOrItemTop(registry, Face{smash, miss, face});
 }
 
 
-void PlayFactory::spawnFaceLeft(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+void PlayFactory::spawnFaceLeft(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
     spawnFaceOrItemLeft(registry, Face{smash, miss, face});
 }
 
 
-void PlayFactory::spawnFaceRight(Registry &registry, UInt8 smash, UInt8 miss, FaceType face) {
+void PlayFactory::spawnFaceRight(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
     spawnFaceOrItemRight(registry, Face{smash, miss, face});
 }
 
@@ -104,7 +104,7 @@ void PlayFactory::spawnItemRight(Registry &registry, ItemType item) {
 }
 
 
-void PlayFactory::spawnSmashScore(Registry &registry, UInt8 score, float x, float y) {
+void PlayFactory::spawnSmashScore(Registry &registry, Uint8 score, float x, float y) {
     auto &textureCache = Locator::TextureCache::ref();
 
     switch(score) {
@@ -127,7 +127,7 @@ void PlayFactory::spawnSmashScore(Registry &registry, UInt8 score, float x, floa
 }
 
 
-void PlayFactory::spawnMissScore(Registry &registry, UInt8 score, float x, float y) {
+void PlayFactory::spawnMissScore(Registry &registry, Uint8 score, float x, float y) {
     auto &textureCache = Locator::TextureCache::ref();
 
     switch(score) {

@@ -3,6 +3,7 @@
 
 
 #include <memory>
+#include <SDL.h>
 #include <entt/resource/handle.hpp>
 #include <entt/resource/loader.hpp>
 
@@ -35,13 +36,13 @@ private:
 };
 
 
-struct SDLTextureLoader final: public entt::ResourceLoader<SDLTextureLoader, SDLTextureResource> {
+struct AssetTextureLoader final: public entt::ResourceLoader<AssetTextureLoader, SDLTextureResource> {
     std::shared_ptr<SDLTextureResource> load(const char *, SDL_Renderer *) const;
 };
 
 
-struct SDLStreamingTextureLoader final: public entt::ResourceLoader<SDLStreamingTextureLoader, SDLTextureResource> {
-    std::shared_ptr<SDLTextureResource> load(SDL_Renderer *, int, int) const;
+struct SDLTextureLoader final: public entt::ResourceLoader<SDLTextureLoader, SDLTextureResource> {
+    std::shared_ptr<SDLTextureResource> load(SDL_Renderer *, Uint32, int, int, int) const;
 };
 
 

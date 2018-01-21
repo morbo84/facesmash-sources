@@ -10,7 +10,7 @@ namespace gamee {
 
 
 struct EnvEvent final {
-    enum class Type: UInt8 {
+    enum class Type: Uint8 {
         TERMINATING,
         LOW_MEMORY,
         ENTERING_BACKGROUND,
@@ -29,7 +29,7 @@ struct DebugEvent final {
 
 
 struct KeyboardEvent final {
-    enum class Type: UInt8 {
+    enum class Type: Uint8 {
         ESCAPE,
         BACK
     };

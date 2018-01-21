@@ -1,3 +1,4 @@
+#include <cassert>
 #include <SDL_image.h>
 #include <SDL_render.h>
 #include "texture_resource.h"
@@ -8,7 +9,9 @@ namespace gamee {
 
 SDLTextureResource::SDLTextureResource(SDL_Texture *texture) noexcept
     : texture{texture}
-{}
+{
+    assert(texture);
+}
 
 
 SDLTextureResource::~SDLTextureResource() noexcept {
@@ -35,7 +38,7 @@ int SDLTextureResource::height() const noexcept {
 }
 
 
-std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_Renderer *renderer) const {
+std::shared_ptr<SDLTextureResource> AssetTextureLoader::load(const char *res, SDL_Renderer *renderer) const {
     std::shared_ptr<SDLTextureResource> ret;
     SDL_Surface *surface = IMG_Load(res);
 
@@ -52,9 +55,9 @@ std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(const char *res, SDL_
 }
 
 
-std::shared_ptr<SDLTextureResource> SDLStreamingTextureLoader::load(SDL_Renderer *renderer, int w, int h) const {
+std::shared_ptr<SDLTextureResource> SDLTextureLoader::load(SDL_Renderer *renderer, Uint32 format, int access, int w, int h) const {
     std::shared_ptr<SDLTextureResource> ret;
-    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_NV21, SDL_TEXTUREACCESS_STREAMING, w, h);
+    SDL_Texture *texture = SDL_CreateTexture(renderer, format, access, w, h);
 
     if(texture) {
         ret = std::make_shared<SDLTextureResource>(texture);

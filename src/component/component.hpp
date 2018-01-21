@@ -48,9 +48,9 @@ struct Sprite final {
     int h;
     int x{0};
     int y{0};
-    UInt8 frames{1_ui8};
-    UInt8 line{1_ui8};
-    UInt8 frame{0_ui8};
+    Uint8 frames{1_ui8};
+    Uint8 line{1_ui8};
+    Uint8 frame{0_ui8};
 };
 
 
@@ -73,7 +73,7 @@ struct Camera final {};
 
 struct CameraShake final {
     delta_type remaining{250_ui32};
-    UInt8 shake{4_ui8};
+    Uint8 shake{4_ui8};
 };
 
 
@@ -149,8 +149,8 @@ struct Movement final {
 
 
 struct Face final {
-    UInt8 smash;
-    UInt8 miss;
+    Uint8 smash;
+    Uint8 miss;
     FaceType type;
 };
 

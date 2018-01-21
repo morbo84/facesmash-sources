@@ -18,7 +18,7 @@ struct FaceBag final {
 private:
     std::mt19937 generator;
     FaceType buffer[numberOfFaces];
-    UInt8 next;
+    Uint8 next;
 };
 
 
@@ -30,7 +30,7 @@ struct ItemBag final {
 private:
     std::mt19937 generator;
     ItemType buffer[numberOfItems];
-    UInt8 next;
+    Uint8 next;
 };
 
 
