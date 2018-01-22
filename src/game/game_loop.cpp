@@ -19,6 +19,7 @@ void GameLoop::init(GameRenderer &renderer) {
 
     loadDefaultFont(renderer);
     loadGameStuff(renderer);
+    loadTargetTextures(renderer);
 
     createSplashScreen(registry);
     createBackgroundTopPanel(registry);
@@ -45,6 +46,9 @@ void GameLoop::init(GameRenderer &renderer) {
     createDebugHUD(registry);
     createSmashButtons(registry);
 #endif // DEBUG
+
+    // init systems explicitly if required
+    recordingSystem.init(renderer);
 
     // request immediately a transition to the main menu from the splash screen
     Locator::Dispatcher::ref().trigger<SceneChangeEvent>(SceneType::SPLASH_SCREEN);
@@ -98,14 +102,10 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     animationSystem.update(registry, delta);
     debugSystem.update(registry, delta);
 
-    renderer.clear();
-
-    renderingSystem.update(registry, renderer);
-    hudSystem.update(registry, renderer);
-
-    renderer.present();
-
-    recordingSystem.update(renderer, delta);
+    recordingSystem.update(renderer, delta, [this](GameRenderer &renderer) {
+        renderingSystem.update(registry, renderer);
+        hudSystem.update(registry, renderer);
+    });
 }
 
 

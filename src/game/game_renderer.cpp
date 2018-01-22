@@ -46,11 +46,6 @@ void GameRenderer::target(SDL_Texture *texture) noexcept {
 }
 
 
-void GameRenderer::reset() noexcept {
-    SDL_SetRenderTarget(renderer, nullptr);
-}
-
-
 GameRenderer::operator bool() const noexcept {
     return (window && renderer);
 }
@@ -58,6 +53,11 @@ GameRenderer::operator bool() const noexcept {
 
 GameRenderer::operator SDL_Renderer * () const noexcept {
     return renderer;
+}
+
+
+GameRenderer::operator SDL_Window * () const noexcept {
+    return window;
 }
 
 

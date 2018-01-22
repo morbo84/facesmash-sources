@@ -126,4 +126,12 @@ void loadDebugFont(GameRenderer &renderer) {
 }
 
 
+void loadTargetTextures(GameRenderer &renderer) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    textureCache.load<SDLTextureLoader>("target/logical", renderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_TARGET, logicalWidth, logicalHeight);
+    textureCache.load<SDLTextureLoader>("target/recording", renderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_TARGET, recordingWidth, recordingHeight);
+}
+
+
 }

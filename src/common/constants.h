@@ -13,6 +13,10 @@ namespace gamee {
 constexpr int logicalWidth = 1080;
 constexpr int logicalHeight = 1920;
 const SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
+
+constexpr int recordingWidth = 720;
+constexpr int recordingHeight = 1280;
+
 const SDL_Rect playArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
 
 constexpr int numberOfItems = 3;

@@ -12,6 +12,7 @@ void loadDefaultFont(GameRenderer &);
 void loadGameStuff(GameRenderer &);
 void loadCameraFrame(GameRenderer &);
 void loadDebugFont(GameRenderer &);
+void loadTargetTextures(GameRenderer &);
 
 
 }

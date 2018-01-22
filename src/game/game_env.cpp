@@ -206,9 +206,9 @@ int GameEnv::exec() noexcept {
                 clock.delay(previous + msPerFrame - current);
             }
         }
-    }
 
-    close();
+        close();
+    }
 
     return static_cast<std::underlying_type_t<ErrorCode>>(errcode);
 }

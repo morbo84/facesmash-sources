@@ -10,7 +10,7 @@ void AvMuxerAndroid::start(int width, int height) {
 }
 
 
-void AvMuxerAndroid::frame(std::unique_ptr<unsigned char[]> pixels, delta_type delta) {
+void AvMuxerAndroid::frame(const unsigned char *pixels, delta_type delta) {
     // TODO
     (void)pixels;
     (void)delta;
@@ -23,6 +23,11 @@ void AvMuxerAndroid::stop() {
 
 
 bool AvMuxerAndroid::recording() const noexcept {
+    return true; // TODO
+}
+
+
+bool AvMuxerAndroid::ready() const noexcept {
     return true; // TODO
 }
 

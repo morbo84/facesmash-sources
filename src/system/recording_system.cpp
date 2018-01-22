@@ -1,4 +1,6 @@
+#include <cassert>
 #include <memory>
+#include <utility>
 #include <SDL_render.h>
 #include <SDL_pixels.h>
 #include "../common/constants.h"
@@ -10,17 +12,62 @@
 namespace gamee {
 
 
-void RecordingSystem::update(GameRenderer &renderer, delta_type delta) {
+void RecordingSystem::init(GameRenderer &renderer) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto recording = textureCache.handle("target/recording");
+
+    Uint32 format;
+    int access;
+    int w;
+    int h;
+
+    SDL_QueryTexture(*recording, &format, &access, &w, &h);
+
+    const auto size = w * h * SDL_BYTESPERPIXEL(format);
+    pixels.reset(new unsigned char [size]);
+    pitch = w * SDL_BYTESPERPIXEL(format);
+}
+
+
+void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(GameRenderer &)> next) {
     auto &avMuxer = Locator::AvMuxer::ref();
 
     if(avMuxer.recording()) {
-        constexpr auto format = SDL_PIXELFORMAT_RGBA32;
-        constexpr auto size = logicalWidth * logicalHeight * SDL_BYTESPERPIXEL(format);
-        constexpr auto pitch = logicalWidth * SDL_BYTESPERPIXEL(format);
+        auto &textureCache = Locator::TextureCache::ref();
+        auto logical = textureCache.handle("target/logical");
+        auto recording = textureCache.handle("target/recording");
 
-        std::unique_ptr<unsigned char[]> pixels{new unsigned char[size]};
-        SDL_RenderReadPixels(renderer, nullptr, 0, pixels.get(), pitch);
-        avMuxer.frame(std::move(pixels), delta);
+        accumulator += firstFrame ? 0_ui32 : delta;
+
+        renderer.target(*recording);
+        renderer.clear();
+
+        if(readPixels && avMuxer.ready()) {
+            SDL_RenderReadPixels(renderer, nullptr, 0, pixels.get(), pitch);
+            avMuxer.frame(pixels.get(), accumulator);
+            firstFrame = false;
+            readPixels = false;
+        } else {
+            SDL_RenderCopy(renderer, *logical, 0, 0);
+            readPixels = true;
+        }
+
+        renderer.target(*logical);
+        renderer.clear();
+        next(renderer);
+
+        renderer.target();
+        renderer.clear();
+        SDL_RenderCopy(renderer, *logical, 0, 0);
+        renderer.present();
+    } else {
+        accumulator = 0_ui32;
+        firstFrame = true;
+        readPixels = false;
+
+        renderer.clear();
+        next(renderer);
+        renderer.present();
     }
 }
 

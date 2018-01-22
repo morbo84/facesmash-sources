@@ -10,9 +10,10 @@ namespace gamee {
 
 struct AvMuxerNull: AvMuxerService {
     void start(int, int) override;
-    void frame(std::unique_ptr<unsigned char[]>, delta_type) override;
+    void frame(const unsigned char *, delta_type) override;
     void stop() override;
     bool recording() const noexcept override;
+    bool ready() const noexcept override;
 };
 
 

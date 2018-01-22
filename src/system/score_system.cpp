@@ -23,9 +23,9 @@ void ScoreSystem::update(Registry &registry) {
         playerScore.score = std::min(playerScore.score, cap - 1);
 
         if(playerScore.current < playerScore.score) {
-            playerScore.current += std::max((playerScore.score - playerScore.current) / 2, 1);
+            playerScore.current += std::max((playerScore.score - playerScore.current) / 3, 1);
         } else if(playerScore.current > playerScore.score) {
-            playerScore.current -= std::max((playerScore.current - playerScore.score) / 2, 1);
+            playerScore.current -= std::max((playerScore.current - playerScore.score) / 3, 1);
         }
 
         const int last = std::extent<decltype(PlayerScore::entities)>::value;
