@@ -60,7 +60,7 @@ void releasePlatformServices() {
     gamee::Locator::FaceBus::reset();
 }
 
-int main(int , char **) {
+int main(int, char **) {
     // set up services
     initBasicServices();
     initPlatformServices();

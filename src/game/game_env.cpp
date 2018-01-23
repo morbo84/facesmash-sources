@@ -172,10 +172,12 @@ int GameEnv::exec() noexcept {
 
             previous = current;
 
+#ifndef DEBUG
             // avoid jumping extremely forward in time
             if(elapsed > clampOverElapsed) {
                 elapsed = clampOverElapsed;
             }
+#endif // DEBUG
 
             // poll events for the next loop
             Locator::InputHandler::ref().poll();
@@ -193,11 +195,6 @@ int GameEnv::exec() noexcept {
 
             // render the scene
             update(*renderer, elapsed);
-
-#if DEBUG
-            // notify about remaining time
-            Locator::Dispatcher::ref().trigger<DebugEvent>(clock.ticks() - previous);
-#endif // DEBUG
         }
 
         close();

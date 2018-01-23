@@ -13,9 +13,8 @@ namespace gamee {
 
 
 struct TimeDebug final {
-    entity_type entities[7];
+    entity_type entities[4];
     float average{0.f};
-    float spent{0.f};
 };
 
 
