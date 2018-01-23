@@ -17,6 +17,9 @@ const SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 constexpr int recordingWidth = 720;
 constexpr int recordingHeight = 1280;
 
+constexpr Uint32 internalFormat = SDL_PIXELFORMAT_ARGB8888;
+constexpr Uint32 cameraFormat = SDL_PIXELFORMAT_NV21;
+
 const SDL_Rect playArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
 
 constexpr int numberOfItems = 3;

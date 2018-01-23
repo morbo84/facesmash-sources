@@ -1,3 +1,4 @@
+#include <cassert>
 #include <utility>
 #include <SDL_render.h>
 #include "font_resource.h"
@@ -8,7 +9,9 @@ namespace gamee {
 
 TTFFontResource::TTFFontResource(TTF_Font *font) noexcept
     : font{font}
-{}
+{
+    assert(font);
+}
 
 
 TTFFontResource::~TTFFontResource() noexcept {
