@@ -96,7 +96,7 @@ void loadGameStuff(GameRenderer &renderer) {
 
 void loadCameraFrame(GameRenderer &renderer) {
     const auto &cameraService = Locator::Camera::ref();
-    Locator::TextureCache::ref().load<SDLTextureLoader>("camera/frame", renderer, internalFormat, SDL_TEXTUREACCESS_STREAMING, cameraService.width(), cameraService.height());
+    Locator::TextureCache::ref().load<SDLTextureLoader>("camera/frame", renderer, cameraFormat, SDL_TEXTUREACCESS_STREAMING, cameraService.width(), cameraService.height());
 }
 
 
