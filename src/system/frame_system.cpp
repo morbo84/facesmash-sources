@@ -36,11 +36,20 @@ void FrameSystem::update(Registry &registry) {
 
         cameraService.frame([&](const void *pixels, int size) {
             auto handle = Locator::TextureCache::ref().handle("camera/frame");
+            Uint32 format;
+
+            SDL_QueryTexture(*handle, &format, nullptr, nullptr, nullptr);
+
+            const int frameWidth = cameraService.width();
+            const int frameHeight = cameraService.height();
+            const Uint32 frameFormat = SDL_PIXELFORMAT_NV21;
+            const int framePitch = cameraService.width() * SDL_BYTESPERPIXEL(SDL_PIXELFORMAT_NV21);
+
             void *texture;
             int pitch;
 
             SDL_LockTexture(*handle, nullptr, &texture, &pitch);
-            SDL_ConvertPixels(cameraService.width(), cameraService.height(), SDL_PIXELFORMAT_NV21, pixels, size / cameraService.width(), SDL_PIXELFORMAT_BGRA8888, texture, pitch);
+            SDL_ConvertPixels(frameWidth, frameHeight, frameFormat, pixels, framePitch, format, texture, pitch);
             SDL_UnlockTexture(*handle);
         });
 
