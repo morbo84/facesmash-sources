@@ -22,6 +22,7 @@ private:
     std::thread t_;
     std::condition_variable cv_;
     mutable std::mutex mtx_;
+    bool run{false};
 };
 
 

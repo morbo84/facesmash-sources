@@ -23,7 +23,7 @@ void AvMuxerAndroid::stop() {
 
 
 bool AvMuxerAndroid::recording() const noexcept {
-    return true; // TODO
+    return false; // TODO
 }
 
 
