@@ -395,12 +395,16 @@ void createDebugHUD(Registry &registry) {
     setPos(registry, timeDebug.entities[4], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 
+    timeDebug.entities[5] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[5], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    offset += sym0Handle->width();
+
     auto spentDebugDotEntity = createHUD(registry, textureCache.handle("str/debug/."), 255);
     setPos(registry, spentDebugDotEntity, offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 
-    timeDebug.entities[5] = createHUD(registry, sym0Handle, 255);
-    setPos(registry, timeDebug.entities[5], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
+    timeDebug.entities[6] = createHUD(registry, sym0Handle, 255);
+    setPos(registry, timeDebug.entities[6], offset, logicalHeight - .2f * fpsHandle->height() - sym0Handle->height());
     offset += sym0Handle->width();
 }
 
