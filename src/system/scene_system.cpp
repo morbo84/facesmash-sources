@@ -517,7 +517,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 camera.start();
-                avMuxer.start(logicalWidth, logicalHeight);
+                avMuxer.start(recordingWidth, recordingHeight);
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
