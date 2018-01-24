@@ -12,7 +12,7 @@ class PlayFactory;
 
 
 struct TrainingSystem final {
-    void update(Registry &, PlayFactory &, delta_type);
+    void update(Registry &, PlayFactory &);
 };
 
 

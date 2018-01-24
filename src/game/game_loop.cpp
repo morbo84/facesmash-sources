@@ -66,42 +66,39 @@ void GameLoop::close() {
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // sum what remains from the previous step
     accumulator50FPS += delta;
-    accumulator20FPS += delta;
-
-    // do the best to invoke systems at 60 fps
-
-    sceneSystem.update(registry, delta);
-
-    destroyLaterSystem.update(registry, delta);
-    uiButtonSystem.update(registry);
-    smashButtonSystem.update(registry);
-
-    itemSystem.update(registry, factory, delta);
-    faceSmashSystem.update(registry, factory);
-    rewardSystem.update(registry);
+    accumulator25FPS += delta;
 
     // invoke systems at 50 fps
     while(accumulator50FPS >= msPerUpdate50FPS) {
+        sceneSystem.update(registry, msPerUpdate50FPS);
+        destroyLaterSystem.update(registry, msPerUpdate50FPS);
+        uiButtonSystem.update(registry);
+        smashButtonSystem.update(registry);
+        itemSystem.update(registry, factory, delta);
+        faceSmashSystem.update(registry, factory);
+        rewardSystem.update(registry);
         movementSystem.update(registry, msPerUpdate50FPS);
-        frameSystem.update(registry);
+        animationSystem.update(registry, msPerUpdate50FPS);
+        theGameSystem.update(registry, factory);
+        trainingSystem.update(registry, factory);
         // consume a token
         accumulator50FPS -= msPerUpdate50FPS;
     }
 
-    // invoke systems at 20 fps
-    while(accumulator20FPS >= msPerUpdate20FPS) {
+    // invoke systems at 25 fps
+    while(accumulator25FPS >= msPerUpdate25FPS) {
         scoreSystem.update(registry);
-        timerSystem.update(registry, msPerUpdate20FPS);
-        cameraSystem.update(registry, msPerUpdate20FPS);
+        timerSystem.update(registry, msPerUpdate25FPS);
+        cameraSystem.update(registry, msPerUpdate25FPS);
+        frameSystem.update(registry);
         // consume a token
-        accumulator20FPS -= msPerUpdate20FPS;
+        accumulator25FPS -= msPerUpdate25FPS;
     }
 
-    theGameSystem.update(registry, factory);
-    trainingSystem.update(registry, factory, delta);
-    animationSystem.update(registry, delta);
+    // update debug information (no fixed step here, thanks)
     debugSystem.update(registry, delta);
 
+    // do the best to record if required and then render everything
     recordingSystem.update(renderer, delta, [this](GameRenderer &renderer) {
         renderingSystem.update(registry, renderer);
         hudSystem.update(registry, renderer);

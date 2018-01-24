@@ -5,7 +5,7 @@
 namespace gamee {
 
 
-void TrainingSystem::update(Registry &registry, PlayFactory &factory, delta_type delta) {
+void TrainingSystem::update(Registry &registry, PlayFactory &factory) {
     // TODO
 }
 
