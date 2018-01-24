@@ -68,19 +68,20 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     accumulator50FPS += delta;
     accumulator25FPS += delta;
 
+    sceneSystem.update(registry, delta);
+    destroyLaterSystem.update(registry, delta);
+
+    uiButtonSystem.update(registry);
+    smashButtonSystem.update(registry);
+
+    itemSystem.update(registry, factory, delta);
+    faceSmashSystem.update(registry, factory);
+    rewardSystem.update(registry);
+
     // invoke systems at 50 fps
     while(accumulator50FPS >= msPerUpdate50FPS) {
-        sceneSystem.update(registry, msPerUpdate50FPS);
-        destroyLaterSystem.update(registry, msPerUpdate50FPS);
-        uiButtonSystem.update(registry);
-        smashButtonSystem.update(registry);
-        itemSystem.update(registry, factory, delta);
-        faceSmashSystem.update(registry, factory);
-        rewardSystem.update(registry);
         movementSystem.update(registry, msPerUpdate50FPS);
         animationSystem.update(registry, msPerUpdate50FPS);
-        theGameSystem.update(registry, factory);
-        trainingSystem.update(registry, factory);
         // consume a token
         accumulator50FPS -= msPerUpdate50FPS;
     }
@@ -94,6 +95,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // consume a token
         accumulator25FPS -= msPerUpdate25FPS;
     }
+
+    theGameSystem.update(registry, factory);
+    trainingSystem.update(registry, factory);
 
     // update debug information (no fixed step here, thanks)
     debugSystem.update(registry, delta);
