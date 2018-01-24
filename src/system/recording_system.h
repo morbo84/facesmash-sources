@@ -16,7 +16,7 @@ struct GameRenderer;
 struct RecordingSystem final {
     void init(GameRenderer &);
 
-    void update(GameRenderer &, delta_type, std::function<void(GameRenderer &)>);
+    void update(GameRenderer &, delta_type, std::function<void(void)>);
 
 private:
     std::unique_ptr<unsigned char[]> pixels{nullptr};
