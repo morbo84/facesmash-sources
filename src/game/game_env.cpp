@@ -172,13 +172,6 @@ int GameEnv::exec() noexcept {
 
             previous = current;
 
-#ifndef DEBUG
-            // avoid jumping extremely forward in time
-            if(elapsed > clampOverElapsed) {
-                elapsed = clampOverElapsed;
-            }
-#endif // DEBUG
-
             // poll events for the next loop
             Locator::InputHandler::ref().poll();
 
