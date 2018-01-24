@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <type_traits>
-#include <SDL_pixels.h>
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"

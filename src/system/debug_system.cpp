@@ -1,4 +1,3 @@
-#include <SDL_timer.h>
 #include <type_traits>
 #include "../common/util.h"
 #include "../component/component.hpp"
