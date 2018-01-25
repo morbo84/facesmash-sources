@@ -66,8 +66,6 @@ void GameLoop::close() {
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // do the best to record if required and then render everything
     recordingSystem.update(renderer, delta, [&, this](bool isRecording) {
-        bool canAcquire = !isRecording;
-
         // sum what remains from the previous step
         accumulator50FPS += delta;
         accumulator25FPS += delta;
@@ -89,6 +87,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
             // consume a token
             accumulator50FPS -= msPerUpdate50FPS;
         }
+
+        // enable or disable the frame system
+        bool canAcquire = !isRecording;
 
         // invoke systems at 25 fps
         while(accumulator25FPS >= msPerUpdate25FPS) {
