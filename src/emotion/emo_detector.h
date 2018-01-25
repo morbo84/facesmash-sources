@@ -28,16 +28,16 @@ private:
     void analyzeCurrentFrame();
     static std::optional<FaceType> estimateEmotion(float* prob);
 
-    static int clamp(int x);
-    static void yuvN21toRGB(const unsigned char* yuv, VsImage& buff, int width, int height);
-    static void yuvN21toRGBRotated(const unsigned char* yuv, VsImage& buff, int width, int height);
+    static void ARGBtoRGB(const unsigned char* argb, VsImage& buff, int width, int height);
+    static void ARGBtoRGBRotated(const unsigned char* argb, VsImage& buff, int width, int height);
 
     const int width_;
     const int height_;
     VisageSDK::VisageTracker tracker_;
     VisageSDK::VisageFaceAnalyser analyzer_;
     VsImage* image_;
-    std::unique_ptr<unsigned char[]> yuv_;
+    size_t internalSize_;
+    std::unique_ptr<unsigned char[]> internal_;
     std::mutex mtx_;
     std::condition_variable cv_;
     std::atomic_bool dirty_;
