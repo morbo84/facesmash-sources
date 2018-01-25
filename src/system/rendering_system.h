@@ -11,7 +11,12 @@ namespace gamee {
 struct GameRenderer;
 
 
-struct RenderingSystem final {
+class RenderingSystem final {
+    void game(Registry &, GameRenderer &);
+    void hud(Registry &, GameRenderer &);
+    void debug(Registry &, GameRenderer &);
+
+public:
     void update(Registry &, GameRenderer &);
 };
 

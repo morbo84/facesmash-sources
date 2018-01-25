@@ -13,11 +13,7 @@
 namespace gamee {
 
 
-void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
-    registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
-        return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
-    });
-
+void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
     const auto offset = transformToPosition(registry, registry.attachee<Camera>(), registry.get<Transform>(registry.attachee<Camera>()));
     auto view = registry.persistent<Transform, Renderable, Sprite>();
 
@@ -47,23 +43,67 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
             SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
             SDL_SetTextureAlphaMod(texture, renderable.alpha);
             SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
-
-#if DEBUG
-            if(registry.has<BoundingBox>(entity)) {
-                SDL_Rect rect = registry.get<BoundingBox>(entity) * position;
-                SDL_SetRenderDrawColor(renderer, 128_ui8, 128_ui8, 128_ui8, SDL_ALPHA_OPAQUE);
-                SDL_RenderDrawRect(renderer, &rect);
-            }
-#endif // DEBUG
         }
     });
+}
 
-#if DEBUG
+
+void RenderingSystem::hud(Registry &registry, GameRenderer &renderer) {
+    auto view = registry.persistent<Transform, Renderable, HUD>();
+    view.sort<Renderable>();
+
+    view.each([&](auto entity, const auto &transform, const auto &renderable, const auto &hud) {
+        const auto position = transformToPosition(registry, entity, transform);
+
+        SDL_Rect src;
+        src.w = hud.width;
+        src.h = hud.height;
+        src.x = hud.x;
+        src.y = hud.y;
+
+        SDL_Rect dst;
+        dst.w = hud.w;
+        dst.h = hud.h;
+        dst.x = position.x;
+        dst.y = position.y;
+
+        SDL_Texture *texture = hud.handle.get();
+        SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(texture, renderable.alpha);
+        SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
+    });
+}
+
+
+void RenderingSystem::debug(Registry &registry, GameRenderer &renderer) {
+    auto view = registry.view<Transform, BoundingBox>();
+
+    view.each([&](auto entity, const auto &transform, const auto &box) {
+        const auto position = transformToPosition(registry, entity, transform);
+
+        SDL_Rect rect = box * position;
+        SDL_SetRenderDrawColor(renderer, 128_ui8, 128_ui8, 128_ui8, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &rect);
+    });
+
     if(registry.has<LetsPlay>()) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(renderer, &playArea);
     }
-#endif // DEBUG
+}
+
+
+void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
+    registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
+        return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
+    });
+
+    game(registry, renderer);
+    hud(registry, renderer);
+
+#ifdef DEBUG
+    debug(registry, renderer);
+#endif
 }
 
 

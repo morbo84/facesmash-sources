@@ -29,7 +29,6 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/frame_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/hud_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/item_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/recording_system.cpp

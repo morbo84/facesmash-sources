@@ -114,8 +114,8 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // update debug information (no fixed step here, thanks)
         debugSystem.update(registry, delta);
 
+        // finally, render everything on screen
         renderingSystem.update(registry, renderer);
-        hudSystem.update(registry, renderer);
     });
 }
 

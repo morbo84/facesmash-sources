@@ -12,7 +12,6 @@
 #include "../system/destroy_later_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/frame_system.h"
-#include "../system/hud_system.h"
 #include "../system/item_system.h"
 #include "../system/movement_system.h"
 #include "../system/recording_system.h"
@@ -59,7 +58,6 @@ private:
     ItemSystem itemSystem;
     FaceSmashSystem faceSmashSystem;
     FrameSystem frameSystem;
-    HudSystem hudSystem;
     MovementSystem movementSystem;
     RecordingSystem recordingSystem;
     RenderingSystem renderingSystem;
