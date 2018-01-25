@@ -1,4 +1,3 @@
-#include <cstring>
 #include <SDL_render.h>
 #include "../common/types.h"
 #include "../component/component.hpp"
