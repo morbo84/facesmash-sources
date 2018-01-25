@@ -1,6 +1,8 @@
 #include "camera_android.h"
 #include "face_bus_service.h"
-#include "../locator/locator.hpp"
+#include "common/constants.h"
+#include "locator/locator.hpp"
+#include <SDL_surface.h>
 #include <algorithm>
 #include <atomic>
 #include <cassert>
@@ -12,12 +14,12 @@ namespace gamee {
 
 #ifdef __ANDROID__
 extern std::atomic_bool cameraAndroidReady;
-std::tuple<int, int, int> bindingGetCameraParams();
+std::tuple<int, int> bindingGetCameraParams();
 void bindingStartCamera();
 void bindingStopCamera();
 #else
 static std::atomic_bool cameraAndroidReady{false};
-std::tuple<int, int, int> bindingGetCameraParams() { return {}; }
+std::tuple<int, int> bindingGetCameraParams() { return {}; }
 void bindingStartCamera() {}
 void bindingStopCamera() {}
 #endif
@@ -28,7 +30,7 @@ void CameraAndroid::init() {
     auto params = bindingGetCameraParams();
     width_ = std::get<0>(params);
     height_ = std::get<1>(params);
-    auto bitsPerPixel = std::get<2>(params);
+    auto bitsPerPixel = SDL_BITSPERPIXEL(internalFormat);
     assert(width_ >= 0 && height_ >= 0 && bitsPerPixel >= 0);
     auto pitch = (static_cast<size_t>(bitsPerPixel) * static_cast<size_t>(width_)) / 8;
     assert(pitch * 8U == static_cast<size_t>(bitsPerPixel * width_));
@@ -67,8 +69,8 @@ CameraAndroid::CameraAndroid() {
 
 
 void CameraAndroid::setPixels(const void *buf) {
-    auto cbuf = static_cast<const char *>(buf);
-    std::copy(cbuf, cbuf + size_, p0_);
+    SDL_ConvertPixels(width_, height_, cameraFormat, buf, width_ * SDL_BITSPERPIXEL(cameraFormat) / 8,
+                      internalFormat, p0_, width_ * SDL_BITSPERPIXEL(internalFormat) / 8);
     swapPtrs();
     Locator::FaceBus::ref().enqueue(FrameAvailableEvent{});
 }
