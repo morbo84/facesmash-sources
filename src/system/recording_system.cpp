@@ -1,6 +1,3 @@
-#include <cassert>
-#include <memory>
-#include <utility>
 #include <SDL_render.h>
 #include <SDL_pixels.h>
 #include "../common/constants.h"
@@ -42,15 +39,17 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
 
         renderer.target(*recording);
 
-        if(readPixels && avMuxer.ready()) {
-            SDL_RenderReadPixels(renderer, nullptr, 0, pixels.get(), pitch);
-            avMuxer.frame(pixels.get(), accumulator);
-            firstFrame = false;
-            readPixels = false;
-            isRecording = true;
+        if(ready) {
+            if(avMuxer.ready()) {
+                SDL_RenderReadPixels(renderer, nullptr, 0, pixels.get(), pitch);
+                avMuxer.frame(pixels.get(), accumulator);
+                isRecording = true;
+                firstFrame = false;
+                ready = false;
+            }
         } else {
             SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
-            readPixels = true;
+            ready = true;
         }
 
         renderer.target(*logical);
@@ -63,7 +62,7 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
     } else {
         accumulator = 0_ui32;
         firstFrame = true;
-        readPixels = false;
+        ready = false;
 
         renderer.clear();
         next(isRecording);

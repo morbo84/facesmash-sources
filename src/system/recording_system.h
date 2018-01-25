@@ -22,7 +22,7 @@ private:
     std::unique_ptr<unsigned char[]> pixels{nullptr};
     delta_type accumulator{0_ui32};
     bool firstFrame{true};
-    bool readPixels{false};
+    bool ready{false};
     int pitch{0};
 };
 
