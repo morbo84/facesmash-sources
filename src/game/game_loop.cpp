@@ -65,7 +65,7 @@ void GameLoop::close() {
 
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // do the best to record if required and then render everything
-    recordingSystem.update(renderer, delta, [&, this]() {
+    recordingSystem.update(renderer, delta, [&, this](bool isRecording) {
         // sum what remains from the previous step
         accumulator50FPS += delta;
         accumulator25FPS += delta;
@@ -93,7 +93,13 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
             scoreSystem.update(registry);
             timerSystem.update(registry, msPerUpdate25FPS);
             cameraSystem.update(registry, msPerUpdate25FPS);
-            frameSystem.update(registry);
+
+            // camera stream set at 25fps and we avoid acquiring a frame in case
+            // we are recording the current scene to avoid stressing the cpu
+            if(!isRecording) {
+                frameSystem.update(registry);
+            }
+
             // consume a token
             accumulator25FPS -= msPerUpdate25FPS;
         }
