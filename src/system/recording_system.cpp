@@ -41,7 +41,7 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
 
         if(ready) {
             if(avMuxer.ready()) {
-                SDL_RenderReadPixels(renderer, nullptr, 0, pixels.get(), pitch);
+                SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
                 avMuxer.frame(pixels.get(), accumulator);
                 isRecording = true;
                 firstFrame = false;
