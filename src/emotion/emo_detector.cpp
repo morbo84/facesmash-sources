@@ -1,9 +1,10 @@
-#include "emo_detector.h"
-#include "common/constants.h"
-#include "locator/locator.hpp"
-#include <SDL_surface.h>
-#include <algorithm>
 #include <array>
+#include <algorithm>
+#include <SDL_surface.h>
+#include "../common/constants.h"
+#include "../locator/locator.hpp"
+#include "emo_detector.h"
+
 
 #ifdef __ANDROID__
 static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
