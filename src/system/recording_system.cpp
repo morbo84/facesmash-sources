@@ -26,9 +26,8 @@ void RecordingSystem::init(GameRenderer &renderer) {
 }
 
 
-void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(bool)> next) {
+void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
     auto &avMuxer = Locator::AvMuxer::ref();
-    bool isRecording = false;
 
     if(avMuxer.recording()) {
         auto &textureCache = Locator::TextureCache::ref();
@@ -39,22 +38,17 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
 
         renderer.target(*recording);
 
-        if(ready) {
-            if(avMuxer.ready()) {
-                SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
-                avMuxer.frame(pixels.get(), accumulator);
-                isRecording = true;
-                firstFrame = false;
-                ready = false;
-            }
-        } else {
-            SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
-            ready = true;
+        if(avMuxer.ready()) {
+            SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
+            avMuxer.frame(pixels.get(), accumulator);
+            firstFrame = false;
         }
+
+        SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
 
         renderer.target(*logical);
         renderer.clear();
-        next(isRecording);
+        next();
 
         renderer.target();
         SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
@@ -62,10 +56,9 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
     } else {
         accumulator = 0_ui32;
         firstFrame = true;
-        ready = false;
 
         renderer.clear();
-        next(isRecording);
+        next();
         renderer.present();
     }
 }

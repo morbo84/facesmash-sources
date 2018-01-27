@@ -34,8 +34,7 @@ struct GameRenderer;
 
 
 class GameLoop final: public GameEnv {
-    static constexpr delta_type msPerUpdate50FPS = 20;
-    static constexpr delta_type msPerUpdate25FPS = 40;
+    static constexpr delta_type msPerUpdate = 10;
 
     void init(GameRenderer &) override;
     void close() override;
@@ -44,8 +43,7 @@ class GameLoop final: public GameEnv {
 
 private:
     // tracking value
-    delta_type accumulator50FPS{0_ui32};
-    delta_type accumulator25FPS{0_ui32};
+    delta_type accumulator{0_ui32};
     // entity-component system
     Registry registry;
     // factory of game objects

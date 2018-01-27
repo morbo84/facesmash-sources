@@ -16,13 +16,12 @@ struct GameRenderer;
 struct RecordingSystem final {
     void init(GameRenderer &);
 
-    void update(GameRenderer &, delta_type, std::function<void(bool)>);
+    void update(GameRenderer &, delta_type, std::function<void(void)>);
 
 private:
     std::unique_ptr<unsigned char[]> pixels{nullptr};
     delta_type accumulator{0_ui32};
     bool firstFrame{true};
-    bool ready{false};
     int pitch{0};
 };
 

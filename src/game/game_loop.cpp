@@ -70,11 +70,11 @@ void GameLoop::close() {
 
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // do the best to record if required and then render everything
-    recordingSystem.update(renderer, delta, [&, this](bool isRecording) {
+    recordingSystem.update(renderer, delta, [&, this]() {
         // sum what remains from the previous step
-        accumulator50FPS += delta;
-        accumulator25FPS += delta;
+        accumulator += delta;
 
+        frameSystem.update(registry);
         sceneSystem.update(registry, delta);
         destroyLaterSystem.update(registry, delta);
 
@@ -85,33 +85,18 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         faceSmashSystem.update(registry, factory);
         rewardSystem.update(registry);
 
-        // invoke systems at 50 fps
-        while(accumulator50FPS >= msPerUpdate50FPS) {
-            movementSystem.update(registry, msPerUpdate50FPS);
-            animationSystem.update(registry, msPerUpdate50FPS);
+        // invoke systems with a fixed timestep
+        while(accumulator >= msPerUpdate) {
+            movementSystem.update(registry, msPerUpdate);
+            animationSystem.update(registry, msPerUpdate);
             // consume a token
-            accumulator50FPS -= msPerUpdate50FPS;
+            accumulator -= msPerUpdate;
         }
-
-        // enable or disable the frame system
-        bool canAcquire = !isRecording;
 
         // invoke systems at 25 fps
-        while(accumulator25FPS >= msPerUpdate25FPS) {
-            scoreSystem.update(registry);
-            timerSystem.update(registry, msPerUpdate25FPS);
-            cameraSystem.update(registry, msPerUpdate25FPS);
-
-            // camera stream set at 25fps and we avoid acquiring a frame in case
-            // we are recording the current scene to avoid stressing the cpu
-            if(canAcquire) {
-                frameSystem.update(registry);
-                canAcquire = !canAcquire;
-            }
-
-            // consume a token
-            accumulator25FPS -= msPerUpdate25FPS;
-        }
+        scoreSystem.update(registry);
+        timerSystem.update(registry, delta);
+        cameraSystem.update(registry, delta);
 
         theGameSystem.update(registry, factory);
         trainingSystem.update(registry, factory);

@@ -175,19 +175,18 @@ int GameEnv::exec() noexcept {
             // poll events for the next loop
             Locator::InputHandler::ref().poll();
 
-            /**
-             * Not used currently, but who knows? We'll see.
-             *
-             * current = clock.ticks();
-             * auto remaining = msPerFrame - current + previous;
-             */
-
             // dispatch the events collected so far (if any)
             Locator::FaceBus::ref().dequeue();
             Locator::Dispatcher::ref().update();
 
             // render the scene
             update(*renderer, elapsed);
+
+            // try to keep the game at 30 FPS at least
+            current = clock.ticks();
+            if(previous + msPerFrame > current) {
+                clock.delay(previous + msPerFrame - current);
+            }
         }
 
         close();
