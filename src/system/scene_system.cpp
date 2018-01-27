@@ -346,10 +346,10 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_BOTTOM_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         default:
             assert(false);
@@ -476,7 +476,7 @@ delta_type SceneSystem::trainingTutorialTransition(Registry &registry) {
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TUTORIAL_TOP_PANEL:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeOutElastic);
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         default:
             assert(false);
