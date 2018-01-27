@@ -133,6 +133,18 @@ struct VerticalAnimation final {
 };
 
 
+struct SizeAnimation final {
+    using ease_type = float(*)(float, float, float, float);
+    int fromW;
+    int fromH;
+    int toW;
+    int toH;
+    delta_type duration;
+    delta_type elapsed{0_ui32};
+    ease_type ease{&linear};
+};
+
+
 struct UIButton final {
     UIAction action;
 };

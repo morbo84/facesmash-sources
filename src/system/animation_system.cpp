@@ -88,12 +88,37 @@ void AnimationSystem::verticalAnimation(Registry &registry, delta_type delta) {
 }
 
 
+void AnimationSystem::sizeAnimation(Registry &registry, delta_type delta) {
+    auto view = registry.view<SizeAnimation, Sprite, Transform>();
+
+    view.each([delta, &registry](auto entity, auto &animation, auto &sprite, auto &transform) {
+        animation.elapsed += delta;
+
+        const int xC = transform.x + sprite.w / 2;
+        const int yC = transform.y + sprite.h / 2;
+
+        if(animation.elapsed < animation.duration) {
+            sprite.w = animation.ease(animation.elapsed, animation.duration, animation.fromW, animation.toW);
+            sprite.h = animation.ease(animation.elapsed, animation.duration, animation.fromH, animation.toH);
+        } else {
+            sprite.w = animation.toW;
+            sprite.h = animation.toH;
+            registry.remove<SizeAnimation>(entity);
+        }
+
+        transform.x = xC - sprite.w / 2;
+        transform.y = yC - sprite.h / 2;
+    });
+}
+
+
 void AnimationSystem::update(Registry &registry, delta_type delta) {
     fadeAnimation(registry, delta);
     rotationAnimation(registry, delta);
     spriteAnimation(registry, delta);
     horizontalAnimation(registry, delta);
     verticalAnimation(registry, delta);
+    sizeAnimation(registry, delta);
 }
 
 

@@ -18,7 +18,7 @@ class PlayFactory final {
     static constexpr float bottomImpulseY = .95f;
     static constexpr float sideImpulseX = .5f;
     static constexpr float sideImpulseY = .35f;
-    static constexpr float scoreDrift = -.04f;
+    static constexpr float scoreDrift = -.1f;
 
     int toZ(FaceType);
     int toZ(ItemType);

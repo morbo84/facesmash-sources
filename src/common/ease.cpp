@@ -25,7 +25,7 @@ float easeOutCubic(float elapsed, float duration, float from, float to) {
 
 float easeOutElastic(float elapsed, float duration, float from, float to) {
     const auto t = elapsed/duration;
-    const float p = .75f;
+    const float p = .55f;
     return from + (std::pow(2, -10*t) * std::sin((t-p/4) * (2*3.14)/p) + 1) * (to - from);
 }
 

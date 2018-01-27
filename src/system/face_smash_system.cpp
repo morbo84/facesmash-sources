@@ -92,7 +92,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
 
     // check rewards
     auto gotIt = [&](auto handle, auto amount) {
-        registry.accomodate<HUD>(registry.attachee<Reward>(), handle, handle->width(), handle->height(), handle->width(), handle->height());
+        registry.accomodate<Sprite>(registry.attachee<Reward>(), handle, handle->width(), handle->height(), handle->width(), handle->height());
         registry.get<Reward>().dirty = true;
         score.score += amount;
     };

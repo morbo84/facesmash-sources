@@ -14,6 +14,7 @@ class AnimationSystem final {
     void spriteAnimation(Registry &, delta_type);
     void horizontalAnimation(Registry &, delta_type);
     void verticalAnimation(Registry &, delta_type);
+    void sizeAnimation(Registry &, delta_type);
 
 public:
     void update(Registry &, delta_type);

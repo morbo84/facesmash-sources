@@ -93,7 +93,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
             accumulator -= msPerUpdate;
         }
 
-        // invoke systems at 25 fps
         scoreSystem.update(registry);
         timerSystem.update(registry, delta);
         cameraSystem.update(registry, delta);

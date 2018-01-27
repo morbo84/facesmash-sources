@@ -290,7 +290,7 @@ void createGameTopPanel(Registry &registry) {
     }
 
     auto rewardHandle = textureCache.handle("str/reward/perfect");
-    auto reward = createHUD(registry, parent, rewardHandle, 160);
+    auto reward = createSprite(registry, parent, rewardHandle, 160);
     setPos(registry, reward, (panel.w - rewardHandle->width()) / 2, panel.h - rewardHandle->height() / 2);
     registry.get<Renderable>(reward).alpha = 0;
     registry.attach<Reward>(reward);

@@ -1,4 +1,5 @@
 #include <cassert>
+#include "../common/ease.h"
 #include "../locator/locator.hpp"
 #include "play_factory.h"
 
@@ -46,8 +47,9 @@ void PlayFactory::addScore(Registry &registry, SDLTextureHandle handle, float x,
     registry.assign<Renderable>(entity, 0.f, 190);
     registry.assign<Movement>(entity, 0.f, 0.f, scoreDrift);
     registry.assign<FadeAnimation>(entity, 255, 0, 2000_ui32);
-    registry.assign<DestroyLater>(entity, 2000_ui32);
+    registry.assign<SizeAnimation>(entity, 0, 0, handle->width(), handle->height(), 1000_ui32, 0_ui32, &easeOutElastic);
     registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    registry.assign<DestroyLater>(entity, 2000_ui32);
 
     auto &transform = registry.assign<Transform>(entity, entity, x - handle->width() / 2.f, y - handle->height() / 2.f);
     const auto left = transform.x;

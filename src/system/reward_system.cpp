@@ -15,10 +15,12 @@ void RewardSystem::update(Registry &registry) {
 
         if(reward.dirty) {
             auto entity = registry.attachee<Reward>();
+            const auto handle = registry.get<Sprite>(entity).handle;
 
             // update reward label and show it
             registry.accomodate<FadeAnimation>(entity, 255, 0, 2000_ui32);
-            registry.get<Transform>(entity).x = logicalWidth / 2.f - registry.get<HUD>(entity).handle->width() / 2.f;
+            registry.accomodate<SizeAnimation>(entity, 0, 0, handle->width(), handle->height(), 1000_ui32, 0_ui32, &easeOutElastic);
+            registry.get<Transform>(entity).x = logicalWidth / 2.f - handle->width() / 2.f;
 
             // shake the camera
             registry.remove<CameraShake>();
