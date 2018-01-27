@@ -40,6 +40,9 @@ enum class SceneType: Uint8 {
     SPLASH_SCREEN,
     MENU_PAGE,
     CREDITS_PAGE,
+    SUPPORT_PAGE,
+    SETTINGS_PAGE,
+    ACHIEVEMENTS_PAGE,
     GAME_TUTORIAL,
     THE_GAME,
     GAME_OVER,
@@ -66,13 +69,15 @@ enum class ItemType: Uint8 {
 
 
 enum class UIAction: Uint8 {
-    EXIT,
     MENU,
     CREDITS,
-    GAME_TUTORIAL,
-    TRAINING_TUTORIAL,
+    SUPPORT,
+    SETTINGS,
+    ACHIEVEMENTS,
+    THE_GAME,
+    TRAINING,
     RELOAD,
-    SHARE,
+    SAVE,
     SWITCH_AUDIO
 };
 
@@ -84,6 +89,9 @@ enum class PanelType: Uint8 {
     MENU_TOP_PANEL,
     MENU_BOTTOM_PANEL,
     CREDITS_PANEL,
+    SUPPORT_PANEL,
+    SETTINGS_PANEL,
+    ACHIEVEMENTS_PANEL,
     TUTORIAL_TOP_PANEL,
     TUTORIAL_BOTTOM_PANEL,
     GAME_TOP_PANEL,

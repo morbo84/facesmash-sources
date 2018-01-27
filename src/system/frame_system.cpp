@@ -41,7 +41,7 @@ void FrameSystem::update(Registry &registry) {
             int pitch;
 
             SDL_LockTexture(*handle, nullptr, &texture, &pitch);
-            std::copy_n(static_cast<const unsigned char*>(pixels), size, static_cast<unsigned char*>(texture));
+            std::copy_n(static_cast<const unsigned char *>(pixels), size, static_cast<unsigned char *>(texture));
             SDL_UnlockTexture(*handle);
         });
 

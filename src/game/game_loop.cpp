@@ -17,7 +17,7 @@ void GameLoop::init(GameRenderer &renderer) {
     // load all the resources at once (as long as it works, why not?)
     // then create all the panels, so as to have them always available
 
-    loadDefaultFont(renderer);
+    loadDefaultFont();
     loadGameStuff(renderer);
     loadTargetTextures(renderer);
 
@@ -27,6 +27,9 @@ void GameLoop::init(GameRenderer &renderer) {
     createMenuTopPanel(registry);
     createMenuBottomPanel(registry);
     createCreditsPanel(registry);
+    createSupportPanel(registry);
+    createSettingsPanel(registry);
+    createAchievementsPanel(registry);
     createTutorialTopPanel(registry);
     createTutorialBottomPanel(registry);
     createGameTopPanel(registry);
@@ -42,7 +45,9 @@ void GameLoop::init(GameRenderer &renderer) {
 #endif // CAMERA_FRAME_AVAILABLE
 
 #ifdef DEBUG
-    loadDebugFont(renderer);
+    loadDebugFont();
+    loadDebugStuff(renderer);
+
     createDebugHUD(registry);
     createSmashButtons(registry);
 #endif // DEBUG

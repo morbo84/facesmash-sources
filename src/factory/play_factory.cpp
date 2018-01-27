@@ -152,11 +152,15 @@ void PlayFactory::spawnMissScore(Registry &registry, Uint8 score, float x, float
 
 void PlayFactory::spawnExplosion(Registry &registry, float x, float y) {
     auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("game/explosion");
     auto entity = registry.create();
 
-    registry.assign<Sprite>(entity, textureCache.handle("game/explosion"), 192, 192, 192, 192, 0, 0, 20_ui8, 5_ui8);
+    const auto width = handle->width() / 5;
+    const auto height = handle->height() / 4;
+
+    registry.assign<Sprite>(entity, handle, width, height, width, height, 0, 0, 20_ui8, 5_ui8);
     registry.assign<Renderable>(entity, 0.f, 255);
-    registry.assign<Transform>(entity, entity, x, y);
+    registry.assign<Transform>(entity, entity, x - width / 2.f, y - height / 2.f);
     registry.assign<SpriteAnimation>(entity, 1000_ui32, 0_ui32, false);
     registry.assign<DestroyLater>(entity, 1000_ui32);
 }

@@ -1,12 +1,12 @@
-#include "camera_android.h"
-#include "face_bus_service.h"
-#include "common/constants.h"
-#include "locator/locator.hpp"
-#include <SDL_surface.h>
-#include <algorithm>
+#include <tuple>
 #include <atomic>
 #include <cassert>
-#include <tuple>
+#include <algorithm>
+#include <SDL_surface.h>
+#include "../common/constants.h"
+#include "../locator/locator.hpp"
+#include "face_bus_service.h"
+#include "camera_android.h"
 
 
 namespace gamee {

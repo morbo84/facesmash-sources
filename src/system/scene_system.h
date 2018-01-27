@@ -24,6 +24,9 @@ class SceneSystem final {
     delta_type splashScreenTransition(Registry &);
     delta_type menuPageTransition(Registry &);
     delta_type creditsTransition(Registry &);
+    delta_type supportTransition(Registry &);
+    delta_type settingsTransition(Registry &);
+    delta_type achievementsTransition(Registry &);
     delta_type gameTutorialTransition(Registry &);
     delta_type theGameTransition(Registry &);
     delta_type gameOverTransition(Registry &);

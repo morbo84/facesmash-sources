@@ -8,10 +8,11 @@ namespace gamee {
 struct GameRenderer;
 
 
-void loadDefaultFont(GameRenderer &);
+void loadDefaultFont();
+void loadDebugFont();
 void loadGameStuff(GameRenderer &);
 void loadCameraFrame(GameRenderer &);
-void loadDebugFont(GameRenderer &);
+void loadDebugStuff(GameRenderer &);
 void loadTargetTextures(GameRenderer &);
 
 

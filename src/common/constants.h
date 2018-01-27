@@ -10,8 +10,8 @@
 namespace gamee {
 
 
-constexpr int logicalWidth = 1080;
-constexpr int logicalHeight = 1920;
+constexpr int logicalWidth = 720;
+constexpr int logicalHeight = 1280;
 const SDL_Rect logicalScreen = { 0, 0, logicalWidth, logicalHeight };
 
 constexpr int recordingWidth = 720;
@@ -20,7 +20,7 @@ constexpr int recordingHeight = 1280;
 constexpr Uint32 internalFormat = SDL_PIXELFORMAT_ARGB8888;
 constexpr Uint32 cameraFormat = SDL_PIXELFORMAT_NV21;
 
-const SDL_Rect playArea = { logicalWidth / 8, logicalHeight / 8, 6 * logicalWidth / 8, 6 * logicalHeight / 8 };
+const SDL_Rect playArea = { logicalWidth / 10, logicalHeight / 6, 4 * logicalWidth / 5, 2 * logicalHeight / 3 };
 
 constexpr int numberOfItems = 3;
 constexpr int numberOfFaces = 6;

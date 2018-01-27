@@ -22,18 +22,9 @@ UIButtonSystem::~UIButtonSystem() {
 
 
 void UIButtonSystem::switchAudio(Registry &registry, entity_type entity) {
-    auto &textureCache = Locator::TextureCache::ref();
-    auto &audio = Locator::Audio::ref();
-
-    if(audio.isMute()) {
-        auto &sprite = registry.get<Sprite>(entity);
-        sprite.handle = textureCache.handle("bt/empty");
-        Locator::Audio::set<AudioSdl>();
-    } else {
-        auto &sprite = registry.get<Sprite>(entity);
-        sprite.handle = textureCache.handle("bt/empty");
-        Locator::Audio::set<AudioNull>();
-    }
+    return Locator::Audio::ref().isMute()
+            ? Locator::Audio::set<AudioSdl>()
+            : Locator::Audio::set<AudioNull>();
 }
 
 
@@ -54,13 +45,10 @@ void UIButtonSystem::update(Registry &registry) {
 
             if(SDL_PointInRect(&coord, &area)) {
                 switch(button.action) {
-                case UIAction::EXIT:
-                    dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
-                    break;
-                case UIAction::GAME_TUTORIAL:
+                case UIAction::THE_GAME:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
-                case UIAction::TRAINING_TUTORIAL:
+                case UIAction::TRAINING:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_TUTORIAL);
                     break;
                 case UIAction::RELOAD:
@@ -72,7 +60,16 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::CREDITS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);
                     break;
-                case UIAction::SHARE:
+                case UIAction::SUPPORT:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
+                    break;
+                case UIAction::SETTINGS:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
+                    break;
+                case UIAction::ACHIEVEMENTS:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::ACHIEVEMENTS_PAGE);
+                    break;
+                case UIAction::SAVE:
                     // TODO
                     break;
                 case UIAction::SWITCH_AUDIO:

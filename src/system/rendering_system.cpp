@@ -76,13 +76,20 @@ void RenderingSystem::hud(Registry &registry, GameRenderer &renderer) {
 
 
 void RenderingSystem::debug(Registry &registry, GameRenderer &renderer) {
-    auto view = registry.view<Transform, BoundingBox>();
-
-    view.each([&](auto entity, const auto &transform, const auto &box) {
+    registry.view<Transform, BoundingBox>().each([&](auto entity, const auto &transform, const auto &box) {
         const auto position = transformToPosition(registry, entity, transform);
 
         SDL_Rect rect = box * position;
         SDL_SetRenderDrawColor(renderer, 128_ui8, 128_ui8, 128_ui8, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &rect);
+    });
+
+    registry.view<Transform, Panel>().each([&](auto, const auto &transform, const auto &panel) {
+        const int x = transform.x;
+        const int y = transform.y;
+
+        SDL_Rect rect = { x, y, panel.w, panel.h };
+        SDL_SetRenderDrawColor(renderer, 0_ui8, 255_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(renderer, &rect);
     });
 

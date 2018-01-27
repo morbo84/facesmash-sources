@@ -13,12 +13,12 @@ namespace gamee {
 
 
 class PlayFactory final {
-    static constexpr float gravity = .0005f;
-    static constexpr float bottomImpulseX = .12f;
-    static constexpr float bottomImpulseY = 1.4f;
+    static constexpr float gravity = .0003f;
+    static constexpr float bottomImpulseX = .08f;
+    static constexpr float bottomImpulseY = .95f;
     static constexpr float sideImpulseX = .5f;
-    static constexpr float sideImpulseY = .4f;
-    static constexpr float scoreDrift = -.06f;
+    static constexpr float sideImpulseY = .35f;
+    static constexpr float scoreDrift = -.04f;
 
     int toZ(FaceType);
     int toZ(ItemType);

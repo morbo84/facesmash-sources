@@ -48,7 +48,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
 
             if(SDL_HasIntersection(&playArea, &area)) {
                 if(dirty && smash.type == type) {
-                    factory.spawnExplosion(registry, area.x + area.w / 2.f - 96, area.y + area.h / 2.f - 96);
+                    factory.spawnExplosion(registry, x, y);
                     factory.spawnSmashScore(registry, smash.smash, x, y);
 
                     switch(smash.type) {
