@@ -24,6 +24,10 @@ void ItemSystem::movement(Registry &registry, float mod) {
 void ItemSystem::fountain(Registry &registry, PlayFactory &factory) {
     const auto face = faceBag.get();
 
+    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+
     while(registry.size<Face>() < 5) {
         factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
     }
@@ -43,7 +47,7 @@ ItemSystem::~ItemSystem() {
 delta_type ItemSystem::toRemaining(ItemType type) {
     switch(type) {
     case ItemType::FOUNTAIN:
-        return 500_ui32;
+        return 1_ui32;
     case ItemType::SLOW_DOWN:
         return 5000_ui32;
     case ItemType::SPEED_UP:
@@ -82,10 +86,6 @@ void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type del
         }
     });
 
-    dirty = false;
-
-    remaining = delta > remaining ? 0_ui32 : (remaining - delta);
-
     if(remaining) {
         switch(curr) {
         case ItemType::FOUNTAIN:
@@ -101,6 +101,9 @@ void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type del
     } else {
         movement(registry, 1.f);
     }
+
+    remaining = delta > remaining ? 0_ui32 : (remaining - delta);
+    dirty = false;
 }
 
 
