@@ -69,8 +69,8 @@ CameraAndroid::CameraAndroid() {
 
 
 void CameraAndroid::setPixels(const void *buf) {
-    SDL_ConvertPixels(width_, height_, cameraFormat, buf, width_ * SDL_BITSPERPIXEL(cameraFormat) / 8,
-                      internalFormat, p0_, width_ * SDL_BITSPERPIXEL(internalFormat) / 8);
+    SDL_ConvertPixels(width_, height_, cameraFormat, buf, width_ * SDL_BYTESPERPIXEL(cameraFormat),
+                      internalFormat, p0_, width_ * SDL_BYTESPERPIXEL(internalFormat));
     swapPtrs();
     Locator::FaceBus::ref().enqueue(FrameAvailableEvent{});
 }
