@@ -109,7 +109,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
     } else if(4 == combo) {
         // 4x combo
         gotIt(textureCache.handle("str/reward/x4"), 4 * total);
-    } else if(5 < combo) {
+    } else if(5 <= combo) {
         // 5x combo
         gotIt(textureCache.handle("str/reward/x5"), 5 * total);
     }
