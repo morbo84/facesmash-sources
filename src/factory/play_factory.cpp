@@ -158,9 +158,9 @@ void PlayFactory::spawnExplosion(Registry &registry, float x, float y) {
     auto entity = registry.create();
 
     const auto width = handle->width() / 5;
-    const auto height = handle->height() / 4;
+    const auto height = handle->height() / 3;
 
-    registry.assign<Sprite>(entity, handle, width, height, width, height, 0, 0, 20_ui8, 5_ui8);
+    registry.assign<Sprite>(entity, handle, width, height, width, height, 0, 0, 15_ui8, 3_ui8);
     registry.assign<Renderable>(entity, 0.f, 255);
     registry.assign<Transform>(entity, entity, x - width / 2.f, y - height / 2.f);
     registry.assign<SpriteAnimation>(entity, 1000_ui32, 0_ui32, false);
