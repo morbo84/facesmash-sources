@@ -148,6 +148,15 @@ void createCreditsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/credits");
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto backButtonHandle = textureCache.handle("bt/small");
+    auto backButton = createUIButton(registry, parent, backButtonHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backButtonHandle->width() / 2, panel.h - 3 * backButtonHandle->height() / 2);
+
+    auto imgBackHandle = textureCache.handle("img/prev");
+    auto imgBackEntity = createSprite(registry, backButton, imgBackHandle, 155);
+    setSpriteSize(registry, imgBackEntity, 5 * backButtonHandle->width() / 6, 5 * backButtonHandle->width() / 6);
+    setPos(registry, imgBackEntity, backButtonHandle->width() / 18, backButtonHandle->width() / 18);
 }
 
 
@@ -160,6 +169,15 @@ void createSupportPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto backButtonHandle = textureCache.handle("bt/small");
+    auto backButton = createUIButton(registry, parent, backButtonHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backButtonHandle->width() / 2, panel.h - 3 * backButtonHandle->height() / 2);
+
+    auto imgBackHandle = textureCache.handle("img/prev");
+    auto imgBackEntity = createSprite(registry, backButton, imgBackHandle, 155);
+    setSpriteSize(registry, imgBackEntity, 5 * backButtonHandle->width() / 6, 5 * backButtonHandle->width() / 6);
+    setPos(registry, imgBackEntity, backButtonHandle->width() / 18, backButtonHandle->width() / 18);
 }
 
 
@@ -172,6 +190,15 @@ void createSettingsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/settings");
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto backButtonHandle = textureCache.handle("bt/small");
+    auto backButton = createUIButton(registry, parent, backButtonHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backButtonHandle->width() / 2, panel.h - 3 * backButtonHandle->height() / 2);
+
+    auto imgBackHandle = textureCache.handle("img/prev");
+    auto imgBackEntity = createSprite(registry, backButton, imgBackHandle, 155);
+    setSpriteSize(registry, imgBackEntity, 5 * backButtonHandle->width() / 6, 5 * backButtonHandle->width() / 6);
+    setPos(registry, imgBackEntity, backButtonHandle->width() / 18, backButtonHandle->width() / 18);
 }
 
 
@@ -184,6 +211,15 @@ void createAchievementsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/achievements");
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto backButtonHandle = textureCache.handle("bt/small");
+    auto backButton = createUIButton(registry, parent, backButtonHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backButtonHandle->width() / 2, panel.h - 3 * backButtonHandle->height() / 2);
+
+    auto imgBackHandle = textureCache.handle("img/prev");
+    auto imgBackEntity = createSprite(registry, backButton, imgBackHandle, 155);
+    setSpriteSize(registry, imgBackEntity, 5 * backButtonHandle->width() / 6, 5 * backButtonHandle->width() / 6);
+    setPos(registry, imgBackEntity, backButtonHandle->width() / 18, backButtonHandle->width() / 18);
 }
 
 

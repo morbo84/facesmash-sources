@@ -71,6 +71,9 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<AssetTextureLoader>("img/medal", "png/gui/medal.png", renderer);
     textureCache.load<AssetTextureLoader>("img/info", "png/gui/information.png", renderer);
     textureCache.load<AssetTextureLoader>("img/support", "png/gui/support.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/back", "png/gui/back.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/prev", "png/gui/prev.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/next", "png/gui/next.png", renderer);
 
     textureCache.load<AssetTextureLoader>("game/explosion", "png/gui/explosion.png", renderer);
 
