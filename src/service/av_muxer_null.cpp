@@ -19,4 +19,7 @@ bool AvMuxerNull::recording() const noexcept { return false; }
 bool AvMuxerNull::ready() const noexcept { return false; }
 
 
+bool AvMuxerNull::available() const noexcept { return false; }
+
+
 }

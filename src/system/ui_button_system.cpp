@@ -5,6 +5,8 @@
 #include "../math/math.hpp"
 #include "../service/audio_null.h"
 #include "../service/audio_sdl.h"
+#include "../service/av_muxer_android.h"
+#include "../service/av_muxer_null.h"
 #include "ui_button_system.h"
 
 
@@ -21,10 +23,37 @@ UIButtonSystem::~UIButtonSystem() {
 }
 
 
-void UIButtonSystem::switchAudio(Registry &registry, entity_type entity) {
-    return Locator::Audio::ref().isMute()
-            ? Locator::Audio::set<AudioSdl>()
-            : Locator::Audio::set<AudioNull>();
+void UIButtonSystem::switchAudio(Registry &registry, UIButton &button) {
+    auto &textureCache = Locator::TextureCache::ref();
+    const auto &audio = Locator::Audio::ref();
+
+    if(audio.isMute()) {
+        registry.get<Sprite>(button.label).handle = textureCache.handle("img/audio/on");
+        Locator::Audio::set<AudioSdl>();
+    } else {
+        registry.get<Sprite>(button.label).handle = textureCache.handle("img/audio/off");
+        Locator::Audio::set<AudioNull>();
+    }
+}
+
+
+void UIButtonSystem::switchVideo(Registry &registry, UIButton &button) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+#ifdef __ANDROID__
+    const auto &muxer = Locator::AvMuxer::ref();
+
+    if(muxer.available()) {
+        registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/on");
+        Locator::AvMuxer::set<AvMuxerAndroid>();
+    } else {
+        registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
+        Locator::AvMuxer::set<AvMuxerNull>();
+    }
+#else
+    registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
+    Locator::AvMuxer::set<AvMuxerNull>();
+#endif
 }
 
 
@@ -73,7 +102,10 @@ void UIButtonSystem::update(Registry &registry) {
                     // TODO
                     break;
                 case UIAction::SWITCH_AUDIO:
-                    switchAudio(registry, entity);
+                    switchAudio(registry, button);
+                    break;
+                case UIAction::SWITCH_VIDEO:
+                    switchVideo(registry, button);
                     break;
                 }
             }

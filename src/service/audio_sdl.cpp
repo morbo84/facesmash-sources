@@ -14,7 +14,7 @@ void AudioSdl::release() {
 }
 
 
-bool AudioSdl::isMute() {
+bool AudioSdl::isMute() const noexcept {
     return false;
 }
 

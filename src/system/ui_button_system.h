@@ -11,13 +11,15 @@ namespace gamee {
 
 
 struct TouchEvent;
+struct UIButton;
 
 
 struct UIButtonSystem final {
     UIButtonSystem();
     ~UIButtonSystem();
 
-    void switchAudio(Registry &, entity_type);
+    void switchAudio(Registry &, UIButton &);
+    void switchVideo(Registry &, UIButton &);
 
     void receive(const TouchEvent &) noexcept;
 

@@ -12,7 +12,7 @@ struct AudioNull: AudioService {
     void init() override;
     void release() override;
 
-    bool isMute() override;
+    bool isMute() const noexcept override;
 
     // TODO
 };

@@ -11,7 +11,7 @@ struct AudioService {
     virtual void init() = 0;
     virtual void release() = 0;
 
-    virtual bool isMute() = 0;
+    virtual bool isMute() const noexcept = 0;
 
     // TODO
 };

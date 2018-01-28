@@ -34,7 +34,7 @@ void releaseBasicServices() {
 
 void initPlatformServices() {
     gamee::Locator::FaceBus::set<gamee::FaceBusService>();
-    gamee::Locator::Audio::set<gamee::AudioNull>();
+    gamee::Locator::Audio::set<gamee::AudioSdl>();
 
 #ifdef __ANDROID__
     gamee::Locator::Camera::set<gamee::CameraAndroid>();

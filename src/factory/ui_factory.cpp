@@ -46,23 +46,23 @@ entity_type createSprite(Registry &registry, entity_type parent, SDLTextureHandl
 }
 
 
-entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, UIAction action, int z) {
-    auto entity = registry.create();
-    registry.assign<Renderable>(entity, 0.f, z);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(entity, parent, 0.f, 0.f);
-    registry.assign<UIButton>(entity, action);
+entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, SDLTextureHandle label, UIAction action, int z) {
+    auto entity = createSprite(registry, parent, handle, z);
+    auto child = createSprite(registry, entity, label, 155);
+
+    registry.assign<UIButton>(entity, child, action);
+
+    setSpriteSize(registry, child, 5 * handle->width() / 6, 5 * handle->width() / 6);
+    setPos(registry, child, label->width() / 18, label->width() / 18);
+
     return entity;
 }
 
 
 entity_type createSmashButton(Registry &registry, entity_type parent, SDLTextureHandle handle, FaceType type, int z) {
-    auto entity = registry.create();
-    registry.assign<SmashButton>(entity, type);
-    registry.assign<Transform>(entity, parent, 0.f, 0.f);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
+    auto entity = createSprite(registry, parent, handle, z);
     registry.assign<BoundingBox>(entity, handle->width(), handle->height());
-    registry.assign<Renderable>(entity, 0.f, z);
+    registry.assign<SmashButton>(entity, type);
     return entity;
 }
 

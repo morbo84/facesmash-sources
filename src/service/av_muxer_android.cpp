@@ -183,3 +183,11 @@ bool AvMuxerAndroid::ready() const noexcept { return false; }
 } // namespace gamee
 
 #endif
+
+namespace gamee {
+
+bool AvMuxerAndroid::available() const noexcept {
+    return true;
+}
+
+}

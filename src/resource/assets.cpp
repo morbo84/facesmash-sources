@@ -53,11 +53,14 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/facesmash/red/S", "S", renderer, *ttfFontCache.handle("font/default/huge"), colorRed);
     textureCache.load<TTFFontTextureLoader>("str/facesmash/green/H", "H", renderer, *ttfFontCache.handle("font/default/huge"), colorGreen);
 
-    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *ttfFontCache.handle("font/default/small"), colorBlack);
-    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *ttfFontCache.handle("font/default/small"), colorBlack);
-    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *ttfFontCache.handle("font/default/small"), colorBlack);
+    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
+    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
+    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
     textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *ttfFontCache.handle("font/default/small"), colorBlack);
     textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
+
+    textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
+    textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
 
     textureCache.load<AssetTextureLoader>("bt/small", "png/gui/bt_small.png", renderer);
     textureCache.load<AssetTextureLoader>("bt/normal", "png/gui/bt_normal.png", renderer);
@@ -74,6 +77,11 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<AssetTextureLoader>("img/back", "png/gui/back.png", renderer);
     textureCache.load<AssetTextureLoader>("img/prev", "png/gui/prev.png", renderer);
     textureCache.load<AssetTextureLoader>("img/next", "png/gui/next.png", renderer);
+
+    textureCache.load<AssetTextureLoader>("img/audio/on", "png/gui/audio_on.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/audio/off", "png/gui/audio_off.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/video/on", "png/gui/video_on.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/video/off", "png/gui/video_off.png", renderer);
 
     textureCache.load<AssetTextureLoader>("game/explosion", "png/gui/explosion.png", renderer);
 

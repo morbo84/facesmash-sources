@@ -8,7 +8,7 @@ void AudioNull::init() {}
 void AudioNull::release() {}
 
 
-bool AudioNull::isMute() {
+bool AudioNull::isMute() const noexcept {
     return true;
 }
 

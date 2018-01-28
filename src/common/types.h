@@ -78,7 +78,8 @@ enum class UIAction: Uint8 {
     TRAINING,
     RELOAD,
     SAVE,
-    SWITCH_AUDIO
+    SWITCH_AUDIO,
+    SWITCH_VIDEO
 };
 
 

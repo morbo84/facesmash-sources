@@ -146,6 +146,7 @@ struct SizeAnimation final {
 
 
 struct UIButton final {
+    entity_type label;
     UIAction action;
 };
 

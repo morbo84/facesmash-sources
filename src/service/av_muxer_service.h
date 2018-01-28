@@ -17,6 +17,8 @@ struct AvMuxerService {
     virtual void stop() = 0;
     virtual bool recording() const noexcept = 0;
     virtual bool ready() const noexcept = 0;
+
+    virtual bool available() const noexcept = 0;
 };
 
 
