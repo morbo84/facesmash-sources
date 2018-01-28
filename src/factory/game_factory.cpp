@@ -19,8 +19,10 @@ void createSplashScreen(Registry &registry) {
     auto gameeHandle = textureCache.handle("str/gamee");
     auto gamee = createSprite(registry, parent, gameeHandle, 20);
     setPos(registry, gamee, (panel.w - gameeHandle->width()) / 2, (panel.h - gameeHandle->height()) / 2);
+    registry.assign<BoundingBox>(gamee, 0, 0, gameeHandle->width(), gameeHandle->height());
     registry.assign<FadeAnimation>(gamee, 0, 255, 2000_ui32);
     registry.get<Renderable>(gamee).alpha = 0;
+    registry.attach<EasterEgg>(gamee);
 }
 
 

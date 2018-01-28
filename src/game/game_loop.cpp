@@ -97,6 +97,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         timerSystem.update(registry, delta);
         cameraSystem.update(registry, delta);
 
+        easterEggSystem.update(registry, factory);
         theGameSystem.update(registry, factory);
         trainingSystem.update(registry, factory);
 

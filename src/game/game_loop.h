@@ -10,6 +10,7 @@
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
+#include "../system/easter_egg_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/frame_system.h"
 #include "../system/item_system.h"
@@ -53,6 +54,7 @@ private:
     DebugSystem debugSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
+    EasterEggSystem easterEggSystem;
     ItemSystem itemSystem;
     FaceSmashSystem faceSmashSystem;
     FrameSystem frameSystem;

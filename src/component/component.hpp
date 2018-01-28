@@ -229,6 +229,11 @@ struct CameraFrame final {
 };
 
 
+struct EasterEgg final {
+    Uint8 remaining{5_ui8};
+};
+
+
 }
 
 
