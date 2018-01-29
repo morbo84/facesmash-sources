@@ -14,7 +14,7 @@ struct GameRenderer;
 
 
 struct RecordingSystem final {
-    void init(GameRenderer &);
+    void init();
 
     void update(GameRenderer &, delta_type, std::function<void(void)>);
 

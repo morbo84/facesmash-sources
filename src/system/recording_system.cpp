@@ -9,7 +9,7 @@
 namespace gamee {
 
 
-void RecordingSystem::init(GameRenderer &renderer) {
+void RecordingSystem::init() {
     auto &textureCache = Locator::TextureCache::ref();
     auto recording = textureCache.handle("target/recording");
 

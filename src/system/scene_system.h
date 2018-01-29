@@ -13,6 +13,7 @@ struct KeyboardEvent;
 
 
 class SceneSystem final {
+    void discardExpiringContents(Registry &);
     void discardSplashScreen(Registry &);
     void disableUIControls(Registry &);
     void enableUIControls(Registry &);

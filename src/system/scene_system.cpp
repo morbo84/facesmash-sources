@@ -4,11 +4,21 @@
 #include "../common/ease.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
+#include "../factory/game_factory.h"
 #include "../locator/locator.hpp"
 #include "scene_system.h"
 
 
 namespace gamee {
+
+
+void SceneSystem::discardExpiringContents(Registry &registry) {
+    auto view = registry.view<ExpiringContent>();
+
+    for(auto entity: view) {
+        registry.destroy(entity);
+    }
+}
 
 
 void SceneSystem::discardSplashScreen(Registry &registry) {
@@ -657,12 +667,16 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = creditsTransition(registry);
                 break;
             case SceneType::SUPPORT_PAGE:
+                discardExpiringContents(registry);
+                refreshSupportPanel(registry);
                 remaining = supportTransition(registry);
                 break;
             case SceneType::SETTINGS_PAGE:
                 remaining = settingsTransition(registry);
                 break;
             case SceneType::ACHIEVEMENTS_PAGE:
+                discardExpiringContents(registry);
+                refreshAchievementsPanel(registry);
                 remaining = achievementsTransition(registry);
                 break;
             case SceneType::MENU_PAGE:

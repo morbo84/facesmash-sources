@@ -53,7 +53,7 @@ void GameLoop::init(GameRenderer &renderer) {
 #endif // DEBUG
 
     // init systems explicitly if required
-    recordingSystem.init(renderer);
+    recordingSystem.init();
 
     // request immediately a transition to the main menu from the splash screen
     Locator::Dispatcher::ref().trigger<SceneChangeEvent>(SceneType::SPLASH_SCREEN);

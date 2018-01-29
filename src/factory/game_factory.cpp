@@ -153,6 +153,11 @@ void createSupportPanel(Registry &registry) {
 }
 
 
+void refreshSupportPanel(Registry &registry) {
+    // TODO
+}
+
+
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     auto &muxer = Locator::AvMuxer::ref();
@@ -204,6 +209,11 @@ void createAchievementsPanel(Registry &registry) {
     auto backHandle = textureCache.handle("img/prev");
     auto backButton = createUIButton(registry, parent, btSmallHandle, backHandle, UIAction::MENU, 150);
     setPos(registry, backButton, btSmallHandle->width() / 2, panel.h - 3 * btSmallHandle->height() / 2);
+}
+
+
+void refreshAchievementsPanel(Registry &registry) {
+    // TODO
 }
 
 
