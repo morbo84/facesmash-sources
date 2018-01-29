@@ -27,12 +27,18 @@ void createSplashScreen(Registry &registry) {
 
 
 void createBackgroundTopPanel(Registry &registry) {
-    createPanel(registry, PanelType::BACKGROUND_TOP_PANEL, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
+    auto &textureCache = Locator::TextureCache::ref();
+    auto parent = createPanel(registry, PanelType::BACKGROUND_TOP_PANEL, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
+    auto handle = textureCache.handle("bg/mono");
+    createSprite(registry, parent, handle, 120);
 }
 
 
 void createBackgroundBottomPanel(Registry &registry) {
-    createPanel(registry, PanelType::BACKGROUND_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 2);
+    auto &textureCache = Locator::TextureCache::ref();
+    auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 2);
+    auto handle = textureCache.handle("bg/mono");
+    createSprite(registry, parent, handle, 120);
 }
 
 

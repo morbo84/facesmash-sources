@@ -62,6 +62,8 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
     textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *ttfFontCache.handle("font/default/normal"), colorBlack);
 
+    textureCache.load<AssetTextureLoader>("bg/mono", "png/gui/panel.png", renderer);
+
     textureCache.load<AssetTextureLoader>("bt/small", "png/gui/bt_small.png", renderer);
     textureCache.load<AssetTextureLoader>("bt/normal", "png/gui/bt_normal.png", renderer);
     textureCache.load<AssetTextureLoader>("bt/large", "png/gui/bt_large.png", renderer);
