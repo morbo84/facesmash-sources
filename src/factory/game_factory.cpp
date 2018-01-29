@@ -28,7 +28,7 @@ void createSplashScreen(Registry &registry) {
 
 void createBackgroundTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto parent = createPanel(registry, PanelType::BACKGROUND_TOP_PANEL, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::BACKGROUND_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     auto handle = textureCache.handle("bg/mono");
     createSprite(registry, parent, handle, 120);
 }
@@ -36,7 +36,7 @@ void createBackgroundTopPanel(Registry &registry) {
 
 void createBackgroundBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     auto handle = textureCache.handle("bg/mono");
     createSprite(registry, parent, handle, 120);
 }
@@ -45,7 +45,7 @@ void createBackgroundBottomPanel(Registry &registry) {
 void createMenuTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::MENU_TOP_PANEL, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::MENU_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     SDLTextureHandle handles[4] = {
@@ -85,7 +85,7 @@ void createMenuTopPanel(Registry &registry) {
 void createMenuBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::MENU_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::MENU_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     SDLTextureHandle handles[5] = {
@@ -126,7 +126,7 @@ void createMenuBottomPanel(Registry &registry) {
 void createCreditsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::CREDITS_PANEL, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::CREDITS, logicalWidth, 0, logicalWidth, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/credits");
@@ -144,7 +144,7 @@ void createCreditsPanel(Registry &registry) {
 void createSupportPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::SUPPORT_PANEL, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::SUPPORT, logicalWidth, 0, logicalWidth, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/support");
@@ -169,7 +169,7 @@ void createSettingsPanel(Registry &registry) {
     auto &muxer = Locator::AvMuxer::ref();
     auto &audio = Locator::Audio::ref();
 
-    auto parent = createPanel(registry, PanelType::SETTINGS_PANEL, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/settings");
@@ -203,7 +203,7 @@ void createSettingsPanel(Registry &registry) {
 void createAchievementsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::ACHIEVEMENTS_PANEL, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::ACHIEVEMENTS, logicalWidth, 0, logicalWidth, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/achievements");
@@ -229,7 +229,7 @@ void createTutorialTopPanel(Registry &registry) {
     auto buttonHandle = textureCache.handle("bt/small");
     const auto buttonSize = buttonHandle->width();
 
-    auto parent = createPanel(registry, PanelType::TUTORIAL_TOP_PANEL, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::TUTORIAL_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](TextureCache::resource_type face, int idx) {
@@ -262,7 +262,7 @@ void createTutorialBottomPanel(Registry &registry) {
     auto buttonHandle = textureCache.handle("bt/small");
     const auto buttonSize = buttonHandle->width();
 
-    auto parent = createPanel(registry, PanelType::TUTORIAL_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 2);
+    auto parent = createPanel(registry, PanelType::TUTORIAL_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](TextureCache::resource_type face, int idx) {
@@ -296,7 +296,7 @@ void createGameTopPanel(Registry &registry) {
 
     auto offset = 0;
 
-    auto parent = createPanel(registry, PanelType::GAME_TOP_PANEL, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
+    auto parent = createPanel(registry, PanelType::GAME_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
     const auto &panel = registry.get<Panel>(parent);
 
     auto playerScoreEntity = createHUD(registry, parent, scoreHandle, 160);
@@ -334,14 +334,14 @@ void createGameTopPanel(Registry &registry) {
 
 
 void createGameBottomPanel(Registry &registry) {
-    createPanel(registry, PanelType::GAME_BOTTOM_PANEL, 0, logicalHeight, logicalWidth, logicalHeight / 8);
+    createPanel(registry, PanelType::GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 8);
 }
 
 
 void createGameOverPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::GAME_OVER_PANEL, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::GAME_OVER, logicalWidth, 0, logicalWidth, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/gameover");
@@ -405,7 +405,7 @@ void createCameraFrame(Registry &registry) {
 
 
 void createSmashButtons(Registry &registry) {
-    auto parent = createPanel(registry, PanelType::SMASH_BUTTONS_PANEL, logicalWidth + 96, logicalHeight / 2 - 368, 96, 736);
+    auto parent = createPanel(registry, PanelType::SMASH_BUTTONS, logicalWidth + 96, logicalHeight / 2 - 368, 96, 736);
 
     auto addButton = [parent, &registry](FaceType type, int idx) {
         auto handle = toHandle(type);

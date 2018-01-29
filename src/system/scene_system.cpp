@@ -100,26 +100,26 @@ delta_type SceneSystem::splashScreenTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration / 3, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
+        case PanelType::BACKGROUND_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration / 3, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::TRAINING_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
         case PanelType::SPLASH_SCREEN:
@@ -137,38 +137,38 @@ delta_type SceneSystem::menuPageTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
+        case PanelType::BACKGROUND_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
+        case PanelType::MENU_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::GAME_OVER:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::SMASH_BUTTONS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
             // they are already out of scene
             break;
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
+        case PanelType::GAME_TOP:
+        case PanelType::TRAINING_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::TRAINING_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         default:
@@ -185,26 +185,26 @@ delta_type SceneSystem::creditsTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::CREDITS_PANEL:
+        case PanelType::CREDITS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         default:
@@ -223,26 +223,26 @@ delta_type SceneSystem::supportTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::SUPPORT_PANEL:
+        case PanelType::SUPPORT:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         default:
@@ -261,26 +261,26 @@ delta_type SceneSystem::settingsTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::SETTINGS_PANEL:
+        case PanelType::SETTINGS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         default:
@@ -299,26 +299,26 @@ delta_type SceneSystem::achievementsTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::ACHIEVEMENTS_PANEL:
+        case PanelType::ACHIEVEMENTS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         default:
@@ -337,28 +337,28 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::TUTORIAL_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         default:
@@ -375,38 +375,38 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
+        case PanelType::BACKGROUND_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
             // they are already out of scene
             break;
-        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
+        case PanelType::TUTORIAL_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_TOP_PANEL:
+        case PanelType::GAME_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_BOTTOM_PANEL:
+        case PanelType::GAME_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_OVER_PANEL:
+        case PanelType::GAME_OVER:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::SMASH_BUTTONS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
             break;
         default:
@@ -426,30 +426,30 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
+        case PanelType::BACKGROUND_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_TOP_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_TOP:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
             // they should stay where they are
             break;
-        case PanelType::GAME_OVER_PANEL:
+        case PanelType::GAME_OVER:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::SMASH_BUTTONS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         default:
@@ -466,26 +466,26 @@ delta_type SceneSystem::trainingTutorialTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
-        case PanelType::TRAINING_TOP_PANEL:
-        case PanelType::TRAINING_BOTTOM_PANEL:
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::BACKGROUND_TOP:
+        case PanelType::BACKGROUND_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
+        case PanelType::TRAINING_TOP:
+        case PanelType::TRAINING_BOTTOM:
+        case PanelType::SMASH_BUTTONS:
             // they are already out of scene
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         default:
@@ -502,34 +502,34 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP_PANEL:
+        case PanelType::BACKGROUND_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::BACKGROUND_BOTTOM_PANEL:
+        case PanelType::BACKGROUND_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::MENU_TOP_PANEL:
-        case PanelType::MENU_BOTTOM_PANEL:
-        case PanelType::CREDITS_PANEL:
-        case PanelType::SUPPORT_PANEL:
-        case PanelType::SETTINGS_PANEL:
-        case PanelType::ACHIEVEMENTS_PANEL:
-        case PanelType::TUTORIAL_BOTTOM_PANEL:
-        case PanelType::GAME_TOP_PANEL:
-        case PanelType::GAME_BOTTOM_PANEL:
-        case PanelType::GAME_OVER_PANEL:
+        case PanelType::MENU_TOP:
+        case PanelType::MENU_BOTTOM:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+        case PanelType::TUTORIAL_BOTTOM:
+        case PanelType::GAME_TOP:
+        case PanelType::GAME_BOTTOM:
+        case PanelType::GAME_OVER:
             // they are already out of scene
             break;
-        case PanelType::TUTORIAL_TOP_PANEL:
+        case PanelType::TUTORIAL_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::TRAINING_TOP_PANEL:
+        case PanelType::TRAINING_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::TRAINING_BOTTOM_PANEL:
+        case PanelType::TRAINING_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::SMASH_BUTTONS_PANEL:
+        case PanelType::SMASH_BUTTONS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
             break;
         default:
