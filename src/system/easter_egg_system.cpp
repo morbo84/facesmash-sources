@@ -42,7 +42,7 @@ void EasterEggSystem::update(Registry &registry, PlayFactory &factory) {
                 --egg.remaining;
             } else {
                 factory.spawnFaceBottom(registry, 0, 0, bag.get());
-                registry.reset<Face>();
+                registry.reset<Destroyable>();
             }
         }
 
