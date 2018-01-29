@@ -114,9 +114,9 @@ delta_type SceneSystem::splashScreenTransition(Registry &registry) {
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
+        case PanelType::THE_GAME_TOP:
         case PanelType::TRAINING_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_BOTTOM:
         case PanelType::SMASH_BUTTONS:
@@ -163,11 +163,11 @@ delta_type SceneSystem::menuPageTransition(Registry &registry) {
         case PanelType::TUTORIAL_BOTTOM:
             // they are already out of scene
             break;
-        case PanelType::GAME_TOP:
+        case PanelType::THE_GAME_TOP:
         case PanelType::TRAINING_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::TRAINING_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
@@ -192,8 +192,8 @@ delta_type SceneSystem::creditsTransition(Registry &registry) {
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -230,8 +230,8 @@ delta_type SceneSystem::supportTransition(Registry &registry) {
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -268,8 +268,8 @@ delta_type SceneSystem::settingsTransition(Registry &registry) {
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -306,8 +306,8 @@ delta_type SceneSystem::achievementsTransition(Registry &registry) {
         case PanelType::SETTINGS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -343,8 +343,8 @@ delta_type SceneSystem::gameTutorialTransition(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::ACHIEVEMENTS:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -397,10 +397,10 @@ delta_type SceneSystem::theGameTransition(Registry &registry) {
         case PanelType::TUTORIAL_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_TOP:
+        case PanelType::THE_GAME_TOP:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
@@ -440,8 +440,8 @@ delta_type SceneSystem::gameOverTransition(Registry &registry) {
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_TOP:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
             // they should stay where they are
@@ -473,8 +473,8 @@ delta_type SceneSystem::trainingTutorialTransition(Registry &registry) {
         case PanelType::SETTINGS:
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
         case PanelType::TRAINING_TOP:
         case PanelType::TRAINING_BOTTOM:
@@ -515,8 +515,8 @@ delta_type SceneSystem::trainingTransition(Registry &registry) {
         case PanelType::SETTINGS:
         case PanelType::ACHIEVEMENTS:
         case PanelType::TUTORIAL_BOTTOM:
-        case PanelType::GAME_TOP:
-        case PanelType::GAME_BOTTOM:
+        case PanelType::THE_GAME_TOP:
+        case PanelType::THE_GAME_BOTTOM:
         case PanelType::GAME_OVER:
             // they are already out of scene
             break;
@@ -626,6 +626,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::MENU_PAGE:
                     enableUIControls(registry);
+                    disableCameraFrame(registry);
                     camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:

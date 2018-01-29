@@ -296,7 +296,7 @@ void createGameTopPanel(Registry &registry) {
 
     auto offset = 0;
 
-    auto parent = createPanel(registry, PanelType::GAME_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
+    auto parent = createPanel(registry, PanelType::THE_GAME_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
     const auto &panel = registry.get<Panel>(parent);
 
     auto playerScoreEntity = createHUD(registry, parent, scoreHandle, 160);
@@ -334,7 +334,7 @@ void createGameTopPanel(Registry &registry) {
 
 
 void createGameBottomPanel(Registry &registry) {
-    createPanel(registry, PanelType::GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 8);
+    createPanel(registry, PanelType::THE_GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 8);
 }
 
 
