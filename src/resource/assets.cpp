@@ -42,6 +42,7 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/hud/.", ".", renderer, *ttfFontCache.handle("font/default/tiny"), colorBlack);
 
     textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *ttfFontCache.handle("font/default/large"), colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *ttfFontCache.handle("font/default/small"), colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/facesmash/red/F", "F", renderer, *ttfFontCache.handle("font/default/huge"), colorRed);
     textureCache.load<TTFFontTextureLoader>("str/facesmash/lightblue/A", "A", renderer, *ttfFontCache.handle("font/default/huge"), colorLightBlue);
@@ -79,6 +80,8 @@ void loadGameStuff(GameRenderer &renderer) {
     textureCache.load<AssetTextureLoader>("img/back", "png/gui/back.png", renderer);
     textureCache.load<AssetTextureLoader>("img/prev", "png/gui/prev.png", renderer);
     textureCache.load<AssetTextureLoader>("img/next", "png/gui/next.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/ok", "png/gui/ok.png", renderer);
+    textureCache.load<AssetTextureLoader>("img/ko", "png/gui/ko.png", renderer);
 
     textureCache.load<AssetTextureLoader>("img/audio/on", "png/gui/audio_on.png", renderer);
     textureCache.load<AssetTextureLoader>("img/audio/off", "png/gui/audio_off.png", renderer);

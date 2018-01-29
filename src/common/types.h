@@ -37,6 +37,7 @@ using entity_type = typename Registry::entity_type;
 
 enum class SceneType: Uint8 {
     UNKNOWN,
+    EXIT,
     SPLASH_SCREEN,
     MENU_PAGE,
     CREDITS_PAGE,
@@ -69,6 +70,7 @@ enum class ItemType: Uint8 {
 
 
 enum class UIAction: Uint8 {
+    EXIT,
     MENU,
     CREDITS,
     SUPPORT,
@@ -84,6 +86,7 @@ enum class UIAction: Uint8 {
 
 
 enum class PanelType: Uint8 {
+    EXIT,
     SPLASH_SCREEN,
     BACKGROUND_TOP,
     BACKGROUND_BOTTOM,

@@ -48,7 +48,7 @@ entity_type createSprite(Registry &registry, entity_type parent, SDLTextureHandl
 
 entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, SDLTextureHandle label, UIAction action, int z) {
     auto entity = createSprite(registry, parent, handle, z);
-    auto child = createSprite(registry, entity, label, 155);
+    auto child = createSprite(registry, entity, label, ++z);
 
     registry.assign<UIButton>(entity, child, action);
 

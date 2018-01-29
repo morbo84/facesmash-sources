@@ -10,7 +10,29 @@
 namespace gamee {
 
 
-void createSplashScreen(Registry &registry) {
+void createExitPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto exitHandle = textureCache.handle("str/exit");
+    auto exit = createSprite(registry, parent, exitHandle, 20);
+    setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 3 * exitHandle->height()) / 2);
+
+    auto buttonHandle = textureCache.handle("bt/small");
+
+    auto acceptHandle = textureCache.handle("img/ok");
+    auto acceptButton = createUIButton(registry, parent, buttonHandle, acceptHandle, UIAction::EXIT, 20);
+    setPos(registry, acceptButton, (panel.w - 3 * buttonHandle->width()) / 2, panel.h / 2);
+
+    auto rejectHandle = textureCache.handle("img/ko");
+    auto rejectButton = createUIButton(registry, parent, buttonHandle, rejectHandle, UIAction::MENU, 20);
+    setPos(registry, rejectButton, (panel.w + buttonHandle->width()) / 2, panel.h / 2);
+}
+
+
+void createSplashScreenPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto parent = createPanel(registry, PanelType::SPLASH_SCREEN, -logicalWidth, 0, logicalWidth, logicalHeight);
@@ -362,6 +384,11 @@ void createGameOverPanel(Registry &registry) {
     auto saveHandle = textureCache.handle("img/save");
     auto saveButton = createUIButton(registry, parent, btSmallHandle, saveHandle, UIAction::SAVE, 150);
     setPos(registry, saveButton, (3 * panel.w / 2 - btSmallHandle->width()) / 2, (3 * panel.h / 2 - btSmallHandle->height()) / 2);
+}
+
+
+void refreshGameOverPanel(Registry &registry) {
+    // TODO
 }
 
 

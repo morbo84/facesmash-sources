@@ -21,7 +21,8 @@ void GameLoop::init(GameRenderer &renderer) {
     loadGameStuff(renderer);
     loadTargetTextures(renderer);
 
-    createSplashScreen(registry);
+    createExitPanel(registry);
+    createSplashScreenPanel(registry);
     createBackgroundTopPanel(registry);
     createBackgroundBottomPanel(registry);
     createMenuTopPanel(registry);

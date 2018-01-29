@@ -8,7 +8,8 @@
 namespace gamee {
 
 
-void createSplashScreen(Registry &);
+void createExitPanel(Registry &);
+void createSplashScreenPanel(Registry &);
 void createBackgroundTopPanel(Registry &);
 void createBackgroundBottomPanel(Registry &);
 void createMenuTopPanel(Registry &);
@@ -24,6 +25,7 @@ void createTutorialBottomPanel(Registry &);
 void createGameTopPanel(Registry &);
 void createGameBottomPanel(Registry &);
 void createGameOverPanel(Registry &);
+void refreshGameOverPanel(Registry &);
 void createTrainingTopPanel(Registry &);
 void createTrainingBottomPanel(Registry &);
 void createCamera(Registry &);

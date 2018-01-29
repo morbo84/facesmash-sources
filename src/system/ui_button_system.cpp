@@ -74,6 +74,9 @@ void UIButtonSystem::update(Registry &registry) {
 
             if(SDL_PointInRect(&coord, &area)) {
                 switch(button.action) {
+                case UIAction::EXIT:
+                    dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+                    break;
                 case UIAction::THE_GAME:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;

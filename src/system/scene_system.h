@@ -12,29 +12,7 @@ struct SceneChangeEvent;
 struct KeyboardEvent;
 
 
-class SceneSystem final {
-    void discardExpiringContents(Registry &);
-    void discardSplashScreen(Registry &);
-    void disableUIControls(Registry &);
-    void enableUIControls(Registry &);
-    void disableCameraFrame(Registry &);
-    void enableCameraFrame(Registry &);
-    void resetGame(Registry &);
-    void resetTraining(Registry &);
-
-    delta_type splashScreenTransition(Registry &);
-    delta_type menuPageTransition(Registry &);
-    delta_type creditsTransition(Registry &);
-    delta_type supportTransition(Registry &);
-    delta_type settingsTransition(Registry &);
-    delta_type achievementsTransition(Registry &);
-    delta_type gameTutorialTransition(Registry &);
-    delta_type theGameTransition(Registry &);
-    delta_type gameOverTransition(Registry &);
-    delta_type trainingTutorialTransition(Registry &);
-    delta_type trainingTransition(Registry &);
-
-public:
+struct SceneSystem final {
     SceneSystem();
     ~SceneSystem();
 
