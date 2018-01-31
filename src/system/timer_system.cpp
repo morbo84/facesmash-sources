@@ -12,7 +12,7 @@ namespace gamee {
 
 
 void TimerSystem::update(Registry &registry, delta_type delta) {
-    if(registry.has<LetsPlay>()) {
+    if(registry.has<GameTimer>()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto &gameTimer = registry.get<GameTimer>();
         auto symEmptyHandle = textureCache.handle("str/hud/ ");

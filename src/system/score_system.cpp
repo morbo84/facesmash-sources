@@ -13,7 +13,7 @@ namespace gamee {
 
 
 void ScoreSystem::update(Registry &registry) {
-    if(registry.has<LetsPlay>()) {
+    if(registry.has<PlayerScore>()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto &playerScore = registry.get<PlayerScore>();
         auto symEmptyHandle = textureCache.handle("str/hud/ ");

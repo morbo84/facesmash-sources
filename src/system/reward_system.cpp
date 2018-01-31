@@ -10,7 +10,7 @@ namespace gamee {
 
 
 void RewardSystem::update(Registry &registry) {
-    if(registry.has<LetsPlay>()) {
+    if(registry.has<Reward>()) {
         auto &reward = registry.get<Reward>();
 
         if(reward.dirty) {
