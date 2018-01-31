@@ -38,6 +38,16 @@ void discardSplashScreen(Registry &registry) {
 }
 
 
+template<PanelType Type>
+void hidePanel(Registry &registry) {
+    registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
+        if(panel.type == Type) {
+            transform.x = -panel.w;
+        }
+    });
+}
+
+
 void disableUIControls(Registry &registry) {
     for(auto entity: registry.view<UIButton, BoundingBox>()) {
         registry.remove<BoundingBox>(entity);
@@ -572,6 +582,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIControls(registry);
                     break;
                 case SceneType::MENU_PAGE:
+                    hidePanel<PanelType::EXIT>(registry);
                     enableUIControls(registry);
                     camera.stop();
                     break;
