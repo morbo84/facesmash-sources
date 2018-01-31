@@ -1,3 +1,4 @@
+#include "../common/constants.h"
 #include "camera_null.h"
 
 
@@ -11,12 +12,12 @@ void CameraNull::stop() {}
 
 
 int CameraNull::width() const noexcept {
-    return 0;
+    return logicalWidth;
 }
 
 
 int CameraNull::height() const noexcept {
-    return 0;
+    return logicalHeight;
 }
 
 

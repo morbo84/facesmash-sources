@@ -20,6 +20,7 @@ void GameLoop::init(GameRenderer &renderer) {
     loadDefaultFont();
     loadGameStuff(renderer);
     loadTargetTextures(renderer);
+    loadCameraFrame(renderer);
 
     createExitPanel(registry);
     createSplashScreenPanel(registry);
@@ -39,11 +40,7 @@ void GameLoop::init(GameRenderer &renderer) {
     createTrainingTopPanel(registry);
     createTrainingBottomPanel(registry);
     createCamera(registry);
-
-#ifdef CAMERA_FRAME_AVAILABLE
-    loadCameraFrame(renderer);
     createCameraFrame(registry);
-#endif // CAMERA_FRAME_AVAILABLE
 
 #ifdef DEBUG
     loadDebugFont();

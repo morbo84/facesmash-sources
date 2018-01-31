@@ -35,11 +35,6 @@ constexpr SDL_Color colorLightBlue{0_ui8, 222_ui8, 255_ui8, 255_ui8};
 constexpr SDL_Color colorGreen{0_ui8, 123_ui8, 74_ui8, 255_ui8};
 
 
-#ifdef __ANDROID__
-#define CAMERA_FRAME_AVAILABLE
-#endif // __ANDROID__
-
-
 }
 
 
