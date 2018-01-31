@@ -12,14 +12,10 @@
 namespace gamee {
 
 
-struct TimeDebug final {
-    entity_type entities[4];
+struct DebugInfo final {
+    entity_type time[4];
+    entity_type fps[2];
     float average{0.f};
-};
-
-
-struct FPSDebug final {
-    entity_type entities[2];
 };
 
 
