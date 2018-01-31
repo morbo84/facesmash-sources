@@ -56,15 +56,10 @@ entity_type createSprite(Registry &registry, SDLTextureHandle handle, int z) {
 }
 
 
-entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, SDLTextureHandle label, UIAction action, int z) {
+entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, UIAction action, int z) {
     auto entity = createSprite(registry, parent, handle, z);
-    auto child = createSprite(registry, entity, label, ++z);
-
-    registry.assign<UIButton>(entity, child, action);
-
-    setSpriteSize(registry, child, 5 * handle->width() / 6, 5 * handle->width() / 6);
-    setPos(registry, child, label->width() / 18, label->width() / 18);
-
+    registry.assign<BoundingBox>(entity, handle->width(), handle->height());
+    registry.assign<UIButton>(entity, entity, action);
     return entity;
 }
 

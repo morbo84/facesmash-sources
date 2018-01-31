@@ -13,6 +13,40 @@
 namespace gamee {
 
 
+static void switchAudio(Registry &registry, entity_type button) {
+    auto &textureCache = Locator::TextureCache::ref();
+    const auto &audio = Locator::Audio::ref();
+
+    if(audio.isMute()) {
+        registry.get<Sprite>(button).handle = textureCache.handle("img/audio/on");
+        Locator::Audio::set<AudioSdl>();
+    } else {
+        registry.get<Sprite>(button).handle = textureCache.handle("img/audio/off");
+        Locator::Audio::set<AudioNull>();
+    }
+}
+
+
+static void switchVideo(Registry &registry, entity_type button) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+#ifdef __ANDROID__
+    const auto &muxer = Locator::AvMuxer::ref();
+
+    if(muxer.available()) {
+        registry.get<Sprite>(button).handle = textureCache.handle("img/video/on");
+        Locator::AvMuxer::set<AvMuxerAndroid>();
+    } else {
+        registry.get<Sprite>(button).handle = textureCache.handle("img/video/off");
+        Locator::AvMuxer::set<AvMuxerNull>();
+    }
+#else
+    registry.get<Sprite>(button).handle = textureCache.handle("img/video/off");
+    Locator::AvMuxer::set<AvMuxerNull>();
+#endif
+}
+
+
 UIButtonSystem::UIButtonSystem(): dirty{false} {
     Locator::Dispatcher::ref().connect<TouchEvent>(this);
 }
@@ -20,40 +54,6 @@ UIButtonSystem::UIButtonSystem(): dirty{false} {
 
 UIButtonSystem::~UIButtonSystem() {
     Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
-}
-
-
-void UIButtonSystem::switchAudio(Registry &registry, UIButton &button) {
-    auto &textureCache = Locator::TextureCache::ref();
-    const auto &audio = Locator::Audio::ref();
-
-    if(audio.isMute()) {
-        registry.get<Sprite>(button.label).handle = textureCache.handle("img/audio/on");
-        Locator::Audio::set<AudioSdl>();
-    } else {
-        registry.get<Sprite>(button.label).handle = textureCache.handle("img/audio/off");
-        Locator::Audio::set<AudioNull>();
-    }
-}
-
-
-void UIButtonSystem::switchVideo(Registry &registry, UIButton &button) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-#ifdef __ANDROID__
-    const auto &muxer = Locator::AvMuxer::ref();
-
-    if(muxer.available()) {
-        registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/on");
-        Locator::AvMuxer::set<AvMuxerAndroid>();
-    } else {
-        registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
-        Locator::AvMuxer::set<AvMuxerNull>();
-    }
-#else
-    registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
-    Locator::AvMuxer::set<AvMuxerNull>();
-#endif
 }
 
 
@@ -72,8 +72,11 @@ void UIButtonSystem::update(Registry &registry) {
 
             auto area = transformToPosition(registry, entity, transform) * box;
 
-            if(SDL_PointInRect(&coord, &area)) {
+            if(button.enabled && SDL_PointInRect(&coord, &area)) {
                 switch(button.action) {
+                case UIAction::EASTER_EGG:
+                    dispatcher.enqueue<ActivateEasterEggEvent>();
+                    break;
                 case UIAction::EXIT:
                     dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
                     break;
@@ -105,10 +108,10 @@ void UIButtonSystem::update(Registry &registry) {
                     // TODO
                     break;
                 case UIAction::SWITCH_AUDIO:
-                    switchAudio(registry, button);
+                    switchAudio(registry, entity);
                     break;
                 case UIAction::SWITCH_VIDEO:
-                    switchVideo(registry, button);
+                    switchVideo(registry, entity);
                     break;
                 }
             }

@@ -142,7 +142,7 @@ struct SizeAnimation final {
 
 
 struct UIButton final {
-    entity_type label;
+    bool enabled;
     UIAction action;
 };
 
@@ -225,11 +225,6 @@ struct Panel final {
 
 struct CameraFrame final {
     bool acquire{false};
-};
-
-
-struct EasterEgg final {
-    Uint8 remaining{5_ui8};
 };
 
 

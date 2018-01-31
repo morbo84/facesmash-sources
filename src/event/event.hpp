@@ -47,6 +47,7 @@ struct FaceEvent final {
 
 
 struct FrameAvailableEvent final {};
+struct ActivateEasterEggEvent final {};
 
 
 }

@@ -20,15 +20,13 @@ void createExitPanel(Registry &registry) {
     auto exit = createSprite(registry, parent, exitHandle, 20);
     setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 3 * exitHandle->height()) / 2);
 
-    auto buttonHandle = textureCache.handle("bt/small");
-
     auto acceptHandle = textureCache.handle("img/ok");
-    auto acceptButton = createUIButton(registry, parent, buttonHandle, acceptHandle, UIAction::EXIT, 20);
-    setPos(registry, acceptButton, (panel.w - 3 * buttonHandle->width()) / 2, panel.h / 2);
+    auto acceptButton = createUIButton(registry, parent, acceptHandle, UIAction::EXIT, 20);
+    setPos(registry, acceptButton, (panel.w - 3 * acceptHandle->width()) / 2, panel.h / 2);
 
     auto rejectHandle = textureCache.handle("img/ko");
-    auto rejectButton = createUIButton(registry, parent, buttonHandle, rejectHandle, UIAction::MENU, 20);
-    setPos(registry, rejectButton, (panel.w + buttonHandle->width()) / 2, panel.h / 2);
+    auto rejectButton = createUIButton(registry, parent, rejectHandle, UIAction::MENU, 20);
+    setPos(registry, rejectButton, (panel.w + acceptHandle->width()) / 2, panel.h / 2);
 }
 
 
@@ -42,9 +40,9 @@ void createSplashScreenPanel(Registry &registry) {
     auto gamee = createSprite(registry, parent, gameeHandle, 20);
     setPos(registry, gamee, (panel.w - gameeHandle->width()) / 2, (panel.h - gameeHandle->height()) / 2);
     registry.assign<BoundingBox>(gamee, 0, 0, gameeHandle->width(), gameeHandle->height());
+    registry.assign<UIButton>(gamee, gamee, UIAction::EASTER_EGG);
     registry.assign<FadeAnimation>(gamee, 0, 255, 2000_ui32);
     registry.get<Renderable>(gamee).alpha = 0;
-    registry.attach<EasterEgg>(gamee);
 }
 
 
@@ -87,20 +85,17 @@ void createMenuTopPanel(Registry &registry) {
         x += handles[i]->width();
     }
 
-    auto btSmallHandle = textureCache.handle("bt/small");
-    auto btNormalHandle = textureCache.handle("bt/normal");
-
     auto trainingHandle = textureCache.handle("img/training");
-    auto trainingButton = createUIButton(registry, parent, btSmallHandle, trainingHandle, UIAction::TRAINING, 150);
-    setPos(registry, trainingButton, (panel.w / 2 - btSmallHandle->width()) / 2, 2 * panel.h / 5);
+    auto trainingButton = createUIButton(registry, parent, trainingHandle, UIAction::TRAINING, 150);
+    setPos(registry, trainingButton, (panel.w / 2 - trainingHandle->width()) / 2, 2 * panel.h / 5);
 
     auto playHandle = textureCache.handle("img/play");
-    auto playButton = createUIButton(registry, parent, btNormalHandle, playHandle, UIAction::THE_GAME, 150);
-    setPos(registry, playButton, (panel.w - btNormalHandle->width()) / 2, 2 * panel.h / 5 - btNormalHandle->height() / 2);
+    auto playButton = createUIButton(registry, parent, playHandle, UIAction::THE_GAME, 150);
+    setPos(registry, playButton, (panel.w - playHandle->width()) / 2, 2 * panel.h / 5 - playHandle->height() / 2);
 
     auto medalHandle = textureCache.handle("img/medal");
-    auto medalButton = createUIButton(registry, parent, btSmallHandle, medalHandle, UIAction::ACHIEVEMENTS, 150);
-    setPos(registry, medalButton, (3 * panel.w / 2 - btSmallHandle->width()) / 2, 2 * panel.h / 5);
+    auto medalButton = createUIButton(registry, parent, medalHandle, UIAction::ACHIEVEMENTS, 150);
+    setPos(registry, medalButton, (3 * panel.w / 2 - medalHandle->width()) / 2, 2 * panel.h / 5);
 }
 
 
@@ -128,20 +123,17 @@ void createMenuBottomPanel(Registry &registry) {
         x += handles[i]->width();
     }
 
-    auto btSmallHandle = textureCache.handle("bt/small");
-    auto btNormalHandle = textureCache.handle("bt/normal");
-
     auto infoHandle = textureCache.handle("img/info");
-    auto infoButton = createUIButton(registry, parent, btSmallHandle, infoHandle, UIAction::CREDITS, 150);
-    setPos(registry, infoButton, (panel.w / 2 - btSmallHandle->width()) / 2, 3 * panel.h / 5 - btSmallHandle->height());
+    auto infoButton = createUIButton(registry, parent, infoHandle, UIAction::CREDITS, 150);
+    setPos(registry, infoButton, (panel.w / 2 - infoHandle->width()) / 2, 3 * panel.h / 5 - infoHandle->height());
 
     auto supportHandle = textureCache.handle("img/support");
-    auto supportButton = createUIButton(registry, parent, btNormalHandle, supportHandle, UIAction::SUPPORT, 150);
-    setPos(registry, supportButton, (panel.w - btNormalHandle->width()) / 2, 3 * panel.h / 5 - btNormalHandle->height() / 2);
+    auto supportButton = createUIButton(registry, parent, supportHandle, UIAction::SUPPORT, 150);
+    setPos(registry, supportButton, (panel.w - supportHandle->width()) / 2, 3 * panel.h / 5 - supportHandle->height() / 2);
 
     auto gearHandle = textureCache.handle("img/gear");
-    auto gearButton = createUIButton(registry, parent, btSmallHandle, gearHandle, UIAction::SETTINGS, 150);
-    setPos(registry, gearButton, (3 * panel.w / 2 - btSmallHandle->width()) / 2, 3 * panel.h / 5 - btSmallHandle->height());
+    auto gearButton = createUIButton(registry, parent, gearHandle, UIAction::SETTINGS, 150);
+    setPos(registry, gearButton, (3 * panel.w / 2 - gearHandle->width()) / 2, 3 * panel.h / 5 - gearHandle->height());
 }
 
 
@@ -155,11 +147,9 @@ void createCreditsPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto buttonHandle = textureCache.handle("bt/small");
-
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, buttonHandle, backHandle, UIAction::MENU, 150);
-    setPos(registry, backButton, buttonHandle->width() / 2, panel.h - 3 * buttonHandle->height() / 2);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
 
@@ -173,11 +163,9 @@ void createSupportPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto buttonHandle = textureCache.handle("bt/small");
-
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, buttonHandle, backHandle, UIAction::MENU, 150);
-    setPos(registry, backButton, buttonHandle->width() / 2, panel.h - 3 * buttonHandle->height() / 2);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
 
@@ -206,19 +194,17 @@ void createSettingsPanel(Registry &registry) {
     auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 150);
     setPos(registry, videoStrEntity, (panel.w - videoStrHandle->width()) / 2, 3 * panel.h / 5);
 
-    auto buttonHandle = textureCache.handle("bt/small");
-
     auto audioHandle = audio.isMute() ? textureCache.handle("img/audio/off") : textureCache.handle("img/audio/on");
-    auto audioButton = createUIButton(registry, parent, buttonHandle, audioHandle, UIAction::SWITCH_AUDIO, 150);
-    setPos(registry, audioButton, (panel.w - buttonHandle->width()) / 2, (3 * panel.h / 4 - buttonHandle->height()) / 2);
+    auto audioButton = createUIButton(registry, parent, audioHandle, UIAction::SWITCH_AUDIO, 150);
+    setPos(registry, audioButton, (panel.w - audioHandle->width()) / 2, (3 * panel.h / 4 - audioHandle->height()) / 2);
 
     auto videoHandle = muxer.available() ? textureCache.handle("img/video/on") : textureCache.handle("img/video/off");
-    auto videoButton = createUIButton(registry, parent, buttonHandle, videoHandle, UIAction::SWITCH_VIDEO, 150);
-    setPos(registry, videoButton, (panel.w - buttonHandle->width()) / 2, 3 * panel.h / 5 + panel.h/ 8 - buttonHandle->height() / 2);
+    auto videoButton = createUIButton(registry, parent, videoHandle, UIAction::SWITCH_VIDEO, 150);
+    setPos(registry, videoButton, (panel.w - videoHandle->width()) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoHandle->height() / 2);
 
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, buttonHandle, backHandle, UIAction::MENU, 150);
-    setPos(registry, backButton, buttonHandle->width() / 2, panel.h - 3 * buttonHandle->height() / 2);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
 
@@ -232,11 +218,9 @@ void createAchievementsPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto btSmallHandle = textureCache.handle("bt/small");
-
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, btSmallHandle, backHandle, UIAction::MENU, 150);
-    setPos(registry, backButton, btSmallHandle->width() / 2, panel.h - 3 * btSmallHandle->height() / 2);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
 
@@ -248,21 +232,15 @@ void refreshAchievementsPanel(Registry &registry) {
 void createTutorialTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto buttonHandle = textureCache.handle("bt/small");
-    const auto buttonSize = buttonHandle->width();
-
     auto parent = createPanel(registry, PanelType::TUTORIAL_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](TextureCache::resource_type face, int idx) {
-        auto button = createSprite(registry, parent, buttonHandle, 150);
-        const auto buttonOffset = (panel.w - (numberOfFaces * buttonSize + (numberOfFaces - 1) * 10)) / 2;
-        setPos(registry, button, buttonOffset + idx * (buttonSize + 10), panel.h - 3 * buttonSize / 2);
-
         auto emojiHandle = textureCache.handle(face);
-        auto emoji = createSprite(registry, button, emojiHandle, 160);
-        setSpriteSize(registry, emoji, 3 * buttonSize / 5, 3 * buttonSize / 5);
-        setPos(registry, emoji, buttonSize / 5, buttonSize / 5);
+        const auto buttonOffset = (panel.w - (numberOfFaces * emojiHandle->width() + (numberOfFaces - 1) * 10)) / 2;
+        auto emoji = createSprite(registry, parent, emojiHandle, 160);
+        setSpriteSize(registry, emoji, 3 * emojiHandle->width() / 5, 3 * emojiHandle->height() / 5);
+        setPos(registry, emoji, buttonOffset + idx * (emojiHandle->width() + 10), panel.h - 3 * emojiHandle->height() / 2);
     };
 
     addButton("face/angry", 0);
@@ -274,28 +252,22 @@ void createTutorialTopPanel(Registry &registry) {
 
     auto tutorialHandle = textureCache.handle("str/tutorial/face");
     auto tutorial = createSprite(registry, parent, tutorialHandle, 150);
-    setPos(registry, tutorial, (panel.w - tutorialHandle->width()) / 2, panel.h - 1.8 * buttonSize - tutorialHandle->height());
+    setPos(registry, tutorial, (panel.w - tutorialHandle->width()) / 2, panel.h - 3 * tutorialHandle->height());
 }
 
 
 void createTutorialBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto buttonHandle = textureCache.handle("bt/small");
-    const auto buttonSize = buttonHandle->width();
-
     auto parent = createPanel(registry, PanelType::TUTORIAL_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](TextureCache::resource_type face, int idx) {
-        auto button = createSprite(registry, parent, buttonHandle, 150);
-        const auto buttonOffset = (panel.w - (numberOfItems * buttonSize + (numberOfItems - 1) * 10)) / 2;
-        setPos(registry, button, buttonOffset + idx * (buttonSize + 10), buttonSize / 2);
-
         auto emojiHandle = textureCache.handle(face);
-        auto emoji = createSprite(registry, button, emojiHandle, 160);
-        setSpriteSize(registry, emoji, 3 * buttonSize / 5, 3 * buttonSize / 5);
-        setPos(registry, emoji, buttonSize / 5, buttonSize / 5);
+        const auto buttonOffset = (panel.w - (numberOfItems * emojiHandle->width() + (numberOfItems - 1) * 10)) / 2;
+        auto emoji = createSprite(registry, parent, emojiHandle, 160);
+        setSpriteSize(registry, emoji, 3 * emojiHandle->width() / 5, 3 * emojiHandle->height() / 5);
+        setPos(registry, emoji, buttonOffset + idx * (emojiHandle->width() + 10), emojiHandle->height() / 2);
     };
 
     addButton("item/speed_up", 0);
@@ -304,7 +276,7 @@ void createTutorialBottomPanel(Registry &registry) {
 
     auto tutorialHandle = textureCache.handle("str/tutorial/touch");
     auto tutorial = createSprite(registry, parent, tutorialHandle, 150);
-    setPos(registry, tutorial, (panel.w - tutorialHandle->width()) / 2, 1.8f * buttonSize);
+    setPos(registry, tutorial, (panel.w - tutorialHandle->width()) / 2, 2 * tutorialHandle->height());
 }
 
 
@@ -370,20 +342,17 @@ void createGameOverPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, (panel.h / 2 - titleHandle->height()) / 2);
 
-    auto btSmallHandle = textureCache.handle("bt/small");
-    auto btNormalHandle = textureCache.handle("bt/normal");
-
     auto menuHandle = textureCache.handle("img/menu");
-    auto menuButton = createUIButton(registry, parent, btSmallHandle, menuHandle, UIAction::MENU, 150);
-    setPos(registry, menuButton, (panel.w / 2 - btSmallHandle->width()) / 2, (3 * panel.h / 2 - btSmallHandle->height()) / 2);
+    auto menuButton = createUIButton(registry, parent, menuHandle, UIAction::MENU, 150);
+    setPos(registry, menuButton, (panel.w / 2 - menuHandle->width()) / 2, (3 * panel.h / 2 - menuHandle->height()) / 2);
 
     auto playHandle = textureCache.handle("img/play");
-    auto playButton = createUIButton(registry, parent, btNormalHandle, playHandle, UIAction::RELOAD, 150);
-    setPos(registry, playButton, (panel.w - btNormalHandle->width()) / 2, (3 * panel.h / 2 - btNormalHandle->height()) / 2);
+    auto playButton = createUIButton(registry, parent, playHandle, UIAction::RELOAD, 150);
+    setPos(registry, playButton, (panel.w - playHandle->width()) / 2, (3 * panel.h / 2 - playHandle->height()) / 2);
 
     auto saveHandle = textureCache.handle("img/save");
-    auto saveButton = createUIButton(registry, parent, btSmallHandle, saveHandle, UIAction::SAVE, 150);
-    setPos(registry, saveButton, (3 * panel.w / 2 - btSmallHandle->width()) / 2, (3 * panel.h / 2 - btSmallHandle->height()) / 2);
+    auto saveButton = createUIButton(registry, parent, saveHandle, UIAction::SAVE, 150);
+    setPos(registry, saveButton, (3 * panel.w / 2 - saveHandle->width()) / 2, (3 * panel.h / 2 - saveHandle->height()) / 2);
 }
 
 

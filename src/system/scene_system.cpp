@@ -70,16 +70,15 @@ void hidePanel(Registry &registry) {
 
 
 void disableUIControls(Registry &registry) {
-    for(auto entity: registry.view<UIButton, BoundingBox>()) {
-        registry.remove<BoundingBox>(entity);
+    for(auto entity: registry.view<UIButton>()) {
+        registry.get<UIButton>(entity).enabled = false;
     }
 }
 
 
 void enableUIControls(Registry &registry) {
-    for(auto entity: registry.view<UIButton, Sprite>()) {
-        const auto &sprite = registry.get<Sprite>(entity);
-        registry.assign<BoundingBox>(entity, sprite.w, sprite.h);
+    for(auto entity: registry.view<UIButton>()) {
+        registry.get<UIButton>(entity).enabled = true;
     }
 }
 
@@ -635,6 +634,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = exitTransition(registry);
                 break;
             case SceneType::SPLASH_SCREEN:
+                enableUIControls(registry);
                 remaining = splashScreenTransition(registry);
                 break;
             case SceneType::CREDITS_PAGE:

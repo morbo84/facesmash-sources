@@ -70,6 +70,7 @@ enum class ItemType: Uint8 {
 
 
 enum class UIAction: Uint8 {
+    EASTER_EGG,
     EXIT,
     MENU,
     CREDITS,

@@ -18,9 +18,6 @@ struct UIButtonSystem final {
     UIButtonSystem();
     ~UIButtonSystem();
 
-    void switchAudio(Registry &, UIButton &);
-    void switchVideo(Registry &, UIButton &);
-
     void receive(const TouchEvent &) noexcept;
 
     void update(Registry &);

@@ -65,10 +65,6 @@ void loadGameStuff(GameRenderer &renderer) {
 
     textureCache.load<AssetTextureLoader>("bg/mono", "png/gui/panel.png", renderer);
 
-    textureCache.load<AssetTextureLoader>("bt/small", "png/gui/bt_small.png", renderer);
-    textureCache.load<AssetTextureLoader>("bt/normal", "png/gui/bt_normal.png", renderer);
-    textureCache.load<AssetTextureLoader>("bt/large", "png/gui/bt_large.png", renderer);
-
     textureCache.load<AssetTextureLoader>("img/play", "png/gui/gamepad.png", renderer);
     textureCache.load<AssetTextureLoader>("img/training", "png/gui/target.png", renderer);
     textureCache.load<AssetTextureLoader>("img/save", "png/gui/save.png", renderer);
