@@ -38,6 +38,27 @@ void discardSplashScreen(Registry &registry) {
 }
 
 
+void showSmashButtons(Registry &registry) {
+    auto view = registry.view<SmashButton, Sprite, Transform>();
+
+    for(auto entity: view) {
+        const auto &sprite = registry.get<Sprite>(entity);
+        const auto &transform = registry.get<Transform>(entity);
+        registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * sprite.w / 2, 500_ui32, 0_ui32, &easeInCubic);
+    }
+}
+
+
+void hideSmashButtons(Registry &registry) {
+    auto view = registry.view<SmashButton, Transform>();
+
+    for(auto entity: view) {
+        const auto &transform = registry.get<Transform>(entity);
+        registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, 500_ui32, 0_ui32, &easeInCubic);
+    }
+}
+
+
 template<PanelType Type>
 void hidePanel(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
@@ -179,7 +200,6 @@ delta_type menuPageTransition(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::ACHIEVEMENTS:
-        case PanelType::SMASH_BUTTONS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_TOP:
@@ -389,9 +409,6 @@ delta_type theGameTransition(Registry &registry) {
         case PanelType::GAME_OVER:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
-        case PanelType::SMASH_BUTTONS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
-            break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
             break;
@@ -418,9 +435,6 @@ delta_type gameOverTransition(Registry &registry) {
             break;
         case PanelType::GAME_OVER:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::SMASH_BUTTONS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -483,9 +497,6 @@ delta_type trainingTransition(Registry &registry) {
             break;
         case PanelType::TRAINING_BOTTOM:
             registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::SMASH_BUTTONS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * panel.w / 2, duration, 0_ui32, &easeOutElastic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -616,6 +627,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             }
         } else {
             disableUIControls(registry);
+            hideSmashButtons(registry);
 
             switch(next) {
             case SceneType::EXIT:
@@ -650,6 +662,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
+                showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = theGameTransition(registry);
                 break;
@@ -663,6 +676,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = trainingTutorialTransition(registry);
                 break;
             case SceneType::TRAINING:
+                showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = trainingTransition(registry);
                 break;

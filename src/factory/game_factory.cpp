@@ -432,14 +432,14 @@ void createCameraFrame(Registry &registry) {
 
 
 void createSmashButtons(Registry &registry) {
-    auto parent = createPanel(registry, PanelType::SMASH_BUTTONS, logicalWidth + 96, logicalHeight / 2 - 368, 96, 736);
-
-    auto addButton = [parent, &registry](FaceType type, int idx) {
+    auto addButton = [&registry](FaceType type, int idx) {
         auto handle = toHandle(type);
-        auto button = createSmashButton(registry, parent, handle, type, 220);
-        setPos(registry, button, 0, idx * (96 + 32));
-        setSpriteSize(registry, button, 96, 96);
-        setBoundingBox(registry, button, 0, 0, 96, 96);
+        const auto w = 3 * handle->width() / 4;
+        const auto h = 3 * handle->height() / 4;
+        auto button = createSmashButton(registry, handle, type, 220);
+        setPos(registry, button, logicalWidth, logicalHeight / 2 + h * (idx - 3));
+        setSpriteSize(registry, button, w, h);
+        setBoundingBox(registry, button, 0, 0, w, h);
     };
 
     int pos = 0;

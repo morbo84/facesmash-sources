@@ -37,11 +37,21 @@ entity_type createPanel(Registry &registry, PanelType type, float x, float y, in
 }
 
 
-entity_type createSprite(Registry &registry, entity_type parent, SDLTextureHandle handle, int z) {
-    const auto entity = registry.create();
+static void internalCreateSprite(Registry &registry, entity_type entity, entity_type parent, SDLTextureHandle handle, int z) {
     registry.assign<Renderable>(entity, 0.f, z);
     registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
     registry.assign<Transform>(entity, parent, 0.f, 0.f);
+}
+
+entity_type createSprite(Registry &registry, entity_type parent, SDLTextureHandle handle, int z) {
+    const auto entity = registry.create();
+    internalCreateSprite(registry, entity, parent, handle, z);
+    return entity;
+}
+
+entity_type createSprite(Registry &registry, SDLTextureHandle handle, int z) {
+    const auto entity = registry.create();
+    internalCreateSprite(registry, entity, entity, handle, z);
     return entity;
 }
 
@@ -59,8 +69,8 @@ entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHan
 }
 
 
-entity_type createSmashButton(Registry &registry, entity_type parent, SDLTextureHandle handle, FaceType type, int z) {
-    auto entity = createSprite(registry, parent, handle, z);
+entity_type createSmashButton(Registry &registry, SDLTextureHandle handle, FaceType type, int z) {
+    auto entity = createSprite(registry, handle, z);
     registry.assign<BoundingBox>(entity, handle->width(), handle->height());
     registry.assign<SmashButton>(entity, type);
     return entity;

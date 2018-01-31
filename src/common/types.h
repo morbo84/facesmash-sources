@@ -102,8 +102,7 @@ enum class PanelType: Uint8 {
     THE_GAME_BOTTOM,
     GAME_OVER,
     TRAINING_TOP,
-    TRAINING_BOTTOM,
-    SMASH_BUTTONS
+    TRAINING_BOTTOM
 };
 
 
