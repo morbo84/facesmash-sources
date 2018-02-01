@@ -99,7 +99,7 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::ACHIEVEMENTS_PAGE);
                     break;
                 case UIAction::SAVE:
-                    // TODO
+                    Locator::AvMuxer::ref().exportMedia();
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, button);

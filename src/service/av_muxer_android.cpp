@@ -17,6 +17,7 @@ namespace gamee {
 
 
 std::string bindingVideoOutputPath();
+void bindingVideoExport();
 
 
 AvMuxerAndroid::~AvMuxerAndroid() {
@@ -78,7 +79,7 @@ void AvMuxerAndroid::recordVideo(int width, int height) {
     AMediaCodec_configure(encoder, videoMediaFormat, nullptr, nullptr, AMEDIACODEC_CONFIGURE_FLAG_ENCODE);
     AMediaCodec_start(encoder);
 
-    const auto filePath = bindingVideoOutputPath() + "/temp.mp4";
+    const auto filePath = bindingVideoOutputPath();
     auto fd = open(filePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
@@ -152,6 +153,16 @@ bool AvMuxerAndroid::ready() const noexcept {
 }
 
 
+bool AvMuxerAndroid::available() const noexcept {
+    return true;
+}
+
+
+void AvMuxerAndroid::exportMedia() const {
+    bindingVideoExport();
+}
+
+
 } // namespace gamee
 
 #else
@@ -180,14 +191,12 @@ void AvMuxerAndroid::recordVideo(int width, int height) {}
 bool AvMuxerAndroid::ready() const noexcept { return false; }
 
 
+bool AvMuxerAndroid::available() const noexcept { return false; }
+
+
+void AvMuxerAndroid::export() const {}
+
+
 } // namespace gamee
 
 #endif
-
-namespace gamee {
-
-bool AvMuxerAndroid::available() const noexcept {
-    return true;
-}
-
-}

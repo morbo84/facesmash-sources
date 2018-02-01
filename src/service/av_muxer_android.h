@@ -27,6 +27,7 @@ struct AvMuxerAndroid : AvMuxerService {
     bool ready() const noexcept override;
 
     bool available() const noexcept override;
+    void exportMedia() const override;
 
 private:
     void recordVideo(int width, int height);

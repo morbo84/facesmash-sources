@@ -19,6 +19,7 @@ struct AvMuxerService {
     virtual bool ready() const noexcept = 0;
 
     virtual bool available() const noexcept = 0;
+    virtual void exportMedia() const = 0;
 };
 
 
