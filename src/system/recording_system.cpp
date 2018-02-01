@@ -27,9 +27,9 @@ void RecordingSystem::init() {
 
 
 void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
-    auto &avMuxer = Locator::AvMuxer::ref();
+    auto &avRecorder = Locator::AvRecorder::ref();
 
-    if(avMuxer.recording()) {
+    if(avRecorder.recording()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto logical = textureCache.handle("target/logical");
         auto recording = textureCache.handle("target/recording");
@@ -44,13 +44,13 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
         SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
         renderer.present();
 
-        if(avMuxer.ready()) {
+        if(avRecorder.ready()) {
             renderer.target(*recording);
             SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
             SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
             renderer.target();
 
-            avMuxer.frame(pixels.get(), accumulator);
+            avRecorder.frame(pixels.get(), accumulator);
             firstFrame = false;
         }
     } else {

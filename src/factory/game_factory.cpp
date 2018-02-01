@@ -166,7 +166,7 @@ void refreshSupportPanel(Registry &registry) {
 
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto &muxer = Locator::AvMuxer::ref();
+    auto &muxer = Locator::AvRecorder::ref();
     auto &audio = Locator::Audio::ref();
 
     auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, logicalHeight);

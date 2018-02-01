@@ -5,8 +5,8 @@
 #include "../math/math.hpp"
 #include "../service/audio_null.h"
 #include "../service/audio_sdl.h"
-#include "../service/av_muxer_android.h"
-#include "../service/av_muxer_null.h"
+#include "../service/av_recorder_android.h"
+#include "../service/av_recorder_null.h"
 #include "ui_button_system.h"
 
 
@@ -41,18 +41,18 @@ void UIButtonSystem::switchVideo(Registry &registry, UIButton &button) {
     auto &textureCache = Locator::TextureCache::ref();
 
 #ifdef __ANDROID__
-    const auto &muxer = Locator::AvMuxer::ref();
+    const auto &muxer = Locator::AvRecorder::ref();
 
     if(muxer.available()) {
         registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/on");
-        Locator::AvMuxer::set<AvMuxerAndroid>();
+        Locator::AvRecorder::set<AvRecorderAndroid>();
     } else {
         registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
-        Locator::AvMuxer::set<AvMuxerNull>();
+        Locator::AvRecorder::set<AvRecorderNull>();
     }
 #else
     registry.get<Sprite>(button.label).handle = textureCache.handle("img/video/off");
-    Locator::AvMuxer::set<AvMuxerNull>();
+    Locator::AvRecorder::set<AvRecorderNull>();
 #endif
 }
 
@@ -99,7 +99,7 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::ACHIEVEMENTS_PAGE);
                     break;
                 case UIAction::SAVE:
-                    Locator::AvMuxer::ref().exportMedia();
+                    Locator::AvRecorder::ref().exportMedia();
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, button);

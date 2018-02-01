@@ -10,8 +10,8 @@
 #include "service/ads_null.h"
 #include "service/audio_null.h"
 #include "service/audio_sdl.h"
-#include "service/av_muxer_android.h"
-#include "service/av_muxer_null.h"
+#include "service/av_recorder_android.h"
+#include "service/av_recorder_null.h"
 #include "service/camera_android.h"
 #include "service/camera_null.h"
 
@@ -39,11 +39,11 @@ void initPlatformServices() {
 #ifdef __ANDROID__
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
-    gamee::Locator::AvMuxer::set<gamee::AvMuxerAndroid>();
+    gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
 #else
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
-    gamee::Locator::AvMuxer::set<gamee::AvMuxerNull>();
+    gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
 #endif
 
     gamee::Locator::Audio::ref().init();
@@ -53,7 +53,7 @@ void initPlatformServices() {
 void releasePlatformServices() {
     gamee::Locator::Audio::ref().release();
 
-    gamee::Locator::AvMuxer::reset();
+    gamee::Locator::AvRecorder::reset();
     gamee::Locator::Ads::reset();
     gamee::Locator::Camera::reset();
     gamee::Locator::Audio::reset();

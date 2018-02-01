@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SERVICE_MUXER_ANDROID_H
-#define FACE_SMASH_SERVICE_MUXER_ANDROID_H
+#ifndef FACE_SMASH_SERVICE_RECORDER_ANDROID_H
+#define FACE_SMASH_SERVICE_RECORDER_ANDROID_H
 
 
 #include <atomic>
@@ -9,16 +9,16 @@
 #include <thread>
 #include <utility>
 #include <condition_variable>
-#include "av_muxer_service.h"
+#include "av_recorder_service.h"
 
 
 namespace gamee {
 
 
-struct AvMuxerAndroid : AvMuxerService {
+struct AvRecorderAndroid : AvRecorderService {
     using VideoFrame = std::pair<const unsigned char*, delta_type>;
 
-    ~AvMuxerAndroid() override;
+    ~AvRecorderAndroid() override;
 
     void start(int, int) override;
     void frame(const unsigned char *, delta_type) override;
@@ -44,4 +44,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SERVICE_MUXER_ANDROID_H
+#endif // FACE_SMASH_SERVICE_RECORDER_ANDROID_H
