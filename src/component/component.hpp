@@ -181,7 +181,8 @@ struct ExpiringContent final {};
 
 struct GameTimer final {
     entity_type entities[2];
-    delta_type remaining{60999_ui32};
+    delta_type remaining{1999_ui32};
+    bool enabled{false};
 };
 
 

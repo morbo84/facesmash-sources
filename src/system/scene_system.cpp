@@ -12,7 +12,7 @@
 namespace gamee {
 
 
-void discardExpiringContents(Registry &registry) {
+static void discardExpiringContents(Registry &registry) {
     auto view = registry.view<ExpiringContent>();
 
     for(auto entity: view) {
@@ -21,7 +21,7 @@ void discardExpiringContents(Registry &registry) {
 }
 
 
-void discardSplashScreen(Registry &registry) {
+static void discardSplashScreen(Registry &registry) {
     // we can safely discard the splash screen once reached
     registry.view<Panel>().each([&registry](auto parent, const auto &panel) {
         if(panel.type == PanelType::SPLASH_SCREEN) {
@@ -38,7 +38,7 @@ void discardSplashScreen(Registry &registry) {
 }
 
 
-void showSmashButtons(Registry &registry) {
+static void showSmashButtons(Registry &registry) {
     auto view = registry.view<SmashButton, Sprite, Transform>();
 
     for(auto entity: view) {
@@ -49,7 +49,7 @@ void showSmashButtons(Registry &registry) {
 }
 
 
-void hideSmashButtons(Registry &registry) {
+static void hideSmashButtons(Registry &registry) {
     auto view = registry.view<SmashButton, Transform>();
 
     for(auto entity: view) {
@@ -59,31 +59,39 @@ void hideSmashButtons(Registry &registry) {
 }
 
 
-template<PanelType Type>
-void hidePanel(Registry &registry) {
+static void hideBackgroundPanels(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
-        if(panel.type == Type) {
+        switch(panel.type) {
+        case PanelType::EXIT:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
             transform.x = -panel.w;
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
         }
     });
 }
 
 
-void disableUIControls(Registry &registry) {
+static void disableUIControls(Registry &registry) {
     for(auto entity: registry.view<UIButton>()) {
         registry.get<UIButton>(entity).enabled = false;
     }
 }
 
 
-void enableUIControls(Registry &registry) {
+static void enableUIControls(Registry &registry) {
     for(auto entity: registry.view<UIButton>()) {
         registry.get<UIButton>(entity).enabled = true;
     }
 }
 
 
-void disableCameraFrame(Registry &registry) {
+static void disableCameraFrame(Registry &registry) {
     if(registry.has<CameraFrame>()) {
         registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 0;
         registry.get<CameraFrame>().acquire = false;
@@ -91,7 +99,7 @@ void disableCameraFrame(Registry &registry) {
 }
 
 
-void enableCameraFrame(Registry &registry) {
+static void enableCameraFrame(Registry &registry) {
     if(registry.has<CameraFrame>()) {
         registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 255;
         registry.get<CameraFrame>().acquire = true;
@@ -99,7 +107,7 @@ void enableCameraFrame(Registry &registry) {
 }
 
 
-void resetGame(Registry &registry) {
+static void resetGame(Registry &registry) {
     auto &playerScore = registry.get<PlayerScore>();
     auto oldPlayerScore = playerScore;
     playerScore = {};
@@ -111,6 +119,7 @@ void resetGame(Registry &registry) {
     auto &gameTimer = registry.get<GameTimer>();
     auto oldGameTimer = gameTimer;
     gameTimer = {};
+    gameTimer.enabled = true;
 
     for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
         gameTimer.entities[i] = oldGameTimer.entities[i];
@@ -120,38 +129,12 @@ void resetGame(Registry &registry) {
 }
 
 
-void resetTraining(Registry &registry) {
+static void resetTraining(Registry &registry) {
     // TODO
 }
 
 
-delta_type exitTransition(Registry &registry) {
-    static constexpr delta_type duration = 1000_ui32;
-
-    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::MENU_TOP:
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case PanelType::MENU_BOTTOM:
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case PanelType::EXIT:
-            registry.accomodate<Transform>(entity, entity, 0.f, 0.f);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
-        }
-    });
-
-    return duration;
-}
-
-
-delta_type splashScreenTransition(Registry &registry) {
+static delta_type splashScreenTransition(Registry &registry) {
     static constexpr delta_type duration = 3000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -175,7 +158,7 @@ delta_type splashScreenTransition(Registry &registry) {
 }
 
 
-delta_type menuPageTransition(Registry &registry) {
+static delta_type menuPageTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -195,10 +178,6 @@ delta_type menuPageTransition(Registry &registry) {
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
-        case PanelType::CREDITS:
-        case PanelType::SUPPORT:
-        case PanelType::SETTINGS:
-        case PanelType::ACHIEVEMENTS:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_TOP:
@@ -219,27 +198,22 @@ delta_type menuPageTransition(Registry &registry) {
 }
 
 
-delta_type creditsTransition(Registry &registry) {
+template<PanelType BackgroundPanel>
+static delta_type bgPanelTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::CREDITS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
         case PanelType::MENU_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+        case PanelType::BACKGROUND_TOP:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+        case PanelType::BACKGROUND_BOTTOM:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h / 4, duration, 0_ui32, &easeOutElastic);
+            break;
+        case BackgroundPanel:
+            registry.accomodate<Transform>(entity, entity, 0.f, (logicalHeight - panel.h) / 2.f);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -251,27 +225,22 @@ delta_type creditsTransition(Registry &registry) {
 }
 
 
-delta_type supportTransition(Registry &registry) {
+template<>
+delta_type bgPanelTransition<PanelType::EXIT>(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::SUPPORT:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
         case PanelType::MENU_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+        case PanelType::BACKGROUND_TOP:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h / 4, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::MENU_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+        case PanelType::BACKGROUND_BOTTOM:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::EXIT:
+            registry.accomodate<Transform>(entity, entity, 0.f, (logicalHeight - panel.h) / 2.f);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -283,71 +252,7 @@ delta_type supportTransition(Registry &registry) {
 }
 
 
-delta_type settingsTransition(Registry &registry) {
-    static constexpr delta_type duration = 1000_ui32;
-
-    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::SETTINGS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::MENU_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::MENU_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
-        }
-    });
-
-    return duration;
-}
-
-
-delta_type achievementsTransition(Registry &registry) {
-    static constexpr delta_type duration = 1000_ui32;
-
-    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::ACHIEVEMENTS:
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::MENU_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::MENU_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
-            registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
-        }
-    });
-
-    return duration;
-}
-
-
-delta_type gameTutorialTransition(Registry &registry) {
+static delta_type gameTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 3000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -382,7 +287,7 @@ delta_type gameTutorialTransition(Registry &registry) {
 }
 
 
-delta_type theGameTransition(Registry &registry) {
+static delta_type theGameTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -418,9 +323,10 @@ delta_type theGameTransition(Registry &registry) {
 }
 
 
-delta_type gameOverTransition(Registry &registry) {
+static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
+    registry.get<GameTimer>().enabled = false;
     registry.destroy(registry.attachee<LetsPlay>());
     registry.reset<Destroyable>();
 
@@ -445,7 +351,7 @@ delta_type gameOverTransition(Registry &registry) {
 }
 
 
-delta_type trainingTutorialTransition(Registry &registry) {
+static delta_type trainingTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 3000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -477,7 +383,7 @@ delta_type trainingTutorialTransition(Registry &registry) {
 }
 
 
-delta_type trainingTransition(Registry &registry) {
+static delta_type trainingTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -592,7 +498,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIControls(registry);
                     break;
                 case SceneType::MENU_PAGE:
-                    hidePanel<PanelType::EXIT>(registry);
+                    hideBackgroundPanels(registry);
                     enableUIControls(registry);
                     camera.stop();
                     break;
@@ -631,27 +537,31 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             switch(next) {
             case SceneType::EXIT:
                 disableCameraFrame(registry);
-                remaining = exitTransition(registry);
+                remaining = bgPanelTransition<PanelType::EXIT>(registry);
                 break;
             case SceneType::SPLASH_SCREEN:
                 enableUIControls(registry);
                 remaining = splashScreenTransition(registry);
                 break;
             case SceneType::CREDITS_PAGE:
-                remaining = creditsTransition(registry);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition<PanelType::CREDITS>(registry);
                 break;
             case SceneType::SUPPORT_PAGE:
+                hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshSupportPanel(registry);
-                remaining = supportTransition(registry);
+                remaining = bgPanelTransition<PanelType::SUPPORT>(registry);
                 break;
             case SceneType::SETTINGS_PAGE:
-                remaining = settingsTransition(registry);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition<PanelType::SETTINGS>(registry);
                 break;
             case SceneType::ACHIEVEMENTS_PAGE:
+                hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshAchievementsPanel(registry);
-                remaining = achievementsTransition(registry);
+                remaining = bgPanelTransition<PanelType::ACHIEVEMENTS>(registry);
                 break;
             case SceneType::MENU_PAGE:
                 remaining = menuPageTransition(registry);

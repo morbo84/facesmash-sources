@@ -13,7 +13,7 @@ namespace gamee {
 void createExitPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto exitHandle = textureCache.handle("str/exit");
@@ -140,15 +140,15 @@ void createMenuBottomPanel(Registry &registry) {
 void createCreditsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::CREDITS, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::CREDITS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/credits");
-    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
     setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
@@ -156,15 +156,15 @@ void createCreditsPanel(Registry &registry) {
 void createSupportPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::SUPPORT, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::SUPPORT, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/support");
-    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
     setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
@@ -179,31 +179,31 @@ void createSettingsPanel(Registry &registry) {
     auto &muxer = Locator::AvRecorder::ref();
     auto &audio = Locator::Audio::ref();
 
-    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/settings");
-    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
     auto audioStrHandle = textureCache.handle("str/audio");
-    auto audioStrEntity = createSprite(registry, parent, audioStrHandle, 150);
+    auto audioStrEntity = createSprite(registry, parent, audioStrHandle, 20);
     setPos(registry, audioStrEntity, (panel.w - audioStrHandle->width()) / 2, panel.h / 4);
 
     auto videoStrHandle = textureCache.handle("str/video");
-    auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 150);
+    auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 20);
     setPos(registry, videoStrEntity, (panel.w - videoStrHandle->width()) / 2, 3 * panel.h / 5);
 
     auto audioHandle = audio.isMute() ? textureCache.handle("img/audio/off") : textureCache.handle("img/audio/on");
-    auto audioButton = createUIButton(registry, parent, audioHandle, UIAction::SWITCH_AUDIO, 150);
+    auto audioButton = createUIButton(registry, parent, audioHandle, UIAction::SWITCH_AUDIO, 20);
     setPos(registry, audioButton, (panel.w - audioHandle->width()) / 2, (3 * panel.h / 4 - audioHandle->height()) / 2);
 
     auto videoHandle = muxer.available() ? textureCache.handle("img/video/on") : textureCache.handle("img/video/off");
-    auto videoButton = createUIButton(registry, parent, videoHandle, UIAction::SWITCH_VIDEO, 150);
+    auto videoButton = createUIButton(registry, parent, videoHandle, UIAction::SWITCH_VIDEO, 20);
     setPos(registry, videoButton, (panel.w - videoHandle->width()) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoHandle->height() / 2);
 
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
     setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
@@ -211,15 +211,15 @@ void createSettingsPanel(Registry &registry) {
 void createAchievementsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::ACHIEVEMENTS, logicalWidth, 0, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::ACHIEVEMENTS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/achievements");
-    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
     auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 150);
+    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
     setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
 }
 
