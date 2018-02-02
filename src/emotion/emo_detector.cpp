@@ -12,7 +12,7 @@ static const char* visageDataPath = "/data/data/com.cynny.gamee.facesmash/files/
 #else
 static const char* visageTrackingCfg = "visage/Facial Features Tracker - High.cfg";
 static const char* visageDataPath = "visage/bdtsdata/LBF/vfadata";
-static const char* visageLicense = "visage/578-496-411-691-522-273-235-359-916-935-253.vlc";
+static const char* visageLicense = "visage/591-919-572-251-334-591-398-301-506-198-303.vlc";
 
 // neccessary prototype declaration for licensing
 namespace VisageSDK {

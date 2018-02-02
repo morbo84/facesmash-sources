@@ -1,4 +1,4 @@
-#include "av_muxer_android.h"
+#include "av_recorder_android.h"
 
 #ifdef __ANDROID__
 #include "common/constants.h"
@@ -17,27 +17,28 @@ namespace gamee {
 
 
 std::string bindingVideoOutputPath();
+void bindingVideoExport();
 
 
-AvMuxerAndroid::~AvMuxerAndroid() {
+AvRecorderAndroid::~AvRecorderAndroid() {
     std::unique_lock lck{mtx_};
     frame_.first = nullptr;
     lck.unlock();
-    AvMuxerAndroid::stop();
+    AvRecorderAndroid::stop();
     if(t_.joinable())
         t_.join();
 }
 
 
-void AvMuxerAndroid::start(int width, int height) {
+void AvRecorderAndroid::start(int width, int height) {
     if(t_.joinable())
         t_.join();
     stopped_ = false;
-    t_ = std::thread{&AvMuxerAndroid::recordVideo, this, width, height};
+    t_ = std::thread{&AvRecorderAndroid::recordVideo, this, width, height};
 }
 
 
-void AvMuxerAndroid::frame(const unsigned char* frame, delta_type delta) {
+void AvRecorderAndroid::frame(const unsigned char* frame, delta_type delta) {
     std::unique_lock lck{mtx_};
     frame_.first = frame;
     frame_.second = delta;
@@ -47,7 +48,7 @@ void AvMuxerAndroid::frame(const unsigned char* frame, delta_type delta) {
 }
 
 
-void AvMuxerAndroid::stop() {
+void AvRecorderAndroid::stop() {
     std::unique_lock lck{mtx_};
     stopped_ = true;
     lck.unlock();
@@ -55,12 +56,12 @@ void AvMuxerAndroid::stop() {
 }
 
 
-bool AvMuxerAndroid::recording() const noexcept {
+bool AvRecorderAndroid::recording() const noexcept {
     return !stopped_;
 }
 
 
-void AvMuxerAndroid::recordVideo(int width, int height) {
+void AvRecorderAndroid::recordVideo(int width, int height) {
     constexpr auto outputFormat = SDL_PIXELFORMAT_NV12;
     const auto outputBufferSize = static_cast<size_t>(width * height) * 12U / 8U;
     constexpr auto frameRate = 30;
@@ -78,7 +79,7 @@ void AvMuxerAndroid::recordVideo(int width, int height) {
     AMediaCodec_configure(encoder, videoMediaFormat, nullptr, nullptr, AMEDIACODEC_CONFIGURE_FLAG_ENCODE);
     AMediaCodec_start(encoder);
 
-    const auto filePath = bindingVideoOutputPath() + "/temp.mp4";
+    const auto filePath = bindingVideoOutputPath();
     auto fd = open(filePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
@@ -147,8 +148,18 @@ void AvMuxerAndroid::recordVideo(int width, int height) {
 }
 
 
-bool AvMuxerAndroid::ready() const noexcept {
+bool AvRecorderAndroid::ready() const noexcept {
     return ready_;
+}
+
+
+bool AvRecorderAndroid::available() const noexcept {
+    return true;
+}
+
+
+void AvRecorderAndroid::exportMedia() const {
+    bindingVideoExport();
 }
 
 
@@ -159,35 +170,33 @@ bool AvMuxerAndroid::ready() const noexcept {
 namespace gamee {
 
 
-AvMuxerAndroid::~AvMuxerAndroid() {}
+AvRecorderAndroid::~AvRecorderAndroid() {}
 
 
-void AvMuxerAndroid::start(int width, int height) {}
+void AvRecorderAndroid::start(int width, int height) {}
 
 
-void AvMuxerAndroid::frame(const unsigned char* frame, delta_type delta) {}
+void AvRecorderAndroid::frame(const unsigned char* frame, delta_type delta) {}
 
 
-void AvMuxerAndroid::stop() {}
+void AvRecorderAndroid::stop() {}
 
 
-bool AvMuxerAndroid::recording() const noexcept { return false; }
+bool AvRecorderAndroid::recording() const noexcept { return false; }
 
 
-void AvMuxerAndroid::recordVideo(int width, int height) {}
+void AvRecorderAndroid::recordVideo(int width, int height) {}
 
 
-bool AvMuxerAndroid::ready() const noexcept { return false; }
+bool AvRecorderAndroid::ready() const noexcept { return false; }
+
+
+bool AvRecorderAndroid::available() const noexcept { return false; }
+
+
+void AvRecorderAndroid::exportMedia() const {}
 
 
 } // namespace gamee
 
 #endif
-
-namespace gamee {
-
-bool AvMuxerAndroid::available() const noexcept {
-    return true;
-}
-
-}
