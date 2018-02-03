@@ -194,7 +194,7 @@ bool AvRecorderAndroid::ready() const noexcept { return false; }
 bool AvRecorderAndroid::available() const noexcept { return false; }
 
 
-void AvRecorderAndroid::export() const {}
+void AvRecorderAndroid::exportMedia() const {}
 
 
 } // namespace gamee
