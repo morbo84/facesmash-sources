@@ -21,7 +21,7 @@ void GameLoop::init(GameRenderer &renderer) {
     prepareGameStrings(renderer);
     prepareGameStuff(renderer);
 
-    // createExitPanel(registry);
+    createExitPanel(registry);
     createSplashScreenPanel(registry);
     createBackgroundTopPanel(registry);
     createBackgroundBottomPanel(registry);
@@ -31,11 +31,11 @@ void GameLoop::init(GameRenderer &renderer) {
     createSupportPanel(registry);
     createSettingsPanel(registry);
     createAchievementsPanel(registry);
-    // createTutorialTopPanel(registry);
-    // createTutorialBottomPanel(registry);
+    createTutorialTopPanel(registry);
+    createTutorialBottomPanel(registry);
     createGameTopPanel(registry);
     createGameBottomPanel(registry);
-    // createGameOverPanel(registry);
+    createGameOverPanel(registry);
     createTrainingTopPanel(registry);
     createTrainingBottomPanel(registry);
     createCamera(registry);

@@ -68,10 +68,10 @@ entity_type createItem(Registry &registry, ItemType item, int z) {
 
     switch(item) {
     case ItemType::FOUNTAIN:
-        setSpriteGeometry(registry, entity, 0, 240, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8, 1_ui8);
         break;
     case ItemType::SLOW_DOWN:
-        setSpriteGeometry(registry, entity, 0, 120, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8, 1_ui8);
         break;
     case ItemType::SPEED_UP:
         setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8, 1_ui8);

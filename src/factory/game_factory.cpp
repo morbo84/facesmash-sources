@@ -243,20 +243,27 @@ void createTutorialTopPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::TUTORIAL_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto addButton = [&](TextureCache::resource_type face, int idx) {
-        auto emojiHandle = textureCache.handle(face);
-        const auto buttonOffset = (panel.w - (numberOfFaces * emojiHandle->width() + (numberOfFaces - 1) * 10)) / 2;
-        auto emoji = createSprite(registry, parent, emojiHandle, 160);
-        setSpriteSize(registry, emoji, 3 * emojiHandle->width() / 5, 3 * emojiHandle->height() / 5);
-        setPos(registry, emoji, buttonOffset + idx * (emojiHandle->width() + 10), panel.h - 3 * emojiHandle->height() / 2);
+    auto addButton = [&](FaceType type, int idx) {
+        auto entity = createFace(registry, type, 0, 0, 160);
+
+        registry.get<Transform>(entity).parent = parent;
+        registry.remove<BoundingBox>(entity);
+
+        const auto &sprite = registry.get<Sprite>(entity);
+        const auto w = 3 * sprite.w / 5;
+        const auto h = 3 * sprite.h / 5;
+
+        const auto buttonOffset = (panel.w - (numberOfFaces * sprite.w + (numberOfFaces - 1) * 10)) / 2;
+        setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), panel.h - 3 * sprite.h / 2);
+        setSpriteSize(registry, entity, w, h);
     };
 
-    addButton("face/angry", 0);
-    addButton("face/disgusted", 1);
-    addButton("face/happy", 2);
-    addButton("face/surprised", 3);
-    addButton("face/fearful", 4);
-    addButton("face/sad", 5);
+    addButton(FaceType::ANGRY, 0);
+    addButton(FaceType::DISGUSTED, 1);
+    addButton(FaceType::HAPPY, 2);
+    addButton(FaceType::SURPRISED, 3);
+    addButton(FaceType::FEARFUL, 4);
+    addButton(FaceType::SAD, 5);
 
     auto tutorialHandle = textureCache.handle("str/tutorial/face");
     auto tutorial = createSprite(registry, parent, tutorialHandle, 150);
@@ -270,17 +277,24 @@ void createTutorialBottomPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::TUTORIAL_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto addButton = [&](TextureCache::resource_type face, int idx) {
-        auto emojiHandle = textureCache.handle(face);
-        const auto buttonOffset = (panel.w - (numberOfItems * emojiHandle->width() + (numberOfItems - 1) * 10)) / 2;
-        auto emoji = createSprite(registry, parent, emojiHandle, 160);
-        setSpriteSize(registry, emoji, 3 * emojiHandle->width() / 5, 3 * emojiHandle->height() / 5);
-        setPos(registry, emoji, buttonOffset + idx * (emojiHandle->width() + 10), emojiHandle->height() / 2);
+    auto addButton = [&](ItemType type, int idx) {
+        auto entity = createItem(registry, type, 160);
+
+        registry.get<Transform>(entity).parent = parent;
+        registry.remove<BoundingBox>(entity);
+
+        const auto &sprite = registry.get<Sprite>(entity);
+        const auto w = 3 * sprite.w / 5;
+        const auto h = 3 * sprite.h / 5;
+
+        const auto buttonOffset = (panel.w - (numberOfItems * sprite.w + (numberOfItems - 1) * 10)) / 2;
+        setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), sprite.h / 2);
+        setSpriteSize(registry, entity, w, h);
     };
 
-    addButton("item/speed_up", 0);
-    addButton("item/slow_down", 1);
-    addButton("item/fountain", 2);
+    addButton(ItemType::SPEED_UP, 0);
+    addButton(ItemType::SLOW_DOWN, 1);
+    addButton(ItemType::FOUNTAIN, 2);
 
     auto tutorialHandle = textureCache.handle("str/tutorial/touch");
     auto tutorial = createSprite(registry, parent, tutorialHandle, 150);
