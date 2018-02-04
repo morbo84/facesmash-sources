@@ -2,7 +2,7 @@
 #include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
-#include "../factory/play_factory.h"
+#include "../factory/spawner.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
@@ -31,7 +31,7 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 }
 
 
-void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
+void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
     auto &score = registry.get<PlayerScore>();
     auto &textureCache = Locator::TextureCache::ref();
     int total = 0;
@@ -48,8 +48,8 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
 
             if(SDL_HasIntersection(&playArea, &area)) {
                 if(dirty && smash.type == type) {
-                    factory.spawnExplosion(registry, x, y);
-                    factory.spawnSmashScore(registry, smash.smash, x, y);
+                    spawner.spawnExplosion(registry, x, y);
+                    spawner.spawnSmashScore(registry, smash.smash, x, y);
 
                     switch(smash.type) {
                     case FaceType::ANGRY:
@@ -79,7 +79,7 @@ void FaceSmashSystem::update(Registry &registry, PlayFactory &factory) {
                     registry.destroy(entity);
                 }
             } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
-                factory.spawnMissScore(registry, smash.miss, x, y);
+                spawner.spawnMissScore(registry, smash.miss, x, y);
                 score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
                 registry.destroy(entity);
             }

@@ -1,3 +1,4 @@
+#include "../component/component.hpp"
 #include "../locator/locator.hpp"
 #include "util.h"
 
@@ -35,70 +36,32 @@ SDL_Point transformToPosition(const Registry &registry, entity_type entity, cons
 }
 
 
-SDLTextureHandle toHandle(FaceType type) {
-    switch(type) {
-    case FaceType::ANGRY:
-        return Locator::TextureCache::ref().handle("face/angry");
-    case FaceType::DISGUSTED:
-        return Locator::TextureCache::ref().handle("face/disgusted");
-    case FaceType::FEARFUL:
-        return Locator::TextureCache::ref().handle("face/fearful");
-    case FaceType::HAPPY:
-        return Locator::TextureCache::ref().handle("face/happy");
-    case FaceType::SAD:
-        return Locator::TextureCache::ref().handle("face/sad");
-    case FaceType::SURPRISED:
-        return Locator::TextureCache::ref().handle("face/surprised");
-    default:
-        assert(false);
-        // suppress warnings
-        return Locator::TextureCache::ref().handle("face/angry");
-    }
-}
-
-
-SDLTextureHandle toHandle(ItemType type) {
-    switch(type) {
-    case ItemType::FOUNTAIN:
-        return Locator::TextureCache::ref().handle("item/fountain");
-    case ItemType::SLOW_DOWN:
-        return Locator::TextureCache::ref().handle("item/slow_down");
-    case ItemType::SPEED_UP:
-        return Locator::TextureCache::ref().handle("item/speed_up");
-    default:
-        assert(false);
-        // suppress warnings
-        return Locator::TextureCache::ref().handle("item/speed_up");
-    }
-}
-
-
 SDLTextureHandle toStrHud(int value) {
     switch (value) {
     case 0:
-        return Locator::TextureCache::ref().handle("str/hud/0");
+        return Locator::TextureCache::ref().handle("str/0");
     case 1:
-        return Locator::TextureCache::ref().handle("str/hud/1");
+        return Locator::TextureCache::ref().handle("str/1");
     case 2:
-        return Locator::TextureCache::ref().handle("str/hud/2");
+        return Locator::TextureCache::ref().handle("str/2");
     case 3:
-        return Locator::TextureCache::ref().handle("str/hud/3");
+        return Locator::TextureCache::ref().handle("str/3");
     case 4:
-        return Locator::TextureCache::ref().handle("str/hud/4");
+        return Locator::TextureCache::ref().handle("str/4");
     case 5:
-        return Locator::TextureCache::ref().handle("str/hud/5");
+        return Locator::TextureCache::ref().handle("str/5");
     case 6:
-        return Locator::TextureCache::ref().handle("str/hud/6");
+        return Locator::TextureCache::ref().handle("str/6");
     case 7:
-        return Locator::TextureCache::ref().handle("str/hud/7");
+        return Locator::TextureCache::ref().handle("str/7");
     case 8:
-        return Locator::TextureCache::ref().handle("str/hud/8");
+        return Locator::TextureCache::ref().handle("str/8");
     case 9:
-        return Locator::TextureCache::ref().handle("str/hud/9");
+        return Locator::TextureCache::ref().handle("str/9");
     default:
         assert(false);
         // suppress warnings
-        return Locator::TextureCache::ref().handle("str/hud/?");
+        return Locator::TextureCache::ref().handle("str/ ");
     }
 }
 
@@ -106,29 +69,29 @@ SDLTextureHandle toStrHud(int value) {
 SDLTextureHandle toStrDebug(int value) {
     switch (value) {
     case 0:
-        return Locator::TextureCache::ref().handle("str/debug/0");
+        return Locator::TextureCache::ref().handle("str/0");
     case 1:
-        return Locator::TextureCache::ref().handle("str/debug/1");
+        return Locator::TextureCache::ref().handle("str/1");
     case 2:
-        return Locator::TextureCache::ref().handle("str/debug/2");
+        return Locator::TextureCache::ref().handle("str/2");
     case 3:
-        return Locator::TextureCache::ref().handle("str/debug/3");
+        return Locator::TextureCache::ref().handle("str/3");
     case 4:
-        return Locator::TextureCache::ref().handle("str/debug/4");
+        return Locator::TextureCache::ref().handle("str/4");
     case 5:
-        return Locator::TextureCache::ref().handle("str/debug/5");
+        return Locator::TextureCache::ref().handle("str/5");
     case 6:
-        return Locator::TextureCache::ref().handle("str/debug/6");
+        return Locator::TextureCache::ref().handle("str/6");
     case 7:
-        return Locator::TextureCache::ref().handle("str/debug/7");
+        return Locator::TextureCache::ref().handle("str/7");
     case 8:
-        return Locator::TextureCache::ref().handle("str/debug/8");
+        return Locator::TextureCache::ref().handle("str/8");
     case 9:
-        return Locator::TextureCache::ref().handle("str/debug/9");
+        return Locator::TextureCache::ref().handle("str/9");
     default:
         assert(false);
         // suppress warnings
-        return Locator::TextureCache::ref().handle("str/debug/?");
+        return Locator::TextureCache::ref().handle("str/ ");
     }
 }
 

@@ -8,21 +8,10 @@
 namespace gamee {
 
 
-void setPos(Registry &, entity_type, float, float);
-void setSpriteSize(Registry &, entity_type, int, int);
-void setBoundingBox(Registry &, entity_type, int, int, int, int);
-
 entity_type createPanel(Registry &, PanelType, float, float, int, int);
-
-entity_type createSprite(Registry &, entity_type, SDLTextureHandle, int);
-entity_type createSprite(Registry &, SDLTextureHandle, int);
-
-entity_type createUIButton(Registry &, entity_type, SDLTextureHandle, UIAction, int);
-entity_type createSmashButton(Registry &, SDLTextureHandle, FaceType, int);
-
+entity_type createUIButton(Registry &, entity_type, UIAction, int);
 entity_type createHUD(Registry &, entity_type, SDLTextureHandle, int);
 entity_type createHUD(Registry &, SDLTextureHandle, int);
-
 
 
 }

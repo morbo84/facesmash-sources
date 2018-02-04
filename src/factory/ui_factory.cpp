@@ -1,32 +1,11 @@
+#include <cassert>
 #include "../component/component.hpp"
+#include "../locator/locator.hpp"
+#include "common.h"
 #include "ui_factory.h"
 
 
 namespace gamee {
-
-
-void setPos(Registry &registry, entity_type entity, float x, float y) {
-    auto &transform = registry.get<Transform>(entity);
-    transform.x = x;
-    transform.y = y;
-}
-
-
-void setSpriteSize(Registry &registry, entity_type entity, int w, int h) {
-    auto &sprite = registry.get<Sprite>(entity);
-    sprite.w = w;
-    sprite.h = h;
-}
-
-
-void setBoundingBox(Registry &registry, entity_type entity, int x, int y, int w, int h) {
-    registry.get<BoundingBox>(entity) = { x, y, w, h };
-}
-
-
-void setY(Registry &registry, entity_type entity, float y) {
-    registry.get<Transform>(entity).y = y;
-}
 
 
 entity_type createPanel(Registry &registry, PanelType type, float x, float y, int w, int h) {
@@ -37,37 +16,61 @@ entity_type createPanel(Registry &registry, PanelType type, float x, float y, in
 }
 
 
-static void internalCreateSprite(Registry &registry, entity_type entity, entity_type parent, SDLTextureHandle handle, int z) {
-    registry.assign<Renderable>(entity, 0.f, z);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
-    registry.assign<Transform>(entity, parent, 0.f, 0.f);
-}
-
-entity_type createSprite(Registry &registry, entity_type parent, SDLTextureHandle handle, int z) {
-    const auto entity = registry.create();
-    internalCreateSprite(registry, entity, parent, handle, z);
-    return entity;
-}
-
-entity_type createSprite(Registry &registry, SDLTextureHandle handle, int z) {
-    const auto entity = registry.create();
-    internalCreateSprite(registry, entity, entity, handle, z);
-    return entity;
-}
-
-
-entity_type createUIButton(Registry &registry, entity_type parent, SDLTextureHandle handle, UIAction action, int z) {
+entity_type createUIButton(Registry &registry, entity_type parent, UIAction action, int z) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("ui/buttons");
     auto entity = createSprite(registry, parent, handle, z);
-    registry.assign<BoundingBox>(entity, handle->width(), handle->height());
+
+    const auto width = handle->width() / 12;
+    const auto height = handle->height() / 14;
+
+    switch(action) {
+    case UIAction::ACHIEVEMENTS:
+        setSpriteGeometry(registry, entity, 1024, 1280, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::CREDITS:
+        setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::EXIT:
+        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::MENU:
+        setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::RELOAD:
+        setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::SAVE:
+        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::SETTINGS:
+        setSpriteGeometry(registry, entity, 0, 1152, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::SUPPORT:
+        setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::SWITCH_AUDIO:
+        setSpriteGeometry(registry, entity, 0, 768, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::SWITCH_VIDEO:
+        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::THE_GAME:
+        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::TRAINING:
+        setSpriteGeometry(registry, entity, 0, 256, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::EASTER_EGG:
+    default:
+        assert(false);
+        break;
+    };
+
+    setSpriteSize(registry, entity, width, height);
+    registry.assign<BoundingBox>(entity, width, height);
     registry.assign<UIButton>(entity, entity, action);
-    return entity;
-}
 
-
-entity_type createSmashButton(Registry &registry, SDLTextureHandle handle, FaceType type, int z) {
-    auto entity = createSprite(registry, handle, z);
-    registry.assign<BoundingBox>(entity, handle->width(), handle->height());
-    registry.assign<SmashButton>(entity, type);
     return entity;
 }
 
@@ -84,7 +87,6 @@ entity_type createHUD(Registry &registry, entity_type parent, SDLTextureHandle h
     internalCreateHUD(registry, entity, parent, handle, z);
     return entity;
 }
-
 
 
 entity_type createHUD(Registry &registry, SDLTextureHandle handle, int z) {

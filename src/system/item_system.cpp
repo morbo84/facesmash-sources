@@ -1,7 +1,7 @@
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
-#include "../factory/play_factory.h"
+#include "../factory/spawner.h"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
 #include "item_system.h"
@@ -21,15 +21,15 @@ void ItemSystem::movement(Registry &registry, float mod) {
 }
 
 
-void ItemSystem::fountain(Registry &registry, PlayFactory &factory) {
+void ItemSystem::fountain(Registry &registry, Spawner &spawner) {
     const auto face = faceBag.get();
 
-    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
-    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
-    factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    spawner.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    spawner.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+    spawner.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
 
     while(registry.size<Face>() < 5) {
-        factory.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
+        spawner.spawnFaceBottom(registry, 100_ui8, 100_ui8, face);
     }
 }
 
@@ -64,7 +64,7 @@ void ItemSystem::receive(const TouchEvent &event) noexcept {
 }
 
 
-void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type delta) {
+void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
     auto view = registry.view<Item, Transform, BoundingBox>();
 
     view.each([&, this](auto entity, const auto &item, const auto &transform, const auto &box) {
@@ -78,7 +78,7 @@ void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type del
                 const auto x = area.x + area.w / 2;
                 const auto y = area.y + area.h / 2;
 
-                factory.spawnExplosion(registry, x, y);
+                spawner.spawnExplosion(registry, x, y);
                 registry.destroy(entity);
             }
         } else {
@@ -89,7 +89,7 @@ void ItemSystem::update(Registry &registry, PlayFactory &factory, delta_type del
     if(remaining) {
         switch(curr) {
         case ItemType::FOUNTAIN:
-            fountain(registry, factory);
+            fountain(registry, spawner);
             break;
         case ItemType::SLOW_DOWN:
             movement(registry, .3f);

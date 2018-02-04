@@ -8,11 +8,11 @@
 namespace gamee {
 
 
-class PlayFactory;
+class Spawner;
 
 
 struct TrainingSystem final {
-    void update(Registry &, PlayFactory &);
+    void update(Registry &, Spawner &);
 };
 
 

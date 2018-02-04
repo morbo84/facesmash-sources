@@ -1,6 +1,6 @@
 #include "../event/event.hpp"
 #include "../component/component.hpp"
-#include "../factory/play_factory.h"
+#include "../factory/spawner.h"
 #include "../locator/locator.hpp"
 #include "easter_egg_system.h"
 
@@ -23,12 +23,12 @@ void EasterEggSystem::receive(const ActivateEasterEggEvent &) noexcept {
 }
 
 
-void EasterEggSystem::update(Registry &registry, PlayFactory &factory) {
+void EasterEggSystem::update(Registry &registry, Spawner &spawner) {
     if(dirty) {
         if(unlock) {
             --unlock;
         } else {
-            factory.spawnFaceBottom(registry, 0, 0, bag.get());
+            spawner.spawnFaceBottom(registry, 0, 0, bag.get());
             registry.reset<Destroyable>();
         }
 

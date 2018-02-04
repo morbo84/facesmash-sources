@@ -11,12 +11,12 @@ namespace gamee {
 
 
 struct TouchEvent;
-struct PlayFactory;
+struct Spawner;
 
 
 class ItemSystem final {
     void movement(Registry &, float);
-    void fountain(Registry &, PlayFactory &);
+    void fountain(Registry &, Spawner &);
 
 public:
     ItemSystem();
@@ -26,7 +26,7 @@ public:
 
     void receive(const TouchEvent &) noexcept;
 
-    void update(Registry &, PlayFactory &, delta_type);
+    void update(Registry &, Spawner &, delta_type);
 
 private:
     SDL_Point coord;

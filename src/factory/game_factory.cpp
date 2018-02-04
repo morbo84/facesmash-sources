@@ -2,7 +2,9 @@
 #include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
+#include "../factory/play_factory.h"
 #include "../locator/locator.hpp"
+#include "common.h"
 #include "ui_factory.h"
 #include "game_factory.h"
 
@@ -20,13 +22,13 @@ void createExitPanel(Registry &registry) {
     auto exit = createSprite(registry, parent, exitHandle, 20);
     setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 3 * exitHandle->height()) / 2);
 
-    auto acceptHandle = textureCache.handle("img/ok");
-    auto acceptButton = createUIButton(registry, parent, acceptHandle, UIAction::EXIT, 20);
-    setPos(registry, acceptButton, (panel.w - 3 * acceptHandle->width()) / 2, panel.h / 2);
+    auto acceptButton = createUIButton(registry, parent, UIAction::EXIT, 20);
+    const auto &acceptSprite = registry.get<Sprite>(acceptButton);
+    setPos(registry, acceptButton, (panel.w - 3 * acceptSprite.w) / 2, panel.h / 2);
 
-    auto rejectHandle = textureCache.handle("img/ko");
-    auto rejectButton = createUIButton(registry, parent, rejectHandle, UIAction::MENU, 20);
-    setPos(registry, rejectButton, (panel.w + acceptHandle->width()) / 2, panel.h / 2);
+    auto rejectButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    const auto &rejectSprite = registry.get<Sprite>(rejectButton);
+    setPos(registry, rejectButton, (panel.w + rejectSprite.w) / 2, panel.h / 2);
 }
 
 
@@ -85,17 +87,17 @@ void createMenuTopPanel(Registry &registry) {
         x += handles[i]->width();
     }
 
-    auto trainingHandle = textureCache.handle("img/training");
-    auto trainingButton = createUIButton(registry, parent, trainingHandle, UIAction::TRAINING, 150);
-    setPos(registry, trainingButton, (panel.w / 2 - trainingHandle->width()) / 2, 2 * panel.h / 5);
+    auto trainingButton = createUIButton(registry, parent, UIAction::TRAINING, 150);
+    const auto &trainingSprite = registry.get<Sprite>(trainingButton);
+    setPos(registry, trainingButton, (panel.w / 2 - trainingSprite.w) / 2, 2 * panel.h / 5);
 
-    auto playHandle = textureCache.handle("img/play");
-    auto playButton = createUIButton(registry, parent, playHandle, UIAction::THE_GAME, 150);
-    setPos(registry, playButton, (panel.w - playHandle->width()) / 2, 2 * panel.h / 5 - playHandle->height() / 2);
+    auto playButton = createUIButton(registry, parent, UIAction::THE_GAME, 150);
+    const auto &playSprite = registry.get<Sprite>(playButton);
+    setPos(registry, playButton, (panel.w - playSprite.w) / 2, 2 * panel.h / 5 - playSprite.h / 2);
 
-    auto medalHandle = textureCache.handle("img/medal");
-    auto medalButton = createUIButton(registry, parent, medalHandle, UIAction::ACHIEVEMENTS, 150);
-    setPos(registry, medalButton, (3 * panel.w / 2 - medalHandle->width()) / 2, 2 * panel.h / 5);
+    auto medalButton = createUIButton(registry, parent, UIAction::ACHIEVEMENTS, 150);
+    const auto &medalSprite = registry.get<Sprite>(medalButton);
+    setPos(registry, medalButton, (3 * panel.w / 2 - medalSprite.w) / 2, 2 * panel.h / 5);
 }
 
 
@@ -123,17 +125,17 @@ void createMenuBottomPanel(Registry &registry) {
         x += handles[i]->width();
     }
 
-    auto infoHandle = textureCache.handle("img/info");
-    auto infoButton = createUIButton(registry, parent, infoHandle, UIAction::CREDITS, 150);
-    setPos(registry, infoButton, (panel.w / 2 - infoHandle->width()) / 2, 3 * panel.h / 5 - infoHandle->height());
+    auto infoButton = createUIButton(registry, parent, UIAction::CREDITS, 150);
+    const auto &infoSprite = registry.get<Sprite>(infoButton);
+    setPos(registry, infoButton, (panel.w / 2 - infoSprite.w) / 2, 3 * panel.h / 5 - infoSprite.h);
 
-    auto supportHandle = textureCache.handle("img/support");
-    auto supportButton = createUIButton(registry, parent, supportHandle, UIAction::SUPPORT, 150);
-    setPos(registry, supportButton, (panel.w - supportHandle->width()) / 2, 3 * panel.h / 5 - supportHandle->height() / 2);
+    auto supportButton = createUIButton(registry, parent, UIAction::SUPPORT, 150);
+    const auto &supportSprite = registry.get<Sprite>(supportButton);
+    setPos(registry, supportButton, (panel.w - supportSprite.w) / 2, 3 * panel.h / 5 - supportSprite.h / 2);
 
-    auto gearHandle = textureCache.handle("img/gear");
-    auto gearButton = createUIButton(registry, parent, gearHandle, UIAction::SETTINGS, 150);
-    setPos(registry, gearButton, (3 * panel.w / 2 - gearHandle->width()) / 2, 3 * panel.h / 5 - gearHandle->height());
+    auto settingsButton = createUIButton(registry, parent, UIAction::SETTINGS, 150);
+    const auto &settingsSprite = registry.get<Sprite>(settingsButton);
+    setPos(registry, settingsButton, (3 * panel.w / 2 - settingsSprite.w) / 2, 3 * panel.h / 5 - settingsSprite.h);
 }
 
 
@@ -147,9 +149,9 @@ void createCreditsPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
-    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
+    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    const auto &menuSprite = registry.get<Sprite>(menuButton);
+    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -163,9 +165,9 @@ void createSupportPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
-    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
+    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    const auto &menuSprite = registry.get<Sprite>(menuButton);
+    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -176,8 +178,6 @@ void refreshSupportPanel(Registry &registry) {
 
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto &muxer = Locator::AvRecorder::ref();
-    auto &audio = Locator::Audio::ref();
 
     auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
@@ -194,17 +194,17 @@ void createSettingsPanel(Registry &registry) {
     auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 20);
     setPos(registry, videoStrEntity, (panel.w - videoStrHandle->width()) / 2, 3 * panel.h / 5);
 
-    auto audioHandle = audio.isMute() ? textureCache.handle("img/audio/off") : textureCache.handle("img/audio/on");
-    auto audioButton = createUIButton(registry, parent, audioHandle, UIAction::SWITCH_AUDIO, 20);
-    setPos(registry, audioButton, (panel.w - audioHandle->width()) / 2, (3 * panel.h / 4 - audioHandle->height()) / 2);
+    auto audioButton = createUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
+    const auto &audioSprite = registry.get<Sprite>(audioButton);
+    setPos(registry, audioButton, (panel.w - audioSprite.w) / 2, (3 * panel.h / 4 - audioSprite.h) / 2);
 
-    auto videoHandle = muxer.available() ? textureCache.handle("img/video/on") : textureCache.handle("img/video/off");
-    auto videoButton = createUIButton(registry, parent, videoHandle, UIAction::SWITCH_VIDEO, 20);
-    setPos(registry, videoButton, (panel.w - videoHandle->width()) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoHandle->height() / 2);
+    auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
+    const auto &videoSprite = registry.get<Sprite>(videoButton);
+    setPos(registry, videoButton, (panel.w - videoSprite.w) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoSprite.h / 2);
 
-    auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
-    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
+    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    const auto &menuSprite = registry.get<Sprite>(menuButton);
+    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -218,9 +218,9 @@ void createAchievementsPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 
-    auto backHandle = textureCache.handle("img/prev");
-    auto backButton = createUIButton(registry, parent, backHandle, UIAction::MENU, 20);
-    setPos(registry, backButton, backHandle->width() / 2, panel.h - 3 * backHandle->height() / 2);
+    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    const auto &menuSprite = registry.get<Sprite>(menuButton);
+    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -342,17 +342,17 @@ void createGameOverPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, (panel.h / 2 - titleHandle->height()) / 2);
 
-    auto menuHandle = textureCache.handle("img/menu");
-    auto menuButton = createUIButton(registry, parent, menuHandle, UIAction::MENU, 150);
-    setPos(registry, menuButton, (panel.w / 2 - menuHandle->width()) / 2, (3 * panel.h / 2 - menuHandle->height()) / 2);
+    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 150);
+    const auto &menuSprite = registry.get<Sprite>(menuButton);
+    setPos(registry, menuButton, (panel.w / 2 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
 
-    auto playHandle = textureCache.handle("img/play");
-    auto playButton = createUIButton(registry, parent, playHandle, UIAction::RELOAD, 150);
-    setPos(registry, playButton, (panel.w - playHandle->width()) / 2, (3 * panel.h / 2 - playHandle->height()) / 2);
+    auto reloadButton = createUIButton(registry, parent, UIAction::RELOAD, 150);
+    const auto &reloadSprite = registry.get<Sprite>(reloadButton);
+    setPos(registry, reloadButton, (panel.w - reloadSprite.w) / 2, (3 * panel.h / 2 - reloadSprite.h) / 2);
 
-    auto saveHandle = textureCache.handle("img/save");
-    auto saveButton = createUIButton(registry, parent, saveHandle, UIAction::SAVE, 150);
-    setPos(registry, saveButton, (3 * panel.w / 2 - saveHandle->width()) / 2, (3 * panel.h / 2 - saveHandle->height()) / 2);
+    auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
+    const auto &saveSprite = registry.get<Sprite>(saveButton);
+    setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
 }
 
 
@@ -402,13 +402,17 @@ void createCameraFrame(Registry &registry) {
 
 void createSmashButtons(Registry &registry) {
     auto addButton = [&registry](FaceType type, int idx) {
-        auto handle = toHandle(type);
-        const auto w = 3 * handle->width() / 4;
-        const auto h = 3 * handle->height() / 4;
-        auto button = createSmashButton(registry, handle, type, 220);
-        setPos(registry, button, logicalWidth, logicalHeight / 2 + h * (idx - 3));
-        setSpriteSize(registry, button, w, h);
-        setBoundingBox(registry, button, 0, 0, w, h);
+        auto entity = createFace(registry, type, 0, 0, 220);
+
+        const auto &sprite = registry.get<Sprite>(entity);
+        const auto w = 3 * sprite.w / 4;
+        const auto h = 3 * sprite.h / 4;
+
+        setPos(registry, entity, logicalWidth, logicalHeight / 2 + h * (idx - 3));
+        setBoundingBox(registry, entity, w, h);
+        setSpriteSize(registry, entity, w, h);
+
+        registry.assign<SmashButton>(entity, type);
     };
 
     int pos = 0;
@@ -427,14 +431,14 @@ void createDebugHUD(Registry &registry) {
 
     auto offset = 0;
 
-    auto symDotHandle = textureCache.handle("str/debug/.");
+    auto symDotHandle = textureCache.handle("str/.");
     auto sym0Handle = toStrDebug(0);
 
     auto &debug = registry.assign<DebugInfo>(registry.create());
 
     offset = sym0Handle->width();
 
-    auto fpsHandle = textureCache.handle("str/debug/fps");
+    auto fpsHandle = textureCache.handle("str/fps");
     auto fpsEntity = createHUD(registry, fpsHandle, 255);
     setPos(registry, fpsEntity, offset, logicalHeight - fpsHandle->height());
 
@@ -468,7 +472,7 @@ void createDebugHUD(Registry &registry) {
     debug.time[0] = createHUD(registry, sym0Handle, 255);
     setPos(registry, debug.time[0], offset, logicalHeight - sym0Handle->height());
 
-    auto timeHandle = textureCache.handle("str/debug/time");
+    auto timeHandle = textureCache.handle("str/time");
     auto timeEntity = createHUD(registry, timeHandle, 255);
     offset -= timeHandle->width() + sym0Handle->width();
     setPos(registry, timeEntity, offset, logicalHeight - timeHandle->height());

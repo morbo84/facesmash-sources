@@ -26,12 +26,12 @@ void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
         SDL_Rect src;
         SDL_Rect dst;
 
-        const auto pos = sprite.frame % sprite.line;
+        const auto pos = sprite.frame % sprite.rows;
 
         src.w = sprite.width;
         src.h = sprite.height;
         src.x = sprite.x + src.w * pos;
-        src.y = sprite.y + src.h * (sprite.frame - pos) / sprite.line;
+        src.y = sprite.y + src.h * (sprite.frame - pos) / sprite.rows;
 
         dst.w = sprite.w;
         dst.h = sprite.h;

@@ -11,7 +11,7 @@ namespace gamee {
 
 
 struct FaceEvent;
-struct PlayFactory;
+struct Spawner;
 
 
 struct FaceSmashSystem final {
@@ -20,7 +20,7 @@ struct FaceSmashSystem final {
 
     void receive(const FaceEvent &) noexcept;
 
-    void update(Registry &, PlayFactory &);
+    void update(Registry &, Spawner &);
 
 private:
     FaceType type;

@@ -44,7 +44,7 @@ struct Sprite final {
     int x{0};
     int y{0};
     Uint8 frames{1_ui8};
-    Uint8 line{1_ui8};
+    Uint8 rows{1_ui8};
     Uint8 frame{0_ui8};
 };
 

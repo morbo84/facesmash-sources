@@ -9,7 +9,7 @@
 namespace gamee {
 
 
-struct PlayFactory;
+struct Spawner;
 struct ActivateEasterEggEvent;
 
 
@@ -19,7 +19,7 @@ struct EasterEggSystem final {
 
     void receive(const ActivateEasterEggEvent &) noexcept;
 
-    void update(Registry &, PlayFactory &);
+    void update(Registry &, Spawner &);
 
 private:
     bool dirty{false};

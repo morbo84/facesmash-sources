@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "../common/types.h"
-#include "../factory/play_factory.h"
+#include "../factory/spawner.h"
 #include "../system/animation_system.h"
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
@@ -48,7 +48,7 @@ private:
     // entity-component system
     Registry registry;
     // factory of game objects
-    PlayFactory factory;
+    Spawner spawner;
     // systems
     AnimationSystem animationSystem;
     DebugSystem debugSystem;

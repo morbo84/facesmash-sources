@@ -17,37 +17,35 @@ void GameLoop::init(GameRenderer &renderer) {
     // load all the resources at once (as long as it works, why not?)
     // then create all the panels, so as to have them always available
 
-    loadDefaultFont();
-    loadGameStuff(renderer);
-    loadTargetTextures(renderer);
-    loadCameraFrame(renderer);
+    loadResources(renderer);
+    prepareGameStrings(renderer);
+    prepareGameStuff(renderer);
 
-    createExitPanel(registry);
+    // createExitPanel(registry);
     createSplashScreenPanel(registry);
-    createBackgroundTopPanel(registry);
-    createBackgroundBottomPanel(registry);
-    createMenuTopPanel(registry);
-    createMenuBottomPanel(registry);
-    createCreditsPanel(registry);
-    createSupportPanel(registry);
-    createSettingsPanel(registry);
-    createAchievementsPanel(registry);
-    createTutorialTopPanel(registry);
-    createTutorialBottomPanel(registry);
-    createGameTopPanel(registry);
-    createGameBottomPanel(registry);
-    createGameOverPanel(registry);
-    createTrainingTopPanel(registry);
-    createTrainingBottomPanel(registry);
+    // createBackgroundTopPanel(registry);
+    // createBackgroundBottomPanel(registry);
+    // createMenuTopPanel(registry);
+    // createMenuBottomPanel(registry);
+    // createCreditsPanel(registry);
+    // createSupportPanel(registry);
+    // createSettingsPanel(registry);
+    // createAchievementsPanel(registry);
+    // createTutorialTopPanel(registry);
+    // createTutorialBottomPanel(registry);
+    // createGameTopPanel(registry);
+    // createGameBottomPanel(registry);
+    // createGameOverPanel(registry);
+    // createTrainingTopPanel(registry);
+    // createTrainingBottomPanel(registry);
     createCamera(registry);
-    createCameraFrame(registry);
+    // createCameraFrame(registry);
 
 #ifdef DEBUG
-    loadDebugFont();
-    loadDebugStuff(renderer);
+    prepareDebugStrings(renderer);
 
     createDebugHUD(registry);
-    createSmashButtons(registry);
+    //createSmashButtons(registry);
 #endif // DEBUG
 
     // init systems explicitly if required
@@ -72,16 +70,16 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // sum what remains from the previous step
         accumulator += delta;
 
-        frameSystem.update(registry);
+        // frameSystem.update(registry);
         sceneSystem.update(registry, delta);
-        destroyLaterSystem.update(registry, delta);
+        // destroyLaterSystem.update(registry, delta);
 
         uiButtonSystem.update(registry);
-        smashButtonSystem.update(registry);
+        // smashButtonSystem.update(registry);
 
-        itemSystem.update(registry, factory, delta);
-        faceSmashSystem.update(registry, factory);
-        rewardSystem.update(registry);
+        // itemSystem.update(registry, spawner, delta);
+        // faceSmashSystem.update(registry, spawner);
+        // rewardSystem.update(registry);
 
         // invoke systems with a fixed timestep
         while(accumulator >= msPerUpdate) {
@@ -91,13 +89,13 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
             accumulator -= msPerUpdate;
         }
 
-        scoreSystem.update(registry);
-        timerSystem.update(registry, delta);
-        cameraSystem.update(registry, delta);
+        // scoreSystem.update(registry);
+        // timerSystem.update(registry, delta);
+        // cameraSystem.update(registry, delta);
 
-        easterEggSystem.update(registry, factory);
-        theGameSystem.update(registry, factory);
-        trainingSystem.update(registry, factory);
+        easterEggSystem.update(registry, spawner);
+        // theGameSystem.update(registry, spawner);
+        // trainingSystem.update(registry, spawner);
 
         // update debug information (no fixed step here, thanks)
         debugSystem.update(registry, delta);
