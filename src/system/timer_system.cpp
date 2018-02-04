@@ -17,7 +17,7 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
 
         if(gameTimer.enabled) {
             auto &textureCache = Locator::TextureCache::ref();
-            auto symEmptyHandle = textureCache.handle("str/hud/ ");
+            auto symEmptyHandle = textureCache.handle("str/ ");
 
             gameTimer.remaining -= std::min(gameTimer.remaining, delta);
 

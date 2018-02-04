@@ -23,23 +23,23 @@ void GameLoop::init(GameRenderer &renderer) {
 
     // createExitPanel(registry);
     createSplashScreenPanel(registry);
-    // createBackgroundTopPanel(registry);
-    // createBackgroundBottomPanel(registry);
+    createBackgroundTopPanel(registry);
+    createBackgroundBottomPanel(registry);
     // createMenuTopPanel(registry);
     // createMenuBottomPanel(registry);
-    // createCreditsPanel(registry);
-    // createSupportPanel(registry);
-    // createSettingsPanel(registry);
-    // createAchievementsPanel(registry);
+    createCreditsPanel(registry);
+    createSupportPanel(registry);
+    createSettingsPanel(registry);
+    createAchievementsPanel(registry);
     // createTutorialTopPanel(registry);
     // createTutorialBottomPanel(registry);
-    // createGameTopPanel(registry);
-    // createGameBottomPanel(registry);
+    createGameTopPanel(registry);
+    createGameBottomPanel(registry);
     // createGameOverPanel(registry);
-    // createTrainingTopPanel(registry);
-    // createTrainingBottomPanel(registry);
+    createTrainingTopPanel(registry);
+    createTrainingBottomPanel(registry);
     createCamera(registry);
-    // createCameraFrame(registry);
+    createCameraFrame(registry);
 
 #ifdef DEBUG
     prepareDebugStrings(renderer);
@@ -70,16 +70,16 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // sum what remains from the previous step
         accumulator += delta;
 
-        // frameSystem.update(registry);
+        frameSystem.update(registry);
         sceneSystem.update(registry, delta);
-        // destroyLaterSystem.update(registry, delta);
+        destroyLaterSystem.update(registry, delta);
 
         uiButtonSystem.update(registry);
-        // smashButtonSystem.update(registry);
+        smashButtonSystem.update(registry);
 
-        // itemSystem.update(registry, spawner, delta);
-        // faceSmashSystem.update(registry, spawner);
-        // rewardSystem.update(registry);
+        itemSystem.update(registry, spawner, delta);
+        faceSmashSystem.update(registry, spawner);
+        rewardSystem.update(registry);
 
         // invoke systems with a fixed timestep
         while(accumulator >= msPerUpdate) {
@@ -90,12 +90,12 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         }
 
         // scoreSystem.update(registry);
-        // timerSystem.update(registry, delta);
-        // cameraSystem.update(registry, delta);
+        timerSystem.update(registry, delta);
+        cameraSystem.update(registry, delta);
 
         easterEggSystem.update(registry, spawner);
-        // theGameSystem.update(registry, spawner);
-        // trainingSystem.update(registry, spawner);
+        theGameSystem.update(registry, spawner);
+        trainingSystem.update(registry, spawner);
 
         // update debug information (no fixed step here, thanks)
         debugSystem.update(registry, delta);

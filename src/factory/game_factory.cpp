@@ -50,17 +50,25 @@ void createSplashScreenPanel(Registry &registry) {
 
 void createBackgroundTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto parent = createPanel(registry, PanelType::BACKGROUND_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
-    auto handle = textureCache.handle("bg/mono");
-    createSprite(registry, parent, handle, 120);
+    const auto width = logicalWidth;
+    const auto height = logicalHeight / 2;
+    auto parent = createPanel(registry, PanelType::BACKGROUND_TOP, 0, -logicalHeight / 2, width, height);
+    auto handle = textureCache.handle("ui/win_hud");
+    auto entity = createSprite(registry, parent, handle, 120);
+    setSpriteGeometry(registry, entity, 0, 0, width, height, 1, 1);
+    setSpriteSize(registry, entity, width, height);
 }
 
 
 void createBackgroundBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
-    auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
-    auto handle = textureCache.handle("bg/mono");
-    createSprite(registry, parent, handle, 120);
+    const auto width = logicalWidth;
+    const auto height = logicalHeight / 2;
+    auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM, 0, logicalHeight, width, height);
+    auto handle = textureCache.handle("ui/win_hud");
+    auto entity = createSprite(registry, parent, handle, 120);
+    setSpriteGeometry(registry, entity, 0, 0, width, height, 1, 1);
+    setSpriteSize(registry, entity, width, height);
 }
 
 
@@ -284,9 +292,9 @@ void createGameTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
     auto sym0Handle = toStrHud(0);
-    auto symEmptyHandle = textureCache.handle("str/hud/ ");
-    auto scoreHandle = textureCache.handle("str/hud/score");
-    auto timerHandle = textureCache.handle("str/hud/timer");
+    auto symEmptyHandle = textureCache.handle("str/ ");
+    auto scoreHandle = textureCache.handle("str/score");
+    auto timerHandle = textureCache.handle("str/timer");
 
     auto offset = 0;
 
