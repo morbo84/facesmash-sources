@@ -112,16 +112,16 @@ void Spawner::maybeRotate(Registry &registry, entity_type entity) {
 
 
 void Spawner::addScore(Registry &registry, SDLTextureHandle handle, float x, float y) {
-    auto entity = registry.create();
+    auto entity = createSprite(registry, handle, 190);
+    setPos(registry, entity, x - handle->width() / 2.f, y - handle->height() / 2.f);
 
-    registry.assign<Renderable>(entity, 0.f, 190);
     registry.assign<Movement>(entity, 0.f, 0.f, scoreDrift);
     registry.assign<FadeAnimation>(entity, 255, 0, 2000_ui32);
     registry.assign<SizeAnimation>(entity, 0, 0, handle->width(), handle->height(), 1000_ui32, 0_ui32, &easeOutElastic);
-    registry.assign<Sprite>(entity, handle, handle->width(), handle->height(), handle->width(), handle->height());
     registry.assign<DestroyLater>(entity, 2000_ui32);
 
-    auto &transform = registry.assign<Transform>(entity, entity, x - handle->width() / 2.f, y - handle->height() / 2.f);
+    // adjust position if requires
+    auto &transform = registry.get<Transform>(entity);
     const auto left = transform.x;
     const auto right = transform.x + handle->width();
     const auto bottom = transform.y + handle->height();
