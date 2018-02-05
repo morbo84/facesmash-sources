@@ -9,37 +9,8 @@
 namespace gamee {
 
 
-int Spawner::toZ(FaceType type) {
-    switch(type) {
-    case FaceType::HAPPY:
-        return 186;
-    case FaceType::ANGRY:
-        return 185;
-    case FaceType::SURPRISED:
-        return 184;
-    case FaceType::SAD:
-        return 183;
-    case FaceType::DISGUSTED:
-        return 182;
-    case FaceType::FEARFUL:
-        return 181;
-    default:
-        return 180;
-    }
-}
-
-
-int Spawner::toZ(ItemType type) {
-    switch(type) {
-    case ItemType::FOUNTAIN:
-        return 173;
-    case ItemType::SLOW_DOWN:
-        return 172;
-    case ItemType::SPEED_UP:
-        return 171;
-    default:
-        return 170;
-    }
+int Spawner::zNext() {
+    return zBase + (zCurr++ % zCount);
 }
 
 
@@ -129,12 +100,12 @@ void Spawner::addScore(Registry &registry, SDLTextureHandle handle, float x, flo
 
 
 Spawner::Spawner()
-    : generator{std::random_device{}()}
+    : generator{std::random_device{}()}, zCurr{0}
 {}
 
 
 void Spawner::spawnFaceBottom(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
-    auto entity = createFace(registry, face, smash, miss, toZ(face));
+    auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromBottom(registry, entity);
     maybeRotate(registry, entity);
@@ -142,7 +113,7 @@ void Spawner::spawnFaceBottom(Registry &registry, Uint8 smash, Uint8 miss, FaceT
 
 
 void Spawner::spawnFaceTop(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
-    auto entity = createFace(registry, face, smash, miss, toZ(face));
+    auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromTop(registry, entity);
     maybeRotate(registry, entity);
@@ -150,7 +121,7 @@ void Spawner::spawnFaceTop(Registry &registry, Uint8 smash, Uint8 miss, FaceType
 
 
 void Spawner::spawnFaceLeft(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
-    auto entity = createFace(registry, face, smash, miss, toZ(face));
+    auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromLeft(registry, entity);
     maybeRotate(registry, entity);
@@ -158,7 +129,7 @@ void Spawner::spawnFaceLeft(Registry &registry, Uint8 smash, Uint8 miss, FaceTyp
 
 
 void Spawner::spawnFaceRight(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
-    auto entity = createFace(registry, face, smash, miss, toZ(face));
+    auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromRight(registry, entity);
     maybeRotate(registry, entity);
@@ -166,7 +137,7 @@ void Spawner::spawnFaceRight(Registry &registry, Uint8 smash, Uint8 miss, FaceTy
 
 
 void Spawner::spawnItemBottom(Registry &registry, ItemType item) {
-    auto entity = createItem(registry, item, toZ(item));
+    auto entity = createItem(registry, item, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromBottom(registry, entity);
     maybeRotate(registry, entity);
@@ -174,7 +145,7 @@ void Spawner::spawnItemBottom(Registry &registry, ItemType item) {
 
 
 void Spawner::spawnItemTop(Registry &registry, ItemType item) {
-    auto entity = createItem(registry, item, toZ(item));
+    auto entity = createItem(registry, item, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromTop(registry, entity);
     maybeRotate(registry, entity);
@@ -182,7 +153,7 @@ void Spawner::spawnItemTop(Registry &registry, ItemType item) {
 
 
 void Spawner::spawnItemLeft(Registry &registry, ItemType item) {
-    auto entity = createItem(registry, item, toZ(item));
+    auto entity = createItem(registry, item, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromLeft(registry, entity);
     maybeRotate(registry, entity);
@@ -190,7 +161,7 @@ void Spawner::spawnItemLeft(Registry &registry, ItemType item) {
 
 
 void Spawner::spawnItemRight(Registry &registry, ItemType item) {
-    auto entity = createItem(registry, item, toZ(item));
+    auto entity = createItem(registry, item, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromRight(registry, entity);
     maybeRotate(registry, entity);

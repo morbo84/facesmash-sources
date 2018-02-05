@@ -19,9 +19,10 @@ class Spawner final {
     static constexpr float sideImpulseX = .5f;
     static constexpr float sideImpulseY = .35f;
     static constexpr float scoreDrift = -.1f;
+    static constexpr int zBase = 180;
+    static constexpr int zCount = 10;
 
-    int toZ(FaceType);
-    int toZ(ItemType);
+    int zNext();
 
     void spawnFromBottom(Registry &, entity_type);
     void spawnFromTop(Registry &, entity_type);
@@ -50,6 +51,7 @@ public:
 
 private:
     std::mt19937 generator;
+    int zCurr;
 };
 
 
