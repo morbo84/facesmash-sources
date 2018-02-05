@@ -16,7 +16,7 @@ void ScoreSystem::update(Registry &registry) {
     if(registry.has<PlayerScore>()) {
         auto &textureCache = Locator::TextureCache::ref();
         auto &playerScore = registry.get<PlayerScore>();
-        auto symEmptyHandle = textureCache.handle("str/hud/ ");
+        auto symEmptyHandle = textureCache.handle("str/ ");
 
         // cap the score to the limit imposed by the number of entities used to represent it
         const int cap = std::pow(10, std::extent<decltype(PlayerScore::entities)>::value);
