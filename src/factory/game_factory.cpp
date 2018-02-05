@@ -78,22 +78,9 @@ void createMenuTopPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::MENU_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
-    SDLTextureHandle handles[4] = {
-        textureCache.handle("str/facesmash/red/F"),
-        textureCache.handle("str/facesmash/lightblue/A"),
-        textureCache.handle("str/facesmash/yellow/C"),
-        textureCache.handle("str/facesmash/blue/E")
-    };
-
-    const auto y = panel.h - 9 * handles[0]->height() / 8;
-    const auto length = std::extent<decltype(handles)>::value;
-    auto x = panel.w / 2 - 2 * handles[0]->width();
-
-    for(auto i = 0u; i < length; ++i) {
-        auto entity = createSprite(registry, parent, handles[i], 150);
-        setPos(registry, entity, x, y);
-        x += handles[i]->width();
-    }
+    auto titleHandle = textureCache.handle("str/face");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, panel.h - 9 * titleHandle->height() / 8);
 
     auto trainingButton = createUIButton(registry, parent, UIAction::TRAINING, 150);
     const auto &trainingSprite = registry.get<Sprite>(trainingButton);
@@ -115,23 +102,9 @@ void createMenuBottomPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::MENU_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 2);
     const auto &panel = registry.get<Panel>(parent);
 
-    SDLTextureHandle handles[5] = {
-        textureCache.handle("str/facesmash/green/S"),
-        textureCache.handle("str/facesmash/lightblue/M"),
-        textureCache.handle("str/facesmash/yellow/A"),
-        textureCache.handle("str/facesmash/red/S"),
-        textureCache.handle("str/facesmash/green/H")
-    };
-
-    const auto y = handles[0]->height() / 8;
-    const auto length = std::extent<decltype(handles)>::value;
-    auto x = (panel.w - 5 * handles[0]->width()) / 2;
-
-    for(auto i = 0u; i < length; ++i) {
-        auto entity = createSprite(registry, parent, handles[i], 150);
-        setPos(registry, entity, x, y);
-        x += handles[i]->width();
-    }
+    auto titleHandle = textureCache.handle("str/smash");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 8);
 
     auto infoButton = createUIButton(registry, parent, UIAction::CREDITS, 150);
     const auto &infoSprite = registry.get<Sprite>(infoButton);

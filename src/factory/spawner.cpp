@@ -54,7 +54,6 @@ void Spawner::spawnFromTop(Registry &registry, entity_type entity) {
 
     setPos(registry, entity, x, y);
     registry.assign<Movement>(entity, gravity, impulseX, impulseY);
-    registry.assign<Destroyable>(entity);
 }
 
 
@@ -83,7 +82,6 @@ void Spawner::spawnFromLeft(Registry &registry, entity_type entity) {
 
     setPos(registry, entity, x, y);
     registry.assign<Movement>(entity, gravity, impulseX, impulseY);
-    registry.assign<Destroyable>(entity);
 }
 
 
@@ -96,7 +94,6 @@ void Spawner::spawnFromRight(Registry &registry, entity_type entity) {
 
     setPos(registry, entity, x, y);
     registry.assign<Movement>(entity, gravity, impulseX, impulseY);
-    registry.assign<Destroyable>(entity);
 }
 
 

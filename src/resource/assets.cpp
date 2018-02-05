@@ -15,8 +15,8 @@ void loadResources(GameRenderer &renderer) {
     ttfFontCache.load<TTFFontLoader>("font/ui/tiny", "font/04B_03__.ttf", 36);
     ttfFontCache.load<TTFFontLoader>("font/ui/small", "font/04B_03__.ttf", 54);
     ttfFontCache.load<TTFFontLoader>("font/ui/normal", "font/04B_03__.ttf", 72);
-    ttfFontCache.load<TTFFontLoader>("font/ui/large", "font/04B_03__.ttf", 90);
-    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_03__.ttf", 108);
+    ttfFontCache.load<TTFFontLoader>("font/ui/large", "font/04B_03__.ttf", 108);
+    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_03__.ttf", 116);
 
     textureCache.load<AssetTextureLoader>("ui/buttons", "ui/buttons.png", renderer);
     textureCache.load<AssetTextureLoader>("ui/win_hud", "ui/win_hud.png", renderer);
@@ -53,16 +53,16 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/score", "SCORE", renderer, *fontTiny, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/timer", "TIME", renderer, *fontTiny, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/face", "FACE", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontSmall, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontLarge, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontSmall, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontSmall, colorWhite);

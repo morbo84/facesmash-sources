@@ -16,6 +16,7 @@ entity_type createExplosion(Registry &registry, int z) {
 
     auto entity = createSprite(registry, handle, z);
     setSpriteGeometry(registry, entity, 0, 0, width, height, 15_ui8, 3_ui8);
+    setSpriteSize(registry, entity, width, height);
 
     return entity;
 }

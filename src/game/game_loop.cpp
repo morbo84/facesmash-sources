@@ -25,8 +25,8 @@ void GameLoop::init(GameRenderer &renderer) {
     createSplashScreenPanel(registry);
     createBackgroundTopPanel(registry);
     createBackgroundBottomPanel(registry);
-    // createMenuTopPanel(registry);
-    // createMenuBottomPanel(registry);
+    createMenuTopPanel(registry);
+    createMenuBottomPanel(registry);
     createCreditsPanel(registry);
     createSupportPanel(registry);
     createSettingsPanel(registry);
@@ -45,7 +45,7 @@ void GameLoop::init(GameRenderer &renderer) {
     prepareDebugStrings(renderer);
 
     createDebugHUD(registry);
-    //createSmashButtons(registry);
+    createSmashButtons(registry);
 #endif // DEBUG
 
     // init systems explicitly if required
