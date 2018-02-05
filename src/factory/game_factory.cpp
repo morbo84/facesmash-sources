@@ -217,18 +217,13 @@ void createTutorialTopPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](FaceType type, int idx) {
-        auto entity = createFace(registry, type, 0, 0, 160);
-
-        registry.get<Transform>(entity).parent = parent;
-        registry.remove<BoundingBox>(entity);
-
+        auto entity = createFaceBlueprint(registry, type, 160);
         const auto &sprite = registry.get<Sprite>(entity);
-        const auto w = 3 * sprite.w / 5;
-        const auto h = 3 * sprite.h / 5;
-
         const auto buttonOffset = (panel.w - (numberOfFaces * sprite.w + (numberOfFaces - 1) * 10)) / 2;
+
         setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), panel.h - 3 * sprite.h / 2);
-        setSpriteSize(registry, entity, w, h);
+        setSpriteSize(registry, entity, 3 * sprite.w / 5, 3 * sprite.h / 5);
+        registry.get<Transform>(entity).parent = parent;
     };
 
     addButton(FaceType::ANGRY, 0);
@@ -251,18 +246,13 @@ void createTutorialBottomPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](ItemType type, int idx) {
-        auto entity = createItem(registry, type, 160);
-
-        registry.get<Transform>(entity).parent = parent;
-        registry.remove<BoundingBox>(entity);
-
+        auto entity = createItemBlueprint(registry, type, 160);
         const auto &sprite = registry.get<Sprite>(entity);
-        const auto w = 3 * sprite.w / 5;
-        const auto h = 3 * sprite.h / 5;
-
         const auto buttonOffset = (panel.w - (numberOfItems * sprite.w + (numberOfItems - 1) * 10)) / 2;
+
         setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), sprite.h / 2);
-        setSpriteSize(registry, entity, w, h);
+        setSpriteSize(registry, entity, 3 * sprite.w / 5, 3 * sprite.h / 5);
+        registry.get<Transform>(entity).parent = parent;
     };
 
     addButton(ItemType::SPEED_UP, 0);
@@ -397,7 +387,7 @@ void createCameraFrame(Registry &registry) {
 
 void createSmashButtons(Registry &registry) {
     auto addButton = [&registry](FaceType type, int idx) {
-        auto entity = createFace(registry, type, 0, 0, 220);
+        auto entity = createSmashButton(registry, type, 220);
 
         const auto &sprite = registry.get<Sprite>(entity);
         const auto w = 3 * sprite.w / 4;
@@ -406,8 +396,6 @@ void createSmashButtons(Registry &registry) {
         setPos(registry, entity, logicalWidth, logicalHeight / 2 + h * (idx - 3));
         setBoundingBox(registry, entity, w, h);
         setSpriteSize(registry, entity, w, h);
-
-        registry.assign<SmashButton>(entity, type);
     };
 
     int pos = 0;

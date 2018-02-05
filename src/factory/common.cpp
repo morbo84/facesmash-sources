@@ -1,4 +1,5 @@
 #include "../component/component.hpp"
+#include "../locator/locator.hpp"
 #include "common.h"
 
 
@@ -24,6 +25,68 @@ entity_type createSprite(Registry &registry, SDLTextureHandle handle, int z) {
     internalCreateSprite(registry, entity, entity, handle, z);
     return entity;
 }
+
+
+entity_type createFaceBlueprint(Registry &registry, FaceType type, int z) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("game/emoji");
+
+    const auto width = handle->width() / 3;
+    const auto height = handle->height() / 2;
+
+    auto entity = createSprite(registry, handle, z);
+    setSpriteSize(registry, entity, width, height);
+
+    switch(type) {
+    case FaceType::ANGRY:
+        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    case FaceType::DISGUSTED:
+        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    case FaceType::FEARFUL:
+        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    case FaceType::HAPPY:
+        setSpriteGeometry(registry, entity, 0, 120, width, height, 1_ui8, 1_ui8);
+        break;
+    case FaceType::SAD:
+        setSpriteGeometry(registry, entity, 120, 120, width, height, 1_ui8, 1_ui8);
+        break;
+    case FaceType::SURPRISED:
+        setSpriteGeometry(registry, entity, 240, 120, width, height, 1_ui8, 1_ui8);
+        break;
+    }
+
+    return entity;
+}
+
+
+entity_type createItemBlueprint(Registry &registry, ItemType type, int z) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("game/items");
+
+    const auto width = handle->width() / 3;
+    const auto height = handle->height();
+
+    auto entity = createSprite(registry, handle, z);
+    setSpriteSize(registry, entity, width, height);
+
+    switch(type) {
+    case ItemType::FOUNTAIN:
+        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    case ItemType::SLOW_DOWN:
+        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    case ItemType::SPEED_UP:
+        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8, 1_ui8);
+        break;
+    }
+
+    return entity;
+}
+
 
 
 void setPos(Registry &registry, entity_type entity, float x, float y) {

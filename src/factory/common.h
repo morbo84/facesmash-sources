@@ -10,6 +10,8 @@ namespace gamee {
 
 entity_type createSprite(Registry &, entity_type, SDLTextureHandle, int);
 entity_type createSprite(Registry &, SDLTextureHandle, int);
+entity_type createFaceBlueprint(Registry &, FaceType, int);
+entity_type createItemBlueprint(Registry &, ItemType, int);
 
 void setPos(Registry &, entity_type, float, float);
 void setSpriteGeometry(Registry &, entity_type, int, int, int, int, Uint8, Uint8);
