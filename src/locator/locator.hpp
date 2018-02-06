@@ -10,6 +10,7 @@
 #include "../service/av_recorder_service.h"
 #include "../service/camera_service.h"
 #include "../service/face_bus_service.h"
+#include "../service/settings_service.h"
 
 
 namespace gamee {
@@ -27,6 +28,7 @@ struct Locator final {
     using Audio = entt::ServiceLocator<gamee::AudioService>;
     using FaceBus = entt::ServiceLocator<gamee::FaceBusService>;
     using AvRecorder = entt::ServiceLocator<gamee::AvRecorderService>;
+    using Settings = entt::ServiceLocator<gamee::SettingsService>;
 };
 
 

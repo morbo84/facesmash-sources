@@ -14,6 +14,8 @@
 #include "service/av_recorder_null.h"
 #include "service/camera_android.h"
 #include "service/camera_null.h"
+#include "service/settings_onfile.h"
+#include "service/settings_onmemory.h"
 
 
 void initBasicServices() {
@@ -40,10 +42,12 @@ void initPlatformServices() {
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
     gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
+    gamee::Locator::Settings::set<gamee::SettingsAndroid>();
 #else
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
+    gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
 #endif
 
     gamee::Locator::Audio::ref().init();
