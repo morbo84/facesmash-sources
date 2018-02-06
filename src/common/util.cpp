@@ -1,3 +1,5 @@
+#include <array>
+#include <cassert>
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
 #include "util.h"
@@ -37,62 +39,38 @@ SDL_Point transformToPosition(const Registry &registry, entity_type entity, cons
 
 
 SDLTextureHandle toStrHud(int value) {
-    switch (value) {
-    case 0:
-        return Locator::TextureCache::ref().handle("str/0");
-    case 1:
-        return Locator::TextureCache::ref().handle("str/1");
-    case 2:
-        return Locator::TextureCache::ref().handle("str/2");
-    case 3:
-        return Locator::TextureCache::ref().handle("str/3");
-    case 4:
-        return Locator::TextureCache::ref().handle("str/4");
-    case 5:
-        return Locator::TextureCache::ref().handle("str/5");
-    case 6:
-        return Locator::TextureCache::ref().handle("str/6");
-    case 7:
-        return Locator::TextureCache::ref().handle("str/7");
-    case 8:
-        return Locator::TextureCache::ref().handle("str/8");
-    case 9:
-        return Locator::TextureCache::ref().handle("str/9");
-    default:
-        assert(false);
-        // suppress warnings
-        return Locator::TextureCache::ref().handle("str/ ");
-    }
+    assert(value >= 0);
+    assert(value < 10);
+    return std::array<SDLTextureHandle, 10>{
+        Locator::TextureCache::ref().handle("str/0"),
+        Locator::TextureCache::ref().handle("str/1"),
+        Locator::TextureCache::ref().handle("str/2"),
+        Locator::TextureCache::ref().handle("str/3"),
+        Locator::TextureCache::ref().handle("str/4"),
+        Locator::TextureCache::ref().handle("str/5"),
+        Locator::TextureCache::ref().handle("str/6"),
+        Locator::TextureCache::ref().handle("str/7"),
+        Locator::TextureCache::ref().handle("str/8"),
+        Locator::TextureCache::ref().handle("str/9")
+    }[value];
 }
 
 
 SDLTextureHandle toStrDebug(int value) {
-    switch (value) {
-    case 0:
-        return Locator::TextureCache::ref().handle("str/0");
-    case 1:
-        return Locator::TextureCache::ref().handle("str/1");
-    case 2:
-        return Locator::TextureCache::ref().handle("str/2");
-    case 3:
-        return Locator::TextureCache::ref().handle("str/3");
-    case 4:
-        return Locator::TextureCache::ref().handle("str/4");
-    case 5:
-        return Locator::TextureCache::ref().handle("str/5");
-    case 6:
-        return Locator::TextureCache::ref().handle("str/6");
-    case 7:
-        return Locator::TextureCache::ref().handle("str/7");
-    case 8:
-        return Locator::TextureCache::ref().handle("str/8");
-    case 9:
-        return Locator::TextureCache::ref().handle("str/9");
-    default:
-        assert(false);
-        // suppress warnings
-        return Locator::TextureCache::ref().handle("str/ ");
-    }
+    assert(value >= 0);
+    assert(value < 10);
+    return std::array<SDLTextureHandle, 10>{
+        Locator::TextureCache::ref().handle("str/debug/0"),
+        Locator::TextureCache::ref().handle("str/debug/1"),
+        Locator::TextureCache::ref().handle("str/debug/2"),
+        Locator::TextureCache::ref().handle("str/debug/3"),
+        Locator::TextureCache::ref().handle("str/debug/4"),
+        Locator::TextureCache::ref().handle("str/debug/5"),
+        Locator::TextureCache::ref().handle("str/debug/6"),
+        Locator::TextureCache::ref().handle("str/debug/7"),
+        Locator::TextureCache::ref().handle("str/debug/8"),
+        Locator::TextureCache::ref().handle("str/debug/9")
+    }[value];
 }
 
 

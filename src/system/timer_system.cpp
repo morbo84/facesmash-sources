@@ -16,20 +16,18 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
         auto &gameTimer = registry.get<GameTimer>();
 
         if(gameTimer.enabled) {
-            auto &textureCache = Locator::TextureCache::ref();
-            auto symEmptyHandle = textureCache.handle("str/ ");
-
             gameTimer.remaining -= std::min(gameTimer.remaining, delta);
 
             const int last = std::extent<decltype(GameTimer::entities)>::value;
             auto remaining = gameTimer.remaining / 1000;
-            const int offset = numOfDigits(remaining);
+            const int offset = last - numOfDigits(remaining);
 
-            for(auto i = offset; i < last; ++i) {
-                registry.accomodate<HUD>(gameTimer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+            for(auto i = 0; i < offset; i++) {
+                const auto sym0Handle = toStrHud(0);
+                registry.accomodate<HUD>(gameTimer.entities[i], sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
             }
 
-            for(auto i = offset; i > 0; --i) {
+            for(auto i = last; i > offset; --i) {
                 auto handle = toStrHud(remaining % 10);
                 registry.accomodate<HUD>(gameTimer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
                 remaining /= 10;
