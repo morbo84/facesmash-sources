@@ -9,6 +9,8 @@ struct GameRenderer;
 
 
 void loadResources(GameRenderer &);
+void loadDebugResources();
+
 void prepareGameStrings(GameRenderer &);
 void prepareDebugStrings(GameRenderer &);
 void prepareGameStuff(GameRenderer &);

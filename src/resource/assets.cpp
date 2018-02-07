@@ -12,12 +12,11 @@ void loadResources(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    ttfFontCache.load<TTFFontLoader>("font/ui/tiny", "font/04B_03__.ttf", 36);
-    ttfFontCache.load<TTFFontLoader>("font/ui/small", "font/04B_03__.ttf", 54);
-    ttfFontCache.load<TTFFontLoader>("font/ui/normal", "font/04B_03__.ttf", 72);
-    ttfFontCache.load<TTFFontLoader>("font/ui/medium", "font/04B_03__.ttf", 90);
-    ttfFontCache.load<TTFFontLoader>("font/ui/large", "font/04B_03__.ttf", 108);
-    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_03__.ttf", 126);
+    ttfFontCache.load<TTFFontLoader>("font/ui/tiny", "font/04B_30__.ttf", 32);
+    ttfFontCache.load<TTFFontLoader>("font/ui/small", "font/04B_30__.ttf", 40);
+    ttfFontCache.load<TTFFontLoader>("font/ui/normal", "font/04B_30__.ttf", 56);
+    ttfFontCache.load<TTFFontLoader>("font/ui/large", "font/04B_30__.ttf", 80);
+    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_30__.ttf", 96);
 
     textureCache.load<AssetTextureLoader>("ui/buttons", "ui/buttons.png", renderer);
     textureCache.load<AssetTextureLoader>("ui/win_hud", "ui/win_hud.png", renderer);
@@ -28,13 +27,20 @@ void loadResources(GameRenderer &renderer) {
 }
 
 
+void loadDebugResources() {
+    auto &ttfFontCache = Locator::TTFFontCache::ref();
+
+    ttfFontCache.load<TTFFontLoader>("font/debug/tiny", "font/04B_03__.ttf", 32);
+}
+
+
 void prepareGameStrings(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
+    auto fontTiny = ttfFontCache.handle("font/ui/tiny");
     auto fontSmall = ttfFontCache.handle("font/ui/small");
     auto fontNormal = ttfFontCache.handle("font/ui/normal");
-    auto fontMedium = ttfFontCache.handle("font/ui/medium");
     auto fontLarge = ttfFontCache.handle("font/ui/large");
     auto fontHuge = ttfFontCache.handle("font/ui/huge");
 
@@ -59,32 +65,32 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontSmall, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontMedium, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontMedium, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontMedium, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontMedium, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontMedium, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontNormal, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontSmall, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontTiny, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/miss/10", "10", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/miss/20", "20", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/miss/50", "50", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/miss/100", "100", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/smash/50", "50", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/smash/100", "100", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/smash/200", "200", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/smash/250", "250", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/miss/10", "10", renderer, *fontSmall, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/miss/20", "20", renderer, *fontSmall, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/miss/50", "50", renderer, *fontSmall, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/miss/100", "100", renderer, *fontSmall, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/smash/50", "50", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/smash/100", "100", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/smash/200", "200", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/smash/250", "250", renderer, *fontSmall, colorGreen);
 
-    textureCache.load<TTFFontTextureLoader>("str/reward/x2", "2x COMBO", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/reward/x3", "3x COMBO", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/reward/x4", "4x COMBO", renderer, *fontMedium, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/reward/x5", "5x COMBO", renderer, *fontMedium, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x2", "2x COMBO", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x3", "3x COMBO", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x4", "4x COMBO", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x5", "5x COMBO", renderer, *fontNormal, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/reward/perfect", "PERFECT", renderer, *fontLarge, colorGreen);
 
-    textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *fontSmall, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "TOUCH THESE", renderer, *fontSmall, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *fontNormal, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "TOUCH THESE", renderer, *fontNormal, colorRed);
 }
 
 
@@ -92,7 +98,7 @@ void prepareDebugStrings(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto fontTiny = ttfFontCache.handle("font/ui/tiny");
+    auto fontTiny = ttfFontCache.handle("font/debug/tiny");
 
     textureCache.load<TTFFontTextureLoader>("str/debug/0", "0", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/debug/1", "1", renderer, *fontTiny, colorWhite);
@@ -107,8 +113,8 @@ void prepareDebugStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/debug/ ", " ", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/debug/.", ".", renderer, *fontTiny, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/fps", "FPS", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/time", "Time", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/debug/fps", "FPS", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/debug/time", "Time", renderer, *fontTiny, colorWhite);
 }
 
 

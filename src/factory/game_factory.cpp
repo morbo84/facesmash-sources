@@ -129,10 +129,6 @@ void createCreditsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/credits");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
-
-    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
-    const auto &menuSprite = registry.get<Sprite>(menuButton);
-    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -145,10 +141,6 @@ void createSupportPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
-
-    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
-    const auto &menuSprite = registry.get<Sprite>(menuButton);
-    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -182,10 +174,6 @@ void createSettingsPanel(Registry &registry) {
     auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
     const auto &videoSprite = registry.get<Sprite>(videoButton);
     setPos(registry, videoButton, (panel.w - videoSprite.w) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoSprite.h / 2);
-
-    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
-    const auto &menuSprite = registry.get<Sprite>(menuButton);
-    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -198,10 +186,6 @@ void createAchievementsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/achievements");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
-
-    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 20);
-    const auto &menuSprite = registry.get<Sprite>(menuButton);
-    setPos(registry, menuButton, menuSprite.w / 2, panel.h - 3 * menuSprite.h / 2);
 }
 
 
@@ -280,8 +264,8 @@ void createGameTopPanel(Registry &registry) {
 
     auto playerScoreEntity = createHUD(registry, parent, scoreHandle, 160);
     auto &playerScore = registry.attach<PlayerScore>(playerScoreEntity);
-    setPos(registry, playerScoreEntity, offset + .2f * scoreHandle->width(), .4f * scoreHandle->height());;
-    offset = registry.get<Transform>(playerScoreEntity).x + 1.2f * scoreHandle->width();
+    setPos(registry, playerScoreEntity, offset + .1f * scoreHandle->width(), .4f * scoreHandle->height());;
+    offset = registry.get<Transform>(playerScoreEntity).x + 1.1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(PlayerScore::entities)>::value; ++i) {
         auto handle = i ? symEmptyHandle : sym0Handle;
@@ -290,12 +274,12 @@ void createGameTopPanel(Registry &registry) {
         offset += sym0Handle->width();
     }
 
-    offset = panel.w - .4f * scoreHandle->width() - 2 * sym0Handle->width() - timerHandle->width();
+    offset = panel.w - .2f * scoreHandle->width() - 2 * sym0Handle->width() - timerHandle->width();
 
     auto gameTimerEntity = createHUD(registry, parent, timerHandle, 160);
     auto &gameTimer = registry.attach<GameTimer>(gameTimerEntity);
     setPos(registry, gameTimerEntity, offset, .4f * scoreHandle->height());;
-    offset = registry.get<Transform>(gameTimerEntity).x + timerHandle->width() + .2f * scoreHandle->width();
+    offset = registry.get<Transform>(gameTimerEntity).x + timerHandle->width() + .1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
         auto handle = i ? symEmptyHandle : sym0Handle;
@@ -421,7 +405,7 @@ void createDebugHUD(Registry &registry) {
 
     offset = sym0Handle->width();
 
-    auto fpsHandle = textureCache.handle("str/fps");
+    auto fpsHandle = textureCache.handle("str/debug/fps");
     auto fpsEntity = createHUD(registry, fpsHandle, 255);
     setPos(registry, fpsEntity, offset, logicalHeight - fpsHandle->height());
 
@@ -455,7 +439,7 @@ void createDebugHUD(Registry &registry) {
     debug.time[0] = createHUD(registry, sym0Handle, 255);
     setPos(registry, debug.time[0], offset, logicalHeight - sym0Handle->height());
 
-    auto timeHandle = textureCache.handle("str/time");
+    auto timeHandle = textureCache.handle("str/debug/time");
     auto timeEntity = createHUD(registry, timeHandle, 255);
     offset -= timeHandle->width() + sym0Handle->width();
     setPos(registry, timeEntity, offset, logicalHeight - timeHandle->height());

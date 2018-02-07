@@ -42,6 +42,7 @@ void GameLoop::init(GameRenderer &renderer) {
     createCameraFrame(registry);
 
 #ifdef DEBUG
+    loadDebugResources();
     prepareDebugStrings(renderer);
 
     createDebugHUD(registry);
