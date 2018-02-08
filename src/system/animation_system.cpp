@@ -30,8 +30,7 @@ void AnimationSystem::rotationAnimation(Registry &registry, delta_type delta) {
 
         if(animation.elapsed < animation.duration || animation.repeat) {
             animation.elapsed %= animation.duration;
-            const float mul = 1.f * animation.elapsed / animation.duration;
-            renderable.angle = animation.from + (mul * (animation.to - animation.from));
+            renderable.angle = animation.ease(animation.elapsed, animation.duration, animation.from, animation.to);
         } else {
             renderable.angle = animation.to;
             registry.remove<RotationAnimation>(entity);
@@ -108,6 +107,12 @@ void AnimationSystem::sizeAnimation(Registry &registry, delta_type delta) {
 
         transform.x = xC - sprite.w / 2;
         transform.y = yC - sprite.h / 2;
+
+        if(registry.has<BoundingBox>(entity)) {
+            auto &box = registry.get<BoundingBox>(entity);
+            box.x = (sprite.w - box.w) / 2;
+            box.y = (sprite.h - box.h) / 2;
+        }
     });
 }
 

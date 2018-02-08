@@ -92,6 +92,10 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::MENU:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
+                case UIAction::MENU_CLOSE_UP:
+                case UIAction::MENU_CLOSE_DOWN:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    break;
                 case UIAction::CREDITS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);
                     break;

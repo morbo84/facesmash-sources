@@ -91,11 +91,13 @@ struct SpriteAnimation final {
 
 
 struct RotationAnimation final {
+    using ease_type = float(*)(float, float, float, float);
     float from;
     float to;
     delta_type duration;
     delta_type elapsed{0_ui32};
     bool repeat{true};
+    ease_type ease{&linear};
 };
 
 
@@ -144,6 +146,9 @@ struct SizeAnimation final {
 struct UIButton final {
     bool enabled;
     UIAction action;
+    bool popup{false};
+    int w{0};
+    int h{0};
 };
 
 

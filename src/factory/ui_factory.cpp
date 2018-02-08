@@ -37,6 +37,12 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::MENU:
         setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8, 1_ui8);
         break;
+    case UIAction::MENU_CLOSE_UP:
+        setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8, 1_ui8);
+        break;
+    case UIAction::MENU_CLOSE_DOWN:
+        setSpriteGeometry(registry, entity, 1024, 768, width, height, 4_ui8, 1_ui8);
+        break;
     case UIAction::RELOAD:
         setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8, 1_ui8);
         break;
@@ -70,6 +76,19 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     setSpriteSize(registry, entity, width, height);
     registry.assign<BoundingBox>(entity, width, height);
     registry.assign<UIButton>(entity, entity, action);
+
+    return entity;
+}
+
+
+entity_type createPopupUIButton(Registry &registry, entity_type parent, UIAction action, int z) {
+    auto entity = createUIButton(registry, parent, action, z);
+    const auto &sprite = registry.get<Sprite>(entity);
+    auto &button = registry.get<UIButton>(entity);
+
+    button.popup = true;
+    button.w = sprite.w;
+    button.h = sprite.h;
 
     return entity;
 }

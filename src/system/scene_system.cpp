@@ -91,6 +91,30 @@ static void enableUIControls(Registry &registry) {
 }
 
 
+static void showPopupButtons(Registry &registry, PanelType type) {
+    registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
+        if(panel.type == type) {
+            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
+                if(transform.parent == parent && button.popup) {
+                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                    registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
+                }
+            });
+        }
+    });
+}
+
+
+static void hidePopupButtons(Registry &registry) {
+    registry.view<UIButton, Sprite, Renderable>().each([&registry](auto entity, const auto &button, const auto &sprite, const auto &renderable) {
+        if(button.popup) {
+            registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+        }
+    });
+}
+
+
 static void disableCameraFrame(Registry &registry) {
     if(registry.has<CameraFrame>()) {
         registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 0;
@@ -198,53 +222,42 @@ static delta_type menuPageTransition(Registry &registry) {
 }
 
 
-template<PanelType BackgroundPanel>
-static delta_type bgPanelTransition(Registry &registry) {
+static delta_type bgPanelTransition(Registry &registry, PanelType type) {
     static constexpr delta_type duration = 1000_ui32;
 
-    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::MENU_TOP:
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case PanelType::MENU_BOTTOM:
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case BackgroundPanel:
-            registry.accomodate<Transform>(entity, entity, 0.f, (logicalHeight - panel.h) / 2.f);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
+    registry.view<Panel, Transform>().each([&registry, type](auto entity, const auto &panel, const auto &transform) {
+        if(panel.type == type) {
+            registry.accomodate<Transform>(entity, entity, (logicalWidth - panel.w) / 2.f, (logicalHeight - panel.h) / 2.f);
         }
-    });
 
-    return duration;
-}
-
-
-template<>
-delta_type bgPanelTransition<PanelType::EXIT>(Registry &registry) {
-    static constexpr delta_type duration = 1000_ui32;
-
-    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::MENU_TOP:
-        case PanelType::BACKGROUND_TOP:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case PanelType::MENU_BOTTOM:
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
-            break;
-        case PanelType::EXIT:
-            registry.accomodate<Transform>(entity, entity, 0.f, (logicalHeight - panel.h) / 2.f);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
+        if(type == PanelType::EXIT) {
+            switch(panel.type) {
+            case PanelType::MENU_TOP:
+            case PanelType::BACKGROUND_TOP:
+                registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h / 4, duration, 0_ui32, &easeOutElastic);
+                break;
+            case PanelType::MENU_BOTTOM:
+            case PanelType::BACKGROUND_BOTTOM:
+                registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - 3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
+                break;
+            default:
+                // all the other panels are already out of scene (they ought to be at least)
+                break;
+            }
+        } else {
+            switch(panel.type) {
+            case PanelType::MENU_TOP:
+            case PanelType::BACKGROUND_TOP:
+                registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -3 * panel.h / 4, duration, 0_ui32, &easeOutElastic);
+                break;
+            case PanelType::MENU_BOTTOM:
+            case PanelType::BACKGROUND_BOTTOM:
+                registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h / 4, duration, 0_ui32, &easeOutElastic);
+                break;
+            default:
+                // all the other panels are already out of scene (they ought to be at least)
+                break;
+            }
         }
     });
 
@@ -500,6 +513,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::MENU_PAGE:
                     hideBackgroundPanels(registry);
                     enableUIControls(registry);
+                    showPopupButtons(registry, PanelType::MENU_TOP);
+                    showPopupButtons(registry, PanelType::MENU_BOTTOM);
                     camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
@@ -533,11 +548,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         } else {
             disableUIControls(registry);
             hideSmashButtons(registry);
+            hidePopupButtons(registry);
 
             switch(next) {
             case SceneType::EXIT:
                 disableCameraFrame(registry);
-                remaining = bgPanelTransition<PanelType::EXIT>(registry);
+                remaining = bgPanelTransition(registry, PanelType::EXIT);
                 break;
             case SceneType::SPLASH_SCREEN:
                 enableUIControls(registry);
@@ -545,23 +561,23 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::CREDITS_PAGE:
                 hideBackgroundPanels(registry);
-                remaining = bgPanelTransition<PanelType::CREDITS>(registry);
+                remaining = bgPanelTransition(registry, PanelType::CREDITS);
                 break;
             case SceneType::SUPPORT_PAGE:
                 hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshSupportPanel(registry);
-                remaining = bgPanelTransition<PanelType::SUPPORT>(registry);
+                remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
             case SceneType::SETTINGS_PAGE:
                 hideBackgroundPanels(registry);
-                remaining = bgPanelTransition<PanelType::SETTINGS>(registry);
+                remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
             case SceneType::ACHIEVEMENTS_PAGE:
                 hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshAchievementsPanel(registry);
-                remaining = bgPanelTransition<PanelType::ACHIEVEMENTS>(registry);
+                remaining = bgPanelTransition(registry, PanelType::ACHIEVEMENTS);
                 break;
             case SceneType::MENU_PAGE:
                 remaining = menuPageTransition(registry);

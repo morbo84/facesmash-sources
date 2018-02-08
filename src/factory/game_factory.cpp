@@ -82,15 +82,15 @@ void createMenuTopPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, panel.h - 9 * titleHandle->height() / 8);
 
-    auto trainingButton = createUIButton(registry, parent, UIAction::TRAINING, 150);
+    auto trainingButton = createPopupUIButton(registry, parent, UIAction::TRAINING, 150);
     const auto &trainingSprite = registry.get<Sprite>(trainingButton);
     setPos(registry, trainingButton, (panel.w / 2 - trainingSprite.w) / 2, 2 * panel.h / 5);
 
-    auto playButton = createUIButton(registry, parent, UIAction::THE_GAME, 150);
+    auto playButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 150);
     const auto &playSprite = registry.get<Sprite>(playButton);
     setPos(registry, playButton, (panel.w - playSprite.w) / 2, 2 * panel.h / 5 - playSprite.h / 2);
 
-    auto medalButton = createUIButton(registry, parent, UIAction::ACHIEVEMENTS, 150);
+    auto medalButton = createPopupUIButton(registry, parent, UIAction::ACHIEVEMENTS, 150);
     const auto &medalSprite = registry.get<Sprite>(medalButton);
     setPos(registry, medalButton, (3 * panel.w / 2 - medalSprite.w) / 2, 2 * panel.h / 5);
 }
@@ -106,15 +106,15 @@ void createMenuBottomPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 8);
 
-    auto infoButton = createUIButton(registry, parent, UIAction::CREDITS, 150);
+    auto infoButton = createPopupUIButton(registry, parent, UIAction::CREDITS, 150);
     const auto &infoSprite = registry.get<Sprite>(infoButton);
     setPos(registry, infoButton, (panel.w / 2 - infoSprite.w) / 2, 3 * panel.h / 5 - infoSprite.h);
 
-    auto supportButton = createUIButton(registry, parent, UIAction::SUPPORT, 150);
+    auto supportButton = createPopupUIButton(registry, parent, UIAction::SUPPORT, 150);
     const auto &supportSprite = registry.get<Sprite>(supportButton);
     setPos(registry, supportButton, (panel.w - supportSprite.w) / 2, 3 * panel.h / 5 - supportSprite.h / 2);
 
-    auto settingsButton = createUIButton(registry, parent, UIAction::SETTINGS, 150);
+    auto settingsButton = createPopupUIButton(registry, parent, UIAction::SETTINGS, 150);
     const auto &settingsSprite = registry.get<Sprite>(settingsButton);
     setPos(registry, settingsButton, (3 * panel.w / 2 - settingsSprite.w) / 2, 3 * panel.h / 5 - settingsSprite.h);
 }
