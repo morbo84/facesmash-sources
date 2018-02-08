@@ -69,7 +69,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
 
     setSpriteSize(registry, entity, width, height);
     registry.assign<BoundingBox>(entity, width, height);
-    registry.assign<UIButton>(entity, entity, action);
+    registry.assign<UIButton>(entity, static_cast<bool>(entity), action);
 
     return entity;
 }
