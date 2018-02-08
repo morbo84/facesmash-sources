@@ -42,7 +42,7 @@ void initPlatformServices() {
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
     gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
-    gamee::Locator::Settings::set<gamee::SettingsAndroid>();
+    gamee::Locator::Settings::set<gamee::SettingsOnFile>();
 #else
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
