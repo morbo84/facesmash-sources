@@ -42,7 +42,7 @@ void createSplashScreenPanel(Registry &registry) {
     auto gamee = createSprite(registry, parent, gameeHandle, 20);
     setPos(registry, gamee, (panel.w - gameeHandle->width()) / 2, (panel.h - gameeHandle->height()) / 2);
     registry.assign<BoundingBox>(gamee, 0, 0, gameeHandle->width(), gameeHandle->height());
-    registry.assign<UIButton>(gamee, gamee, UIAction::EASTER_EGG);
+    registry.assign<UIButton>(gamee, static_cast<bool>(gamee), UIAction::EASTER_EGG);
     registry.assign<FadeAnimation>(gamee, 0, 255, 2000_ui32);
     registry.get<Renderable>(gamee).alpha = 0;
 }
