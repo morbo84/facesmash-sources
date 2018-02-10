@@ -24,11 +24,15 @@ void createExitPanel(Registry &registry) {
 
     auto acceptButton = createUIButton(registry, parent, UIAction::EXIT, 20);
     const auto &acceptSprite = registry.get<Sprite>(acceptButton);
+    setSpriteSize(registry, acceptButton, 3 * acceptSprite.w / 4, 3 * acceptSprite.h / 4);
     setPos(registry, acceptButton, (panel.w - 3 * acceptSprite.w) / 2, panel.h / 2);
+    setBoundingBox(registry, acceptButton, acceptSprite.w, acceptSprite.h);
 
     auto rejectButton = createUIButton(registry, parent, UIAction::MENU, 20);
     const auto &rejectSprite = registry.get<Sprite>(rejectButton);
+    setSpriteSize(registry, rejectButton, 3 * rejectSprite.w / 4, 3 * rejectSprite.h / 4);
     setPos(registry, rejectButton, (panel.w + rejectSprite.w) / 2, panel.h / 2);
+    setBoundingBox(registry, rejectButton, rejectSprite.w, rejectSprite.h);
 }
 
 
@@ -237,10 +241,14 @@ void createTutorialTopPanel(Registry &registry) {
     auto addButton = [&](FaceType type, int idx) {
         auto entity = createFaceBlueprint(registry, type, 160);
         const auto &sprite = registry.get<Sprite>(entity);
-        const auto buttonOffset = (panel.w - (numberOfFaces * sprite.w + (numberOfFaces - 1) * 10)) / 2;
 
-        setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), panel.h - 3 * sprite.h / 2);
-        setSpriteSize(registry, entity, 3 * sprite.w / 5, 3 * sprite.h / 5);
+        const auto width = 3 * sprite.w / 5;
+        const auto height = 3 * sprite.h / 5;
+
+        const auto buttonOffset = (panel.w - (numberOfFaces * width + (numberOfFaces - 1) * 10)) / 2;
+
+        setPos(registry, entity, buttonOffset + idx * (width + 10), panel.h - 3 * height / 2);
+        setSpriteSize(registry, entity, width, height);
         registry.get<Transform>(entity).parent = parent;
     };
 
@@ -266,10 +274,14 @@ void createTutorialBottomPanel(Registry &registry) {
     auto addButton = [&](ItemType type, int idx) {
         auto entity = createItemBlueprint(registry, type, 160);
         const auto &sprite = registry.get<Sprite>(entity);
-        const auto buttonOffset = (panel.w - (numberOfItems * sprite.w + (numberOfItems - 1) * 10)) / 2;
 
-        setPos(registry, entity, buttonOffset + idx * (sprite.w + 10), sprite.h / 2);
-        setSpriteSize(registry, entity, 3 * sprite.w / 5, 3 * sprite.h / 5);
+        const auto width = 3 * sprite.w / 5;
+        const auto height = 3 * sprite.h / 5;
+
+        const auto buttonOffset = (panel.w - (numberOfItems * width + (numberOfItems - 1) * 10)) / 2;
+
+        setPos(registry, entity, buttonOffset + idx * (width + 10), height / 2);
+        setSpriteSize(registry, entity, width, height);
         registry.get<Transform>(entity).parent = parent;
     };
 
