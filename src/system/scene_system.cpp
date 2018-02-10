@@ -38,6 +38,44 @@ static void discardSplashScreen(Registry &registry) {
 }
 
 
+static void hideBackgroundPanels(Registry &registry) {
+    registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
+        switch(panel.type) {
+        case PanelType::EXIT:
+        case PanelType::CREDITS:
+        case PanelType::SUPPORT:
+        case PanelType::SETTINGS:
+        case PanelType::ACHIEVEMENTS:
+            transform.x = -panel.w;
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
+        }
+    });
+}
+
+
+static void disableUIButtons(Registry &registry) {
+    for(auto entity: registry.view<UIButton>()) {
+        registry.get<UIButton>(entity).enabled = false;
+    }
+}
+
+
+static void enableUIButtons(Registry &registry, PanelType type) {
+    registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
+        if(panel.type == type) {
+            registry.view<UIButton, Transform>().each([parent, &registry](auto, auto &button, const auto &transform) {
+                if(transform.parent == parent && !button.popup) {
+                    button.enabled = true;
+                }
+            });
+        }
+    });
+}
+
+
 static void showSmashButtons(Registry &registry) {
     auto view = registry.view<SmashButton, Sprite, Transform>();
 
@@ -59,43 +97,12 @@ static void hideSmashButtons(Registry &registry) {
 }
 
 
-static void hideBackgroundPanels(Registry &registry) {
-    registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
-        switch(panel.type) {
-        case PanelType::EXIT:
-        case PanelType::CREDITS:
-        case PanelType::SUPPORT:
-        case PanelType::SETTINGS:
-        case PanelType::ACHIEVEMENTS:
-            transform.x = -panel.w;
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
-        }
-    });
-}
-
-
-static void disableUIControls(Registry &registry) {
-    for(auto entity: registry.view<UIButton>()) {
-        registry.get<UIButton>(entity).enabled = false;
-    }
-}
-
-
-static void enableUIControls(Registry &registry) {
-    for(auto entity: registry.view<UIButton>()) {
-        registry.get<UIButton>(entity).enabled = true;
-    }
-}
-
-
-static void showPopupButtons(Registry &registry, PanelType type) {
+static void enableShowPopupButtons(Registry &registry, PanelType type) {
     registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
         if(panel.type == type) {
-            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
+            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
+                    button.enabled = true;
                     registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
                     registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
                 }
@@ -105,11 +112,15 @@ static void showPopupButtons(Registry &registry, PanelType type) {
 }
 
 
-static void hidePopupButtons(Registry &registry) {
-    registry.view<UIButton, Sprite, Renderable>().each([&registry](auto entity, const auto &button, const auto &sprite, const auto &renderable) {
-        if(button.popup) {
-            registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
-            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+static void hidePopupButtons(Registry &registry, PanelType type) {
+    registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
+        if(panel.type == type) {
+            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
+                if(transform.parent == parent && button.popup) {
+                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                    registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+                }
+            });
         }
     });
 }
@@ -497,7 +508,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             if(!remaining) {
                 switch(next) {
                 case SceneType::EXIT:
-                    enableUIControls(registry);
+                    enableShowPopupButtons(registry, PanelType::MENU_BOTTOM);
+                    enableShowPopupButtons(registry, PanelType::MENU_TOP);
+                    enableUIButtons(registry, PanelType::EXIT);
                     break;
                 case SceneType::SPLASH_SCREEN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
@@ -505,16 +518,21 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     ads.show(AdsType::BANNER);
                     break;
                 case SceneType::CREDITS_PAGE:
+                    enableUIButtons(registry, PanelType::CREDITS);
+                    break;
                 case SceneType::SUPPORT_PAGE:
+                    enableUIButtons(registry, PanelType::SUPPORT);
+                    break;
                 case SceneType::SETTINGS_PAGE:
+                    enableUIButtons(registry, PanelType::SETTINGS);
+                    break;
                 case SceneType::ACHIEVEMENTS_PAGE:
-                    enableUIControls(registry);
+                    enableUIButtons(registry, PanelType::ACHIEVEMENTS);
                     break;
                 case SceneType::MENU_PAGE:
                     hideBackgroundPanels(registry);
-                    enableUIControls(registry);
-                    showPopupButtons(registry, PanelType::MENU_TOP);
-                    showPopupButtons(registry, PanelType::MENU_BOTTOM);
+                    enableShowPopupButtons(registry, PanelType::MENU_BOTTOM);
+                    enableShowPopupButtons(registry, PanelType::MENU_TOP);
                     camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
@@ -528,8 +546,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     avRecorder.stop();
                     disableCameraFrame(registry);
                     ads.isLoaded(AdsType::INTERSTITIAL)
-                            ? (ads.show(AdsType::INTERSTITIAL), enableUIControls(registry))
-                            : enableUIControls(registry);
+                            ? (ads.show(AdsType::INTERSTITIAL), enableUIButtons(registry, PanelType::GAME_OVER))
+                            : enableUIButtons(registry, PanelType::GAME_OVER);
                     break;
                 case SceneType::TRAINING_TUTORIAL:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
@@ -546,9 +564,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 curr = next;
             }
         } else {
-            disableUIControls(registry);
+            disableUIButtons(registry);
             hideSmashButtons(registry);
-            hidePopupButtons(registry);
 
             switch(next) {
             case SceneType::EXIT:
@@ -556,30 +573,44 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::EXIT);
                 break;
             case SceneType::SPLASH_SCREEN:
-                enableUIControls(registry);
+                enableUIButtons(registry, PanelType::SPLASH_SCREEN);
+                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
+                hidePopupButtons(registry, PanelType::MENU_BOTTOM);
+                hidePopupButtons(registry, PanelType::MENU_TOP);
                 remaining = splashScreenTransition(registry);
                 break;
             case SceneType::CREDITS_PAGE:
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::CREDITS);
                 break;
             case SceneType::SUPPORT_PAGE:
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshSupportPanel(registry);
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
             case SceneType::SETTINGS_PAGE:
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
             case SceneType::ACHIEVEMENTS_PAGE:
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshAchievementsPanel(registry);
                 remaining = bgPanelTransition(registry, PanelType::ACHIEVEMENTS);
                 break;
             case SceneType::MENU_PAGE:
+                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:

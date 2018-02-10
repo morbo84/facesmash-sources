@@ -41,7 +41,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
         setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8, 1_ui8);
         break;
     case UIAction::MENU_CLOSE_DOWN:
-        setSpriteGeometry(registry, entity, 1024, 768, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 1024, 640, width, height, 4_ui8, 1_ui8);
         break;
     case UIAction::RELOAD:
         setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8, 1_ui8);
@@ -75,7 +75,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
 
     setSpriteSize(registry, entity, width, height);
     registry.assign<BoundingBox>(entity, width, height);
-    registry.assign<UIButton>(entity, static_cast<bool>(entity), action);
+    registry.assign<UIButton>(entity, false, action);
 
     return entity;
 }

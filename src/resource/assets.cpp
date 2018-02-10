@@ -83,10 +83,10 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash/200", "200", renderer, *fontSmall, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/smash/250", "250", renderer, *fontSmall, colorGreen);
 
-    textureCache.load<TTFFontTextureLoader>("str/reward/x2", "2x COMBO", renderer, *fontSmall, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/reward/x3", "3x COMBO", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x2", "2x COMBO", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x3", "3x COMBO", renderer, *fontNormal, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/reward/x4", "4x COMBO", renderer, *fontNormal, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/reward/x5", "5x COMBO", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/reward/x5", "5x COMBO", renderer, *fontLarge, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/reward/perfect", "PERFECT", renderer, *fontLarge, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *fontNormal, colorRed);

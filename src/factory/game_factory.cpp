@@ -52,11 +52,28 @@ void createBackgroundTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     const auto width = logicalWidth;
     const auto height = logicalHeight / 2;
+
     auto parent = createPanel(registry, PanelType::BACKGROUND_TOP, 0, -logicalHeight / 2, width, height);
+    const auto &panel = registry.get<Panel>(parent);
+
     auto handle = textureCache.handle("ui/win_hud");
-    auto entity = createSprite(registry, parent, handle, 120);
-    setSpriteGeometry(registry, entity, 0, 0, width, height, 1, 1);
-    setSpriteSize(registry, entity, width, height);
+    auto bg = createSprite(registry, parent, handle, 120);
+    setSpriteGeometry(registry, bg, 0, 0, width, height, 1, 1);
+    setSpriteSize(registry, bg, width, height);
+
+    auto createCloseButton = [&registry, &panel, parent](auto x){
+        auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_DOWN, 180);
+        auto &closeSprite = registry.get<Sprite>(closeButton);
+        auto &closeUIButton = registry.get<UIButton>(closeButton);
+        closeUIButton.w = closeSprite.w = 2 * closeSprite.w / 3;
+        closeUIButton.h = closeSprite.h = 2 * closeSprite.h / 3;
+        setPos(registry, closeButton, x(closeSprite), panel.h - 3 * closeSprite.h / 8);
+        setBoundingBox(registry, closeButton, closeUIButton.w, closeUIButton.h);
+        setSpriteSize(registry, closeButton, 0, 0);
+    };
+
+    createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
+    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 
@@ -64,11 +81,28 @@ void createBackgroundBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     const auto width = logicalWidth;
     const auto height = logicalHeight / 2;
+
     auto parent = createPanel(registry, PanelType::BACKGROUND_BOTTOM, 0, logicalHeight, width, height);
+    const auto &panel = registry.get<Panel>(parent);
+
     auto handle = textureCache.handle("ui/win_hud");
-    auto entity = createSprite(registry, parent, handle, 120);
-    setSpriteGeometry(registry, entity, 0, 0, width, height, 1, 1);
-    setSpriteSize(registry, entity, width, height);
+    auto bg = createSprite(registry, parent, handle, 120);
+    setSpriteGeometry(registry, bg, 0, 0, width, height, 1, 1);
+    setSpriteSize(registry, bg, width, height);
+
+    auto createCloseButton = [&registry, &panel, parent](auto x){
+        auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);
+        auto &closeSprite = registry.get<Sprite>(closeButton);
+        auto &closeUIButton = registry.get<UIButton>(closeButton);
+        closeUIButton.w = closeSprite.w = 2 * closeSprite.w / 3;
+        closeUIButton.h = closeSprite.h = 2 * closeSprite.h / 3;
+        setPos(registry, closeButton, x(closeSprite), 3 * closeSprite.h / 8);
+        setBoundingBox(registry, closeButton, closeUIButton.w, closeUIButton.h);
+        setSpriteSize(registry, closeButton, 0, 0);
+    };
+
+    createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
+    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 
