@@ -18,6 +18,23 @@ void createExitPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
+
+
+
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 19 * panel.w / 20, 10, 20);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 19 * panel.w / 20, 10, 20);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 10, 19 * panel.h / 20, 20);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 10, 19 * panel.h / 20, 20);
+
+    setPos(registry, borderTop, panel.w / 40, panel.h / 40);
+    setPos(registry, borderBottom, panel.w / 40, 39 * panel.h / 40 - 10);
+    setPos(registry, borderLeft, panel.w / 40, panel.h / 40);
+    setPos(registry, borderRight, 39 * panel.w / 40 - 10, panel.h / 40);
+
+
+
+
+
     auto exitHandle = textureCache.handle("str/exit");
     auto exit = createSprite(registry, parent, exitHandle, 20);
     setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 3 * exitHandle->height()) / 2);
