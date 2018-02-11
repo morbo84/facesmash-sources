@@ -115,4 +115,91 @@ entity_type createHUD(Registry &registry, SDLTextureHandle handle, int z) {
 }
 
 
+entity_type createBoxBorder(Registry &registry, entity_type parent, BoxBorderType type, int width, int height, int z) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("ui/win_hud");
+    auto entity = createSprite(registry, parent, handle, z);
+    setSpriteSize(registry, entity, width, height);
+
+    switch(type) {
+    case BoxBorderType::BOX_1_TOP:
+        setSpriteGeometry(registry, entity, 720, 0, 437, 10, 1_ui8);
+        break;
+    case BoxBorderType::BOX_1_BOTTOM:
+        setSpriteGeometry(registry, entity, 720, 413, 437, 10, 1_ui8);
+        break;
+    case BoxBorderType::BOX_1_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_1_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_2_TOP:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_2_BOTTOM:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_2_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_2_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_3_TOP:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_3_BOTTOM:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_3_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_3_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_4_TOP:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_4_BOTTOM:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_4_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_4_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_5_TOP:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_5_BOTTOM:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_5_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_5_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_6_TOP:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_6_BOTTOM:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_6_LEFT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    case BoxBorderType::BOX_6_RIGHT:
+        // setSpriteGeometry(registry, entity, ?, ?, ?, ?, 1_ui8);
+        break;
+    }
+
+    return entity;
+}
+
+
 }

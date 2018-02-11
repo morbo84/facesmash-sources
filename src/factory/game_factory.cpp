@@ -61,16 +61,13 @@ void createBackgroundTopPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto handle = textureCache.handle("ui/win_hud");
-
     auto bg = createSprite(registry, parent, handle, 120);
     setSpriteGeometry(registry, bg, 0, 0, width, height, 1_ui8);
     setSpriteSize(registry, bg, width, height);
 
-    auto border = createSprite(registry, parent, handle, 140);
-    setSpriteGeometry(registry, border, width, 936, width, 24, 1_ui8);
-    setSpriteSize(registry, border, width, 4);
-    setPos(registry, border, 0, height - 4);
-    registry.get<Renderable>(border).alpha = 90;
+    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_TOP, width, 5, 140);
+    setPos(registry, border, 0, height - 5);
+    registry.get<Renderable>(border).alpha = 120;
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_DOWN, 180);
@@ -97,15 +94,12 @@ void createBackgroundBottomPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto handle = textureCache.handle("ui/win_hud");
-
     auto bg = createSprite(registry, parent, handle, 120);
     setSpriteGeometry(registry, bg, 0, height, width, height, 1_ui8);
     setSpriteSize(registry, bg, width, height);
 
-    auto border = createSprite(registry, parent, handle, 140);
-    setSpriteGeometry(registry, border, width, 0, width, 24, 1_ui8);
-    setSpriteSize(registry, border, width, 4);
-    registry.get<Renderable>(border).alpha = 90;
+    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_BOTTOM, width, 5, 140);
+    registry.get<Renderable>(border).alpha = 120;
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);

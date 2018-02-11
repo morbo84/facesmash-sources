@@ -109,6 +109,34 @@ enum class PanelType: Uint8 {
 };
 
 
+enum class BoxBorderType: Uint8 {
+    BOX_1_TOP,
+    BOX_1_BOTTOM,
+    BOX_1_LEFT,
+    BOX_1_RIGHT,
+    BOX_2_TOP,
+    BOX_2_BOTTOM,
+    BOX_2_LEFT,
+    BOX_2_RIGHT,
+    BOX_3_TOP,
+    BOX_3_BOTTOM,
+    BOX_3_LEFT,
+    BOX_3_RIGHT,
+    BOX_4_TOP,
+    BOX_4_BOTTOM,
+    BOX_4_LEFT,
+    BOX_4_RIGHT,
+    BOX_5_TOP,
+    BOX_5_BOTTOM,
+    BOX_5_LEFT,
+    BOX_5_RIGHT,
+    BOX_6_TOP,
+    BOX_6_BOTTOM,
+    BOX_6_LEFT,
+    BOX_6_RIGHT
+};
+
+
 }
 
 

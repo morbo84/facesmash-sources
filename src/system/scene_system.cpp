@@ -21,23 +21,6 @@ static void discardExpiringContents(Registry &registry) {
 }
 
 
-static void discardSplashScreen(Registry &registry) {
-    // we can safely discard the splash screen once reached
-    registry.view<Panel>().each([&registry](auto parent, const auto &panel) {
-        if(panel.type == PanelType::SPLASH_SCREEN) {
-            registry.view<Transform>().each([parent, &registry](auto child, const auto &transform) {
-                if(child != parent && transform.parent == parent) {
-                    registry.assign<DestroyLater>(child, 1000_ui32);
-                    registry.get<Transform>(child).parent = child;
-                }
-            });
-
-            registry.destroy(parent);
-        }
-    });
-}
-
-
 static void hideBackgroundPanels(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
         switch(panel.type) {
@@ -46,6 +29,7 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::ACHIEVEMENTS:
+        case PanelType::SPLASH_SCREEN:
             transform.x = -panel.w;
             break;
         default:
@@ -514,7 +498,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::SPLASH_SCREEN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-                    discardSplashScreen(registry);
                     ads.show(AdsType::BANNER);
                     break;
                 case SceneType::CREDITS_PAGE:
