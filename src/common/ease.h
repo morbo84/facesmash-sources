@@ -8,6 +8,8 @@ namespace gamee {
 float linear(float, float, float, float);
 float easeInCubic(float, float, float, float);
 float easeOutCubic(float, float, float, float);
+float easeInExpo(float, float, float, float);
+float easeOutExpo(float, float, float, float);
 float easeOutElastic(float, float, float, float);
 
 

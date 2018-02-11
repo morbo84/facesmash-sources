@@ -18,7 +18,7 @@ void RewardSystem::update(Registry &registry) {
             const auto handle = registry.get<Sprite>(entity).handle;
 
             // update reward label and show it
-            registry.accomodate<FadeAnimation>(entity, 255, 0, 2000_ui32);
+            registry.accomodate<FadeAnimation>(entity, 255, 0, 2000_ui32, 0_ui32, &easeInExpo);
             registry.accomodate<SizeAnimation>(entity, 0, 0, handle->width(), handle->height(), 1000_ui32, 0_ui32, &easeOutElastic);
             registry.get<Transform>(entity).x = logicalWidth / 2.f - handle->width() / 2.f;
 
