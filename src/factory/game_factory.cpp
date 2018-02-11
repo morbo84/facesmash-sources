@@ -91,7 +91,7 @@ void createBackgroundBottomPanel(Registry &registry) {
 
     auto handle = textureCache.handle("ui/win_hud");
     auto bg = createSprite(registry, parent, handle, 120);
-    setSpriteGeometry(registry, bg, 0, 0, width, height, 1, 1);
+    setSpriteGeometry(registry, bg, 0, height, width, height, 1, 1);
     setSpriteSize(registry, bg, width, height);
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
