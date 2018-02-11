@@ -26,46 +26,46 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
 
     switch(action) {
     case UIAction::ACHIEVEMENTS:
-        setSpriteGeometry(registry, entity, 1024, 1280, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 1024, 1280, width, height, 4_ui8);
         break;
     case UIAction::CREDITS:
-        setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8);
         break;
     case UIAction::EXIT:
-        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8);
         break;
     case UIAction::MENU:
-        setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8);
         break;
     case UIAction::MENU_CLOSE_UP:
-        setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8);
         break;
     case UIAction::MENU_CLOSE_DOWN:
-        setSpriteGeometry(registry, entity, 1024, 640, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 1024, 640, width, height, 4_ui8);
         break;
     case UIAction::RELOAD:
-        setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8);
         break;
     case UIAction::SAVE:
-        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
         break;
     case UIAction::SETTINGS:
-        setSpriteGeometry(registry, entity, 0, 1152, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 1152, width, height, 4_ui8);
         break;
     case UIAction::SUPPORT:
-        setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8);
         break;
     case UIAction::SWITCH_AUDIO:
-        setSpriteGeometry(registry, entity, 0, 768, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 768, width, height, 4_ui8);
         break;
     case UIAction::SWITCH_VIDEO:
-        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
         break;
     case UIAction::THE_GAME:
-        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8);
         break;
     case UIAction::TRAINING:
-        setSpriteGeometry(registry, entity, 0, 256, width, height, 4_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 256, width, height, 4_ui8);
         break;
     case UIAction::EASTER_EGG:
     default:

@@ -39,22 +39,22 @@ entity_type createFaceBlueprint(Registry &registry, FaceType type, int z) {
 
     switch(type) {
     case FaceType::ANGRY:
-        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8);
         break;
     case FaceType::DISGUSTED:
-        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8);
         break;
     case FaceType::FEARFUL:
-        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8);
         break;
     case FaceType::HAPPY:
-        setSpriteGeometry(registry, entity, 0, 120, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 120, width, height, 1_ui8);
         break;
     case FaceType::SAD:
-        setSpriteGeometry(registry, entity, 120, 120, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 120, 120, width, height, 1_ui8);
         break;
     case FaceType::SURPRISED:
-        setSpriteGeometry(registry, entity, 240, 120, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 240, 120, width, height, 1_ui8);
         break;
     }
 
@@ -74,13 +74,13 @@ entity_type createItemBlueprint(Registry &registry, ItemType type, int z) {
 
     switch(type) {
     case ItemType::FOUNTAIN:
-        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 240, 0, width, height, 1_ui8);
         break;
     case ItemType::SLOW_DOWN:
-        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 120, 0, width, height, 1_ui8);
         break;
     case ItemType::SPEED_UP:
-        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8, 1_ui8);
+        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8);
         break;
     }
 
@@ -96,14 +96,15 @@ void setPos(Registry &registry, entity_type entity, float x, float y) {
 }
 
 
-void setSpriteGeometry(Registry &registry, entity_type entity, int x, int y, int width, int height, Uint8 frames, Uint8 rows) {
+void setSpriteGeometry(Registry &registry, entity_type entity, int x, int y, int width, int height, Uint8 frames) {
     auto &sprite = registry.get<Sprite>(entity);
     sprite.x = x;
     sprite.y = y;
     sprite.width = width;
     sprite.height = height;
     sprite.frames = frames;
-    sprite.rows = rows;
+    // horizontal sprites by default
+    sprite.cols = frames;
 }
 
 

@@ -218,8 +218,8 @@ void Spawner::spawnExplosion(Registry &registry, float x, float y) {
     auto entity = createExplosion(registry, 255);
     const auto &sprite = registry.get<Sprite>(entity);
     setPos(registry, entity, x - sprite.w / 2.f, y - sprite.h / 2.f);
-    registry.assign<SpriteAnimation>(entity, 1000_ui32, 0_ui32, false);
-    registry.assign<DestroyLater>(entity, 1000_ui32);
+    registry.assign<SpriteAnimation>(entity, 750_ui32, 0_ui32, false);
+    registry.assign<DestroyLater>(entity, 750_ui32);
 }
 
 

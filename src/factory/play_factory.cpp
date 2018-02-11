@@ -15,8 +15,9 @@ entity_type createExplosion(Registry &registry, int z) {
     const auto height = handle->height() / 3;
 
     auto entity = createSprite(registry, handle, z);
-    setSpriteGeometry(registry, entity, 0, 0, width, height, 15_ui8, 3_ui8);
+    setSpriteGeometry(registry, entity, 0, 0, width, height, 15_ui8);
     setSpriteSize(registry, entity, width, height);
+    registry.get<Sprite>(entity).cols = 5_ui8;
 
     return entity;
 }
