@@ -28,7 +28,6 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::CREDITS:
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
-        case PanelType::ACHIEVEMENTS:
         case PanelType::SPLASH_SCREEN:
             transform.x = -panel.w;
             break;
@@ -457,7 +456,6 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
-        case SceneType::ACHIEVEMENTS_PAGE:
         case SceneType::TRAINING:
         case SceneType::GAME_OVER:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
@@ -508,9 +506,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::SETTINGS);
-                    break;
-                case SceneType::ACHIEVEMENTS_PAGE:
-                    enableUIButtons(registry, PanelType::ACHIEVEMENTS);
                     break;
                 case SceneType::MENU_PAGE:
                     hideBackgroundPanels(registry);
@@ -582,14 +577,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
-                break;
-            case SceneType::ACHIEVEMENTS_PAGE:
-                enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                hideBackgroundPanels(registry);
-                discardExpiringContents(registry);
-                refreshAchievementsPanel(registry);
-                remaining = bgPanelTransition(registry, PanelType::ACHIEVEMENTS);
                 break;
             case SceneType::MENU_PAGE:
                 hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);

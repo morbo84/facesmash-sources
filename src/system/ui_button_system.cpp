@@ -106,7 +106,7 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
                     break;
                 case UIAction::ACHIEVEMENTS:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::ACHIEVEMENTS_PAGE);
+                    // TODO
                     break;
                 case UIAction::SAVE:
                     Locator::AvRecorder::ref().exportMedia();

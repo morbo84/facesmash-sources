@@ -18,8 +18,6 @@ void createCreditsPanel(Registry &);
 void createSupportPanel(Registry &);
 void refreshSupportPanel(Registry &);
 void createSettingsPanel(Registry &);
-void createAchievementsPanel(Registry &);
-void refreshAchievementsPanel(Registry &);
 void createTutorialTopPanel(Registry &);
 void createTutorialBottomPanel(Registry &);
 void createGameTopPanel(Registry &);

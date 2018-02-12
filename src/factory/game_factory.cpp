@@ -18,15 +18,15 @@ void createExitPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 19 * panel.w / 20, 10, 20);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 19 * panel.w / 20, 10, 20);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 10, 19 * panel.h / 20, 20);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 10, 19 * panel.h / 20, 20);
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 29 * panel.w / 30, 10, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_BOTTOM, 29 * panel.w / 30, 10, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_LEFT, 10, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_RIGHT, 10, 29 * panel.h / 30, 24);
 
-    setPos(registry, borderTop, panel.w / 40, panel.h / 40);
-    setPos(registry, borderBottom, panel.w / 40, 39 * panel.h / 40 - 10);
-    setPos(registry, borderLeft, panel.w / 40, panel.h / 40);
-    setPos(registry, borderRight, 39 * panel.w / 40 - 10, panel.h / 40);
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
 
     auto exitHandle = textureCache.handle("str/exit");
     auto exit = createSprite(registry, parent, exitHandle, 20);
@@ -181,6 +181,16 @@ void createCreditsPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::CREDITS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_3_TOP, 29 * panel.w / 30, 10, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_3_BOTTOM, 29 * panel.w / 30, 10, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_3_LEFT, 10, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_3_RIGHT, 10, 29 * panel.h / 30, 24);
+
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
+
     auto titleHandle = textureCache.handle("str/credits");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
@@ -192,6 +202,16 @@ void createSupportPanel(Registry &registry) {
 
     auto parent = createPanel(registry, PanelType::SUPPORT, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
+
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_4_TOP, 29 * panel.w / 30, 10, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_4_BOTTOM, 29 * panel.w / 30, 10, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_4_LEFT, 10, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_4_RIGHT, 10, 29 * panel.h / 30, 24);
+
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
 
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
@@ -209,6 +229,16 @@ void createSettingsPanel(Registry &registry) {
 
     auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
+
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_5_TOP, 29 * panel.w / 30, 10, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_5_BOTTOM, 29 * panel.w / 30, 10, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_5_LEFT, 10, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_5_RIGHT, 10, 29 * panel.h / 30, 24);
+
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
 
     auto titleHandle = textureCache.handle("str/settings");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
@@ -229,23 +259,6 @@ void createSettingsPanel(Registry &registry) {
     auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
     const auto &videoSprite = registry.get<Sprite>(videoButton);
     setPos(registry, videoButton, (panel.w - videoSprite.w) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoSprite.h / 2);
-}
-
-
-void createAchievementsPanel(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-    auto parent = createPanel(registry, PanelType::ACHIEVEMENTS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
-    const auto &panel = registry.get<Panel>(parent);
-
-    auto titleHandle = textureCache.handle("str/achievements");
-    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
-    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
-}
-
-
-void refreshAchievementsPanel(Registry &registry) {
-    // TODO
 }
 
 
