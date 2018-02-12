@@ -38,7 +38,6 @@ void prepareGameStrings(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto fontTiny = ttfFontCache.handle("font/ui/tiny");
     auto fontSmall = ttfFontCache.handle("font/ui/small");
     auto fontNormal = ttfFontCache.handle("font/ui/normal");
     auto fontLarge = ttfFontCache.handle("font/ui/large");
@@ -71,8 +70,8 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontLarge, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontSmall, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/miss/10", "10", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/miss/20", "20", renderer, *fontSmall, colorRed);

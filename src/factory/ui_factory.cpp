@@ -115,84 +115,108 @@ entity_type createHUD(Registry &registry, SDLTextureHandle handle, int z) {
 }
 
 
-entity_type createBoxBorder(Registry &registry, entity_type parent, BoxBorderType type, int width, int height, int z) {
+entity_type createBoxBorder(Registry &registry, entity_type parent, BoxBorderType type, int size, int z) {
     auto &textureCache = Locator::TextureCache::ref();
     auto handle = textureCache.handle("ui/win_hud");
     auto entity = createSprite(registry, parent, handle, z);
-    setSpriteSize(registry, entity, width, height);
+    const auto sz = 5;
 
     switch(type) {
     case BoxBorderType::BOX_1_TOP:
-        setSpriteGeometry(registry, entity, 720, 0, 436, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 0, 436, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_1_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 413, 436, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 418, 436, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_1_LEFT:
-        setSpriteGeometry(registry, entity, 720, 0, 10, 423, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 0, sz, 423, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_1_RIGHT:
-        setSpriteGeometry(registry, entity, 1146, 0, 10, 423, 1_ui8);
+        setSpriteGeometry(registry, entity, 1151, 0, sz, 423, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_2_TOP:
-        setSpriteGeometry(registry, entity, 720, 423, 436, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 423, 436, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_2_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 609, 436, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 614, 436, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_2_LEFT:
-        setSpriteGeometry(registry, entity, 720, 423, 10, 196, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 423, sz, 196, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_2_RIGHT:
-        setSpriteGeometry(registry, entity, 1146, 423, 10, 196, 1_ui8);
+        setSpriteGeometry(registry, entity, 1151, 423, sz, 196, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_3_TOP:
-        setSpriteGeometry(registry, entity, 720, 619, 356, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 619, 356, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_3_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 912, 356, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 917, 356, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_3_LEFT:
-        setSpriteGeometry(registry, entity, 720, 619, 10, 303, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 619, sz, 303, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_3_RIGHT:
-        setSpriteGeometry(registry, entity, 1066, 619, 10, 303, 1_ui8);
+        setSpriteGeometry(registry, entity, 1071, 619, sz, 303, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_4_TOP:
-        setSpriteGeometry(registry, entity, 720, 922, 437, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 922, 437, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_4_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 1082, 437, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1087, 437, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_4_LEFT:
-        setSpriteGeometry(registry, entity, 720, 922, 10, 170, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 922, sz, 170, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_4_RIGHT:
-        setSpriteGeometry(registry, entity, 1147, 922, 10, 170, 1_ui8);
+        setSpriteGeometry(registry, entity, 1152, 922, sz, 170, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_5_TOP:
-        setSpriteGeometry(registry, entity, 720, 1092, 276, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1092, 276, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_5_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 1358, 276, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1363, 276, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_5_LEFT:
-        setSpriteGeometry(registry, entity, 720, 1092, 10, 276, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1092, sz, 276, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_5_RIGHT:
-        setSpriteGeometry(registry, entity, 986, 1092, 10, 276, 1_ui8);
+        setSpriteGeometry(registry, entity, 991, 1092, sz, 276, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_6_TOP:
-        setSpriteGeometry(registry, entity, 720, 1368, 356, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1368, 356, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_6_BOTTOM:
-        setSpriteGeometry(registry, entity, 720, 1528, 356, 10, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1533, 356, sz, 1_ui8);
+        setSpriteSize(registry, entity, size, sz);
         break;
     case BoxBorderType::BOX_6_LEFT:
-        setSpriteGeometry(registry, entity, 720, 1368, 10, 170, 1_ui8);
+        setSpriteGeometry(registry, entity, 720, 1368, sz, 170, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     case BoxBorderType::BOX_6_RIGHT:
-        setSpriteGeometry(registry, entity, 1066, 1368, 10, 170, 1_ui8);
+        setSpriteGeometry(registry, entity, 1071, 1368, sz, 170, 1_ui8);
+        setSpriteSize(registry, entity, sz, size);
         break;
     }
 

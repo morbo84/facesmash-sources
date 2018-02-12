@@ -18,15 +18,15 @@ void createExitPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::EXIT, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 29 * panel.w / 30, 10, 21);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_BOTTOM, 29 * panel.w / 30, 10, 22);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_LEFT, 10, 29 * panel.h / 30, 23);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_RIGHT, 10, 29 * panel.h / 30, 24);
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_RIGHT, 29 * panel.h / 30, 24);
 
     setPos(registry, borderTop, panel.w / 60, panel.h / 60);
-    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
     setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
-    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
 
     auto exitHandle = textureCache.handle("str/exit");
     auto exit = createSprite(registry, parent, exitHandle, 20);
@@ -75,7 +75,7 @@ void createBackgroundTopPanel(Registry &registry) {
     setSpriteGeometry(registry, bg, 0, 0, width, height, 1_ui8);
     setSpriteSize(registry, bg, width, height);
 
-    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_TOP, width, 5, 140);
+    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_TOP, width, 140);
     setPos(registry, border, 0, height - 5);
     registry.get<Renderable>(border).alpha = 120;
 
@@ -108,7 +108,7 @@ void createBackgroundBottomPanel(Registry &registry) {
     setSpriteGeometry(registry, bg, 0, height, width, height, 1_ui8);
     setSpriteSize(registry, bg, width, height);
 
-    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_BOTTOM, width, 5, 140);
+    auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_BOTTOM, width, 140);
     registry.get<Renderable>(border).alpha = 120;
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
@@ -181,15 +181,15 @@ void createCreditsPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::CREDITS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_3_TOP, 29 * panel.w / 30, 10, 21);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_3_BOTTOM, 29 * panel.w / 30, 10, 22);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_3_LEFT, 10, 29 * panel.h / 30, 23);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_3_RIGHT, 10, 29 * panel.h / 30, 24);
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_3_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_3_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_3_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_3_RIGHT, 29 * panel.h / 30, 24);
 
     setPos(registry, borderTop, panel.w / 60, panel.h / 60);
-    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
     setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
-    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
 
     auto titleHandle = textureCache.handle("str/credits");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
@@ -203,15 +203,15 @@ void createSupportPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::SUPPORT, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_4_TOP, 29 * panel.w / 30, 10, 21);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_4_BOTTOM, 29 * panel.w / 30, 10, 22);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_4_LEFT, 10, 29 * panel.h / 30, 23);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_4_RIGHT, 10, 29 * panel.h / 30, 24);
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_4_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_4_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_4_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_4_RIGHT, 29 * panel.h / 30, 24);
 
     setPos(registry, borderTop, panel.w / 60, panel.h / 60);
-    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
     setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
-    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
 
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
@@ -230,15 +230,15 @@ void createSettingsPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_5_TOP, 29 * panel.w / 30, 10, 21);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_5_BOTTOM, 29 * panel.w / 30, 10, 22);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_5_LEFT, 10, 29 * panel.h / 30, 23);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_5_RIGHT, 10, 29 * panel.h / 30, 24);
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_5_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_5_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_5_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_5_RIGHT, 29 * panel.h / 30, 24);
 
     setPos(registry, borderTop, panel.w / 60, panel.h / 60);
-    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 10);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
     setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
-    setPos(registry, borderRight, 59 * panel.w / 60 - 10, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
 
     auto titleHandle = textureCache.handle("str/settings");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
