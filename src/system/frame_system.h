@@ -8,7 +8,7 @@
 namespace gamee {
 
 
-class FrameAvailableEvent;
+struct FrameAvailableEvent;
 
 
 struct FrameSystem final {

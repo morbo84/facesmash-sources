@@ -12,19 +12,19 @@
 namespace gamee {
 
 
-struct DebugInfo final {
+struct DebugInfo {
     entity_type time[4];
     entity_type fps[2];
     float average{0.f};
 };
 
 
-struct SmashButton final {
+struct SmashButton {
     FaceType type;
 };
 
 
-struct HUD final {
+struct HUD {
     SDLTextureHandle handle;
     int width;
     int height;
@@ -35,40 +35,30 @@ struct HUD final {
 };
 
 
-struct Sprite final {
-    SDLTextureHandle handle;
-    int width;
-    int height;
-    int w;
-    int h;
-    int x{0};
-    int y{0};
+struct Sprite: HUD {
     Uint8 frames{1_ui8};
     Uint8 cols{1_ui8};
     Uint8 frame{0_ui8};
 };
 
 
-struct Renderable final {
+struct Renderable {
     float angle{0.f};
     int z{127};
     int alpha{255};
 };
 
 
-struct Transform final {
+struct Transform {
     entity_type parent;
     float x;
     float y;
 };
 
 
-struct Camera final {};
-
-
-struct CameraShake final {
-    delta_type remaining{250_ui32};
-    Uint8 shake{4_ui8};
+struct Camera {
+    Uint8 shake{8_ui8};
+    delta_type remaining{0_ui32};
 };
 
 
@@ -83,14 +73,14 @@ struct BoundingBox final: SDL_Rect {
 };
 
 
-struct SpriteAnimation final {
+struct SpriteAnimation {
     delta_type duration;
     delta_type elapsed{0_ui32};
     bool repeat{true};
 };
 
 
-struct RotationAnimation final {
+struct RotationAnimation {
     using ease_type = float(*)(float, float, float, float);
     float from;
     float to;
@@ -101,7 +91,7 @@ struct RotationAnimation final {
 };
 
 
-struct FadeAnimation final {
+struct FadeAnimation {
     using ease_type = float(*)(float, float, float, float);
     int from;
     int to;
@@ -111,27 +101,12 @@ struct FadeAnimation final {
 };
 
 
-struct HorizontalAnimation final {
-    using ease_type = float(*)(float, float, float, float);
-    int from;
-    int to;
-    delta_type duration;
-    delta_type elapsed{0_ui32};
-    ease_type ease{&linear};
-};
+// it's useful to have different types, but after all they are identical :-)
+struct HorizontalAnimation: FadeAnimation {};
+struct VerticalAnimation: FadeAnimation {};
 
 
-struct VerticalAnimation final {
-    using ease_type = float(*)(float, float, float, float);
-    int from;
-    int to;
-    delta_type duration;
-    delta_type elapsed{0_ui32};
-    ease_type ease{&linear};
-};
-
-
-struct SizeAnimation final {
+struct SizeAnimation {
     using ease_type = float(*)(float, float, float, float);
     int fromW;
     int fromH;
@@ -143,7 +118,7 @@ struct SizeAnimation final {
 };
 
 
-struct UIButton final {
+struct UIButton {
     bool enabled;
     UIAction action;
     bool popup{false};
@@ -152,7 +127,7 @@ struct UIButton final {
 };
 
 
-struct Movement final {
+struct Movement {
     float gravity;
     float velX;
     float velY;
@@ -161,38 +136,41 @@ struct Movement final {
 };
 
 
-struct Face final {
+struct Face {
     Uint8 smash;
     Uint8 miss;
     FaceType type;
 };
 
 
-struct Item final {
+struct Item {
     ItemType type;
 };
 
 
-struct Destroyable final {};
+struct Destroyable {};
 
 
-struct DestroyLater final {
+struct DestroyLater {
     delta_type remaining{0_ui32};
 };
 
 
-struct ExpiringContent final {};
+struct ExpiringContent {};
 
 
-struct GameTimer final {
-    entity_type entities[2];
-    delta_type remaining{60999_ui32};
-    bool enabled{false};
+struct Timer {
+    delta_type remaining{0_ui32};
+    bool enabled{true};
 };
 
 
-struct PlayerScore final {
-    entity_type entities[5];
+struct TimerObserver {
+    entity_type entities[2];
+};
+
+
+struct PlayerScore {
     int score{0};
     int current{0};
     int hitAngry{0};
@@ -204,32 +182,29 @@ struct PlayerScore final {
 };
 
 
-struct Reward final {
-    bool dirty{false};
+struct PlayerScoreObserver {
+    entity_type entities[5];
 };
 
 
-struct LetsPlay final {
-    // time steps
-    bool remaining55000{false};
-    bool remaining50000{false};
-    bool remaining40000{false};
-    bool remaining30000{false};
-    bool remaining15000{false};
-    bool remaining7500{false};
-    // score steps
-    int nextScoreStep{2500};
+struct LetsPlay {
+    bool enabled{false};
 };
 
 
-struct Panel final {
+struct LetsTrain {
+    // TODO
+};
+
+
+struct Panel {
     int w;
     int h;
     PanelType type;
 };
 
 
-struct CameraFrame final {
+struct CameraFrame {
     bool acquire{false};
 };
 

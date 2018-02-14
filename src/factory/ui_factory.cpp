@@ -224,4 +224,20 @@ entity_type createBoxBorder(Registry &registry, entity_type parent, BoxBorderTyp
 }
 
 
+entity_type createProgressBar(Registry &registry, entity_type parent, int step, int z) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("ui/win_hud");
+    auto entity = createSprite(registry, parent, handle, z);
+
+    step = step < 0 ? 0 : step;
+    step = step > 10 ? 10 : step;
+
+    setSpriteGeometry(registry, entity, 0, 1280, 512, 64, 11_ui8);
+    // it's a shame, the model for the progress bar is vertical :-)
+    registry.get<Sprite>(entity).cols = 1_ui8;
+
+    return entity;
+}
+
+
 }

@@ -46,6 +46,19 @@ struct FaceEvent final {
 };
 
 
+struct SmashEvent final {
+    int angry;
+    int disgusted;
+    int happy;
+    int surprised;
+    int fearful;
+    int sad;
+    int combo;
+    int smash;
+    int miss;
+};
+
+
 struct FrameAvailableEvent final {};
 struct ActivateEasterEggEvent final {};
 

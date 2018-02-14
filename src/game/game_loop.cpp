@@ -79,7 +79,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 
         itemSystem.update(registry, spawner, delta);
         faceSmashSystem.update(registry, spawner);
-        rewardSystem.update(registry);
 
         // invoke systems with a fixed timestep
         while(accumulator >= msPerUpdate) {

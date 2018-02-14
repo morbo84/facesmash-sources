@@ -227,7 +227,7 @@ void refreshSupportPanel(Registry &registry) {
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 3 * logicalHeight / 4);
+    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 5 * logicalHeight / 8);
     const auto &panel = registry.get<Panel>(parent);
 
     auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_5_TOP, 29 * panel.w / 30, 21);
@@ -339,36 +339,30 @@ void createGameTopPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto playerScoreEntity = createHUD(registry, parent, scoreHandle, 160);
-    auto &playerScore = registry.attach<PlayerScore>(playerScoreEntity);
+    auto &playerScoreObserver = registry.assign<PlayerScoreObserver>(playerScoreEntity);
     setPos(registry, playerScoreEntity, offset + .1f * scoreHandle->width(), .4f * scoreHandle->height());;
     offset = registry.get<Transform>(playerScoreEntity).x + 1.1f * scoreHandle->width();
 
-    for(auto i = 0u; i < std::extent<decltype(PlayerScore::entities)>::value; ++i) {
+    for(auto i = 0u; i < std::extent<decltype(PlayerScoreObserver::entities)>::value; ++i) {
         auto handle = i ? symEmptyHandle : sym0Handle;
-        playerScore.entities[i] = createHUD(registry, parent, handle, 160);
-        setPos(registry, playerScore.entities[i], offset, .4f * scoreHandle->height());
+        playerScoreObserver.entities[i] = createHUD(registry, parent, handle, 160);
+        setPos(registry, playerScoreObserver.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
 
     offset = panel.w - .2f * scoreHandle->width() - 2 * sym0Handle->width() - timerHandle->width();
 
-    auto gameTimerEntity = createHUD(registry, parent, timerHandle, 160);
-    auto &gameTimer = registry.attach<GameTimer>(gameTimerEntity);
-    setPos(registry, gameTimerEntity, offset, .4f * scoreHandle->height());;
-    offset = registry.get<Transform>(gameTimerEntity).x + timerHandle->width() + .1f * scoreHandle->width();
+    auto timerEntity = createHUD(registry, parent, timerHandle, 160);
+    auto &timerObserver = registry.assign<TimerObserver>(timerEntity);
+    setPos(registry, timerEntity, offset, .4f * scoreHandle->height());;
+    offset = registry.get<Transform>(timerEntity).x + timerHandle->width() + .1f * scoreHandle->width();
 
-    for(auto i = 0u; i < std::extent<decltype(GameTimer::entities)>::value; ++i) {
+    for(auto i = 0u; i < std::extent<decltype(TimerObserver::entities)>::value; ++i) {
         auto handle = i ? symEmptyHandle : sym0Handle;
-        gameTimer.entities[i] = createHUD(registry, parent, handle, 160);
-        setPos(registry, gameTimer.entities[i], offset, .4f * scoreHandle->height());
+        timerObserver.entities[i] = createHUD(registry, parent, handle, 160);
+        setPos(registry, timerObserver.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
-
-    auto rewardHandle = textureCache.handle("str/reward/perfect");
-    auto reward = createSprite(registry, parent, rewardHandle, 160);
-    setPos(registry, reward, (panel.w - rewardHandle->width()) / 2, panel.h - rewardHandle->height() / 2);
-    registry.get<Renderable>(reward).alpha = 0;
-    registry.attach<Reward>(reward);
 }
 
 

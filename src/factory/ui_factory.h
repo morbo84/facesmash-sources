@@ -14,7 +14,8 @@ entity_type createPopupUIButton(Registry &, entity_type, UIAction, int);
 entity_type createHUD(Registry &, entity_type, SDLTextureHandle, int);
 entity_type createHUD(Registry &, SDLTextureHandle, int);
 entity_type createBoxBorder(Registry &, entity_type, BoxBorderType, int, int);
-
+entity_type createBoxBorder(Registry &, entity_type, BoxBorderType, int, int);
+entity_type createProgressBar(Registry &, entity_type, int, int);
 
 }
 

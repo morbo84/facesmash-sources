@@ -2,17 +2,27 @@
 #define FACE_SMASH_SYSTEM_SCORE_SYSTEM_H
 
 
+#include "../event/event.hpp"
 #include "../common/types.h"
 
 
 namespace gamee {
 
 
-struct GameRenderer;
+struct SmashEvent;
 
 
 struct ScoreSystem final {
+    ScoreSystem() noexcept;
+    ~ScoreSystem() noexcept;
+
+    void receive(const SmashEvent &) noexcept;
+
     void update(Registry &);
+
+private:
+    bool dirty;
+    SmashEvent last;
 };
 
 

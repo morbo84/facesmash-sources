@@ -2,6 +2,8 @@
 #include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
+#include "../factory/common.h"
+#include "../factory/play_factory.h"
 #include "../factory/spawner.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -32,12 +34,10 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 
 
 void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
-    auto &score = registry.get<PlayerScore>();
     auto &textureCache = Locator::TextureCache::ref();
-    int total = 0;
-    int combo = 0;
 
     auto view = registry.view<Face, Transform, BoundingBox>();
+    SmashEvent event{};
 
     view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
@@ -53,34 +53,33 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
 
                     switch(smash.type) {
                     case FaceType::ANGRY:
-                        ++score.hitAngry;
+                        ++event.angry;
                         break;
                     case FaceType::DISGUSTED:
-                        ++score.hitDisgusted;
+                        ++event.disgusted;
                         break;
                     case FaceType::HAPPY:
-                        ++score.hitHappy;
+                        ++event.happy;
                         break;
                     case FaceType::SURPRISED:
-                        ++score.hitSurprised;
+                        ++event.surprised;
                         break;
                     case FaceType::FEARFUL:
-                        ++score.hitFearful;
+                        ++event.fearful;
                         break;
                     case FaceType::SAD:
-                        ++score.hitSad;
+                        ++event.sad;
                         break;
                     };
 
-                    ++combo;
-                    total += smash.smash;
-                    score.score += smash.smash;
+                    event.smash += smash.smash;
+                    ++event.combo;
 
                     registry.destroy(entity);
                 }
             } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
                 spawner.spawnMissScore(registry, smash.miss, x, y);
-                score.score = (smash.miss > score.score) ? 0 : (score.score - smash.miss);
+                event.miss += smash.miss;
                 registry.destroy(entity);
             }
         } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
@@ -91,28 +90,34 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
     dirty = false;
 
     // check rewards
-    auto gotIt = [&](auto handle, auto amount) {
-        registry.accomodate<Sprite>(registry.attachee<Reward>(), handle, handle->width(), handle->height(), handle->width(), handle->height());
-        registry.get<Reward>().dirty = true;
-        score.score += amount;
+    auto reward = [&](auto handle, auto shake) {
+        auto &camera = registry.get<Camera>();
+        camera.remaining = shakeDuration;
+        camera.shake = shake;
+
+        auto entity = createInGameMessage(registry, handle, 160);
+        const auto &sprite = registry.get<Sprite>(entity);
+        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
     };
 
-    if(1 == combo && registry.empty<Face>()) {
+    if(1 == event.combo && registry.empty<Face>()) {
         // no more faces to smash
-        gotIt(textureCache.handle("str/reward/perfect"), total);
-    } else if(2 == combo) {
+        reward(textureCache.handle("str/reward/perfect"), 8_ui8);
+    } else if(2 == event.combo) {
         // 2x combo
-        gotIt(textureCache.handle("str/reward/x2"), 2 * total);
-    } else if(3 == combo) {
+        reward(textureCache.handle("str/reward/x2"), 2_ui8);
+    } else if(3 == event.combo) {
         // 3x combo
-        gotIt(textureCache.handle("str/reward/x3"), 3 * total);
-    } else if(4 == combo) {
+        reward(textureCache.handle("str/reward/x3"), 4_ui8);
+    } else if(4 == event.combo) {
         // 4x combo
-        gotIt(textureCache.handle("str/reward/x4"), 4 * total);
-    } else if(5 <= combo) {
+        reward(textureCache.handle("str/reward/x4"), 6_ui8);
+    } else if(5 <= event.combo) {
         // 5x combo
-        gotIt(textureCache.handle("str/reward/x5"), 5 * total);
+        reward(textureCache.handle("str/reward/x5"), 8_ui8);
     }
+
+    Locator::Dispatcher::ref().enqueue<SmashEvent>(event);
 }
 
 

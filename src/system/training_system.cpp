@@ -6,7 +6,9 @@ namespace gamee {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner) {
-    // TODO
+    if(registry.has<LetsTrain>()) {
+        // TODO
+    }
 }
 
 

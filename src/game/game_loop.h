@@ -17,7 +17,6 @@
 #include "../system/movement_system.h"
 #include "../system/recording_system.h"
 #include "../system/rendering_system.h"
-#include "../system/reward_system.h"
 #include "../system/scene_system.h"
 #include "../system/score_system.h"
 #include "../system/smash_button_system.h"
@@ -61,7 +60,6 @@ private:
     MovementSystem movementSystem;
     RecordingSystem recordingSystem;
     RenderingSystem renderingSystem;
-    RewardSystem rewardSystem;
     SceneSystem sceneSystem;
     ScoreSystem scoreSystem;
     SmashButtonSystem smashButtonSystem;
