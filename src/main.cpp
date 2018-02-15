@@ -35,28 +35,34 @@ void releaseBasicServices() {
 
 
 void initPlatformServices() {
-    gamee::Locator::FaceBus::set<gamee::FaceBusService>();
-    gamee::Locator::Audio::set<gamee::AudioSdl>();
-
 #ifdef __ANDROID__
+    gamee::Locator::Settings::set<gamee::SettingsOnFile>();
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
-    gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
-    gamee::Locator::Settings::set<gamee::SettingsOnFile>();
+
+    auto &settings = gamee::Locator::Settings::ref();
+
+    settings.read("controls/video", true)
+        ? gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>()
+        : gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
 #else
+    gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
-    gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
+
+    auto &settings = gamee::Locator::Settings::ref();
 #endif
 
-    gamee::Locator::Audio::ref().init();
+    gamee::Locator::FaceBus::set<gamee::FaceBusService>();
+
+    settings.read("controls/audio", true)
+            ? gamee::Locator::Audio::set<gamee::AudioSdl>()
+            : gamee::Locator::Audio::set<gamee::AudioNull>();
 }
 
 
 void releasePlatformServices() {
-    gamee::Locator::Audio::ref().release();
-
     gamee::Locator::AvRecorder::reset();
     gamee::Locator::Ads::reset();
     gamee::Locator::Camera::reset();

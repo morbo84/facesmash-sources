@@ -9,9 +9,6 @@ namespace gamee {
 
 
 struct AudioNull: AudioService {
-    void init() override;
-    void release() override;
-
     bool isMute() const noexcept override;
 
     // TODO

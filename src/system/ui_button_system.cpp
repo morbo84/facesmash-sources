@@ -14,36 +14,12 @@ namespace gamee {
 
 
 static void switchAudio(Registry &registry, entity_type button) {
-    auto &textureCache = Locator::TextureCache::ref();
-    const auto &audio = Locator::Audio::ref();
-
-    if(audio.isMute()) {
-        registry.get<Sprite>(button).handle = textureCache.handle("img/audio/on");
-        Locator::Audio::set<AudioSdl>();
-    } else {
-        registry.get<Sprite>(button).handle = textureCache.handle("img/audio/off");
-        Locator::Audio::set<AudioNull>();
-    }
+    // TODO
 }
 
 
 static void switchVideo(Registry &registry, entity_type button) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-#ifdef __ANDROID__
-    const auto &muxer = Locator::AvRecorder::ref();
-
-    if(muxer.available()) {
-        registry.get<Sprite>(button).handle = textureCache.handle("img/video/on");
-        Locator::AvRecorder::set<AvRecorderAndroid>();
-    } else {
-        registry.get<Sprite>(button).handle = textureCache.handle("img/video/off");
-        Locator::AvRecorder::set<AvRecorderNull>();
-    }
-#else
-    registry.get<Sprite>(button).handle = textureCache.handle("img/video/off");
-    Locator::AvRecorder::set<AvRecorderNull>();
-#endif
+    // TODO
 }
 
 
