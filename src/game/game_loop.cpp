@@ -88,6 +88,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
             accumulator -= msPerUpdate;
         }
 
+        achievementsSystem.update(registry);
         scoreSystem.update(registry);
         timerSystem.update(registry, delta);
         cameraSystem.update(registry, delta);

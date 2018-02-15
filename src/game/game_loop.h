@@ -6,6 +6,7 @@
 
 #include "../common/types.h"
 #include "../factory/spawner.h"
+#include "../system/achievements_system.h"
 #include "../system/animation_system.h"
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
@@ -49,6 +50,7 @@ private:
     // factory of game objects
     Spawner spawner;
     // systems
+    AchievementsSystem achievementsSystem;
     AnimationSystem animationSystem;
     DebugSystem debugSystem;
     CameraSystem cameraSystem;

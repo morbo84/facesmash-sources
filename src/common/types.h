@@ -135,6 +135,50 @@ enum class BoxBorderType: Uint8 {
 };
 
 
+enum class AchievementType: Uint8 {
+    // thanks to our supporters
+    FACE_SMASH_SUPPORTER,
+    // easy to achieve, it gratifies the user immediately
+    MY_FIRST_COMBO,
+    // collectors, 50 combo of the given type
+    COLLECTOR_2X,
+    COLLECTOR_3X,
+    COLLECTOR_4X,
+    COLLECTOR_5X,
+    // my first smash
+    SMASH_ME_BABY,
+    // 100th smash
+    THE_SNIPER,
+    // 1000th smash
+    GOD_SMASHER,
+    // 50 smashes of the given type
+    ANGRY_SMASH,
+    DISGUSTED_SMASH,
+    FEARFUL_SMASH,
+    HAPPY_SMASH,
+    SAD_SMASH,
+    SURPRISED_SMASH,
+    // smash in [00:00, 00:05] (keep an eye to the timezone)
+    MIDNIGHT_COMBO,
+    // smash in [12:00, 12:05] (keep an eye to the timezone)
+    NOON_COMBO,
+    // smash only happy faces in a match
+    I_AM_SO_HAPPY,
+    // smash only sad faces in a match
+    BLUE_IS_THE_NEW_SMASH,
+    // smash a face during the training
+    NO_PAIN_NO_GAME,
+    // all the faces one after the other in a row
+    ALL_IN_A_ROW,
+    // my first 1000 points
+    KINDERGARTEN,
+    // my first 7500 points
+    READY_TO_SMASH,
+    // my first 15000 points
+    SMASH_IS_MY_JOB
+};
+
+
 }
 
 

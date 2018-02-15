@@ -27,6 +27,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/service/settings_onfile.cpp
     ${facesmash_SOURCE_DIR}/src/service/settings_onmemory.cpp
+    ${facesmash_SOURCE_DIR}/src/system/achievements_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
