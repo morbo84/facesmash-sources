@@ -9,9 +9,6 @@
 namespace gamee {
 
 
-struct SmashEvent;
-
-
 struct ScoreSystem final {
     ScoreSystem() noexcept;
     ~ScoreSystem() noexcept;
