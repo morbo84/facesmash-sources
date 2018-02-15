@@ -84,6 +84,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::ACHIEVEMENTS:
                     // TODO
                     break;
+                case UIAction::LEADERBOARD:
+                    // TODO
+                    break;
                 case UIAction::SAVE:
                     Locator::AvRecorder::ref().exportMedia();
                     break;

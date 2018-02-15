@@ -28,6 +28,9 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::ACHIEVEMENTS:
         setSpriteGeometry(registry, entity, 1024, 1280, width, height, 4_ui8);
         break;
+    case UIAction::LEADERBOARD:
+        setSpriteGeometry(registry, entity, 512, 1664, width, height, 4_ui8);
+        break;
     case UIAction::CREDITS:
         setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8);
         break;

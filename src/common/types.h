@@ -78,6 +78,7 @@ enum class UIAction: Uint8 {
     SUPPORT,
     SETTINGS,
     ACHIEVEMENTS,
+    LEADERBOARD,
     THE_GAME,
     TRAINING,
     RELOAD,
