@@ -65,9 +65,12 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
         setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
         break;
     case UIAction::THE_GAME:
-        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 512, 128, width, height, 4_ui8);
         break;
     case UIAction::TRAINING:
+        setSpriteGeometry(registry, entity, 0, 1664, width, height, 4_ui8);
+        break;
+    case UIAction::LOGIN:
         setSpriteGeometry(registry, entity, 0, 256, width, height, 4_ui8);
         break;
     case UIAction::EASTER_EGG:

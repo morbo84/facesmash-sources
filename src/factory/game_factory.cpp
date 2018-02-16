@@ -154,6 +154,12 @@ void createMenuTopPanel(Registry &registry) {
     setPopupUIButtonSize(registry, settingsButton, 2 * settingsSprite.w / 3, 2 * settingsSprite.h / 3);
     setSpriteSize(registry, settingsButton, 2 * settingsSprite.w / 3, 2 * settingsSprite.h / 3);
     setPos(registry, settingsButton, panel.w - 9 * settingsSprite.w / 8, settingsSprite.h / 8);
+
+    auto loginButton = createPopupUIButton(registry, parent, UIAction::LOGIN, 150);
+    const auto &loginSprite = registry.get<Sprite>(loginButton);
+    setPopupUIButtonSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
+    setSpriteSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
+    setPos(registry, loginButton, loginSprite.w / 8, loginSprite.h / 8);
 }
 
 

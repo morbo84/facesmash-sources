@@ -100,6 +100,11 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
     };
 
+    if(event.combo > 5) {
+        // max combo allowed
+        event.combo = 5;
+    }
+
     if(1 == event.combo && registry.empty<Face>()) {
         // no more faces to smash
         reward(textureCache.handle("str/reward/perfect"), 8_ui8);
@@ -112,7 +117,7 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
     } else if(4 == event.combo) {
         // 4x combo
         reward(textureCache.handle("str/reward/x4"), 6_ui8);
-    } else if(5 <= event.combo) {
+    } else if(5 == event.combo) {
         // 5x combo
         reward(textureCache.handle("str/reward/x5"), 8_ui8);
     }

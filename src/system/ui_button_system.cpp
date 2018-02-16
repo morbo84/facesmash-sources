@@ -96,6 +96,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::SWITCH_VIDEO:
                     switchVideo(registry, entity);
                     break;
+                case UIAction::LOGIN:
+                    // TODO
+                    break;
                 }
             }
         });

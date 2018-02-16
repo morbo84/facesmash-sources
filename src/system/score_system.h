@@ -18,6 +18,7 @@ struct ScoreSystem final {
     void update(Registry &);
 
 private:
+    int current;
     bool dirty;
     SmashEvent last;
 };

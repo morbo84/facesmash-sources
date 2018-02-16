@@ -53,9 +53,9 @@ struct SmashEvent final {
     int surprised;
     int fearful;
     int sad;
-    int combo;
     int smash;
     int miss;
+    int combo;
 };
 
 
