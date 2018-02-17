@@ -485,8 +485,6 @@ void refreshGameOverPanel(Registry &registry) {
         score /= 10;
         printScore(score % 10, [](const auto &sprite) { return -5 * sprite.w / 2; });
     }
-
-    // TODO
 }
 
 
