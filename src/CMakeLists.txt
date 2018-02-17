@@ -29,8 +29,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/settings_onmemory.cpp
     ${facesmash_SOURCE_DIR}/src/system/achievements_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/easter_egg_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
