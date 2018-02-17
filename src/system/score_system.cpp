@@ -62,7 +62,7 @@ void ScoreSystem::update(Registry &registry) {
 
         registry.view<PlayerScoreObserver>().each([&](auto, auto &observer) {
             auto &textureCache = Locator::TextureCache::ref();
-            auto symEmptyHandle = textureCache.handle("str/ ");
+            auto symEmptyHandle = textureCache.handle("str/small/ ");
 
             // cap the score to the limit imposed by the number of entities used to represent it
             const int cap = std::pow(10, std::extent<decltype(PlayerScoreObserver::entities)>::value);
@@ -76,7 +76,7 @@ void ScoreSystem::update(Registry &registry) {
             }
 
             for(auto i = offset; i > 0; --i) {
-                auto handle = toStrHud(score % 10);
+                auto handle = toStrSmallHandle(score % 10);
                 registry.accomodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
                 score /= 10;
             }

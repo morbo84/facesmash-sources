@@ -38,20 +38,38 @@ SDL_Point transformToPosition(const Registry &registry, entity_type entity, cons
 }
 
 
-SDLTextureHandle toStrHud(int value) {
+SDLTextureHandle toStrSmallHandle(int value) {
     assert(value >= 0);
     assert(value < 10);
     return std::array<SDLTextureHandle, 10>{
-        Locator::TextureCache::ref().handle("str/0"),
-        Locator::TextureCache::ref().handle("str/1"),
-        Locator::TextureCache::ref().handle("str/2"),
-        Locator::TextureCache::ref().handle("str/3"),
-        Locator::TextureCache::ref().handle("str/4"),
-        Locator::TextureCache::ref().handle("str/5"),
-        Locator::TextureCache::ref().handle("str/6"),
-        Locator::TextureCache::ref().handle("str/7"),
-        Locator::TextureCache::ref().handle("str/8"),
-        Locator::TextureCache::ref().handle("str/9")
+        Locator::TextureCache::ref().handle("str/small/0"),
+        Locator::TextureCache::ref().handle("str/small/1"),
+        Locator::TextureCache::ref().handle("str/small/2"),
+        Locator::TextureCache::ref().handle("str/small/3"),
+        Locator::TextureCache::ref().handle("str/small/4"),
+        Locator::TextureCache::ref().handle("str/small/5"),
+        Locator::TextureCache::ref().handle("str/small/6"),
+        Locator::TextureCache::ref().handle("str/small/7"),
+        Locator::TextureCache::ref().handle("str/small/8"),
+        Locator::TextureCache::ref().handle("str/small/9")
+    }[value];
+}
+
+
+SDLTextureHandle toStrNormalHandle(int value) {
+    assert(value >= 0);
+    assert(value < 10);
+    return std::array<SDLTextureHandle, 10>{
+        Locator::TextureCache::ref().handle("str/normal/0"),
+        Locator::TextureCache::ref().handle("str/normal/1"),
+        Locator::TextureCache::ref().handle("str/normal/2"),
+        Locator::TextureCache::ref().handle("str/normal/3"),
+        Locator::TextureCache::ref().handle("str/normal/4"),
+        Locator::TextureCache::ref().handle("str/normal/5"),
+        Locator::TextureCache::ref().handle("str/normal/6"),
+        Locator::TextureCache::ref().handle("str/normal/7"),
+        Locator::TextureCache::ref().handle("str/normal/8"),
+        Locator::TextureCache::ref().handle("str/normal/9")
     }[value];
 }
 

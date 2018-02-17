@@ -326,6 +326,14 @@ static delta_type gameOverTransition(Registry &registry) {
         case PanelType::GAME_OVER:
             registry.accomodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
+        case PanelType::THE_GAME_TOP:
+        case PanelType::TRAINING_TOP:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::THE_GAME_BOTTOM:
+        case PanelType::TRAINING_BOTTOM:
+            registry.accomodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
             break;

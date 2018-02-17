@@ -16,7 +16,8 @@ int numOfDigits(int);
 
 
 SDL_Point transformToPosition(const Registry &, entity_type entity, const Transform &);
-SDLTextureHandle toStrHud(int);
+SDLTextureHandle toStrSmallHandle(int);
+SDLTextureHandle toStrNormalHandle(int);
 SDLTextureHandle toStrDebug(int);
 
 

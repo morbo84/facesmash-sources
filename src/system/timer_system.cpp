@@ -24,12 +24,12 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
                 const int offset = last - numOfDigits(remaining);
 
                 for(auto i = 0; i < offset; i++) {
-                    const auto sym0Handle = toStrHud(0);
+                    const auto sym0Handle = toStrSmallHandle(0);
                     registry.accomodate<HUD>(observer.entities[i], sym0Handle, sym0Handle->width(), sym0Handle->height(), sym0Handle->width(), sym0Handle->height());
                 }
 
                 for(auto i = last; i > offset; --i) {
-                    auto handle = toStrHud(remaining % 10);
+                    auto handle = toStrSmallHandle(remaining % 10);
                     registry.accomodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
                     remaining /= 10;
                 }

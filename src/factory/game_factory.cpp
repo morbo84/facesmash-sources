@@ -340,10 +340,10 @@ void createTutorialBottomPanel(Registry &registry) {
 void createGameTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto sym0Handle = toStrHud(0);
-    auto symEmptyHandle = textureCache.handle("str/ ");
-    auto scoreHandle = textureCache.handle("str/score");
-    auto timerHandle = textureCache.handle("str/timer");
+    auto sym0Handle = toStrSmallHandle(0);
+    auto symEmptyHandle = textureCache.handle("str/small/ ");
+    auto scoreHandle = textureCache.handle("str/game/score");
+    auto timerHandle = textureCache.handle("str/game/timer");
 
     auto offset = 0;
 
@@ -408,6 +408,84 @@ void createGameOverPanel(Registry &registry) {
 
 
 void refreshGameOverPanel(Registry &registry) {
+    if(registry.has<PlayerScore>()) {
+        auto &textureCache = Locator::TextureCache::ref();
+        entity_type parent{};
+
+        for(auto entity: registry.view<Panel>()) {
+            if(registry.get<Panel>(entity).type == PanelType::GAME_OVER) {
+                parent = entity;
+                break;
+            }
+        }
+
+        const auto &playerScore = registry.get<PlayerScore>();
+        const auto &panel = registry.get<Panel>(parent);
+
+        auto printHit = [&](FaceType type, int PlayerScore:: *member, int xOffset, auto initYOffset) {
+            auto faceEntity = createFaceBlueprint(registry, type, 150);
+            const auto &faceSprite = registry.get<Sprite>(faceEntity);
+            setSpriteSize(registry, faceEntity, faceSprite.w / 2, faceSprite.h / 2);
+            auto yOffset = panel.h / 2 + initYOffset(faceSprite);
+            setPos(registry, faceEntity, xOffset, yOffset);
+            registry.assign<ExpiringContent>(faceEntity);
+            registry.get<Transform>(faceEntity).parent = parent;
+            yOffset += faceSprite.h / 3;
+            xOffset += faceSprite.w;
+
+            auto xEntity = createSprite(registry, parent, textureCache.handle("str/small/x"), 150);
+            const auto &xSprite = registry.get<Sprite>(xEntity);
+            setPos(registry, xEntity, xOffset+ xSprite.w / 2, yOffset);
+            registry.assign<ExpiringContent>(xEntity);
+            xOffset += 2 * xSprite.w;
+
+            auto res0Entity = createSprite(registry, parent, toStrSmallHandle((playerScore.*member) / 10), 150);
+            const auto &res0Sprite = registry.get<Sprite>(res0Entity);
+            setPos(registry, res0Entity, xOffset, yOffset);
+            registry.assign<ExpiringContent>(res0Entity);
+            xOffset += res0Sprite.w;
+
+            auto res1Entity = createSprite(registry, parent, toStrSmallHandle((playerScore.*member) % 10), 150);
+            const auto &res1Sprite = registry.get<Sprite>(res1Entity);
+            setPos(registry, res1Entity, xOffset, yOffset);
+            registry.assign<ExpiringContent>(res1Entity);
+            xOffset += res1Sprite.w;
+        };
+
+        // first line
+        printHit(FaceType::HAPPY, &PlayerScore::hitHappy, panel.w / 6, [](const auto &sprite) { return -17 * sprite.h / 4; });
+        printHit(FaceType::ANGRY, &PlayerScore::hitAngry, 5 * panel.w / 9, [](const auto &sprite) { return -17 * sprite.h / 4; });
+        // second line
+        printHit(FaceType::SAD, &PlayerScore::hitSad, panel.w / 6, [](const auto &sprite) { return -12 * sprite.h / 4; });
+        printHit(FaceType::SURPRISED, &PlayerScore::hitSurprised, 5 * panel.w / 9, [](const auto &sprite) { return -12 * sprite.h / 4; });
+        // third line
+        printHit(FaceType::DISGUSTED, &PlayerScore::hitDisgusted, panel.w / 6, [](const auto &sprite) { return -7 * sprite.h / 4; });
+        printHit(FaceType::FEARFUL, &PlayerScore::hitFearful, 5 * panel.w / 9, [](const auto &sprite) { return -7 * sprite.h / 4; });
+
+        auto scoreEntity = createSprite(registry, parent, textureCache.handle("str/score"), 150);
+        const auto &scoreSprite = registry.get<Sprite>(scoreEntity);
+        setPos(registry, scoreEntity, (panel.w - scoreSprite.w) / 2, panel.h / 2 + 2 * scoreSprite.h / 3);
+        registry.assign<ExpiringContent>(scoreEntity);
+
+        auto printScore = [&](int score, auto getXOffset) {
+            auto entity = createSprite(registry, parent, toStrNormalHandle(score), 150);
+            const auto &sprite = registry.get<Sprite>(entity);
+            setPos(registry, entity, panel.w / 2 + getXOffset(sprite), panel.h / 2 + 2 * sprite.h);
+            registry.assign<ExpiringContent>(entity);
+        };
+
+        auto score = playerScore.score;
+        printScore(score % 10, [](const auto &sprite) { return 3 * sprite.w / 2; });
+        score /= 10;
+        printScore(score % 10, [](const auto &sprite) { return sprite.w / 2; });
+        score /= 10;
+        printScore(score % 10, [](const auto &sprite) { return -sprite.w / 2; });
+        score /= 10;
+        printScore(score % 10, [](const auto &sprite) { return -3 * sprite.w / 2; });
+        score /= 10;
+        printScore(score % 10, [](const auto &sprite) { return -5 * sprite.w / 2; });
+    }
+
     // TODO
 }
 
