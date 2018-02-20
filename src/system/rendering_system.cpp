@@ -107,7 +107,7 @@ void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
     hud(registry, renderer);
 
 #ifdef DEBUG
-    debug(registry, renderer);
+    //debug(registry, renderer);
 #endif
 }
 

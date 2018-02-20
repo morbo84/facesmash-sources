@@ -228,6 +228,38 @@ void createSupportPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto makingHandle = textureCache.handle("str/support/making");
+    auto makingEntity = createSprite(registry, parent, makingHandle, 20);
+    setPos(registry, makingEntity, (panel.w - makingHandle->width()) / 2, 1 * panel.h / 6);
+
+    auto timeHandle = textureCache.handle("str/support/time");
+    auto timeEntity = createSprite(registry, parent, timeHandle, 20);
+    setPos(registry, timeEntity, (panel.w - timeHandle->width()) / 2, 2 * panel.h / 9);
+
+    auto lotHandle = textureCache.handle("str/support/lot");
+    auto lotEntity = createSprite(registry, parent, lotHandle, 20);
+    setPos(registry, lotEntity, (panel.w - lotHandle->width()) / 2, 3 * panel.h / 9);
+
+    auto coffeeHandle = textureCache.handle("str/support/coffee");
+    auto coffeeEntity = createSprite(registry, parent, coffeeHandle, 20);
+    setPos(registry, coffeeEntity, (panel.w - coffeeHandle->width()) / 2, 4 * panel.h / 10);
+
+    auto buyButton = createPopupUIButton(registry, parent, UIAction::BUY, 20);
+    const auto &buySprite = registry.get<Sprite>(buyButton);
+    setPos(registry, buyButton, (panel.w - buySprite.w) / 2, 5 * panel.h / 9);
+
+    auto removeHandle = textureCache.handle("str/support/remove");
+    auto removeEntity = createSprite(registry, parent, removeHandle, 20);
+    setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + buySprite.h + removeHandle->height() / 3);
+
+    auto offerHandle = textureCache.handle("str/support/offer");
+    auto offerEntity = createSprite(registry, parent, offerHandle, 20);
+    setPos(registry, offerEntity, (panel.w - offerHandle->width()) / 2, 7 * panel.h / 9);
+
+    auto nextHandle = textureCache.handle("str/support/next");
+    auto nextEntity = createSprite(registry, parent, nextHandle, 20);
+    setPos(registry, nextEntity, (panel.w - nextHandle->width()) / 2, 8 * panel.h / 9);
 }
 
 

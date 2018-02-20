@@ -85,7 +85,8 @@ enum class UIAction: Uint8 {
     SAVE,
     SWITCH_AUDIO,
     SWITCH_VIDEO,
-    LOGIN
+    LOGIN,
+    BUY
 };
 
 

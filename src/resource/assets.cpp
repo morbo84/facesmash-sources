@@ -38,6 +38,7 @@ void prepareGameStrings(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
 
+    auto fontTiny = ttfFontCache.handle("font/ui/tiny");
     auto fontSmall = ttfFontCache.handle("font/ui/small");
     auto fontNormal = ttfFontCache.handle("font/ui/normal");
     auto fontLarge = ttfFontCache.handle("font/ui/large");
@@ -78,11 +79,19 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontNormal, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontNormal, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontNormal, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontNormal, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontLarge, colorRed);
+
+    textureCache.load<TTFFontTextureLoader>("str/support/making", "Making games", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/time", "in the free time", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/lot", "requires lot of", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/coffee", "COFFEE", renderer, *fontHuge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/offer", "Offer us", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/next", "the next one", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/remove", "REMOVE ADS", renderer, *fontTiny, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontSmall, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontSmall, colorWhite);

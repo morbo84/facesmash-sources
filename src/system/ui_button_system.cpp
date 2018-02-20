@@ -99,6 +99,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::LOGIN:
                     // TODO
                     break;
+                case UIAction::BUY:
+                    // TODO
+                    break;
                 }
             }
         });

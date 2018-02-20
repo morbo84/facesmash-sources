@@ -55,6 +55,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::SETTINGS:
         setSpriteGeometry(registry, entity, 0, 1152, width, height, 4_ui8);
         break;
+    case UIAction::BUY:
     case UIAction::SUPPORT:
         setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8);
         break;
