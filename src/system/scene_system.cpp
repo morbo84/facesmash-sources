@@ -552,12 +552,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::CREDITS);
                 break;
             case SceneType::SUPPORT_PAGE:
+                discardExpiringContents(registry);
+                refreshSupportPanel(registry);
                 enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 enableShowPopupButtons(registry, PanelType::SUPPORT);
                 hideBackgroundPanels(registry);
-                discardExpiringContents(registry);
-                refreshSupportPanel(registry);
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
             case SceneType::SETTINGS_PAGE:
