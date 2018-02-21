@@ -37,7 +37,7 @@ void TimerSystem::update(Registry &registry, delta_type delta) {
 
             if(!timer.remaining) {
                 timer.enabled = false;
-                Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
+                Locator::Dispatcher::ref().enqueue<TimeIsOverEvent>();
             }
         }
     }

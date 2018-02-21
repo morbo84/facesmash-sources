@@ -61,6 +61,7 @@ struct SmashEvent final {
 
 struct FrameAvailableEvent final {};
 struct ActivateEasterEggEvent final {};
+struct TimeIsOverEvent final {};
 
 
 }

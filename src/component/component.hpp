@@ -190,14 +190,8 @@ struct PlayerScoreObserver {
 };
 
 
-struct LetsPlay {
-    bool enabled{false};
-};
-
-
-struct LetsTrain {
-    // TODO
-};
+struct LetsPlay {};
+struct LetsTrain {};
 
 
 struct Panel {

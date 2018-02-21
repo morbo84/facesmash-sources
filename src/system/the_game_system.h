@@ -9,13 +9,20 @@
 namespace gamee {
 
 
+struct TimeIsOverEvent;
 class Spawner;
 
 
 struct TheGameSystem final {
+    TheGameSystem();
+    ~TheGameSystem();
+
+    void receive(const TimeIsOverEvent &) noexcept;
+
     void update(Registry &, Spawner &);
 
 private:
+    bool timeIsOver;
     FaceBag faceBag;
     ItemBag itemBag;
 };
