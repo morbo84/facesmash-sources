@@ -388,8 +388,8 @@ void createGameTopPanel(Registry &registry) {
     offset = registry.get<Transform>(playerScoreEntity).x + 1.1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(PlayerScoreObserver::entities)>::value; ++i) {
-        auto handle = i ? symEmptyHandle : sym0Handle;
-        playerScoreObserver.entities[i] = createHUD(registry, parent, handle, 160);
+        playerScoreObserver.entities[i] = createHUD(registry, parent, sym0Handle, 160);
+        registry.get<HUD>(playerScoreObserver.entities[i]).handle = i ? symEmptyHandle : sym0Handle;
         setPos(registry, playerScoreObserver.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
@@ -402,8 +402,7 @@ void createGameTopPanel(Registry &registry) {
     offset = registry.get<Transform>(timerEntity).x + timerHandle->width() + .1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(TimerObserver::entities)>::value; ++i) {
-        auto handle = i ? symEmptyHandle : sym0Handle;
-        timerObserver.entities[i] = createHUD(registry, parent, handle, 160);
+        timerObserver.entities[i] = createHUD(registry, parent, sym0Handle, 160);
         setPos(registry, timerObserver.entities[i], offset, .4f * scoreHandle->height());
         offset += sym0Handle->width();
     }
@@ -471,17 +470,21 @@ void refreshGameOverPanel(Registry &registry) {
             registry.assign<ExpiringContent>(xEntity);
             xOffset += 2 * xSprite.w;
 
-            auto res0Entity = createSprite(registry, parent, toStrSmallHandle((playerScore.*member) / 10), 150);
-            const auto &res0Sprite = registry.get<Sprite>(res0Entity);
+            auto sym0Handle = toStrSmallHandle(0);
+
+            auto res0Entity = createSprite(registry, parent, sym0Handle, 150);
+            registry.get<Sprite>(res0Entity).handle = toStrSmallHandle((playerScore.*member) / 10);
             setPos(registry, res0Entity, xOffset, yOffset);
             registry.assign<ExpiringContent>(res0Entity);
-            xOffset += res0Sprite.w;
+            registry.assign<BoundingBox>(res0Entity, sym0Handle->width(), sym0Handle->height());
+            xOffset += sym0Handle->width();
 
-            auto res1Entity = createSprite(registry, parent, toStrSmallHandle((playerScore.*member) % 10), 150);
-            const auto &res1Sprite = registry.get<Sprite>(res1Entity);
+            auto res1Entity = createSprite(registry, parent, sym0Handle, 150);
+            registry.get<Sprite>(res1Entity).handle = toStrSmallHandle((playerScore.*member) % 10);
             setPos(registry, res1Entity, xOffset, yOffset);
             registry.assign<ExpiringContent>(res1Entity);
-            xOffset += res1Sprite.w;
+            registry.assign<BoundingBox>(res1Entity, sym0Handle->width(), sym0Handle->height());
+            xOffset += sym0Handle->width();
         };
 
         // first line
@@ -499,23 +502,26 @@ void refreshGameOverPanel(Registry &registry) {
         setPos(registry, scoreEntity, (panel.w - scoreSprite.w) / 2, panel.h / 2 + 2 * scoreSprite.h / 3);
         registry.assign<ExpiringContent>(scoreEntity);
 
-        auto printScore = [&](int score, auto getXOffset) {
-            auto entity = createSprite(registry, parent, toStrNormalHandle(score), 150);
-            const auto &sprite = registry.get<Sprite>(entity);
-            setPos(registry, entity, panel.w / 2 + getXOffset(sprite), panel.h / 2 + 2 * sprite.h);
+        auto sym0Handle = toStrNormalHandle(0);
+
+        auto printScore = [&](int score, auto x) {
+            auto entity = createSprite(registry, parent, sym0Handle, 150);
+            registry.get<Sprite>(entity).handle = toStrNormalHandle(score);
+            setPos(registry, entity, panel.w / 2 + x, panel.h / 2 + 2 * sym0Handle->height());
+            registry.assign<BoundingBox>(entity, sym0Handle->width(), sym0Handle->height());
             registry.assign<ExpiringContent>(entity);
         };
 
         auto score = playerScore.score;
-        printScore(score % 10, [](const auto &sprite) { return 3 * sprite.w / 2; });
+        printScore(score % 10, 3 * sym0Handle->width() / 2);
         score /= 10;
-        printScore(score % 10, [](const auto &sprite) { return sprite.w / 2; });
+        printScore(score % 10, sym0Handle->width() / 2);
         score /= 10;
-        printScore(score % 10, [](const auto &sprite) { return -sprite.w / 2; });
+        printScore(score % 10, -sym0Handle->width() / 2);
         score /= 10;
-        printScore(score % 10, [](const auto &sprite) { return -3 * sprite.w / 2; });
+        printScore(score % 10, -3 * sym0Handle->width() / 2);
         score /= 10;
-        printScore(score % 10, [](const auto &sprite) { return -5 * sprite.w / 2; });
+        printScore(score % 10, -5 * sym0Handle->width() / 2);
     }
 }
 

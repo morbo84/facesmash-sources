@@ -100,7 +100,7 @@ static void hidePopupButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
-                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
                     registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
                 }
             });
