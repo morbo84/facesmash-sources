@@ -554,6 +554,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::SUPPORT_PAGE:
                 enableShowPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                enableShowPopupButtons(registry, PanelType::SUPPORT);
                 hideBackgroundPanels(registry);
                 discardExpiringContents(registry);
                 refreshSupportPanel(registry);
@@ -568,6 +569,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::MENU_PAGE:
                 hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
+                hidePopupButtons(registry, PanelType::SUPPORT);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
