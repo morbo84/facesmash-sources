@@ -9,7 +9,7 @@
 namespace gamee {
 
 
-struct EnvEvent final {
+struct EnvEvent {
     enum class Type: Uint8 {
         TERMINATING,
         LOW_MEMORY,
@@ -23,7 +23,7 @@ struct EnvEvent final {
 };
 
 
-struct KeyboardEvent final {
+struct KeyboardEvent {
     enum class Type: Uint8 {
         ESCAPE,
         BACK
@@ -36,17 +36,21 @@ struct KeyboardEvent final {
 struct TouchEvent final: SDL_Point {};
 
 
-struct SceneChangeEvent final {
+struct SceneChangeEvent {
     SceneType scene;
 };
 
 
-struct FaceEvent final {
+struct FaceEvent {
     FaceType type;
 };
 
 
-struct SmashEvent final {
+// different meaning, same structure... why not? :-)
+struct FaceRequest: FaceEvent {};
+
+
+struct SmashEvent {
     int angry;
     int disgusted;
     int happy;
@@ -59,9 +63,9 @@ struct SmashEvent final {
 };
 
 
-struct FrameAvailableEvent final {};
-struct ActivateEasterEggEvent final {};
-struct TimeIsOverEvent final {};
+struct FrameAvailableEvent {};
+struct ActivateEasterEggEvent {};
+struct TimeIsOverEvent {};
 
 
 }

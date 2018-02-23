@@ -24,6 +24,14 @@ struct SmashButton {
 };
 
 
+struct FaceButton {
+    bool enabled;
+    FaceType type;
+    int w{0};
+    int h{0};
+};
+
+
 struct HUD {
     SDLTextureHandle handle;
     int width;

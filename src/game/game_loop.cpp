@@ -75,6 +75,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         destroyLaterSystem.update(registry, delta);
 
         uiButtonSystem.update(registry);
+        faceButtonSystem.update(registry);
         smashButtonSystem.update(registry);
 
         itemSystem.update(registry, spawner, delta);

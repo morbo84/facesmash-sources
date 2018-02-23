@@ -117,6 +117,7 @@ void setSpriteSize(Registry &registry, entity_type entity, int w, int h) {
 
 void setPopupUIButtonSize(Registry &registry, entity_type entity, int w, int h) {
     auto &button = registry.get<UIButton>(entity);
+    button.popup = true;
     button.w = w;
     button.h = h;
 }

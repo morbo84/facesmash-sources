@@ -157,10 +157,10 @@ void createMenuTopPanel(Registry &registry) {
 
     auto loginButton = createPopupUIButton(registry, parent, UIAction::LOGIN, 150);
     auto &loginSprite = registry.get<Sprite>(loginButton);
-    loginSprite.frame = 3;
     setPopupUIButtonSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
     setSpriteSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
     setPos(registry, loginButton, loginSprite.w / 8, loginSprite.h / 8);
+    loginSprite.frame = 3;
 }
 
 
@@ -551,7 +551,25 @@ void createTrainingBottomPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::TRAINING_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
-    // TODO
+    auto createButton = [&](auto type, auto pos) {
+        auto entity = createFaceButton(registry, type, 160);
+
+        const auto &sprite = registry.get<Sprite>(entity);
+        const auto w = 2 * sprite.w / 3;
+        const auto h = 2 * sprite.h / 3;
+
+        setPos(registry, entity, (pos + 1) * panel.w / 8, (panel.h - h) / 2);
+        setBoundingBox(registry, entity, w, h);
+        setSpriteSize(registry, entity, w, h);
+        registry.get<Transform>(entity).parent = parent;
+    };
+
+    createButton(FaceType::ANGRY, 0);
+    createButton(FaceType::DISGUSTED, 1);
+    createButton(FaceType::FEARFUL, 2);
+    createButton(FaceType::HAPPY, 3);
+    createButton(FaceType::SAD, 4);
+    createButton(FaceType::SURPRISED, 5);
 }
 
 

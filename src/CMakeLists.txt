@@ -33,6 +33,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/easter_egg_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/face_button_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/face_smash_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/frame_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/item_system.cpp

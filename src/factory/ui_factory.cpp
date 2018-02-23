@@ -91,12 +91,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
 entity_type createPopupUIButton(Registry &registry, entity_type parent, UIAction action, int z) {
     auto entity = createUIButton(registry, parent, action, z);
     const auto &sprite = registry.get<Sprite>(entity);
-    auto &button = registry.get<UIButton>(entity);
-
-    button.popup = true;
-    button.w = sprite.w;
-    button.h = sprite.h;
-
+    setPopupUIButtonSize(registry, entity, sprite.w, sprite.h);
     return entity;
 }
 

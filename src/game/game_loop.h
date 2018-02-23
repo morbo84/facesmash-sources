@@ -12,6 +12,7 @@
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
 #include "../system/easter_egg_system.h"
+#include "../system/face_button_system.h"
 #include "../system/face_smash_system.h"
 #include "../system/frame_system.h"
 #include "../system/item_system.h"
@@ -56,6 +57,7 @@ private:
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
     EasterEggSystem easterEggSystem;
+    FaceButtonSystem faceButtonSystem;
     ItemSystem itemSystem;
     FaceSmashSystem faceSmashSystem;
     FrameSystem frameSystem;

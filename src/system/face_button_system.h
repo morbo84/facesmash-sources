@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SYSTEM_UI_BUTTON_SYSTEM_H
-#define FACE_SMASH_SYSTEM_UI_BUTTON_SYSTEM_H
+#ifndef FACE_SMASH_SYSTEM_FACE_BUTTON_SYSTEM_H
+#define FACE_SMASH_SYSTEM_FACE_BUTTON_SYSTEM_H
 
 
 #include <SDL_rect.h>
@@ -12,9 +12,9 @@ namespace gamee {
 struct TouchEvent;
 
 
-struct UIButtonSystem final {
-    UIButtonSystem();
-    ~UIButtonSystem();
+struct FaceButtonSystem final {
+    FaceButtonSystem();
+    ~FaceButtonSystem();
 
     void receive(const TouchEvent &) noexcept;
 
@@ -29,4 +29,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SYSTEM_UI_BUTTON_SYSTEM_H
+#endif // FACE_SMASH_SYSTEM_UFACE_BUTTON_SYSTEM_H
