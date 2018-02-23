@@ -138,8 +138,10 @@ static void initGame(Registry &registry) {
 }
 
 
-static void resetTraining(Registry &registry) {
-    // TODO
+static void initTraining(Registry &registry) {
+    auto game = registry.create();
+    registry.attach<LetsTrain>(game);
+    registry.attach<Timer>(game);
 }
 
 
@@ -518,7 +520,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
                     break;
                 case SceneType::TRAINING:
-                    resetTraining(registry);
+                    initTraining(registry);
                     break;
                 default:
                     assert(false);

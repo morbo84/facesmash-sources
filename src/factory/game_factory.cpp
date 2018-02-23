@@ -156,7 +156,8 @@ void createMenuTopPanel(Registry &registry) {
     setPos(registry, settingsButton, panel.w - 9 * settingsSprite.w / 8, settingsSprite.h / 8);
 
     auto loginButton = createPopupUIButton(registry, parent, UIAction::LOGIN, 150);
-    const auto &loginSprite = registry.get<Sprite>(loginButton);
+    auto &loginSprite = registry.get<Sprite>(loginButton);
+    loginSprite.frame = 3;
     setPopupUIButtonSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
     setSpriteSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
     setPos(registry, loginButton, loginSprite.w / 8, loginSprite.h / 8);
@@ -384,7 +385,7 @@ void createGameTopPanel(Registry &registry) {
 
     auto playerScoreEntity = createHUD(registry, parent, scoreHandle, 160);
     auto &playerScoreObserver = registry.assign<PlayerScoreObserver>(playerScoreEntity);
-    setPos(registry, playerScoreEntity, offset + .1f * scoreHandle->width(), .4f * scoreHandle->height());;
+    setPos(registry, playerScoreEntity, offset + .1f * scoreHandle->width(), .4f * scoreHandle->height());
     offset = registry.get<Transform>(playerScoreEntity).x + 1.1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(PlayerScoreObserver::entities)>::value; ++i) {
@@ -398,7 +399,7 @@ void createGameTopPanel(Registry &registry) {
 
     auto timerEntity = createHUD(registry, parent, timerHandle, 160);
     auto &timerObserver = registry.assign<TimerObserver>(timerEntity);
-    setPos(registry, timerEntity, offset, .4f * scoreHandle->height());;
+    setPos(registry, timerEntity, offset, .4f * scoreHandle->height());
     offset = registry.get<Transform>(timerEntity).x + timerHandle->width() + .1f * scoreHandle->width();
 
     for(auto i = 0u; i < std::extent<decltype(TimerObserver::entities)>::value; ++i) {
@@ -410,7 +411,9 @@ void createGameTopPanel(Registry &registry) {
 
 
 void createGameBottomPanel(Registry &registry) {
-    createPanel(registry, PanelType::THE_GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 8);
+    createPanel(registry, PanelType::THE_GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
+
+    // TODO
 }
 
 
@@ -527,11 +530,27 @@ void refreshGameOverPanel(Registry &registry) {
 
 
 void createTrainingTopPanel(Registry &registry) {
-    // TODO
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto smashHandle = textureCache.handle("str/training/smash");
+
+    auto parent = createPanel(registry, PanelType::TRAINING_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto smashEntity = createHUD(registry, parent, smashHandle, 160);
+    setPos(registry, smashEntity, .1f * smashHandle->width(), .4f * smashHandle->height());
+
+    auto progressEntity = createProgressBar(registry, parent, 160);
+    setSpriteSize(registry, progressEntity, panel.w - 5 * smashHandle->width() / 4, smashHandle->height());
+    const auto &progressSprite = registry.get<Sprite>(progressEntity);
+    setPos(registry, progressEntity, panel.w - progressSprite.w - .1f * smashHandle->width(), .4f * smashHandle->height());
 }
 
 
 void createTrainingBottomPanel(Registry &registry) {
+    auto parent = createPanel(registry, PanelType::TRAINING_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
     // TODO
 }
 
