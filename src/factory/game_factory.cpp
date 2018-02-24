@@ -558,7 +558,9 @@ void createTrainingBottomPanel(Registry &registry) {
         const auto w = 2 * sprite.w / 3;
         const auto h = 2 * sprite.h / 3;
 
-        setPos(registry, entity, (pos + 1) * panel.w / 8, (panel.h - h) / 2);
+        const auto x = (panel.w - 23 * w / 3) / 2 + pos * 4 * w / 3;
+
+        setPos(registry, entity, x, (panel.h - h) / 2);
         setBoundingBox(registry, entity, w, h);
         setSpriteSize(registry, entity, w, h);
         registry.get<Transform>(entity).parent = parent;
