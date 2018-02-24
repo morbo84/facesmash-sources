@@ -95,9 +95,11 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         camera.remaining = shakeDuration;
         camera.shake = shake;
 
-        auto entity = createInGameMessage(registry, handle, 160);
-        const auto &sprite = registry.get<Sprite>(entity);
-        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
+        if(registry.has<LetsPlay>()) {
+            auto entity = createInGameMessage(registry, handle, 160);
+            const auto &sprite = registry.get<Sprite>(entity);
+            setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
+        }
     };
 
     if(event.combo > 5) {

@@ -81,14 +81,6 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         itemSystem.update(registry, spawner, delta);
         faceSmashSystem.update(registry, spawner);
 
-        // invoke systems with a fixed timestep
-        while(accumulator >= msPerUpdate) {
-            movementSystem.update(registry, msPerUpdate);
-            animationSystem.update(registry, msPerUpdate);
-            // consume a token
-            accumulator -= msPerUpdate;
-        }
-
         achievementsSystem.update(registry);
         scoreSystem.update(registry);
         timerSystem.update(registry, delta);
@@ -97,6 +89,14 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         easterEggSystem.update(registry, spawner);
         theGameSystem.update(registry, spawner);
         trainingSystem.update(registry, spawner, delta);
+
+        // invoke systems with a fixed timestep
+        while(accumulator >= msPerUpdate) {
+            movementSystem.update(registry, msPerUpdate);
+            animationSystem.update(registry, msPerUpdate);
+            // consume a token
+            accumulator -= msPerUpdate;
+        }
 
         // update debug information (no fixed step here, thanks)
         debugSystem.update(registry, delta);

@@ -14,23 +14,20 @@ class Spawner;
 
 
 class TrainingSystem final {
-    static constexpr delta_type interval = 200_ui32;
+    static constexpr delta_type duration = 10000_ui32;
+    static constexpr delta_type interval = 500_ui32;
     static constexpr auto steps = 10;
 
     enum class TrainingState: Uint8 {
         START_TRAINING,
         TRAINING,
-        STOP_TRAINING,
         IDLE
     };
 
-    void showFaceButtons(Registry &);
-    void hideFaceButtons(Registry &);
+    void enableFaceButtons(Registry &);
+    void disableFaceButtons(Registry &);
 
-    void startTraining(Registry &);
-    void training(Registry &, Spawner &, delta_type);
-    void stopTraining(Registry &);
-    void idle(Registry &);
+    TrainingState training(Registry &, Spawner &, delta_type);
 
 public:
     TrainingSystem();
@@ -44,7 +41,8 @@ public:
 private:
     FaceType current;
     FaceType match;
-    int progress;
+    Uint8 progress;
+    delta_type range;
     delta_type remaining;
     TrainingState state;
 };

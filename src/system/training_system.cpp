@@ -1,5 +1,8 @@
+#include "../common/constants.h"
 #include "../common/ease.h"
 #include "../component/component.hpp"
+#include "../factory/common.h"
+#include "../factory/play_factory.h"
 #include "../factory/spawner.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -9,50 +12,95 @@
 namespace gamee {
 
 
-void TrainingSystem::showFaceButtons(Registry &registry) {
+void TrainingSystem::enableFaceButtons(Registry &registry) {
     registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
-        button.enabled = true;
-        renderable.angle = 0.f;
-        registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
-        registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
+        if(!button.enabled) {
+            button.enabled = true;
+            renderable.angle = 0.f;
+            registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
+        }
     });
 }
 
 
-void TrainingSystem::hideFaceButtons(Registry &registry) {
+void TrainingSystem::disableFaceButtons(Registry &registry) {
     registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
-        button.enabled = false;
-        renderable.angle = 0.f;
-        registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
-        registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+        if(button.enabled) {
+            button.enabled = false;
+            renderable.angle = 0.f;
+            registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
+            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+        }
     });
 }
 
 
-void TrainingSystem::startTraining(Registry &registry) {
-    // TODO
-}
+TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawner &spawner, delta_type delta) {
+    const bool hurry = remaining < (duration / 2);
+    TrainingState next = TrainingState::TRAINING;
 
+    remaining = delta > remaining ? 0_ui32 : (remaining - delta);
+    range = delta > range ? 0_ui32 : (range - delta);
 
-void TrainingSystem::training(Registry &registry, Spawner &spawner, delta_type delta) {
-    // TODO
-}
+    if(!range) {
+        if(current == match) {
+            progress += progress == steps ? 0_ui8 : 1_ui8;
+            remaining = duration;
+        } else {
+            progress -= progress ? 1_ui8 : 0_ui8;
+        }
 
+        range += interval;
+    }
 
-void TrainingSystem::stopTraining(Registry &registry) {
-    // TODO
-}
+    const int left = (1 + progress / 2) - registry.size<Face>();
 
+    for(auto i = 0; i < (left < 0 ? 0 : left); ++i) {
+        spawner.spawnFaceBottom(registry, 0_ui8, 0_ui8, current);
+    }
 
-void TrainingSystem::idle(Registry &registry) {
-    // TODO
+    for(auto entity: registry.view<FaceProgress, Sprite>()) {
+        registry.get<Sprite>(entity).frame = progress;
+    }
+
+    if(progress == steps) {
+        next = TrainingState::IDLE;
+
+        const auto handle = Locator::TextureCache::ref().handle("str/training/good");
+        auto entity = createInTrainingMessage(registry, handle , 200);
+        const auto &sprite = registry.get<Sprite>(entity);
+        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+
+        // reset the match so as the user must keep it to smash everything
+        match = current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY;
+
+        for(auto i = 0; i < steps; ++i) {
+            spawner.spawnFaceBottom(registry, 0_ui8, 0_ui8, current);
+        }
+    } else if(!hurry && remaining < (duration / 2)) {
+        const auto handle = Locator::TextureCache::ref().handle("str/training/hurry");
+        auto entity = createInTrainingMessage(registry, handle , 200);
+        const auto &sprite = registry.get<Sprite>(entity);
+        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+    } if(!remaining) {
+        next = TrainingState::IDLE;
+
+        const auto handle = Locator::TextureCache::ref().handle("str/training/fail");
+        auto entity = createInTrainingMessage(registry, handle , 200);
+        const auto &sprite = registry.get<Sprite>(entity);
+        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+    }
+
+    return next;
 }
 
 
 TrainingSystem::TrainingSystem()
     : current{FaceType::HAPPY},
       match{FaceType::ANGRY},
-      progress{0},
+      progress{0_ui8},
+      range{0_ui32},
       remaining{0_ui32},
       state{TrainingState::IDLE}
 {
@@ -70,9 +118,6 @@ TrainingSystem::~TrainingSystem() {
 void TrainingSystem::receive(const FaceRequest &event) noexcept {
     if(state == TrainingState::IDLE) {
         current = event.type;
-        match = current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY;
-        progress = 0;
-        remaining = interval;
         state = TrainingState::START_TRAINING;
     }
 }
@@ -86,28 +131,28 @@ void TrainingSystem::receive(const FaceEvent &event) noexcept {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
-    if(registry.has<LetsTrain>()) {
-        switch(state) {
-        case TrainingState::IDLE:
-            idle(registry);
-            break;
-        case TrainingState::START_TRAINING:
-            hideFaceButtons(registry);
-            startTraining(registry);
-            break;
-        case TrainingState::STOP_TRAINING:
-            showFaceButtons(registry);
-            stopTraining(registry);
-            break;
-        case TrainingState::TRAINING:
-            training(registry, spawner, delta);
-            break;
-        }
-    } else if(state != TrainingState::IDLE) {
-        showFaceButtons(registry);
-        state = TrainingState::IDLE;
-        remaining = 0_ui32;
-        progress = 0;
+    switch(state) {
+    case TrainingState::IDLE:
+        enableFaceButtons(registry);
+        break;
+    case TrainingState::START_TRAINING:
+        disableFaceButtons(registry);
+        progress = 0_ui8;
+        range = interval;
+        remaining = duration;
+        state = TrainingState::TRAINING;
+        // reset the match so that smashes don't start immediately
+        match = current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY;
+        break;
+    case TrainingState::TRAINING:
+        state = registry.has<LetsTrain>()
+                ? training(registry, spawner, delta)
+                : TrainingState::IDLE;
+        break;
+    }
+
+    if(!registry.has<LetsTrain>()) {
+        disableFaceButtons(registry);
     }
 }
 

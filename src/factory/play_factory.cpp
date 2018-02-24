@@ -16,6 +16,15 @@ entity_type createInGameMessage(Registry &registry, SDLTextureHandle handle, int
 }
 
 
+entity_type createInTrainingMessage(Registry &registry, SDLTextureHandle handle, int z) {
+    auto entity = createSprite(registry, handle, z);
+    registry.assign<FadeAnimation>(entity, 255, 0, 3000_ui32, 0_ui32, &easeInCubic);
+    registry.assign<SizeAnimation>(entity, 0, 0, handle->width(), handle->height(), 1000_ui32, 0_ui32, &easeOutElastic);
+    registry.assign<DestroyLater>(entity, 3000_ui32);
+    return entity;
+}
+
+
 entity_type createExplosion(Registry &registry, int z) {
     auto &textureCache = Locator::TextureCache::ref();
     auto handle = textureCache.handle("game/explosion");

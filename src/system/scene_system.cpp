@@ -602,6 +602,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = trainingTutorialTransition(registry);
                 break;
             case SceneType::TRAINING:
+                enableShowPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = trainingTransition(registry);
