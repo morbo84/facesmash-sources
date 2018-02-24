@@ -130,6 +130,13 @@ static void clearGame(Registry &registry) {
 }
 
 
+static void clearTraining(Registry &registry) {
+    if(registry.has<LetsTrain>()) {
+        registry.destroy(registry.attachee<LetsTrain>());
+    }
+}
+
+
 static void initGame(Registry &registry) {
     auto game = registry.create();
     registry.attach<LetsPlay>(game);
@@ -496,6 +503,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::SETTINGS);
                     break;
                 case SceneType::MENU_PAGE:
+                    clearTraining(registry);
                     hideBackgroundPanels(registry);
                     enableShowPopupButtons(registry, PanelType::MENU_BOTTOM);
                     enableShowPopupButtons(registry, PanelType::MENU_TOP);

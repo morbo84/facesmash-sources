@@ -96,7 +96,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 
         easterEggSystem.update(registry, spawner);
         theGameSystem.update(registry, spawner);
-        trainingSystem.update(registry, spawner);
+        trainingSystem.update(registry, spawner, delta);
 
         // update debug information (no fixed step here, thanks)
         debugSystem.update(registry, delta);

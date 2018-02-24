@@ -544,6 +544,7 @@ void createTrainingTopPanel(Registry &registry) {
     setSpriteSize(registry, progressEntity, panel.w - 5 * smashHandle->width() / 4, smashHandle->height());
     const auto &progressSprite = registry.get<Sprite>(progressEntity);
     setPos(registry, progressEntity, panel.w - progressSprite.w - .1f * smashHandle->width(), .4f * smashHandle->height());
+    registry.assign<FaceProgress>(progressEntity);
 }
 
 
@@ -563,6 +564,7 @@ void createTrainingBottomPanel(Registry &registry) {
         setPos(registry, entity, x, (panel.h - h) / 2);
         setBoundingBox(registry, entity, w, h);
         setSpriteSize(registry, entity, w, h);
+        setFaceButtonSize(registry, entity, w, h);
         registry.get<Transform>(entity).parent = parent;
     };
 

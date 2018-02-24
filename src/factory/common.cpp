@@ -123,6 +123,13 @@ void setPopupUIButtonSize(Registry &registry, entity_type entity, int w, int h) 
 }
 
 
+void setFaceButtonSize(Registry &registry, entity_type entity, int w, int h) {
+    auto &button = registry.get<FaceButton>(entity);
+    button.w = w;
+    button.h = h;
+}
+
+
 void setBoundingBox(Registry &registry, entity_type entity, int x, int y, int w, int h) {
     registry.get<BoundingBox>(entity) = { x, y, w, h };
 }

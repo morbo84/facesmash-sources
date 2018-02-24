@@ -214,6 +214,9 @@ struct CameraFrame {
 };
 
 
+struct FaceProgress {};
+
+
 }
 
 
