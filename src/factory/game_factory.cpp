@@ -81,12 +81,11 @@ void createBackgroundTopPanel(Registry &registry) {
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_DOWN, 180);
-        auto &closeSprite = registry.get<Sprite>(closeButton);
-        auto &closeUIButton = registry.get<UIButton>(closeButton);
-        closeUIButton.w = closeSprite.w = 2 * closeSprite.w / 3;
-        closeUIButton.h = closeSprite.h = 2 * closeSprite.h / 3;
+        const auto &closeSprite = registry.get<Sprite>(closeButton);
+        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 3, 2 * closeSprite.h / 3);
+        setPopupUIButtonSize(registry, closeButton, closeSprite.w, closeSprite.h);
         setPos(registry, closeButton, x(closeSprite), panel.h - 3 * closeSprite.h / 8);
-        setBoundingBox(registry, closeButton, closeUIButton.w, closeUIButton.h);
+        setBoundingBox(registry, closeButton, closeSprite.w, closeSprite.h);
         setSpriteSize(registry, closeButton, 0, 0);
     };
 
@@ -113,12 +112,11 @@ void createBackgroundBottomPanel(Registry &registry) {
 
     auto createCloseButton = [&registry, &panel, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);
-        auto &closeSprite = registry.get<Sprite>(closeButton);
-        auto &closeUIButton = registry.get<UIButton>(closeButton);
-        closeUIButton.w = closeSprite.w = 2 * closeSprite.w / 3;
-        closeUIButton.h = closeSprite.h = 2 * closeSprite.h / 3;
+        const auto &closeSprite = registry.get<Sprite>(closeButton);
+        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 3, 2 * closeSprite.h / 3);
+        setPopupUIButtonSize(registry, closeButton, closeSprite.w, closeSprite.h);
         setPos(registry, closeButton, x(closeSprite), 3 * closeSprite.h / 8);
-        setBoundingBox(registry, closeButton, closeUIButton.w, closeUIButton.h);
+        setBoundingBox(registry, closeButton, closeSprite.w, closeSprite.h);
         setSpriteSize(registry, closeButton, 0, 0);
     };
 
@@ -207,6 +205,55 @@ void createCreditsPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/credits");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+
+    auto offset = registry.get<Transform>(titleEntity).y + 5 * titleHandle->height() / 3;
+
+    auto thanksHandle = textureCache.handle("str/credits/thanks");
+    auto thanksEntity = createSprite(registry, parent, thanksHandle, 20);
+    setPos(registry, thanksEntity, (panel.w - thanksHandle->width()) / 2, offset);
+    offset += 9 * thanksHandle->height() / 8;
+
+    auto playingHandle = textureCache.handle("str/credits/playing");
+    auto playingEntity = createSprite(registry, parent, playingHandle, 20);
+    setPos(registry, playingEntity, (panel.w - playingHandle->width()) / 2, offset);
+    offset += 5 * playingHandle->height() / 4;
+
+    auto facesmashHandle = textureCache.handle("str/credits/facesmash");
+    auto facesmashEntity = createSprite(registry, parent, facesmashHandle, 20);
+    setPos(registry, facesmashEntity, (panel.w - facesmashHandle->width()) / 2, offset);
+    offset += 2 * facesmashHandle->height();
+
+    auto wearegameeHandle = textureCache.handle("str/credits/wearegamee");
+    auto wearegameeEntity = createSprite(registry, parent, wearegameeHandle, 20);
+    setPos(registry, wearegameeEntity, (panel.w - wearegameeHandle->width()) / 2, offset);
+    offset += 9 * wearegameeHandle->height() / 8;
+
+    auto authorsHandle = textureCache.handle("str/credits/authors");
+    auto authorsEntity = createSprite(registry, parent, authorsHandle, 20);
+    setPos(registry, authorsEntity, (panel.w - authorsHandle->width()) / 2, offset);
+    offset += 3 * authorsHandle->height();
+
+    auto emojiHandle = textureCache.handle("str/credits/emoji");
+    auto emojiEntity = createSprite(registry, parent, emojiHandle, 20);
+    setPos(registry, emojiEntity, (panel.w - emojiHandle->width()) / 2, offset);
+    offset += 2 * emojiHandle->height();
+
+    auto emojitwoHandle = textureCache.handle("str/credits/emojitwo");
+    auto emojitwoEntity = createSprite(registry, parent, emojitwoHandle, 20);
+    setPos(registry, emojitwoEntity, (panel.w - emojitwoHandle->width()) / 2, offset);
+    offset += 2 * emojitwoHandle->height();
+
+    auto oslicensesHandle = textureCache.handle("str/credits/oslicenses");
+    auto oslicensesEntity = createSprite(registry, parent, oslicensesHandle, 20);
+    setPos(registry, oslicensesEntity, (panel.w - oslicensesHandle->width()) / 2, offset);
+    offset += 5 * oslicensesHandle->height() / 4;
+
+    auto gpgLicenseButton = createPopupUIButton(registry, parent, UIAction::GPG_LICENSE, 20);
+    const auto &gpgLicenseSprite = registry.get<Sprite>(gpgLicenseButton);
+    setSpriteSize(registry, gpgLicenseButton, 2 * gpgLicenseSprite.w / 3, 2 * gpgLicenseSprite.h / 3);
+    setPopupUIButtonSize(registry, gpgLicenseButton, gpgLicenseSprite.w, gpgLicenseSprite.h);
+    setBoundingBox(registry, gpgLicenseButton, gpgLicenseSprite.w, gpgLicenseSprite.h);
+    setPos(registry, gpgLicenseButton, (panel.w - gpgLicenseSprite.w) / 2, offset);
 }
 
 
@@ -249,6 +296,7 @@ void createSupportPanel(Registry &registry) {
     auto buyButton = createPopupUIButton(registry, parent, UIAction::BUY, 20);
     const auto &buySprite = registry.get<Sprite>(buyButton);
     setPos(registry, buyButton, (panel.w - buySprite.w) / 2, 5 * panel.h / 9);
+    registry.get<Sprite>(buyButton).frame = 2;
 
     auto removeHandle = textureCache.handle("str/support/remove");
     auto removeEntity = createSprite(registry, parent, removeHandle, 20);

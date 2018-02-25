@@ -87,7 +87,8 @@ enum class UIAction: Uint8 {
     SWITCH_AUDIO,
     SWITCH_VIDEO,
     LOGIN,
-    BUY
+    BUY,
+    GPG_LICENSE
 };
 
 

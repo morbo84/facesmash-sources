@@ -102,6 +102,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::BUY:
                     // TODO
                     break;
+                case UIAction::GPG_LICENSE:
+                    // TODO
+                    break;
                 }
             }
         });

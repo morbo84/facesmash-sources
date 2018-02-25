@@ -84,19 +84,27 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontNormal, colorWhite);
 
-    textureCache.load<TTFFontTextureLoader>("str/credits", "CREDITS", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/support", "SUPPORT US", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/settings", "SETTINGS", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/achievements", "ACHIEVEMENTS", renderer, *fontNormal, colorRed);
-    textureCache.load<TTFFontTextureLoader>("str/gameover", "GAME OVER", renderer, *fontLarge, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/credits", "Credits", renderer, *fontLarge, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/support", "Support us", renderer, *fontLarge, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/settings", "Settings", renderer, *fontLarge, colorRed);
+    textureCache.load<TTFFontTextureLoader>("str/gameover", "Game Over", renderer, *fontLarge, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/support/making", "Making games", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support/time", "in the free time", renderer, *fontSmall, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support/lot", "requires lot of", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/making", "Making Games", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/time", "In the free time", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/lot", "Requires LOT of", renderer, *fontSmall, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/support/coffee", "COFFEE", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/support/offer", "Offer us", renderer, *fontLarge, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support/next", "the next one", renderer, *fontNormal, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/support/remove", "REMOVE ADS", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/next", "The next one", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/support/remove", "Remove ADS", renderer, *fontTiny, colorWhite);
+
+    textureCache.load<TTFFontTextureLoader>("str/credits/thanks", "Thank YOU", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits/playing", "For playing", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits/facesmash", "FACE SMASH", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits/wearegamee", "We are GAMEE", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/credits/authors", "skypjack morbo84", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/credits/emoji", "Emoji artwork provided by", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits/emojitwo", "Emojitwo", renderer, *fontNormal, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/credits/oslicenses", "Open Source Licenses", renderer, *fontSmall, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/audio", "Audio", renderer, *fontSmall, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/video", "Video", renderer, *fontSmall, colorWhite);
