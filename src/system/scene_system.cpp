@@ -483,6 +483,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             remaining = delta > remaining ? 0_ui32 : (remaining - delta);
 
             if(!remaining) {
+                disableCameraFrame(registry);
+
                 switch(next) {
                 case SceneType::EXIT:
                     enableShowPopupButtons(registry, PanelType::MENU_BOTTOM);
@@ -514,12 +516,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::THE_GAME:
                     ads.load(AdsType::INTERSTITIAL);
+                    enableCameraFrame(registry);
                     initGame(registry);
                     break;
                 case SceneType::GAME_OVER:
                     avRecorder.stop();
                     clearGame(registry);
-                    disableCameraFrame(registry);
                     ads.isLoaded(AdsType::INTERSTITIAL)
                             ? (ads.show(AdsType::INTERSTITIAL), enableUIButtons(registry, PanelType::GAME_OVER))
                             : enableUIButtons(registry, PanelType::GAME_OVER);
@@ -528,6 +530,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
                     break;
                 case SceneType::TRAINING:
+                    enableCameraFrame(registry);
                     initTraining(registry);
                     break;
                 default:
@@ -544,7 +547,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
 
             switch(next) {
             case SceneType::EXIT:
-                disableCameraFrame(registry);
                 remaining = bgPanelTransition(registry, PanelType::EXIT);
                 break;
             case SceneType::SPLASH_SCREEN:
