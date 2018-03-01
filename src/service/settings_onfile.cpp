@@ -10,15 +10,18 @@
 namespace gamee {
 
 
+static const std::string& filePath() {
 #ifdef __ANDROID__
-static const std::string filePath{std::string{SDL_AndroidGetInternalStoragePath()} + "/settings"};
+    static const auto ret = std::string{SDL_AndroidGetInternalStoragePath()} + "/settings";
 #else
-static const std::string filePath{"./settings"};
+    static const std::string ret{"./settings"};
 #endif
+    return ret;
+}
 
 
 SettingsOnFile::SettingsOnFile() {
-    std::ifstream infile{filePath};
+    std::ifstream infile{filePath()};
     std::string key;
 
     while(infile >> key) {
@@ -88,8 +91,7 @@ std::string SettingsOnFile::read(const std::string &key, const char *fallback) c
 
 
 void SettingsOnFile::save() {
-    std::ofstream outfile{filePath};
-
+    std::ofstream outfile{filePath()};
     for(auto& p : m_) {
         outfile << p.first << "\t\t" << p.second << '\n';
     }
