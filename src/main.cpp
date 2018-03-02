@@ -8,8 +8,7 @@
 #include "locator/locator.hpp"
 #include "service/ads_android.h"
 #include "service/ads_null.h"
-#include "service/audio_null.h"
-#include "service/audio_sdl.h"
+#include "service/audio_service.h"
 #include "service/av_recorder_android.h"
 #include "service/av_recorder_null.h"
 #include "service/camera_android.h"
@@ -18,7 +17,7 @@
 #include "service/settings_onmemory.h"
 
 
-void initBasicServices() {
+static void initBasicServices() {
     gamee::Locator::TTFFontCache::set();
     gamee::Locator::TextureCache::set();
     gamee::Locator::Dispatcher::set();
@@ -26,7 +25,7 @@ void initBasicServices() {
 }
 
 
-void releaseBasicServices() {
+static void releaseBasicServices() {
     gamee::Locator::InputHandler::reset();
     gamee::Locator::Dispatcher::reset();
     gamee::Locator::TextureCache::reset();
@@ -34,41 +33,46 @@ void releaseBasicServices() {
 }
 
 
-void initPlatformServices() {
+static void initPlatformServices() {
 #ifdef __ANDROID__
     gamee::Locator::Settings::set<gamee::SettingsOnFile>();
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
-
-    auto &settings = gamee::Locator::Settings::ref();
-
-    settings.read("controls/video", true)
-        ? gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>()
-        : gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
 #else
     gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
-    gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
-
-    auto &settings = gamee::Locator::Settings::ref();
 #endif
 
+    gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
     gamee::Locator::FaceBus::set<gamee::FaceBusService>();
-
-    settings.read("controls/audio", true)
-            ? gamee::Locator::Audio::set<gamee::AudioSdl>()
-            : gamee::Locator::Audio::set<gamee::AudioNull>();
+    gamee::Locator::Audio::set<gamee::AudioService>();
 }
 
 
-void releasePlatformServices() {
+static void releasePlatformServices() {
     gamee::Locator::AvRecorder::reset();
     gamee::Locator::Ads::reset();
     gamee::Locator::Camera::reset();
     gamee::Locator::Audio::reset();
     gamee::Locator::FaceBus::reset();
 }
+
+
+static void readSettings() {
+    auto &settings = gamee::Locator::Settings::ref();
+
+#ifdef __ANDROID__
+    if(settings.read("video/available", true)) {
+        gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>()
+    }
+#endif
+
+    const int mute = settings.read("audio/mute", false);
+    gamee::Locator::Audio::ref().mute(mute);
+
+}
+
 
 int main(int, char **) {
     // set up services
@@ -81,6 +85,9 @@ int main(int, char **) {
 
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();
+
+    // read settings and adjust services if required
+    readSettings();
 
     // enjoy!! :-)
     auto ret = loop->exec();

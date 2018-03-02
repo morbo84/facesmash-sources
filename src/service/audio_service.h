@@ -2,15 +2,15 @@
 #define FACE_SMASH_SERVICE_AUDIO_SERVICE_H
 
 
+#include "audio_service.h"
+
+
 namespace gamee {
 
 
 struct AudioService {
-    virtual ~AudioService() = default;
-
-    virtual bool isMute() const noexcept = 0;
-
-    // TODO
+    bool mute() const noexcept;
+    void mute(bool) noexcept;
 };
 
 

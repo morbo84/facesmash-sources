@@ -1,5 +1,4 @@
 #include <cassert>
-#include <utility>
 #include <SDL_render.h>
 #include "font_resource.h"
 

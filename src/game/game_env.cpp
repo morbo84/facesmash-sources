@@ -71,11 +71,12 @@ GameEnv::GameEnv() noexcept
     SDL_WasInit = (SDL_Init(sdlFlags) == 0);
     IMG_WasInit = ((IMG_Init(sdlImageFlags) & sdlImageFlags) == sdlImageFlags);
     Mix_WasInit = ((Mix_Init(sdlMixerFlags) & sdlMixerFlags) == sdlMixerFlags);
+    Audio_WasInit = (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != -1);
     TTF_Init();
 
     renderer = std::make_unique<GameRenderer>();
 
-    if(!SDL_WasInit || !IMG_WasInit || !Mix_WasInit || !TTF_WasInit()) {
+    if(!SDL_WasInit || !IMG_WasInit || !Mix_WasInit || !Audio_WasInit || !TTF_WasInit()) {
         errcode = ErrorCode::UNDERLYING_LIBRARY_INITIALIZATION;
     } else if(!*renderer) {
         errcode = ErrorCode::RENDERER_INITIALIZATION;
@@ -94,8 +95,9 @@ GameEnv::~GameEnv() noexcept {
     Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     SDL_SetEventFilter(nullptr, nullptr);
     if(TTF_WasInit()) { TTF_Quit(); }
-    if(IMG_WasInit) { IMG_Quit(); }
+    if(Audio_WasInit) { Mix_CloseAudio(); }
     if(Mix_WasInit) { Mix_Quit(); }
+    if(IMG_WasInit) { IMG_Quit(); }
     if(SDL_WasInit) { SDL_Quit(); }
 }
 
@@ -157,7 +159,7 @@ int GameEnv::exec() noexcept {
      */
 
     // in case of errors, the game won't start
-    loop = loop && (errcode == ErrorCode::NONE);
+    loop = loop && valid();
 
     if(loop) {
         // initialize the game

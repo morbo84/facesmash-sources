@@ -56,6 +56,7 @@ private:
     bool SDL_WasInit;
     bool IMG_WasInit;
     bool Mix_WasInit;
+    bool Audio_WasInit;
     // actual game data members
     ErrorCode errcode;
     std::unique_ptr<GameRenderer> renderer;

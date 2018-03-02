@@ -7,6 +7,7 @@
 #include <entt/entity/registry.hpp>
 #include <entt/resource/cache.hpp>
 #include <entt/signal/dispatcher.hpp>
+#include "../resource/audio_resource.h"
 #include "../resource/font_resource.h"
 #include "../resource/texture_resource.h"
 
@@ -26,6 +27,8 @@ constexpr Sint64 operator"" _si64 (unsigned long long ull) { return Sint64(ull);
 
 using delta_type = Uint32;
 
+using AudioMusicCache = entt::ResourceCache<AudioMusicResource>;
+using AudioChunkCache = entt::ResourceCache<AudioChunkResource>;
 using TextureCache = entt::ResourceCache<SDLTextureResource>;
 using TTFFontCache = entt::ResourceCache<TTFFontResource>;
 using Dispatcher = entt::UnmanagedDispatcher;
