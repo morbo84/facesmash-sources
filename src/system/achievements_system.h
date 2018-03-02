@@ -3,6 +3,7 @@
 
 
 #include "../common/types.h"
+#include "../component/component.hpp"
 
 
 namespace gamee {
@@ -22,6 +23,7 @@ struct AchievementsSystem final {
 private:
     bool dirtyGameOver;
     SceneType current;
+    PlayerScore previous{};
 };
 
 

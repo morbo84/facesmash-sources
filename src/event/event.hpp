@@ -68,6 +68,18 @@ struct ActivateEasterEggEvent {};
 struct TimeIsOverEvent {};
 
 
+struct GameServicesEvent {
+    enum class Type: Uint8 {
+        SIGNING_IN,
+        SIGNED_IN,
+        SIGNING_OUT,
+        SIGNED_OUT
+    };
+
+    const Type type;
+};
+
+
 }
 
 

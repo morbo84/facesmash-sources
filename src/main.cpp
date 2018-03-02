@@ -13,6 +13,8 @@
 #include "service/av_recorder_null.h"
 #include "service/camera_android.h"
 #include "service/camera_null.h"
+#include "service/game_services_android.h"
+#include "service/game_services_null.h"
 #include "service/settings_onfile.h"
 #include "service/settings_onmemory.h"
 
@@ -37,10 +39,12 @@ static void initPlatformServices() {
 #ifdef __ANDROID__
     gamee::Locator::Settings::set<gamee::SettingsOnFile>();
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
+    gamee::Locator::GameServices::set<gamee::GameServicesAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
 #else
     gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
     gamee::Locator::Camera::set<gamee::CameraNull>();
+    gamee::Locator::GameServices::set<gamee::GameServicesNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
 #endif
 
@@ -74,6 +78,7 @@ static void readSettings() {
 }
 
 
+
 int main(int, char **) {
     // set up services
     initBasicServices();
@@ -88,6 +93,9 @@ int main(int, char **) {
 
     // read settings and adjust services if required
     readSettings();
+
+    // try to log in for fun and profit
+    gamee::Locator::GameServices::ref().signIn();
 
     // enjoy!! :-)
     auto ret = loop->exec();

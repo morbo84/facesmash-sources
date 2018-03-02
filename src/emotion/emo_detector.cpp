@@ -1,18 +1,36 @@
-#include <array>
 #include <algorithm>
+#include <array>
+#include <string>
 #include <SDL_surface.h>
+#include <SDL_system.h>
 #include "../common/constants.h"
 #include "../locator/locator.hpp"
 #include "emo_detector.h"
 
 
+static const std::string& visageTrackingCfg() {
 #ifdef __ANDROID__
-static const char* visageTrackingCfg = "/data/data/com.cynny.gamee.facesmash/files/visage/Facial Features Tracker - High.cfg";
-static const char* visageDataPath = "/data/data/com.cynny.gamee.facesmash/files/visage/bdtsdata/LBF/vfadata";
+    static const auto ret = std::string{SDL_AndroidGetInternalStoragePath()} + "/visage/Facial Features Tracker - High.cfg";
 #else
-static const char* visageTrackingCfg = "visage/Facial Features Tracker - High.cfg";
-static const char* visageDataPath = "visage/bdtsdata/LBF/vfadata";
+    static const std::string ret = "visage/Facial Features Tracker - High.cfg";
+#endif
+    return ret;
+}
+
+
+static const std::string& visageDataPath() {
+#ifdef __ANDROID__
+    static const auto ret = std::string{SDL_AndroidGetInternalStoragePath()} + "/visage/bdtsdata/LBF/vfadata";
+#else
+    static const std::string ret = "visage/bdtsdata/LBF/vfadata";
+#endif
+    return ret;
+}
+
+
+#ifndef __ANDROID__
 static const char* visageLicense = "visage/591-919-572-251-334-591-398-301-506-198-303.vlc";
+
 
 // neccessary prototype declaration for licensing
 namespace VisageSDK {
@@ -36,7 +54,7 @@ namespace gamee {
 EmoDetector::EmoDetector(int width, int height)
     : width_{width}
     , height_{height}
-    , tracker_{visageTrackingCfg}
+    , tracker_{visageTrackingCfg().c_str()}
     , image_{vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3)}
     , internalSize_{(static_cast<size_t>(width * height) * SDL_BITSPERPIXEL(internalFormat)) / 8}
     , internal_{std::make_unique<unsigned char[]>(internalSize_)}
@@ -44,7 +62,7 @@ EmoDetector::EmoDetector(int width, int height)
     , end_{false}
     , t_{&EmoDetector::analyzeCurrentFrame, this}
 {
-    analyzer_.init(visageDataPath);
+    analyzer_.init(visageDataPath().c_str());
     Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
 }
 
