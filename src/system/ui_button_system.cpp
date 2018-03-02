@@ -109,6 +109,7 @@ void UIButtonSystem::update(Registry &registry) {
 
         view.each([&, this](auto entity, auto &button, auto &transform, auto &box) {
             auto &dispatcher = Locator::Dispatcher::ref();
+            auto &gservices = Locator::GameServices::ref();
 
             auto area = transformToPosition(registry, entity, transform) * box;
 
@@ -146,10 +147,14 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
                     break;
                 case UIAction::ACHIEVEMENTS:
-                    Locator::GameServices::ref().achievements().showAllUI();
+                    gservices.isSignedIn()
+                            ? gservices.achievements().showAllUI()
+                            : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
                 case UIAction::LEADERBOARD:
-                    // TODO
+                    gservices.isSignedIn()
+                            ? /* TODO */ void()
+                            : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
                 case UIAction::SAVE:
                     Locator::AvRecorder::ref().exportMedia();

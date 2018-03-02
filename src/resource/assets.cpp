@@ -84,6 +84,11 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontNormal, colorWhite);
 
+    textureCache.load<TTFFontTextureLoader>("str/oops", "Oops!!", renderer, *fontLarge, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/wrong", "Something went wrong", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/retry", "Log in and retry", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/please", "Please", renderer, *fontNormal, colorWhite);
+
     textureCache.load<TTFFontTextureLoader>("str/credits", "Credits", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/support", "Support us", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/settings", "Settings", renderer, *fontLarge, colorRed);

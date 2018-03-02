@@ -26,6 +26,7 @@ void createGameOverPanel(Registry &);
 void refreshGameOverPanel(Registry &);
 void createTrainingTopPanel(Registry &);
 void createTrainingBottomPanel(Registry &);
+void createLoginPleasePanel(Registry &);
 void createCamera(Registry &);
 void createCameraFrame(Registry &);
 void createSmashButtons(Registry &);
