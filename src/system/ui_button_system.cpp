@@ -29,7 +29,9 @@ enum GameServicesStatus: Uint8 {
 static void handleUserButtonClick(Registry &registry) {
     auto view = registry.view<UIButton, Sprite>();
 
-    view.each([](auto entity, auto &button, auto &sprite) {
+    for(auto entity: view) {
+        auto &sprite = registry.get<Sprite>(entity);
+
         switch(sprite.frame){
             case GameServicesStatus::SIGNED_IN:
                 Locator::GameServices::ref().signOut();
@@ -41,7 +43,7 @@ static void handleUserButtonClick(Registry &registry) {
                 // do nothing
                 break;
         }
-    });
+    }
 }
 
 
@@ -82,19 +84,19 @@ void UIButtonSystem::update(Registry &registry) {
     if(gsEvent) {
         auto view = registry.view<UIButton, Sprite>();
 
-        view.each([this](auto entity, auto &button, auto &sprite) {
+        view.each([this](auto, auto &button, auto &sprite) {
             if(button.action == UIAction::LOGIN) {
-                switch(gsEvent->type){
-                    case GameServicesEvent::Type::SIGNED_IN:
-                        sprite.frame = GameServicesStatus::SIGNED_IN;
-                        break;
-                    case GameServicesEvent::Type::SIGNED_OUT:
-                        sprite.frame = GameServicesStatus::SIGNED_OUT;
-                        break;
-                    case GameServicesEvent::Type::SIGNING_IN:
-                    case GameServicesEvent::Type::SIGNING_OUT:
-                        sprite.frame = GameServicesStatus::PENDING;
-                        break;
+                switch(gsEvent->type) {
+                case GameServicesEvent::Type::SIGNED_IN:
+                    sprite.frame = GameServicesStatus::SIGNED_IN;
+                    break;
+                case GameServicesEvent::Type::SIGNED_OUT:
+                    sprite.frame = GameServicesStatus::SIGNED_OUT;
+                    break;
+                case GameServicesEvent::Type::SIGNING_IN:
+                case GameServicesEvent::Type::SIGNING_OUT:
+                    sprite.frame = GameServicesStatus::PENDING;
+                    break;
                 }
             }
         });
