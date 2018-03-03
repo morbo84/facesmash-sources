@@ -36,7 +36,7 @@ enum class FaceSmashAchievement {
 
 
 enum class FaceSmashLeaderboard {
-    SINGLE_GAME_POINTS
+    SCORE, FACES
 };
 
 
@@ -53,6 +53,7 @@ struct LeaderboardsManager {
     virtual ~LeaderboardsManager() = default;
 
     virtual void submitScore(FaceSmashLeaderboard, uint64_t) noexcept = 0;
+    virtual void showAllLeaderboardsUI() noexcept = 0;
 };
 
 
