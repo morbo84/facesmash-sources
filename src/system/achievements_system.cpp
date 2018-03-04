@@ -244,6 +244,14 @@ void smashMeCry(Registry &registry) {
 }
 
 
+// submit scores to leaderboards
+void submitToLeaderboards(Registry &registry) {
+    const auto& score = registry.get<PlayerScore>();
+    Locator::GameServices::ref().leaderboards().submitScore(FaceSmashLeaderboard::SCORE, score.score);
+    Locator::GameServices::ref().leaderboards().submitScore(FaceSmashLeaderboard::FACES, total(score));
+}
+
+
 AchievementsSystem::AchievementsSystem() noexcept
     : dirtyGameOver{false}
 {
@@ -297,6 +305,7 @@ void AchievementsSystem::update(Registry &registry) {
             iAmSoHappy(registry);
             blueIsTheNewSmash(registry);
             smashMeCry(registry);
+            submitToLeaderboards(registry);
         }
     }
 

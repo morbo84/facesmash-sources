@@ -6,6 +6,7 @@
 #include <gpg/achievement_manager.h>
 #include <gpg/builder.h>
 #include <gpg/game_services.h>
+#include <gpg/leaderboard_manager.h>
 #include <gpg/platform_configuration.h>
 #include <SDL_system.h>
 #include <android/log.h>
@@ -61,6 +62,16 @@ static constexpr const char* achievementCode(FaceSmashAchievement a) {
             return "CgkI5IbdrqUREAIQFg";
         case FaceSmashAchievement::SMASH_ME_CRY:
             return "CgkI5IbdrqUREAIQFw";
+    }
+}
+
+
+static constexpr const char* leaderboardCode(FaceSmashLeaderboard l) {
+    switch(l) {
+        case FaceSmashLeaderboard::SCORE:
+            return "CgkI5IbdrqUREAIQGA";
+        case FaceSmashLeaderboard::FACES:
+            return "CgkI5IbdrqUREAIQGQ";
     }
 }
 
@@ -166,8 +177,15 @@ LeaderboardsManager& GameServicesAndroid::leaderboards() noexcept {
 }
 
 
-void GameServicesAndroid::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {
-    // TODO
+void GameServicesAndroid::submitScore(FaceSmashLeaderboard l, uint64_t score) noexcept {
+    if(isAuthorized())
+        gs_->Leaderboards().SubmitScore(leaderboardCode(l), score);
+}
+
+
+void GameServicesAndroid::showAllLeaderboardsUI() noexcept {
+    if(isAuthorized())
+        gs_->Leaderboards().ShowAllUIBlocking(std::chrono::seconds{3});
 }
 
 

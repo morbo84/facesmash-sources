@@ -35,6 +35,7 @@ struct GameServicesAndroid : GameServicesService, AchievementsManager, Leaderboa
 
     // LeaderboardsManager interface
     void submitScore(FaceSmashLeaderboard, uint64_t) noexcept override;
+    void showAllLeaderboardsUI() noexcept override;
 
 private:
     bool isAuthorized() const noexcept;

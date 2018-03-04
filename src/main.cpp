@@ -68,7 +68,7 @@ static void readSettings() {
 
 #ifdef __ANDROID__
     if(settings.read("video/available", true)) {
-        gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>()
+        gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
     }
 #endif
 

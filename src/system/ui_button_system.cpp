@@ -153,7 +153,7 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::LEADERBOARD:
                     gservices.isSignedIn()
-                            ? /* TODO */ void()
+                            ? Locator::GameServices::ref().leaderboards().showAllLeaderboardsUI()
                             : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
                 case UIAction::SAVE:
