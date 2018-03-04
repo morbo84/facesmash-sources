@@ -481,7 +481,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         auto &ads = Locator::Ads::ref();
 
         if(isTransitioning) {
-            remaining = delta > remaining ? 0_ui32 : (remaining - delta);
+            remaining -= std::min(remaining, delta);
 
             if(!remaining) {
                 disableCameraFrame(registry);

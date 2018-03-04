@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../common/constants.h"
 #include "../common/ease.h"
 #include "../component/component.hpp"
@@ -40,8 +41,8 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
     const bool hurry = remaining < (duration / 2);
     TrainingState next = TrainingState::TRAINING;
 
-    remaining = delta > remaining ? 0_ui32 : (remaining - delta);
-    range = delta > range ? 0_ui32 : (range - delta);
+    remaining -= std::min(remaining, delta);
+    range -= std::min(range, delta);
 
     if(!range) {
         if(current == match) {

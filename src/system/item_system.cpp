@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
@@ -102,7 +103,7 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
         movement(registry, 1.f);
     }
 
-    remaining = delta > remaining ? 0_ui32 : (remaining - delta);
+    remaining -= std::min(remaining, delta);
     dirty = false;
 }
 

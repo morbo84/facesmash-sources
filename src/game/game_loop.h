@@ -8,6 +8,7 @@
 #include "../factory/spawner.h"
 #include "../system/achievements_system.h"
 #include "../system/animation_system.h"
+#include "../system/audio_system.h"
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
@@ -53,6 +54,7 @@ private:
     // systems
     AchievementsSystem achievementsSystem;
     AnimationSystem animationSystem;
+    AudioSystem audioSystem;
     DebugSystem debugSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;

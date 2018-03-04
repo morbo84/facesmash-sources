@@ -73,6 +73,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 
         frameSystem.update(registry);
         sceneSystem.update(registry, delta);
+        audioSystem.update(registry,delta);
         destroyLaterSystem.update(registry, delta);
 
         uiButtonSystem.update(registry);
