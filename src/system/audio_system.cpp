@@ -49,6 +49,7 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
         // TODO restart music
         break;
     case AudioEvent::Type::STOP:
+        Locator::Audio::ref().halt();
         Locator::Audio::set<AudioNull>();
         break;
     }

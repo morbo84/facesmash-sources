@@ -9,8 +9,6 @@ namespace gamee {
 
 
 struct AudioSDL: AudioService {
-    ~AudioSDL();
-
     bool mute() const noexcept override;
     void mute(bool) noexcept override;
 
