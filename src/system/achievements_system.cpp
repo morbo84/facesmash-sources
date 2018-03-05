@@ -91,39 +91,41 @@ void smashIsMyJob(const PlayerScore& score) {
 
 // collector, 50 combo of the given type
 void collector2x(const PlayerScore& delta) {
-    if(auto combos2x = delta.combo2x) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_2X, combos2x);
+    if(delta.combo2x) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_2X, delta.combo2x);
     }
 }
 
 
 // collector, 40 combo of the given type
 void collector3x(const PlayerScore& delta) {
-    if(auto combos3x = delta.combo3x) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_3X, combos3x);
+    if(delta.combo3x) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_3X, delta.combo3x);
     }
 }
 
 
 // collector, 30 combo of the given type
 void collector4x(const PlayerScore& delta) {
-    if(auto combos4x = delta.combo4x) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_4X, combos4x);
+    if(delta.combo4x) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_4X, delta.combo4x);
     }
 }
 
 
 // collector, 20 combo of the given type
 void collector5x(const PlayerScore& delta) {
-    if(auto combos5x= delta.combo5x) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_5X, combos5x);
+    if(delta.combo5x) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::COMBO_COLLECTOR_5X, delta.combo5x);
     }
 }
 
 
 // 100th smash
 void littleSmasher(const PlayerScore& delta) {
-    if(auto smash = total(delta)) {
+    const auto smash = total(delta);
+
+    if(smash) {
         Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::LITTLE_SMASHER, smash);
     }
 }
@@ -131,7 +133,9 @@ void littleSmasher(const PlayerScore& delta) {
 
 // 1000th smash
 void theSniper(const PlayerScore& delta) {
-    if(auto smash = total(delta)) {
+    const auto smash = total(delta);
+
+    if(smash) {
         Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::THE_SNIPER, smash);
     }
 }
@@ -139,7 +143,9 @@ void theSniper(const PlayerScore& delta) {
 
 // 10000th smash
 void godSmasher(const PlayerScore& delta) {
-    if(auto smash = total(delta)) {
+    const auto smash = total(delta);
+
+    if(smash) {
         Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::GOD_SMASHER, smash);
     }
 }
@@ -147,48 +153,48 @@ void godSmasher(const PlayerScore& delta) {
 
 // 100 smashes of the given type
 void angrySmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitAngry) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_ANGRY, smash);
+    if(delta.hitAngry) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_ANGRY, delta.hitAngry);
     }
 }
 
 
 // 100 smashes of the given type
 void disgustedSmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitDisgusted) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_DISGUSTED, smash);
+    if(delta.hitDisgusted) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_DISGUSTED, delta.hitDisgusted);
     }
 }
 
 
 // 100 smashes of the given type
 void fearfulSmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitFearful) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_FEARFUL, smash);
+    if(delta.hitFearful) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_FEARFUL, delta.hitFearful);
     }
 }
 
 
 // 100 smashes of the given type
 void happySmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitHappy) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_HAPPY, smash);
+    if(delta.hitHappy) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_HAPPY, delta.hitHappy);
     }
 }
 
 
 // 100 smashes of the given type
 void sadSmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitSad) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_SAD, smash);
+    if(delta.hitSad) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_SAD, delta.hitSad);
     }
 }
 
 
 // 100 smashes of the given type
 void surprisedSmash(const PlayerScore& delta) {
-    if(auto smash = delta.hitSurprised) {
-        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_SURPRISED, smash);
+    if(delta.hitSurprised) {
+        Locator::GameServices::ref().achievements().increment(FaceSmashAchievement::SMASH_THE_SURPRISED, delta.hitSurprised);
     }
 }
 
