@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H
-#define FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H
+#ifndef FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H
+#define FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H
 
 
 #include <memory>
@@ -10,17 +10,17 @@
 namespace gamee {
 
 
-struct RecorderEvent;
+struct AvRecorderEvent;
 struct GameRenderer;
 
 
-struct RecordingSystem final {
-    RecordingSystem();
-    ~RecordingSystem();
+struct AvRecorderSystem final {
+    AvRecorderSystem();
+    ~AvRecorderSystem();
 
     void init();
 
-    void receive(const RecorderEvent &) noexcept;
+    void receive(const AvRecorderEvent &) noexcept;
 
     void update(GameRenderer &, delta_type, std::function<void(void)>);
 
@@ -35,4 +35,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H
+#endif // FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H

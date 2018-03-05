@@ -507,6 +507,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
+                    enableUIButtons(registry, PanelType::MENU_BOTTOM);
+                    enableUIButtons(registry, PanelType::MENU_TOP);
                     enableUIButtons(registry, PanelType::SETTINGS);
                     break;
                 case SceneType::MENU_PAGE:
@@ -520,6 +522,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
+                    hideBackgroundPanels(registry);
                     break;
                 case SceneType::THE_GAME:
                     ads.load(AdsType::INTERSTITIAL);
@@ -535,6 +538,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::TRAINING_TUTORIAL:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
+                    hideBackgroundPanels(registry);
                     break;
                 case SceneType::TRAINING:
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
@@ -606,6 +610,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::GAME_TUTORIAL:
                 camera.start();
                 avRecorder.start(recordingWidth, recordingHeight);
+                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
@@ -620,6 +626,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::TRAINING_TUTORIAL:
                 camera.start();
+                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = trainingTutorialTransition(registry);
                 break;
             case SceneType::TRAINING:

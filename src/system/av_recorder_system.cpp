@@ -6,28 +6,28 @@
 #include "../locator/locator.hpp"
 #include "../service/av_recorder_android.h"
 #include "../service/av_recorder_null.h"
-#include "recording_system.h"
+#include "av_recorder_system.h"
 
 
 namespace gamee {
 
 
-RecordingSystem::RecordingSystem()
+AvRecorderSystem::AvRecorderSystem()
     : pixels{nullptr},
       accumulator{0_ui32},
       firstFrame{true},
       pitch{0}
 {
-    Locator::Dispatcher::ref().connect<RecorderEvent>(this);
+    Locator::Dispatcher::ref().connect<AvRecorderEvent>(this);
 }
 
 
-RecordingSystem::~RecordingSystem() {
-    Locator::Dispatcher::ref().disconnect<RecorderEvent>(this);
+AvRecorderSystem::~AvRecorderSystem() {
+    Locator::Dispatcher::ref().disconnect<AvRecorderEvent>(this);
 }
 
 
-void RecordingSystem::init() {
+void AvRecorderSystem::init() {
     auto &textureCache = Locator::TextureCache::ref();
     auto recording = textureCache.handle("target/recording");
 
@@ -44,26 +44,26 @@ void RecordingSystem::init() {
 }
 
 
-void RecordingSystem::receive(const RecorderEvent &event) noexcept {
+void AvRecorderSystem::receive(const AvRecorderEvent &event) noexcept {
     switch(event.type) {
 #ifdef __ANDROID__
-    case RecorderEvent::Type::ENABLE:
+    case AvRecorderEvent::Type::ENABLE:
         Locator::AvRecorder::set<AvRecorderAndroid>();
         break;
 #else
-    case RecorderEvent::Type::ENABLE:
+    case AvRecorderEvent::Type::ENABLE:
 #endif
-    case RecorderEvent::Type::DISABLE:
+    case AvRecorderEvent::Type::DISABLE:
         Locator::AvRecorder::set<AvRecorderNull>();
         break;
-    case RecorderEvent::Type::EXPORT:
+    case AvRecorderEvent::Type::EXPORT:
         Locator::AvRecorder::ref().exportMedia();
         break;
     }
 }
 
 
-void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
+void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
     auto &avRecorder = Locator::AvRecorder::ref();
 
     if(avRecorder.recording()) {

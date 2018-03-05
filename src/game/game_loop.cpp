@@ -50,7 +50,7 @@ void GameLoop::init(GameRenderer &renderer) {
 #endif // DEBUG
 
     // init systems explicitly if required
-    recordingSystem.init();
+    avRecorderSystem.init();
 
     // request immediately a transition to the main menu from the splash screen
     Locator::Dispatcher::ref().trigger<SceneChangeEvent>(SceneType::SPLASH_SCREEN);
@@ -67,7 +67,7 @@ void GameLoop::close() {
 
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // do the best to record if required and then render everything
-    recordingSystem.update(renderer, delta, [&, this]() {
+    avRecorderSystem.update(renderer, delta, [&, this]() {
         // sum what remains from the previous step
         accumulator += delta;
 

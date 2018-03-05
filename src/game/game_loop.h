@@ -9,6 +9,7 @@
 #include "../system/achievements_system.h"
 #include "../system/animation_system.h"
 #include "../system/audio_system.h"
+#include "../system/av_recorder_system.h"
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
@@ -18,7 +19,6 @@
 #include "../system/frame_system.h"
 #include "../system/item_system.h"
 #include "../system/movement_system.h"
-#include "../system/recording_system.h"
 #include "../system/rendering_system.h"
 #include "../system/scene_system.h"
 #include "../system/score_system.h"
@@ -55,6 +55,7 @@ private:
     AchievementsSystem achievementsSystem;
     AnimationSystem animationSystem;
     AudioSystem audioSystem;
+    AvRecorderSystem avRecorderSystem;
     DebugSystem debugSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;
@@ -64,7 +65,6 @@ private:
     FaceSmashSystem faceSmashSystem;
     FrameSystem frameSystem;
     MovementSystem movementSystem;
-    RecordingSystem recordingSystem;
     RenderingSystem renderingSystem;
     SceneSystem sceneSystem;
     ScoreSystem scoreSystem;

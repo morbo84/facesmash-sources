@@ -90,7 +90,7 @@ struct AudioEvent {
 };
 
 
-struct RecorderEvent {
+struct AvRecorderEvent {
     enum class Type: Uint8 {
         EXPORT,
         DISABLE,

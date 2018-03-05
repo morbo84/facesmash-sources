@@ -74,15 +74,15 @@ static void switchVideo(Registry &registry, entity_type button) {
     settings.write("video/available", !video);
 
     if(video) {
-        dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::DISABLE);
+        dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
         registry.get<Sprite>(button).frame = 3;
     } else {
-        dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::ENABLE);
+        dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::ENABLE);
         registry.get<Sprite>(button).frame = 2;
     }
 #else
     settings.write("video/available", false);
-    dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::DISABLE);
+    dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
     registry.get<Sprite>(button).frame = 3;
 #endif
 
@@ -190,7 +190,7 @@ void UIButtonSystem::update(Registry &registry) {
                             : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
                 case UIAction::SAVE:
-                    dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::EXPORT);
+                    dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);
