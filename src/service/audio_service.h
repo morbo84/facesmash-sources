@@ -13,21 +13,23 @@ struct AudioChunkResource;
 
 
 struct AudioService {
-    bool mute() const noexcept;
-    void mute(bool) noexcept;
+    virtual ~AudioService() = default;
 
-    void pause();
-    void resume();
-    void halt();
+    virtual bool mute() const noexcept = 0;
+    virtual void mute(bool) noexcept = 0;
 
-    void play(const AudioMusicResource &);
-    void play(const AudioChunkResource &);
+    virtual void pause() = 0;
+    virtual void resume() = 0;
+    virtual void halt() = 0;
 
-    void fadeIn(const AudioMusicResource &, int);
-    int fadeIn(const AudioChunkResource &, int);
+    virtual void play(const AudioMusicResource &) = 0;
+    virtual void play(const AudioChunkResource &) = 0;
 
-    void fadeOut(int);
-    void fadeOut(int, int);
+    virtual void fadeIn(const AudioMusicResource &, int) = 0;
+    virtual int fadeIn(const AudioChunkResource &, int) = 0;
+
+    virtual void fadeOut(int) = 0;
+    virtual void fadeOut(int, int) = 0;
 };
 
 

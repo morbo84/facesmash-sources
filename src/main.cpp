@@ -8,7 +8,8 @@
 #include "locator/locator.hpp"
 #include "service/ads_android.h"
 #include "service/ads_null.h"
-#include "service/audio_service.h"
+#include "service/audio_null.h"
+#include "service/audio_sdl.h"
 #include "service/av_recorder_android.h"
 #include "service/av_recorder_null.h"
 #include "service/camera_android.h"
@@ -50,16 +51,18 @@ static void initPlatformServices() {
 
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
     gamee::Locator::FaceBus::set<gamee::FaceBusService>();
-    gamee::Locator::Audio::set<gamee::AudioService>();
+    gamee::Locator::Audio::set<gamee::AudioNull>();
 }
 
 
 static void releasePlatformServices() {
-    gamee::Locator::AvRecorder::reset();
-    gamee::Locator::Ads::reset();
-    gamee::Locator::Camera::reset();
     gamee::Locator::Audio::reset();
     gamee::Locator::FaceBus::reset();
+    gamee::Locator::AvRecorder::reset();
+    gamee::Locator::Ads::reset();
+    gamee::Locator::GameServices::reset();
+    gamee::Locator::Camera::reset();
+    gamee::Locator::Settings::reset();
 }
 
 
@@ -72,11 +75,10 @@ static void readSettings() {
     }
 #endif
 
-    const int mute = settings.read("audio/mute", false);
-    gamee::Locator::Audio::ref().mute(mute);
-
+    if(settings.read("audio/available", true)) {
+        gamee::Locator::Audio::set<gamee::AudioSDL>();
+    }
 }
-
 
 
 int main(int, char **) {

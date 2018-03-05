@@ -19,7 +19,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/resource/texture_resource.cpp
     ${facesmash_SOURCE_DIR}/src/service/ads_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/ads_null.cpp
-    ${facesmash_SOURCE_DIR}/src/service/audio_service.cpp
+    ${facesmash_SOURCE_DIR}/src/service/audio_null.cpp
+    ${facesmash_SOURCE_DIR}/src/service/audio_sdl.cpp
     ${facesmash_SOURCE_DIR}/src/service/av_recorder_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/av_recorder_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_android.cpp
