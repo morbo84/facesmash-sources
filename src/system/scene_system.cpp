@@ -322,8 +322,6 @@ static delta_type theGameTransition(Registry &registry) {
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
-    registry.reset<Destroyable>();
-
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
@@ -560,6 +558,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         } else {
             disableUIButtons(registry);
             hideSmashButtons(registry);
+
+            // make faces and items on screen (if any) no longer smashable
+            registry.reset<Destroyable>();
 
             switch(next) {
             case SceneType::EXIT:
