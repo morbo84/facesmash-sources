@@ -208,7 +208,8 @@ void noPainNoGame(Registry &registry) {
        || playerScore.hitDisgusted
        || playerScore.hitSurprised
        || playerScore.hitFearful
-       || playerScore.hitHappy) {
+       || playerScore.hitHappy)
+    {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::NO_PAIN_NO_GAME);
     }
 }
