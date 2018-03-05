@@ -1,11 +1,9 @@
+#include "../common/ease.h"
 #include "../common/util.h"
 #include "../event/event.hpp"
 #include "../component/component.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
-#include "../service/audio_service.h"
-#include "../service/av_recorder_android.h"
-#include "../service/av_recorder_null.h"
 #include "../service/game_services_service.h"
 #include "ui_button_system.h"
 
@@ -48,12 +46,47 @@ static void handleUserButtonClick(Registry &registry) {
 
 
 static void switchAudio(Registry &registry, entity_type button) {
-    // TODO
+    auto &settings = gamee::Locator::Settings::ref();
+    auto &dispatcher = Locator::Dispatcher::ref();
+    const bool audio = settings.read("audio/available", true);
+
+    settings.write("audio/available", !audio);
+
+    if(audio) {
+        dispatcher.enqueue<AudioEvent>(AudioEvent::Type::STOP);
+        registry.get<Sprite>(button).frame = 3;
+    } else {
+        dispatcher.enqueue<AudioEvent>(AudioEvent::Type::START);
+        registry.get<Sprite>(button).frame = 2;
+    }
+
+    registry.accomodate<RotationAnimation>(button, 0.f, 360.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
 }
 
 
 static void switchVideo(Registry &registry, entity_type button) {
-    // TODO
+    auto &settings = gamee::Locator::Settings::ref();
+    auto &dispatcher = Locator::Dispatcher::ref();
+
+#if __ANDROID__
+    const bool video = settings.read("video/available", true);
+
+    settings.write("video/available", !video);
+
+    if(video) {
+        dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::DISABLE);
+        registry.get<Sprite>(button).frame = 3;
+    } else {
+        dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::ENABLE);
+        registry.get<Sprite>(button).frame = 2;
+    }
+#else
+    settings.write("video/available", false);
+    dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::DISABLE);
+    registry.get<Sprite>(button).frame = 3;
+#endif
+
+    registry.accomodate<RotationAnimation>(button, 0.f, 360.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
 }
 
 
@@ -157,7 +190,7 @@ void UIButtonSystem::update(Registry &registry) {
                             : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
                 case UIAction::SAVE:
-                    Locator::AvRecorder::ref().exportMedia();
+                    dispatcher.enqueue<RecorderEvent>(RecorderEvent::Type::EXPORT);
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);

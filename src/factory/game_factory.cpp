@@ -320,7 +320,7 @@ void refreshSupportPanel(Registry &registry) {
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, 5 * logicalHeight / 8);
+    auto parent = createPanel(registry, PanelType::SETTINGS, logicalWidth, 0, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_5_TOP, 29 * panel.w / 30, 21);
@@ -335,23 +335,30 @@ void createSettingsPanel(Registry &registry) {
 
     auto titleHandle = textureCache.handle("str/settings");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
-    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 4);
+
+    auto &settings = gamee::Locator::Settings::ref();
+
+    const bool audio = settings.read("audio/available", true);
+    const bool video = settings.read("video/available", true);
+
+    auto audioButton = createUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
+    auto &audioSprite = registry.get<Sprite>(audioButton);
+    setPos(registry, audioButton, panel.w / 3 - audioSprite.w / 2, panel.h / 2 - audioSprite.h / 3);
+    audioSprite.frame = audio ? 2 : 3;
+
+    auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
+    auto &videoSprite = registry.get<Sprite>(videoButton);
+    setPos(registry, videoButton, 2 * panel.w / 3 - videoSprite.w / 2, panel.h / 2 - videoSprite.h / 3);
+    videoSprite.frame = video ? 2 : 3;
 
     auto audioStrHandle = textureCache.handle("str/audio");
     auto audioStrEntity = createSprite(registry, parent, audioStrHandle, 20);
-    setPos(registry, audioStrEntity, (panel.w - audioStrHandle->width()) / 2, panel.h / 4);
+    setPos(registry, audioStrEntity, panel.w / 3 - audioStrHandle->width() / 2, panel.h - 2 * audioStrHandle->height());
 
     auto videoStrHandle = textureCache.handle("str/video");
     auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 20);
-    setPos(registry, videoStrEntity, (panel.w - videoStrHandle->width()) / 2, 3 * panel.h / 5);
-
-    auto audioButton = createUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
-    const auto &audioSprite = registry.get<Sprite>(audioButton);
-    setPos(registry, audioButton, (panel.w - audioSprite.w) / 2, (3 * panel.h / 4 - audioSprite.h) / 2);
-
-    auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
-    const auto &videoSprite = registry.get<Sprite>(videoButton);
-    setPos(registry, videoButton, (panel.w - videoSprite.w) / 2, 3 * panel.h / 5 + panel.h/ 8 - videoSprite.h / 2);
+    setPos(registry, videoStrEntity, 2 * panel.w / 3 - videoStrHandle->width() / 2, panel.h - 2 * videoStrHandle->height());
 }
 
 

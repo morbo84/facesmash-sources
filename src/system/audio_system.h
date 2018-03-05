@@ -10,6 +10,8 @@ namespace gamee {
 
 struct SceneChangeEvent;
 struct SmashEvent;
+struct AudioEvent;
+struct EnvEvent;
 
 
 class AudioSystem final {
@@ -22,6 +24,7 @@ public:
 
     void receive(const SceneChangeEvent &) noexcept;
     void receive(const SmashEvent &) noexcept;
+    void receive(const AudioEvent &) noexcept;
     void receive(const EnvEvent &) noexcept;
 
     void update(Registry &, delta_type);

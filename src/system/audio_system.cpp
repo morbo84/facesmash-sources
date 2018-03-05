@@ -2,6 +2,8 @@
 #include <SDL_mixer.h>
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
+#include "../service/audio_null.h"
+#include "../service/audio_sdl.h"
 #include "audio_system.h"
 
 
@@ -16,6 +18,7 @@ AudioSystem::AudioSystem()
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<SmashEvent>(this);
+    Locator::Dispatcher::ref().connect<AudioEvent>(this);
     Locator::Dispatcher::ref().connect<EnvEvent>(this);
 }
 
@@ -23,6 +26,7 @@ AudioSystem::AudioSystem()
 AudioSystem::~AudioSystem() {
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().disconnect<SmashEvent>(this);
+    Locator::Dispatcher::ref().disconnect<AudioEvent>(this);
     Locator::Dispatcher::ref().disconnect<EnvEvent>(this);
 }
 
@@ -35,6 +39,19 @@ void AudioSystem::receive(const SceneChangeEvent &event) noexcept {
 void AudioSystem::receive(const SmashEvent &event) noexcept {
     // combo is greater than 0 event in case of single smash, so why not? :-)
     explosion += (event.combo ? 1u : 0u);
+}
+
+
+void AudioSystem::receive(const AudioEvent &event) noexcept {
+    switch (event.type) {
+    case AudioEvent::Type::START:
+        Locator::Audio::set<AudioSDL>();
+        // TODO restart music
+        break;
+    case AudioEvent::Type::STOP:
+        Locator::Audio::set<AudioNull>();
+        break;
+    }
 }
 
 

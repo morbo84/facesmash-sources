@@ -73,6 +73,8 @@ static void readSettings() {
     if(settings.read("video/available", true)) {
         gamee::Locator::AvRecorder::set<gamee::AvRecorderAndroid>();
     }
+#else
+    settings.write("video/available", false);
 #endif
 
     if(settings.read("audio/available", true)) {

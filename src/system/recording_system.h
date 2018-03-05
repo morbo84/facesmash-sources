@@ -10,19 +10,25 @@
 namespace gamee {
 
 
+struct RecorderEvent;
 struct GameRenderer;
 
 
 struct RecordingSystem final {
+    RecordingSystem();
+    ~RecordingSystem();
+
     void init();
+
+    void receive(const RecorderEvent &) noexcept;
 
     void update(GameRenderer &, delta_type, std::function<void(void)>);
 
 private:
-    std::unique_ptr<unsigned char[]> pixels{nullptr};
-    delta_type accumulator{0_ui32};
-    bool firstFrame{true};
-    int pitch{0};
+    std::unique_ptr<unsigned char[]> pixels;
+    delta_type accumulator;
+    bool firstFrame;
+    int pitch;
 };
 
 

@@ -80,6 +80,27 @@ struct GameServicesEvent {
 };
 
 
+struct AudioEvent {
+    enum class Type: Uint8 {
+        START,
+        STOP
+    };
+
+    const Type type;
+};
+
+
+struct RecorderEvent {
+    enum class Type: Uint8 {
+        EXPORT,
+        DISABLE,
+        ENABLE
+    };
+
+    const Type type;
+};
+
+
 }
 
 
