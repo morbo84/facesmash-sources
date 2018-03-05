@@ -19,9 +19,6 @@ bool AvRecorderNull::recording() const noexcept { return false; }
 bool AvRecorderNull::ready() const noexcept { return false; }
 
 
-bool AvRecorderNull::available() const noexcept { return false; }
-
-
 void AvRecorderNull::exportMedia() const {}
 
 

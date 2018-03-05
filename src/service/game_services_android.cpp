@@ -157,11 +157,6 @@ bool GameServicesAndroid::isSignedIn() const noexcept {
 }
 
 
-bool GameServicesAndroid::isAvailable() const noexcept {
-    return true;
-}
-
-
 bool GameServicesAndroid::isAuthorized() const noexcept {
 return ready_ && gs_ && gs_->IsAuthorized();
 }
@@ -208,8 +203,8 @@ void GameServicesAndroid::unlock(FaceSmashAchievement) noexcept {}
 void GameServicesAndroid::increment(FaceSmashAchievement, uint32_t) noexcept {}
 void GameServicesAndroid::showAllUI() noexcept {}
 bool GameServicesAndroid::isSignedIn() const noexcept { return false; }
-bool GameServicesAndroid::isAvailable() const noexcept { return false; }
 void GameServicesAndroid::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {}
+void GameServicesAndroid::showAllLeaderboardsUI() noexcept {}
 AchievementsManager& GameServicesAndroid::achievements() noexcept { return *this; }
 LeaderboardsManager& GameServicesAndroid::leaderboards() noexcept { return *this; }
 

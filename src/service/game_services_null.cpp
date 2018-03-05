@@ -16,6 +16,9 @@ void GameServicesNull::showAllUI() noexcept {}
 void GameServicesNull::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {}
 
 
+void GameServicesNull::showAllLeaderboardsUI() noexcept {}
+
+
 void GameServicesNull::signIn() noexcept {}
 
 
@@ -23,9 +26,6 @@ void GameServicesNull::signOut() noexcept {}
 
 
 bool GameServicesNull::isSignedIn() const noexcept { return false; }
-
-
-bool GameServicesNull::isAvailable() const noexcept { return false; }
 
 
 AchievementsManager& GameServicesNull::achievements() noexcept { return *this; }

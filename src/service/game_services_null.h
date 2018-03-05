@@ -12,7 +12,6 @@ struct GameServicesNull : GameServicesService, AchievementsManager, Leaderboards
     void signIn() noexcept override;
     void signOut() noexcept override;
     bool isSignedIn() const noexcept override;
-    bool isAvailable() const noexcept override;
     AchievementsManager& achievements() noexcept override;
     LeaderboardsManager& leaderboards() noexcept override;
 
@@ -21,6 +20,7 @@ struct GameServicesNull : GameServicesService, AchievementsManager, Leaderboards
     void showAllUI() noexcept override;
 
     void submitScore(FaceSmashLeaderboard, uint64_t) noexcept override;
+    void showAllLeaderboardsUI() noexcept override;
 };
 
 

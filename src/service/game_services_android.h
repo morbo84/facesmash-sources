@@ -24,7 +24,6 @@ struct GameServicesAndroid : GameServicesService, AchievementsManager, Leaderboa
     void signIn() noexcept override;
     void signOut() noexcept override;
     bool isSignedIn() const noexcept override;
-    bool isAvailable() const noexcept override;
     AchievementsManager& achievements() noexcept override;
     LeaderboardsManager& leaderboards() noexcept override;
 

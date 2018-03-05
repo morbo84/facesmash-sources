@@ -63,7 +63,6 @@ struct GameServicesService {
     virtual void signIn() noexcept = 0;
     virtual void signOut() noexcept = 0;
     virtual bool isSignedIn() const noexcept = 0;
-    virtual bool isAvailable() const noexcept = 0;
     virtual AchievementsManager& achievements() noexcept = 0;
     virtual LeaderboardsManager& leaderboards() noexcept = 0;
 };

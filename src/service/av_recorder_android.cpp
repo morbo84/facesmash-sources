@@ -153,11 +153,6 @@ bool AvRecorderAndroid::ready() const noexcept {
 }
 
 
-bool AvRecorderAndroid::available() const noexcept {
-    return true;
-}
-
-
 void AvRecorderAndroid::exportMedia() const {
     bindingVideoExport();
 }
@@ -189,9 +184,6 @@ void AvRecorderAndroid::recordVideo(int width, int height) {}
 
 
 bool AvRecorderAndroid::ready() const noexcept { return false; }
-
-
-bool AvRecorderAndroid::available() const noexcept { return false; }
 
 
 void AvRecorderAndroid::exportMedia() const {}
