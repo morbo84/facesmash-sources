@@ -680,18 +680,35 @@ void createCameraFrame(Registry &registry) {
     auto frame = registry.create();
     registry.attach<CameraFrame>(frame);
 
-    if(cameraService.height() > cameraService.width()) {
-        registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), logicalWidth, handle->height() * logicalWidth / handle->width());
-        registry.assign<Transform>(frame, frame, 0.f, (logicalHeight - handle->height()) / 2.f);
-        registry.assign<Renderable>(frame, 0.f, 90, 0);
-    } else {
-        const int width = handle->width() * logicalWidth / handle->height();
-        const int height = logicalWidth;
+    int width = 0;
+    int height = 0;
+    float angle = 0.f;
 
-        registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
-        registry.assign<Transform>(frame, frame, (height - width) / 2.f, (width - height) / 2.f);
-        registry.assign<Renderable>(frame, -90.f, 90, 0);
+    if(cameraService.height() > cameraService.width()) {
+        width = handle->width() * logicalHeight / handle->height();
+        height = logicalHeight;
+
+        // it shouldn't happen but who knows? just in case... :-)
+        if(width < logicalWidth) {
+            height = height * logicalWidth / width;
+            width = logicalWidth;
+        }
+    } else {
+        width = logicalHeight;
+        height = handle->width() * logicalHeight / handle->height();
+
+        // it shouldn't happen but who knows? just in case... :-)
+        if(height < logicalWidth) {
+            width = width * logicalWidth / height;
+            height = logicalWidth;
+        }
+
+        angle = -90.f;
     }
+
+    registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
+    registry.assign<Transform>(frame, frame, (logicalWidth - width) / 2.f, (logicalHeight - height) / 2.f);
+    registry.assign<Renderable>(frame, angle, 90, 0);
 }
 
 

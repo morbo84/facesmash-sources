@@ -12,12 +12,14 @@ void CameraNull::stop() {}
 
 
 int CameraNull::width() const noexcept {
-    return logicalWidth;
+    // useful for test purposes
+    return logicalWidth / 2;
 }
 
 
 int CameraNull::height() const noexcept {
-    return logicalHeight;
+    // useful for test purposes
+    return logicalHeight / 2;
 }
 
 
