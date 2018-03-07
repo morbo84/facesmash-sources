@@ -10,6 +10,12 @@
 
 namespace gamee {
 
+#ifdef __ANDROID__
+void showOssLicenses();
+#else
+void showOssLicenses() {}
+#endif
+
 
 namespace GameServicesStatus {
 
@@ -205,7 +211,7 @@ void UIButtonSystem::update(Registry &registry) {
                     // TODO
                     break;
                 case UIAction::GPG_LICENSE:
-                    // TODO
+                    showOssLicenses();
                     break;
                 }
             }
