@@ -1,3 +1,4 @@
+#include <cassert>
 #include <algorithm>
 #include <SDL_mixer.h>
 #include "../event/event.hpp"
@@ -46,7 +47,7 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
     switch (event.type) {
     case AudioEvent::Type::START:
         Locator::Audio::set<AudioSDL>();
-        // TODO restart music
+        // TODO restart music and play default track
         break;
     case AudioEvent::Type::STOP:
         Locator::Audio::ref().halt();
@@ -89,48 +90,53 @@ void AudioSystem::update(Registry &registry, delta_type delta) {
    }
 
     if(curr != next) {
-        // TODO
+        // TODO auto &audio = Locator::Audio::ref();
 
-        switch(next) {
-        case SceneType::UNKNOWN:
+        if(curr == SceneType::UNKNOWN) {
+            assert(next == SceneType::SPLASH_SCREEN);
             // TODO
-            break;
-        case SceneType::EXIT:
-            // TODO
-            break;
-        case SceneType::SPLASH_SCREEN:
-            // TODO
-            break;
-        case SceneType::MENU_PAGE:
-            // TODO
-            break;
-        case SceneType::CREDITS_PAGE:
-            // TODO
-            break;
-        case SceneType::SUPPORT_PAGE:
-            // TODO
-            break;
-        case SceneType::SETTINGS_PAGE:
-            // TODO
-            break;
-        case SceneType::GAME_TUTORIAL:
-            // TODO
-            break;
-        case SceneType::THE_GAME:
-            // TODO
-            break;
-        case SceneType::GAME_OVER:
-            // TODO
-            break;
-        case SceneType::TRAINING_TUTORIAL:
-            // TODO
-            break;
-        case SceneType::TRAINING:
-            // TODO
-            break;
-        case SceneType::LOGIN_PLEASE:
-            // TODO
-            break;
+        } else {
+            switch(next) {
+            case SceneType::EXIT:
+                // TODO
+                break;
+            case SceneType::SPLASH_SCREEN:
+                // TODO
+                break;
+            case SceneType::MENU_PAGE:
+                // TODO
+                break;
+            case SceneType::CREDITS_PAGE:
+                // TODO
+                break;
+            case SceneType::SUPPORT_PAGE:
+                // TODO
+                break;
+            case SceneType::SETTINGS_PAGE:
+                // TODO
+                break;
+            case SceneType::GAME_TUTORIAL:
+                // TODO
+                break;
+            case SceneType::THE_GAME:
+                // TODO
+                break;
+            case SceneType::GAME_OVER:
+                // TODO
+                break;
+            case SceneType::TRAINING_TUTORIAL:
+                // TODO
+                break;
+            case SceneType::TRAINING:
+                // TODO
+                break;
+            case SceneType::LOGIN_PLEASE:
+                // TODO
+                break;
+            default:
+                // we should never reach this point... never!!
+                assert(false);
+            }
         }
 
         curr = next;

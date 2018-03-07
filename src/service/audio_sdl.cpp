@@ -36,6 +36,11 @@ void AudioSDL::halt() {
 }
 
 
+void AudioSDL::rewind() {
+    Mix_RewindMusic();
+}
+
+
 void AudioSDL::play(const AudioMusicResource &music) {
     Mix_PlayMusic(music, -1);
 }
@@ -63,6 +68,36 @@ void AudioSDL::fadeOut(int ms) {
 
 void AudioSDL::fadeOut(int channel, int ms) {
     Mix_FadeOutChannel(channel, ms);
+}
+
+
+bool AudioSDL::playing() const noexcept {
+    return (1 == Mix_PlayingMusic());
+}
+
+
+bool AudioSDL::playing(int channel) const noexcept {
+    return (1 == Mix_Playing(channel));
+}
+
+
+bool AudioSDL::paused() const noexcept {
+    return (1 == Mix_PausedMusic());
+}
+
+
+bool AudioSDL::paused(int channel) const noexcept {
+    return (1 == Mix_Paused(channel));
+}
+
+
+bool AudioSDL::fading() const noexcept {
+    return !(Mix_FadingMusic() == MIX_NO_FADING);
+}
+
+
+bool AudioSDL::fading(int channel) const noexcept {
+    return !(Mix_FadingChannel(channel) == MIX_NO_FADING);
 }
 
 

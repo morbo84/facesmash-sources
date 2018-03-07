@@ -15,6 +15,7 @@ struct AudioNull: AudioService {
     void pause() override;
     void resume() override;
     void halt() override;
+    void rewind() override;
 
     void play(const AudioMusicResource &) override;
     void play(const AudioChunkResource &) override;
@@ -24,6 +25,15 @@ struct AudioNull: AudioService {
 
     void fadeOut(int) override;
     void fadeOut(int, int) override;
+
+    bool playing() const noexcept override;
+    bool playing(int) const noexcept override;
+
+    bool paused() const noexcept override;
+    bool paused(int) const noexcept override;
+
+    bool fading() const noexcept override;
+    bool fading(int) const noexcept override;
 };
 
 

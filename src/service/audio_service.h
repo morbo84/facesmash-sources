@@ -21,6 +21,7 @@ struct AudioService {
     virtual void pause() = 0;
     virtual void resume() = 0;
     virtual void halt() = 0;
+    virtual void rewind() = 0;
 
     virtual void play(const AudioMusicResource &) = 0;
     virtual void play(const AudioChunkResource &) = 0;
@@ -30,6 +31,15 @@ struct AudioService {
 
     virtual void fadeOut(int) = 0;
     virtual void fadeOut(int, int) = 0;
+
+    virtual bool playing() const noexcept = 0;
+    virtual bool playing(int) const noexcept = 0;
+
+    virtual bool paused() const noexcept = 0;
+    virtual bool paused(int) const noexcept = 0;
+
+    virtual bool fading() const noexcept = 0;
+    virtual bool fading(int) const noexcept = 0;
 };
 
 
