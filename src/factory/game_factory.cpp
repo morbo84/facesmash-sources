@@ -695,7 +695,7 @@ void createCameraFrame(Registry &registry) {
         }
     } else {
         width = logicalHeight;
-        height = handle->width() * logicalHeight / handle->height();
+        height = handle->height() * logicalHeight / handle->width();
 
         // it shouldn't happen but who knows? just in case... :-)
         if(height < logicalWidth) {
