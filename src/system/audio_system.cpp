@@ -47,10 +47,10 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
     switch (event.type) {
     case AudioEvent::Type::START:
         Locator::Audio::set<AudioSDL>();
-        // TODO restart music and play default track
+        Locator::Audio::ref().resume();
         break;
     case AudioEvent::Type::STOP:
-        Locator::Audio::ref().halt();
+        Locator::Audio::ref().pause();
         Locator::Audio::set<AudioNull>();
         break;
     }
@@ -59,18 +59,18 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
 
 void AudioSystem::receive(const EnvEvent &event) noexcept {
     switch(event.type) {
-    case EnvEvent::Type::TERMINATING:
-        Locator::Audio::ref().halt();
-        break;
     case EnvEvent::Type::ENTERING_BACKGROUND:
-        Locator::Audio::ref().pause();
+        Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::STOP);
         break;
     case EnvEvent::Type::ENTERING_FOREGROUND:
-        Locator::Audio::ref().resume();
+        Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::START);
         break;
     case EnvEvent::Type::ENTERED_BACKGROUND:
     case EnvEvent::Type::ENTERED_FOREGROUND:
         // nothing to do here
+        break;
+    case EnvEvent::Type::TERMINATING:
+        // audio is going to be stopped anyway, we can safely ignore this...
         break;
     case EnvEvent::Type::LOW_MEMORY:
         // enjoy the last chunks of battery, my friend!!
