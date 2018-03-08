@@ -29,7 +29,7 @@ static const std::string& visageDataPath() {
 
 
 #ifndef __ANDROID__
-static const char* visageLicense = "visage/591-919-572-251-334-591-398-301-506-198-303.vlc";
+static const char* visageLicense = "visage/813-721-696-114-345-714-410-682-472-210-486.vlc";
 
 
 // neccessary prototype declaration for licensing
