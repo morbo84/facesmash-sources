@@ -14,10 +14,7 @@ struct AvRecorderEvent;
 struct GameRenderer;
 
 
-class AvRecorderSystem final {
-    static constexpr auto bucket = 3;
-
-public:
+struct AvRecorderSystem final {
     AvRecorderSystem();
     ~AvRecorderSystem();
 
@@ -32,7 +29,6 @@ private:
     delta_type accumulator;
     bool firstFrame;
     int pitch;
-    int remaining;
 };
 
 
