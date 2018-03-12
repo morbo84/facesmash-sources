@@ -522,6 +522,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
+                    avRecorder.start(recordingWidth, recordingHeight);
                     hideBackgroundPanels(registry);
                     break;
                 case SceneType::THE_GAME:
@@ -609,7 +610,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 camera.start();
-                avRecorder.start(recordingWidth, recordingHeight);
                 hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = gameTutorialTransition(registry);

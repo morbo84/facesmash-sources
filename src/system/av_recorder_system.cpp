@@ -73,6 +73,17 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
 
         accumulator += firstFrame ? 0_ui32 : delta;
 
+        renderer.target(*recording);
+
+        if(avRecorder.ready()) {
+            SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
+            avRecorder.frame(pixels.get(), accumulator);
+            firstFrame = false;
+        } else {
+            renderer.clear();
+            SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
+        }
+
         renderer.target(*logical);
         renderer.clear();
         next();
@@ -80,16 +91,6 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
         renderer.target();
         SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
         renderer.present();
-
-        if(avRecorder.ready()) {
-            renderer.target(*recording);
-            SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
-            SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
-            renderer.target();
-
-            avRecorder.frame(pixels.get(), accumulator);
-            firstFrame = false;
-        }
     } else {
         accumulator = 0_ui32;
         firstFrame = true;
