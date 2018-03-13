@@ -17,7 +17,7 @@ struct EnvEvent;
 
 class GameEnv {
     static constexpr delta_type clampOverElapsed = 25;
-    static constexpr delta_type msPerFrame = 17;
+    static constexpr delta_type msPerFrame = 16;
 
     virtual void suspend();
     virtual void resume();
