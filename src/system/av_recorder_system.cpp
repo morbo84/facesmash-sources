@@ -15,6 +15,7 @@ namespace gamee {
 AvRecorderSystem::AvRecorderSystem()
     : pixels{nullptr},
       accumulator{0_ui32},
+      frameTime{0_ui32},
       firstFrame{true},
       hasFrame{false},
       pitch{0}
@@ -78,7 +79,7 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
             if(avRecorder.ready()) {
                 renderer.target(*recording);
                 SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
-                avRecorder.frame(pixels.get(), accumulator);
+                avRecorder.frame(pixels.get(), frameTime);
                 firstFrame = false;
                 hasFrame = false;
             }
@@ -97,10 +98,13 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
             renderer.target();
             SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
 
+            frameTime += accumulator;
+            accumulator = 0_ui32;
             hasFrame = true;
         }
     } else {
         accumulator = 0_ui32;
+        frameTime = 0_ui32;
         firstFrame = true;
         hasFrame = false;
 

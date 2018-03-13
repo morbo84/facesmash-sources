@@ -27,6 +27,7 @@ struct AvRecorderSystem final {
 private:
     std::unique_ptr<unsigned char[]> pixels;
     delta_type accumulator;
+    delta_type frameTime;
     bool firstFrame;
     bool hasFrame;
     int pitch;
