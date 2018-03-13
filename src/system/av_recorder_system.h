@@ -28,6 +28,7 @@ private:
     std::unique_ptr<unsigned char[]> pixels;
     delta_type accumulator;
     bool firstFrame;
+    bool hasFrame;
     int pitch;
 };
 

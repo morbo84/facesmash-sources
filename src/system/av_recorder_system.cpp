@@ -16,6 +16,7 @@ AvRecorderSystem::AvRecorderSystem()
     : pixels{nullptr},
       accumulator{0_ui32},
       firstFrame{true},
+      hasFrame{false},
       pitch{0}
 {
     Locator::Dispatcher::ref().connect<AvRecorderEvent>(this);
@@ -73,29 +74,42 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
 
         accumulator += firstFrame ? 0_ui32 : delta;
 
-        renderer.target(*logical);
-        renderer.clear();
-        next();
+        if(hasFrame) {
+            if(avRecorder.ready()) {
+                renderer.target(*recording);
+                SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
+                avRecorder.frame(pixels.get(), accumulator);
+                firstFrame = false;
+                hasFrame = false;
+            }
 
-        if(avRecorder.ready()) {
+            renderer.target();
+            renderer.clear();
+            next();
+        } else {
+            renderer.target(*logical);
+            renderer.clear();
+            next();
+
             renderer.target(*recording);
             SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
-            SDL_RenderReadPixels(renderer, nullptr, internalFormat, pixels.get(), pitch);
-            avRecorder.frame(pixels.get(), accumulator);
-            firstFrame = false;
-        }
 
-        renderer.target();
-        SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
-        renderer.present();
+            renderer.target();
+            SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
+
+            hasFrame = true;
+        }
     } else {
         accumulator = 0_ui32;
         firstFrame = true;
+        hasFrame = false;
 
+        renderer.target();
         renderer.clear();
         next();
-        renderer.present();
     }
+
+    renderer.present();
 }
 
 
