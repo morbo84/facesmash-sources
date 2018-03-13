@@ -47,6 +47,11 @@ static void initPlatformServices() {
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::GameServices::set<gamee::GameServicesNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
+#endifz
+
+#ifdef DEBUG
+    // turn off ads in debug mode, no matter if we are on android
+    gamee::Locator::Ads::set<gamee::AdsNull>();
 #endif
 
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
