@@ -126,6 +126,9 @@ struct SizeAnimation {
 };
 
 
+struct InputReceiver {};
+
+
 struct UIButton {
     bool enabled;
     UIAction action;

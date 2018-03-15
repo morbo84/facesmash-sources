@@ -42,7 +42,7 @@ static void hideBackgroundPanels(Registry &registry) {
 
 static void disableUIButtons(Registry &registry) {
     for(auto entity: registry.view<UIButton>()) {
-        registry.get<UIButton>(entity).enabled = false;
+        registry.reset<InputReceiver>(entity);
     }
 }
 
@@ -50,9 +50,9 @@ static void disableUIButtons(Registry &registry) {
 static void enableUIButtons(Registry &registry, PanelType type) {
     registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
         if(panel.type == type) {
-            registry.view<UIButton, Transform>().each([parent, &registry](auto, auto &button, const auto &transform) {
-                if(transform.parent == parent) {
-                    button.enabled = true;
+            registry.view<UIButton, Transform>().each([parent, &registry](auto child, auto &button, const auto &transform) {
+                if(transform.parent == parent && button.enabled) {
+                    registry.assign<InputReceiver>(child);
                 }
             });
         }
@@ -86,7 +86,7 @@ static void showPopupButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
-                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                    registry.accomodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutElastic);
                     registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
                 }
             });
@@ -100,7 +100,7 @@ static void hidePopupButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
-                    registry.accomodate<RotationAnimation>(entity, renderable.angle, 0.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
+                    registry.accomodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutCubic);
                     registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
                 }
             });
@@ -514,8 +514,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::MENU_PAGE:
                     clearTraining(registry);
                     hideBackgroundPanels(registry);
-                    showPopupButtons(registry, PanelType::MENU_BOTTOM);
-                    showPopupButtons(registry, PanelType::MENU_TOP);
+                    curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_BOTTOM) : void();
+                    curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_TOP) : void();
                     enableUIButtons(registry, PanelType::MENU_BOTTOM);
                     enableUIButtons(registry, PanelType::MENU_TOP);
                     camera.stop();

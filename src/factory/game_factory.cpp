@@ -489,10 +489,6 @@ void createGameOverPanel(Registry &registry) {
     auto reloadButton = createUIButton(registry, parent, UIAction::RELOAD, 150);
     const auto &reloadSprite = registry.get<Sprite>(reloadButton);
     setPos(registry, reloadButton, (panel.w - reloadSprite.w) / 2, (3 * panel.h / 2 - reloadSprite.h) / 2);
-
-    auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
-    const auto &saveSprite = registry.get<Sprite>(saveButton);
-    setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
 }
 
 
@@ -580,6 +576,19 @@ void refreshGameOverPanel(Registry &registry) {
         printScore(score % 10, -3 * sym0Handle->width() / 2);
         score /= 10;
         printScore(score % 10, -5 * sym0Handle->width() / 2);
+
+
+        auto &recorder = Locator::AvRecorder::ref();
+
+        auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
+        const auto &saveSprite = registry.get<Sprite>(saveButton);
+        setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
+        registry.assign<ExpiringContent>(saveButton);
+
+        if(!recorder.recording()) {
+            registry.get<UIButton>(saveButton).enabled = false;
+            registry.get<Sprite>(saveButton).frame = 3;
+        }
     }
 }
 

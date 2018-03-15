@@ -17,40 +17,6 @@ void showOssLicenses() {}
 #endif
 
 
-namespace GameServicesStatus {
-
-
-enum GameServicesStatus: Uint8 {
-    SIGNED_IN = 2, // green icon
-    SIGNED_OUT = 3, // red icon
-    PENDING = 1 // blue icon
-};
-
-
-} // namespace detail
-
-
-static void handleUserButtonClick(Registry &registry) {
-    auto view = registry.view<UIButton, Sprite>();
-
-    for(auto entity: view) {
-        auto &sprite = registry.get<Sprite>(entity);
-
-        switch(sprite.frame){
-            case GameServicesStatus::SIGNED_IN:
-                Locator::GameServices::ref().signOut();
-                break;
-            case GameServicesStatus::SIGNED_OUT:
-                Locator::GameServices::ref().signIn();
-                break;
-            case GameServicesStatus::PENDING:
-                // do nothing
-                break;
-        }
-    }
-}
-
-
 static void switchAudio(Registry &registry, entity_type button) {
     auto &settings = gamee::Locator::Settings::ref();
     auto &dispatcher = Locator::Dispatcher::ref();
@@ -127,14 +93,14 @@ void UIButtonSystem::update(Registry &registry) {
             if(button.action == UIAction::LOGIN) {
                 switch(gsEvent->type) {
                 case GameServicesEvent::Type::SIGNED_IN:
-                    sprite.frame = GameServicesStatus::SIGNED_IN;
+                    sprite.frame = 2;
                     break;
                 case GameServicesEvent::Type::SIGNED_OUT:
-                    sprite.frame = GameServicesStatus::SIGNED_OUT;
+                    sprite.frame = 3;
                     break;
                 case GameServicesEvent::Type::SIGNING_IN:
                 case GameServicesEvent::Type::SIGNING_OUT:
-                    sprite.frame = GameServicesStatus::PENDING;
+                    sprite.frame = 1;
                     break;
                 }
             }
@@ -152,10 +118,13 @@ void UIButtonSystem::update(Registry &registry) {
 
             auto area = transformToPosition(registry, entity, transform) * box;
 
-            if(button.enabled && SDL_PointInRect(&coord, &area)) {
+            if(registry.has<InputReceiver>(entity) && SDL_PointInRect(&coord, &area)) {
+                registry.accomodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+
                 switch(button.action) {
                 case UIAction::EASTER_EGG:
                     dispatcher.enqueue<ActivateEasterEggEvent>();
+                    registry.remove<RotationAnimation>(entity);
                     break;
                 case UIAction::EXIT:
                     dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
@@ -197,6 +166,8 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::SAVE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
+                    registry.remove<InputReceiver>(entity);
+                    registry.get<Sprite>(entity).frame = 3;
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);
@@ -205,7 +176,9 @@ void UIButtonSystem::update(Registry &registry) {
                     switchVideo(registry, entity);
                     break;
                 case UIAction::LOGIN:
-                    handleUserButtonClick(registry);
+                    Locator::GameServices::ref().isSignedIn()
+                            ? Locator::GameServices::ref().signOut()
+                            : Locator::GameServices::ref().signIn();
                     break;
                 case UIAction::BUY:
                     // TODO
