@@ -6,8 +6,13 @@
 namespace gamee {
 
 
-void PermissionsNull::request(PermissionType p) {
-    Locator::Dispatcher::ref().enqueue<PermissionEvent>(p, PermissionResultType::GRANTED);
+PermissionStatus PermissionsNull::status(PermissionType) const noexcept {
+    return PermissionStatus::GRANTED;
+}
+
+
+void PermissionsNull::request(PermissionType p) noexcept {
+    Locator::Dispatcher::ref().enqueue<PermissionEvent>(p, PermissionStatus::GRANTED);
 }
 
 

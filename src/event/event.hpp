@@ -103,7 +103,7 @@ struct AvRecorderEvent {
 
 struct PermissionEvent {
     PermissionType permission;
-    PermissionResultType result;
+    PermissionStatus result;
 };
 
 

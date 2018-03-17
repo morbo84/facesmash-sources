@@ -4,7 +4,13 @@
 namespace gamee {
 
 
-void PermissionsAndroid::request(PermissionType p) {
+PermissionStatus PermissionsAndroid::status(PermissionType) const noexcept {
+    // TODO
+    return PermissionStatus::GRANTED;
+}
+
+
+void PermissionsAndroid::request(PermissionType p) noexcept {
     // TODO
 }
 

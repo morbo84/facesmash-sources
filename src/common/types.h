@@ -149,9 +149,10 @@ enum class PermissionType {
 };
 
 
-enum class PermissionResultType {
+enum class PermissionStatus {
     DENIED,
-    GRANTED
+    GRANTED,
+    SHOW_RATIONALE
 };
 
 
