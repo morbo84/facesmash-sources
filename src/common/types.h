@@ -144,6 +144,17 @@ enum class BoxBorderType: Uint8 {
 };
 
 
+enum class PermissionType {
+    CAMERA
+};
+
+
+enum class PermissionResultType {
+    DENIED,
+    GRANTED
+};
+
+
 }
 
 

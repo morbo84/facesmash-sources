@@ -28,6 +28,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/service/game_services_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/game_services_null.cpp
+    ${facesmash_SOURCE_DIR}/src/service/permissions_android.cpp
+    ${facesmash_SOURCE_DIR}/src/service/permissions_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/settings_onfile.cpp
     ${facesmash_SOURCE_DIR}/src/service/settings_onmemory.cpp
     ${facesmash_SOURCE_DIR}/src/system/achievements_system.cpp
