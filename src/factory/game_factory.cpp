@@ -347,12 +347,12 @@ void createSettingsPanel(Registry &registry) {
     const bool audio = settings.read("audio/available", true);
     const bool video = settings.read("video/available", true);
 
-    auto audioButton = createUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
+    auto audioButton = createPopupUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
     auto &audioSprite = registry.get<Sprite>(audioButton);
     setPos(registry, audioButton, panel.w / 3 - audioSprite.w / 2, panel.h / 2 - audioSprite.h / 3);
     audioSprite.frame = audio ? 2 : 3;
 
-    auto videoButton = createUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
+    auto videoButton = createPopupUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
     auto &videoSprite = registry.get<Sprite>(videoButton);
     setPos(registry, videoButton, 2 * panel.w / 3 - videoSprite.w / 2, panel.h / 2 - videoSprite.h / 3);
     videoSprite.frame = video ? 2 : 3;

@@ -605,6 +605,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::SETTINGS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showPopupButtons(registry, PanelType::SETTINGS);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
@@ -613,6 +614,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hidePopupButtons(registry, PanelType::CREDITS);
                 hidePopupButtons(registry, PanelType::SUPPORT);
+                hidePopupButtons(registry, PanelType::SETTINGS);
                 hidePopupButtons(registry, PanelType::PERMISSIONS);
                 remaining = menuPageTransition(registry);
                 break;
