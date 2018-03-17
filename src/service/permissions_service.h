@@ -10,7 +10,8 @@ namespace gamee {
 
 struct PermissionsService {
     virtual ~PermissionsService() = default;
-    virtual void request(PermissionType) = 0;
+    virtual PermissionStatus status(PermissionType) const noexcept = 0;
+    virtual void request(PermissionType) noexcept = 0;
 };
 
 

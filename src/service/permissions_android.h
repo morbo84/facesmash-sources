@@ -9,7 +9,8 @@ namespace gamee {
 
 
 struct PermissionsAndroid : PermissionsService {
-    void request(PermissionType) override;
+    PermissionStatus status(PermissionType) const noexcept override;
+    void request(PermissionType) noexcept override;
 };
 
 
