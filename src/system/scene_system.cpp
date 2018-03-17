@@ -526,7 +526,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
-                    avRecorder.start(recordingWidth, recordingHeight);
                     hideBackgroundPanels(registry);
                     break;
                 case SceneType::THE_GAME:
@@ -625,6 +624,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
+                avRecorder.start(recordingWidth, recordingHeight);
                 showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = theGameTransition(registry);
