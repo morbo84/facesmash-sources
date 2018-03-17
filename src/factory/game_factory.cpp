@@ -317,6 +317,11 @@ void refreshSupportPanel(Registry &registry) {
 }
 
 
+void createPermissionsPanel(Registry &registry) {
+    // TODO
+}
+
+
 void createSettingsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 

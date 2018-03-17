@@ -27,6 +27,7 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::EXIT:
         case PanelType::CREDITS:
         case PanelType::SUPPORT:
+        case PanelType::PERMISSIONS:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
         case PanelType::LOGIN_PLEASE:
@@ -504,6 +505,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
                     enableUIButtons(registry, PanelType::SUPPORT);
                     break;
+                case SceneType::PERMISSIONS_PAGE:
+                    // TODO
+                    break;
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
@@ -595,6 +599,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
+            case SceneType::PERMISSIONS_PAGE:
+                // TODO
+                break;
             case SceneType::SETTINGS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
@@ -606,6 +613,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hidePopupButtons(registry, PanelType::CREDITS);
                 hidePopupButtons(registry, PanelType::SUPPORT);
+                hidePopupButtons(registry, PanelType::PERMISSIONS);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:

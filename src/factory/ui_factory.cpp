@@ -60,6 +60,9 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::SUPPORT:
         setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8);
         break;
+    case UIAction::PERMISSIONS:
+        // TODO
+        break;
     case UIAction::SWITCH_AUDIO:
         setSpriteGeometry(registry, entity, 0, 768, width, height, 4_ui8);
         break;
