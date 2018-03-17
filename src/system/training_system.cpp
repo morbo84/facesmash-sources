@@ -73,8 +73,8 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
         const auto &sprite = registry.get<Sprite>(entity);
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
 
-        // reset the match so as the user must keep it to smash everything
-        match = current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY;
+        // resets match somehow so that users must keep it to smash everything
+        match = (current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY);
 
         for(auto i = 0; i < steps; ++i) {
             spawner.spawnFaceBottom(registry, 0_ui8, 0_ui8, current);
@@ -132,27 +132,26 @@ void TrainingSystem::receive(const FaceEvent &event) noexcept {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
-    switch(state) {
-    case TrainingState::IDLE:
-        enableFaceButtons(registry);
-        break;
-    case TrainingState::START_TRAINING:
-        disableFaceButtons(registry);
-        progress = 0_ui8;
-        range = interval;
-        remaining = duration;
-        state = TrainingState::TRAINING;
-        // reset the match so that smashes don't start immediately
-        match = current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY;
-        break;
-    case TrainingState::TRAINING:
-        state = registry.has<LetsTrain>()
-                ? training(registry, spawner, delta)
-                : TrainingState::IDLE;
-        break;
-    }
-
-    if(!registry.has<LetsTrain>()) {
+    if(registry.has<LetsTrain>()) {
+        switch(state) {
+        case TrainingState::IDLE:
+            enableFaceButtons(registry);
+            break;
+        case TrainingState::START_TRAINING:
+            disableFaceButtons(registry);
+            progress = 0_ui8;
+            range = interval;
+            remaining = duration;
+            state = TrainingState::TRAINING;
+            // resets match somehow so that users must keep it to smash everything
+            match = (current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY);
+            break;
+        case TrainingState::TRAINING:
+            state = training(registry, spawner, delta);
+            break;
+        }
+    } else {
+        state = TrainingState::IDLE;
         disableFaceButtons(registry);
     }
 }

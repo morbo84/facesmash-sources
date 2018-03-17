@@ -21,6 +21,7 @@ constexpr Uint32 internalFormat = SDL_PIXELFORMAT_ARGB8888;
 constexpr Uint32 cameraFormat = SDL_PIXELFORMAT_NV21;
 
 const SDL_Rect playArea = { logicalWidth / 10, logicalHeight / 6, 4 * logicalWidth / 5, 2 * logicalHeight / 3 };
+const SDL_Rect trainingArea = { 0, logicalHeight / 6, logicalWidth, 4 * logicalHeight / 9 };
 
 constexpr int numberOfItems = 3;
 constexpr int numberOfFaces = 6;

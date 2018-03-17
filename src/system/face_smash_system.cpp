@@ -39,6 +39,14 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
     auto view = registry.view<Face, Transform, BoundingBox>();
     SmashEvent event{};
 
+    SDL_Rect smashArea = logicalScreen;
+
+    if(registry.has<LetsPlay>()) {
+        smashArea = playArea;
+    } else if(registry.has<LetsTrain>()) {
+        smashArea = trainingArea;
+    }
+
     view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
 
@@ -46,7 +54,7 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
             const auto x = area.x + area.w / 2;
             const auto y = area.y + area.h / 2;
 
-            if(SDL_HasIntersection(&playArea, &area)) {
+            if(SDL_HasIntersection(&smashArea, &area)) {
                 if(dirty && smash.type == type) {
                     spawner.spawnExplosion(registry, x, y);
                     spawner.spawnSmashScore(registry, smash.smash, x, y);

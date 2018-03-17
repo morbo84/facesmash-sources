@@ -91,9 +91,12 @@ void RenderingSystem::debug(Registry &registry, GameRenderer &renderer) {
         SDL_RenderDrawRect(renderer, &rect);
     });
 
-    if(registry.has<LetsPlay>() || registry.has<LetsTrain>()) {
+    if(registry.has<LetsPlay>()) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(renderer, &playArea);
+    } else if(registry.has<LetsTrain>()) {
+        SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawRect(renderer, &trainingArea);
     }
 }
 
