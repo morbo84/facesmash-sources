@@ -340,12 +340,35 @@ void createCameraPermissionPanel(Registry &registry) {
     auto requiredHandle = textureCache.handle("str/camera/required");
     auto requiredEntity = createSprite(registry, parent, requiredHandle, 20);
     setPos(registry, requiredEntity, (panel.w - requiredHandle->width()) / 2, 2 * panel.h / 6);
+}
+
+
+void refreshCameraPermissionPanel(Registry &registry) {
+    auto &permissions = Locator::Permissions::ref();
+    entity_type parent{};
+
+    for(auto entity: registry.view<Panel>()) {
+        if(registry.get<Panel>(entity).type == PanelType::CAMERA_PERMISSION) {
+            parent = entity;
+            break;
+        }
+    }
+
+    const auto &panel = registry.get<Panel>(parent);
 
     auto cameraButton = createPopupUIButton(registry, parent, UIAction::CAMERA_PERMISSION, 20);
     auto &cameraSprite = registry.get<Sprite>(cameraButton);
     setPos(registry, cameraButton, (panel.w - cameraSprite.w) / 2, panel.h / 2);
+    registry.assign<ExpiringContent>(cameraButton);
 
-    // TODO
+    auto cameraStatus = permissions.status(PermissionType::CAMERA);
+
+    if(cameraStatus == PermissionStatus::SHOW_RATIONALE) {
+        cameraSprite.frame = 0;
+    } else {
+        registry.get<UIButton>(cameraButton).enabled = false;
+        cameraSprite.frame = 3;
+    }
 }
 
 
@@ -609,15 +632,25 @@ void refreshGameOverPanel(Registry &registry) {
         score /= 10;
         printScore(score % 10, -5 * sym0Handle->width() / 2);
 
-
         auto &recorder = Locator::AvRecorder::ref();
+        auto &permissions = Locator::Permissions::ref();
 
         auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
         const auto &saveSprite = registry.get<Sprite>(saveButton);
         setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
         registry.assign<ExpiringContent>(saveButton);
 
-        if(!recorder.recording()) {
+        if(recorder.supportExport()) {
+            const auto status = permissions.status(PermissionType::STORAGE);
+
+            if(status == PermissionStatus::SHOW_RATIONALE) {
+                registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
+            } else if(status == PermissionStatus::DENIED) {
+                registry.get<UIButton>(saveButton).enabled = false;
+            }
+
+            registry.get<Sprite>(saveButton).frame = 3;
+        } else {
             registry.get<UIButton>(saveButton).enabled = false;
             registry.get<Sprite>(saveButton).frame = 3;
         }

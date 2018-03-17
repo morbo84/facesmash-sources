@@ -18,6 +18,7 @@ void createCreditsPanel(Registry &);
 void createSupportPanel(Registry &);
 void refreshSupportPanel(Registry &);
 void createCameraPermissionPanel(Registry &);
+void refreshCameraPermissionPanel(Registry &);
 void createSettingsPanel(Registry &);
 void createTutorialTopPanel(Registry &);
 void createTutorialBottomPanel(Registry &);

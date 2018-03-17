@@ -31,8 +31,6 @@ static void switchAudio(Registry &registry, entity_type button) {
         dispatcher.enqueue<AudioEvent>(AudioEvent::Type::START);
         registry.get<Sprite>(button).frame = 2;
     }
-
-    registry.accomodate<RotationAnimation>(button, 0.f, 360.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
 }
 
 
@@ -57,8 +55,6 @@ static void switchVideo(Registry &registry, entity_type button) {
     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
     registry.get<Sprite>(button).frame = 3;
 #endif
-
-    registry.accomodate<RotationAnimation>(button, 0.f, 360.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
 }
 
 
@@ -115,6 +111,7 @@ void UIButtonSystem::update(Registry &registry) {
         view.each([&, this](auto entity, auto &button, auto &transform, auto &box) {
             auto &dispatcher = Locator::Dispatcher::ref();
             auto &gservices = Locator::GameServices::ref();
+            auto &permissions = Locator::Permissions::ref();
 
             auto area = transformToPosition(registry, entity, transform) * box;
 
@@ -169,6 +166,11 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::SAVE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
+                    registry.remove<InputReceiver>(entity);
+                    registry.get<Sprite>(entity).frame = 3;
+                    break;
+                case UIAction::STORAGE_PERMISSION:
+                    permissions.request(PermissionType::STORAGE);
                     registry.remove<InputReceiver>(entity);
                     registry.get<Sprite>(entity).frame = 3;
                     break;

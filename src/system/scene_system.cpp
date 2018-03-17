@@ -418,8 +418,7 @@ SceneSystem::SceneSystem()
     : curr{SceneType::UNKNOWN},
       next{SceneType::UNKNOWN},
       remaining{0_ui32},
-      isTransitioning{false},
-      hasCameraPermission{false}
+      isTransitioning{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
@@ -440,7 +439,9 @@ void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
         next = event.scene;
 
         // forces camera permission page if required (game/training not allowed)
-        if(!hasCameraPermission && (next == SceneType::GAME_TUTORIAL || next == SceneType::TRAINING_TUTORIAL)) {
+        if((Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED)
+                && (next == SceneType::GAME_TUTORIAL || next == SceneType::TRAINING_TUTORIAL))
+        {
             next = SceneType::CAMERA_PERMISSION;
         }
     }
@@ -608,6 +609,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
             case SceneType::CAMERA_PERMISSION:
+                discardExpiringContents(registry);
+                refreshCameraPermissionPanel(registry);
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 showPopupButtons(registry, PanelType::CAMERA_PERMISSION);

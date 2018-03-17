@@ -153,6 +153,11 @@ bool AvRecorderAndroid::ready() const noexcept {
 }
 
 
+bool AvRecorderAndroid::supportExport() const {
+    return true;
+}
+
+
 void AvRecorderAndroid::exportMedia() const {
     bindingVideoExport();
 }
@@ -160,7 +165,9 @@ void AvRecorderAndroid::exportMedia() const {
 
 } // namespace gamee
 
+
 #else
+
 
 namespace gamee {
 
@@ -186,9 +193,13 @@ void AvRecorderAndroid::recordVideo(int width, int height) {}
 bool AvRecorderAndroid::ready() const noexcept { return false; }
 
 
+bool AvRecorderAndroid::supportExport() const { return false; }
+
+
 void AvRecorderAndroid::exportMedia() const {}
 
 
 } // namespace gamee
+
 
 #endif

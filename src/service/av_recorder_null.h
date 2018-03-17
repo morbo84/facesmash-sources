@@ -14,6 +14,7 @@ struct AvRecorderNull: AvRecorderService {
     void stop() override;
     bool recording() const noexcept override;
     bool ready() const noexcept override;
+    bool supportExport() const override;
     void exportMedia() const override;
 };
 

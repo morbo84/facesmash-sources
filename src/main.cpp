@@ -16,6 +16,8 @@
 #include "service/camera_null.h"
 #include "service/game_services_android.h"
 #include "service/game_services_null.h"
+#include "service/permissions_null.h"
+#include "service/permissions_android.h"
 #include "service/settings_onfile.h"
 #include "service/settings_onmemory.h"
 
@@ -38,11 +40,13 @@ static void releaseBasicServices() {
 
 static void initPlatformServices() {
 #ifdef __ANDROID__
+    gamee::Locator::Permissions::set<gamee::PermissionsAndroid>();
     gamee::Locator::Settings::set<gamee::SettingsOnFile>();
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::GameServices::set<gamee::GameServicesAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
 #else
+    gamee::Locator::Permissions::set<gamee::PermissionsNull>();
     gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::GameServices::set<gamee::GameServicesNull>();
@@ -68,6 +72,7 @@ static void releasePlatformServices() {
     gamee::Locator::GameServices::reset();
     gamee::Locator::Camera::reset();
     gamee::Locator::Settings::reset();
+    gamee::Locator::Permissions::reset();
 }
 
 
