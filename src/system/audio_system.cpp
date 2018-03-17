@@ -112,7 +112,7 @@ void AudioSystem::update(Registry &registry, delta_type delta) {
             case SceneType::SUPPORT_PAGE:
                 // TODO
                 break;
-            case SceneType::PERMISSIONS_PAGE:
+            case SceneType::CAMERA_PERMISSION:
                 // TODO
                 break;
             case SceneType::SETTINGS_PAGE:

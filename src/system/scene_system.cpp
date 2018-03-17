@@ -27,7 +27,7 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::EXIT:
         case PanelType::CREDITS:
         case PanelType::SUPPORT:
-        case PanelType::PERMISSIONS:
+        case PanelType::CAMERA_PERMISSION:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
         case PanelType::LOGIN_PLEASE:
@@ -418,7 +418,8 @@ SceneSystem::SceneSystem()
     : curr{SceneType::UNKNOWN},
       next{SceneType::UNKNOWN},
       remaining{0_ui32},
-      isTransitioning{false}
+      isTransitioning{false},
+      hasCameraPermission{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
@@ -437,6 +438,11 @@ void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
     // events are filtered out during transitions
     if(curr == next) {
         next = event.scene;
+
+        // forces camera permission page if required (game/training not allowed)
+        if(!hasCameraPermission && (next == SceneType::GAME_TUTORIAL || next == SceneType::TRAINING_TUTORIAL)) {
+            next = SceneType::CAMERA_PERMISSION;
+        }
     }
 }
 
@@ -449,6 +455,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         switch(curr) {
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
+        case SceneType::CAMERA_PERMISSION:
         case SceneType::SETTINGS_PAGE:
         case SceneType::LOGIN_PLEASE:
         case SceneType::TRAINING:
@@ -487,8 +494,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
 
                 switch(next) {
                 case SceneType::EXIT:
-                    enableUIButtons(registry, PanelType::MENU_BOTTOM);
-                    enableUIButtons(registry, PanelType::MENU_TOP);
                     enableUIButtons(registry, PanelType::EXIT);
                     break;
                 case SceneType::SPLASH_SCREEN:
@@ -505,14 +510,14 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
                     enableUIButtons(registry, PanelType::SUPPORT);
                     break;
-                case SceneType::PERMISSIONS_PAGE:
-                    // TODO
+                case SceneType::CAMERA_PERMISSION:
+                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
+                    enableUIButtons(registry, PanelType::CAMERA_PERMISSION);
                     break;
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::MENU_BOTTOM);
-                    enableUIButtons(registry, PanelType::MENU_TOP);
                     enableUIButtons(registry, PanelType::SETTINGS);
                     break;
                 case SceneType::MENU_PAGE:
@@ -520,8 +525,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     hideBackgroundPanels(registry);
                     curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_BOTTOM) : void();
                     curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_TOP) : void();
-                    enableUIButtons(registry, PanelType::MENU_BOTTOM);
-                    enableUIButtons(registry, PanelType::MENU_TOP);
                     camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
@@ -552,13 +555,14 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::LOGIN_PLEASE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::MENU_BOTTOM);
-                    enableUIButtons(registry, PanelType::MENU_TOP);
                     break;
                 default:
                     assert(false);
                     break;
                 }
+
+                enableUIButtons(registry, PanelType::MENU_BOTTOM);
+                enableUIButtons(registry, PanelType::MENU_TOP);
 
                 isTransitioning = false;
                 curr = next;
@@ -570,14 +574,19 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             // make faces and items on screen (if any) no longer smashable
             registry.reset<Destroyable>();
 
+            hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+            hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
+            hidePopupButtons(registry, PanelType::CREDITS);
+            hidePopupButtons(registry, PanelType::SUPPORT);
+            hidePopupButtons(registry, PanelType::SETTINGS);
+            hidePopupButtons(registry, PanelType::CAMERA_PERMISSION);
+
             switch(next) {
             case SceneType::EXIT:
                 remaining = bgPanelTransition(registry, PanelType::EXIT);
                 break;
             case SceneType::SPLASH_SCREEN:
                 enableUIButtons(registry, PanelType::SPLASH_SCREEN);
-                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 hidePopupButtons(registry, PanelType::MENU_BOTTOM);
                 hidePopupButtons(registry, PanelType::MENU_TOP);
                 remaining = splashScreenTransition(registry);
@@ -598,8 +607,13 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
                 break;
-            case SceneType::PERMISSIONS_PAGE:
-                // TODO
+            case SceneType::CAMERA_PERMISSION:
+                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showPopupButtons(registry, PanelType::CAMERA_PERMISSION);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition(registry, PanelType::CAMERA_PERMISSION);
+                break;
                 break;
             case SceneType::SETTINGS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -609,18 +623,10 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
             case SceneType::MENU_PAGE:
-                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
-                hidePopupButtons(registry, PanelType::CREDITS);
-                hidePopupButtons(registry, PanelType::SUPPORT);
-                hidePopupButtons(registry, PanelType::SETTINGS);
-                hidePopupButtons(registry, PanelType::PERMISSIONS);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
                 camera.start();
-                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::THE_GAME:
@@ -636,8 +642,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::TRAINING_TUTORIAL:
                 camera.start();
-                hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
                 remaining = trainingTutorialTransition(registry);
                 break;
             case SceneType::TRAINING:

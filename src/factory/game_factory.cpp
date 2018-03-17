@@ -317,7 +317,34 @@ void refreshSupportPanel(Registry &registry) {
 }
 
 
-void createPermissionsPanel(Registry &registry) {
+void createCameraPermissionPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::CAMERA_PERMISSION, logicalWidth, 0, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_6_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_6_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_6_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_6_RIGHT, 29 * panel.h / 30, 24);
+
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
+
+    auto titleHandle = textureCache.handle("str/camera");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 20);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 4);
+
+    auto requiredHandle = textureCache.handle("str/camera/required");
+    auto requiredEntity = createSprite(registry, parent, requiredHandle, 20);
+    setPos(registry, requiredEntity, (panel.w - requiredHandle->width()) / 2, 2 * panel.h / 6);
+
+    auto cameraButton = createPopupUIButton(registry, parent, UIAction::CAMERA_PERMISSION, 20);
+    auto &cameraSprite = registry.get<Sprite>(cameraButton);
+    setPos(registry, cameraButton, (panel.w - cameraSprite.w) / 2, panel.h / 2);
+
     // TODO
 }
 

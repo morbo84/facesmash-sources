@@ -26,6 +26,7 @@ public:
     SceneType next;
     delta_type remaining;
     bool isTransitioning;
+    bool hasCameraPermission;
 };
 
 
