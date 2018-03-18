@@ -58,7 +58,7 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
     const int left = (1 + progress / 2) - registry.size<Face>();
 
     for(auto i = 0; i < (left < 0 ? 0 : left); ++i) {
-        spawner.spawnFaceBottom(registry, 0_ui8, 0_ui8, current);
+        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
     }
 
     for(auto entity: registry.view<FaceProgress, Sprite>()) {
@@ -77,7 +77,7 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
         match = (current == FaceType::HAPPY ? FaceType::ANGRY : FaceType::HAPPY);
 
         for(auto i = 0; i < steps; ++i) {
-            spawner.spawnFaceBottom(registry, 0_ui8, 0_ui8, current);
+            spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
         }
     } else if(!hurry && remaining < (duration / 2)) {
         const auto handle = Locator::TextureCache::ref().handle("str/training/hurry");

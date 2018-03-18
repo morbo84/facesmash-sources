@@ -18,6 +18,9 @@ class ItemSystem final {
     void movement(Registry &, float);
     void fountain(Registry &, Spawner &);
 
+    void message(Registry &, SDLTextureHandle);
+    void message(Registry &, ItemType);
+
 public:
     ItemSystem();
     ~ItemSystem();
@@ -34,6 +37,7 @@ private:
     ItemType curr;
     delta_type remaining;
     FaceBag faceBag;
+    ItemBag itemBag;
 };
 
 

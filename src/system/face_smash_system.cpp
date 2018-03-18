@@ -16,13 +16,17 @@ namespace gamee {
 
 FaceSmashSystem::FaceSmashSystem()
     : type{FaceType::HAPPY},
-      dirty{false}
+      dirty{false},
+      smashAll{false},
+      richMan{false}
 {
     Locator::Dispatcher::ref().connect<FaceEvent>(this);
+    Locator::Dispatcher::ref().connect<BonusEvent>(this);
 }
 
 
 FaceSmashSystem::~FaceSmashSystem() {
+    Locator::Dispatcher::ref().disconnect<BonusEvent>(this);
     Locator::Dispatcher::ref().disconnect<FaceEvent>(this);
 }
 
@@ -30,6 +34,12 @@ FaceSmashSystem::~FaceSmashSystem() {
 void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
     type = event.type;
     dirty = true;
+}
+
+
+void FaceSmashSystem::receive(const BonusEvent &event) noexcept {
+    smashAll = (event.type == BonusEvent::Type::SMASH_ALL);
+    richMan = (event.type == BonusEvent::Type::I_AM_RICH);
 }
 
 
@@ -47,7 +57,7 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         smashArea = trainingArea;
     }
 
-    view.each([&, this](auto entity, const auto &smash, const auto &transform, const auto &box) {
+    view.each([&, this](auto entity, auto &face, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
 
         if(registry.has<Destroyable>(entity)) {
@@ -55,11 +65,8 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
             const auto y = area.y + area.h / 2;
 
             if(SDL_HasIntersection(&smashArea, &area)) {
-                if(dirty && smash.type == type) {
-                    spawner.spawnExplosion(registry, x, y);
-                    spawner.spawnSmashScore(registry, smash.smash, x, y);
-
-                    switch(smash.type) {
+                if(smashAll || (dirty && face.type == type)) {
+                    switch(face.type) {
                     case FaceType::ANGRY:
                         ++event.angry;
                         break;
@@ -80,14 +87,28 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
                         break;
                     };
 
-                    event.smash += smash.smash;
+                    auto smash = face.smash;
+
+                    if(smashAll) {
+                        smash /= 10_ui8;
+                    } else if(face.bonus) {
+                        smash *= 10_ui8;
+                    }
+
+                    spawner.spawnExplosion(registry, x, y);
+                    spawner.spawnSmashScore(registry, smash, x, y);
+
+                    event.smash += smash;
                     ++event.combo;
 
                     registry.destroy(entity);
+                } else if(richMan && !face.bonus) {
+                    spawner.spawnBonus(registry, x, y);
+                    face.bonus = true;
                 }
             } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
-                spawner.spawnMissScore(registry, smash.miss, x, y);
-                event.miss += smash.miss;
+                spawner.spawnMissScore(registry, face.miss, x, y);
+                event.miss += face.miss;
                 registry.destroy(entity);
             }
         } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
@@ -95,6 +116,8 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         }
     });
 
+    smashAll = false;
+    richMan = false;
     dirty = false;
 
     // check rewards
@@ -104,7 +127,7 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         camera.shake = shake;
 
         if(registry.has<LetsPlay>()) {
-            auto entity = createInGameMessage(registry, handle, 160);
+            auto entity = createInGameMessage(registry, handle, 200);
             const auto &sprite = registry.get<Sprite>(entity);
             setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
         }

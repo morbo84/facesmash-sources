@@ -63,6 +63,16 @@ struct SmashEvent {
 };
 
 
+struct BonusEvent {
+    enum class Type: Uint8 {
+        SMASH_ALL,
+        I_AM_RICH
+    };
+
+    const Type type;
+};
+
+
 struct FrameAvailableEvent {};
 struct ActivateEasterEggEvent {};
 struct TimeIsOverEvent {};

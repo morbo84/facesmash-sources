@@ -463,7 +463,7 @@ void createTutorialBottomPanel(Registry &registry) {
         const auto width = 3 * sprite.w / 5;
         const auto height = 3 * sprite.h / 5;
 
-        const auto buttonOffset = (panel.w - (numberOfItems * width + (numberOfItems - 1) * 10)) / 2;
+        const auto buttonOffset = (panel.w - ((numberOfItems - 1) * width + (numberOfItems - 2) * 10)) / 2;
 
         setPos(registry, entity, buttonOffset + idx * (width + 10), height / 2);
         setSpriteSize(registry, entity, width, height);
@@ -473,6 +473,8 @@ void createTutorialBottomPanel(Registry &registry) {
     addButton(ItemType::SPEED_UP, 0);
     addButton(ItemType::SLOW_DOWN, 1);
     addButton(ItemType::FOUNTAIN, 2);
+    addButton(ItemType::BOMB, 3);
+    addButton(ItemType::MONEY, 4);
 
     auto tutorialHandle = textureCache.handle("str/tutorial/touch");
     auto tutorial = createSprite(registry, parent, tutorialHandle, 150);

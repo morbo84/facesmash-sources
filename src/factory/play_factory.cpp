@@ -59,7 +59,7 @@ entity_type createFaceButton(Registry &registry, FaceType type, int z) {
 }
 
 
-entity_type createFace(Registry &registry, FaceType type, Uint8 smash, Uint8 miss, int z) {
+entity_type createFace(Registry &registry, FaceType type, Uint16 smash, Uint16 miss, int z) {
     auto entity = createFaceBlueprint(registry, type, z);
     const auto &sprite = registry.get<Sprite>(entity);
     registry.assign<BoundingBox>(entity, sprite.w, sprite.h);

@@ -30,23 +30,24 @@ class Spawner final {
     void spawnFromRight(Registry &, entity_type);
     void maybeRotate(Registry &, entity_type);
 
-    void addScore(Registry &, SDLTextureHandle, float, float);
+    void spawnMessage(Registry &, SDLTextureHandle, float, float);
 
 public:
     Spawner();
 
-    void spawnFaceBottom(Registry &, Uint8, Uint8, FaceType);
-    void spawnFaceTop(Registry &, Uint8, Uint8, FaceType);
-    void spawnFaceLeft(Registry &, Uint8, Uint8, FaceType);
-    void spawnFaceRight(Registry &, Uint8, Uint8, FaceType);
+    void spawnFaceBottom(Registry &, Uint16, Uint16, FaceType);
+    void spawnFaceTop(Registry &, Uint16, Uint16, FaceType);
+    void spawnFaceLeft(Registry &, Uint16, Uint16, FaceType);
+    void spawnFaceRight(Registry &, Uint16, Uint16, FaceType);
 
     void spawnItemBottom(Registry &, ItemType);
     void spawnItemTop(Registry &, ItemType);
     void spawnItemLeft(Registry &, ItemType);
     void spawnItemRight(Registry &, ItemType);
 
-    void spawnSmashScore(Registry &, Uint8, float, float);
-    void spawnMissScore(Registry &, Uint8, float, float);
+    void spawnSmashScore(Registry &, Uint16, float, float);
+    void spawnMissScore(Registry &, Uint16, float, float);
+    void spawnBonus(Registry &, float, float);
     void spawnExplosion(Registry &, float, float);
 
 private:

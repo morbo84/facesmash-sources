@@ -79,7 +79,7 @@ void Spawner::maybeRotate(Registry &registry, entity_type entity) {
 }
 
 
-void Spawner::addScore(Registry &registry, SDLTextureHandle handle, float x, float y) {
+void Spawner::spawnMessage(Registry &registry, SDLTextureHandle handle, float x, float y) {
     auto entity = createSprite(registry, handle, 190);
     setPos(registry, entity, x - handle->width() / 2.f, y - handle->height() / 2.f);
 
@@ -104,7 +104,7 @@ Spawner::Spawner()
 {}
 
 
-void Spawner::spawnFaceBottom(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
+void Spawner::spawnFaceBottom(Registry &registry, Uint16 smash, Uint16 miss, FaceType face) {
     auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromBottom(registry, entity);
@@ -112,7 +112,7 @@ void Spawner::spawnFaceBottom(Registry &registry, Uint8 smash, Uint8 miss, FaceT
 }
 
 
-void Spawner::spawnFaceTop(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
+void Spawner::spawnFaceTop(Registry &registry, Uint16 smash, Uint16 miss, FaceType face) {
     auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromTop(registry, entity);
@@ -120,7 +120,7 @@ void Spawner::spawnFaceTop(Registry &registry, Uint8 smash, Uint8 miss, FaceType
 }
 
 
-void Spawner::spawnFaceLeft(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
+void Spawner::spawnFaceLeft(Registry &registry, Uint16 smash, Uint16 miss, FaceType face) {
     auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromLeft(registry, entity);
@@ -128,7 +128,7 @@ void Spawner::spawnFaceLeft(Registry &registry, Uint8 smash, Uint8 miss, FaceTyp
 }
 
 
-void Spawner::spawnFaceRight(Registry &registry, Uint8 smash, Uint8 miss, FaceType face) {
+void Spawner::spawnFaceRight(Registry &registry, Uint16 smash, Uint16 miss, FaceType face) {
     auto entity = createFace(registry, face, smash, miss, zNext());
     registry.assign<Destroyable>(entity);
     spawnFromRight(registry, entity);
@@ -168,21 +168,45 @@ void Spawner::spawnItemRight(Registry &registry, ItemType item) {
 }
 
 
-void Spawner::spawnSmashScore(Registry &registry, Uint8 score, float x, float y) {
+void Spawner::spawnSmashScore(Registry &registry, Uint16 score, float x, float y) {
     auto &textureCache = Locator::TextureCache::ref();
 
     switch(score) {
+    case 5:
+        spawnMessage(registry, textureCache.handle("str/smash/all/5"), x, y);
+        break;
+    case 10:
+        spawnMessage(registry, textureCache.handle("str/smash/all/10"), x, y);
+        break;
+    case 20:
+        spawnMessage(registry, textureCache.handle("str/smash/all/20"), x, y);
+        break;
+    case 25:
+        spawnMessage(registry, textureCache.handle("str/smash/all/25"), x, y);
+        break;
     case 50:
-        addScore(registry, textureCache.handle("str/smash/50"), x, y);
+        spawnMessage(registry, textureCache.handle("str/smash/default/50"), x, y);
         break;
     case 100:
-        addScore(registry, textureCache.handle("str/smash/100"), x, y);
+        spawnMessage(registry, textureCache.handle("str/smash/default/100"), x, y);
         break;
     case 200:
-        addScore(registry, textureCache.handle("str/smash/200"), x, y);
+        spawnMessage(registry, textureCache.handle("str/smash/default/200"), x, y);
         break;
     case 250:
-        addScore(registry, textureCache.handle("str/smash/250"), x, y);
+        spawnMessage(registry, textureCache.handle("str/smash/default/250"), x, y);
+        break;
+    case 500:
+        spawnMessage(registry, textureCache.handle("str/smash/rich/500"), x, y);
+        break;
+    case 1000:
+        spawnMessage(registry, textureCache.handle("str/smash/rich/1000"), x, y);
+        break;
+    case 2000:
+        spawnMessage(registry, textureCache.handle("str/smash/rich/2000"), x, y);
+        break;
+    case 2500:
+        spawnMessage(registry, textureCache.handle("str/smash/rich/2500"), x, y);
         break;
     default:
         // does nothing (ie value = 0)
@@ -191,26 +215,32 @@ void Spawner::spawnSmashScore(Registry &registry, Uint8 score, float x, float y)
 }
 
 
-void Spawner::spawnMissScore(Registry &registry, Uint8 score, float x, float y) {
+void Spawner::spawnMissScore(Registry &registry, Uint16 score, float x, float y) {
     auto &textureCache = Locator::TextureCache::ref();
 
     switch(score) {
     case 10:
-        addScore(registry, textureCache.handle("str/miss/10"), x, y);
+        spawnMessage(registry, textureCache.handle("str/miss/10"), x, y);
         break;
     case 20:
-        addScore(registry, textureCache.handle("str/miss/20"), x, y);
+        spawnMessage(registry, textureCache.handle("str/miss/20"), x, y);
         break;
     case 50:
-        addScore(registry, textureCache.handle("str/miss/50"), x, y);
+        spawnMessage(registry, textureCache.handle("str/miss/50"), x, y);
         break;
     case 100:
-        addScore(registry, textureCache.handle("str/miss/100"), x, y);
+        spawnMessage(registry, textureCache.handle("str/miss/100"), x, y);
         break;
     default:
         // does nothing (ie value = 0)
         break;
     }
+}
+
+
+void Spawner::spawnBonus(Registry &registry, float x, float y) {
+    auto &textureCache = Locator::TextureCache::ref();
+    spawnMessage(registry, textureCache.handle("str/smash/bonus/x10"), x, y);
 }
 
 

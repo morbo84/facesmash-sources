@@ -33,7 +33,10 @@ ItemBag::ItemBag()
       buffer{
           ItemType::FOUNTAIN,
           ItemType::SLOW_DOWN,
-          ItemType::SPEED_UP
+          ItemType::SPEED_UP,
+          ItemType::BOMB,
+          ItemType::MONEY,
+          ItemType::RANDOM
       },
       next{numberOfItems}
 {}

@@ -69,7 +69,10 @@ enum class FaceType: Uint8 {
 enum class ItemType: Uint8 {
     FOUNTAIN,
     SPEED_UP,
-    SLOW_DOWN
+    SLOW_DOWN,
+    BOMB,
+    MONEY,
+    RANDOM
 };
 
 

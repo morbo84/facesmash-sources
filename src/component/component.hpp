@@ -148,9 +148,10 @@ struct Movement {
 
 
 struct Face {
-    Uint8 smash;
-    Uint8 miss;
+    Uint16 smash;
+    Uint16 miss;
     FaceType type;
+    bool bonus{false};
 };
 
 

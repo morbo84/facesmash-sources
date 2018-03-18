@@ -13,7 +13,7 @@ entity_type createInTrainingMessage(Registry &, SDLTextureHandle, int);
 entity_type createExplosion(Registry &, int);
 entity_type createSmashButton(Registry &, FaceType, int);
 entity_type createFaceButton(Registry &, FaceType, int);
-entity_type createFace(Registry &, FaceType, Uint8, Uint8, int);
+entity_type createFace(Registry &, FaceType, Uint16, Uint16, int);
 entity_type createItem(Registry &, ItemType, int);
 
 
