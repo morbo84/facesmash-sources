@@ -647,11 +647,11 @@ void refreshGameOverPanel(Registry &registry) {
 
             if(status == PermissionStatus::SHOW_RATIONALE) {
                 registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
+                registry.get<Sprite>(saveButton).frame = 3;
             } else if(status == PermissionStatus::DENIED) {
                 registry.get<UIButton>(saveButton).enabled = false;
+                registry.get<Sprite>(saveButton).frame = 3;
             }
-
-            registry.get<Sprite>(saveButton).frame = 3;
         } else {
             registry.get<UIButton>(saveButton).enabled = false;
             registry.get<Sprite>(saveButton).frame = 3;
