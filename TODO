@@ -1,0 +1,7 @@
+* ripulire assets!!
+* salvataggio video: dare feedback un po' più decente?
+* salvataggio: se ads disabilitati, il salvataggio non funziona, se ads abilitati tutto ok
+* audio: agganciare tracce e suoni vari
+* aggiungere al servizio recorder un metodo per cancellare file vecchio da storage (dropTmpMedia?) e chiamarlo quando si torna al menu nello scene system
+* acquisti in-app
+* sistemare pagina support una volta che c'è il servizio per acquisti in-app
