@@ -2,7 +2,6 @@
 #define FACE_SMASH_SERVICE_SETTINGS_SERVICE_H
 
 
-#include "settings_service.h"
 #include <cstdint>
 #include <string>
 

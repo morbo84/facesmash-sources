@@ -122,6 +122,7 @@ void prepareGameStrings(GameRenderer &renderer) {
 
     textureCache.load<TTFFontTextureLoader>("str/audio", "AUDIO", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/video", "VIDEO", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/haptic", "RUMBLE", renderer, *fontTiny, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/miss/10", "10", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/miss/20", "20", renderer, *fontSmall, colorRed);

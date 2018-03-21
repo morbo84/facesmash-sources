@@ -28,6 +28,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/service/game_services_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/game_services_null.cpp
+    ${facesmash_SOURCE_DIR}/src/service/haptic_null.cpp
+    ${facesmash_SOURCE_DIR}/src/service/haptic_sdl.cpp
     ${facesmash_SOURCE_DIR}/src/service/permissions_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/permissions_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/settings_onfile.cpp

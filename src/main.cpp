@@ -16,6 +16,8 @@
 #include "service/camera_null.h"
 #include "service/game_services_android.h"
 #include "service/game_services_null.h"
+#include "service/haptic_null.h"
+#include "service/haptic_sdl.h"
 #include "service/permissions_null.h"
 #include "service/permissions_android.h"
 #include "service/settings_onfile.h"
@@ -61,10 +63,12 @@ static void initPlatformServices() {
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
     gamee::Locator::FaceBus::set<gamee::FaceBusService>();
     gamee::Locator::Audio::set<gamee::AudioNull>();
+    gamee::Locator::Haptic::set<gamee::HapticNull>();
 }
 
 
 static void releasePlatformServices() {
+    gamee::Locator::Haptic::reset();
     gamee::Locator::Audio::reset();
     gamee::Locator::FaceBus::reset();
     gamee::Locator::AvRecorder::reset();
@@ -90,6 +94,10 @@ static void readSettings() {
     if(settings.read("audio/available", true)) {
         gamee::Locator::Audio::set<gamee::AudioSDL>();
     }
+
+    if(settings.read("haptic/available", true)) {
+        gamee::Locator::Haptic::set<gamee::HapticSDL>();
+    }
 }
 
 
@@ -114,14 +122,16 @@ int main(int, char **) {
     // enjoy!! :-)
     auto ret = loop->exec();
 
+    // tear down standard services
+    releasePlatformServices();
+
     // destroy the loop
     loop.reset();
 
     // reset the emo detector before to shutdown all the other services
     emoDetector.reset();
 
-    // tear down services
-    releasePlatformServices();
+    // tear down standard services
     releaseBasicServices();
 
     // bye bye, have a nice day

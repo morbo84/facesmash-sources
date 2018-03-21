@@ -126,6 +126,9 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
                 message(registry, curr);
                 spawner.spawnExplosion(registry, x, y);
                 registry.destroy(entity);
+
+                auto &haptic = Locator::Haptic::ref();
+                haptic.rumble(RumbleEffect::SUPER_HARD);
             }
         } else {
             registry.destroy(entity);

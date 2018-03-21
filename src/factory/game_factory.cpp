@@ -396,24 +396,34 @@ void createSettingsPanel(Registry &registry) {
 
     const bool audio = settings.read("audio/available", true);
     const bool video = settings.read("video/available", true);
+    const bool haptic = settings.read("haptic/available", true);
 
     auto audioButton = createPopupUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
     auto &audioSprite = registry.get<Sprite>(audioButton);
-    setPos(registry, audioButton, panel.w / 3 - audioSprite.w / 2, panel.h / 2 - audioSprite.h / 3);
+    setPos(registry, audioButton, panel.w / 4 - audioSprite.w / 2, panel.h / 2 - audioSprite.h / 3);
     audioSprite.frame = audio ? 2 : 3;
 
     auto videoButton = createPopupUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
     auto &videoSprite = registry.get<Sprite>(videoButton);
-    setPos(registry, videoButton, 2 * panel.w / 3 - videoSprite.w / 2, panel.h / 2 - videoSprite.h / 3);
+    setPos(registry, videoButton, panel.w / 2 - videoSprite.w / 2, panel.h / 2 - videoSprite.h / 3);
     videoSprite.frame = video ? 2 : 3;
+
+    auto hapticButton = createPopupUIButton(registry, parent, UIAction::SWITCH_HAPTIC, 20);
+    auto &hapticSprite = registry.get<Sprite>(hapticButton);
+    setPos(registry, hapticButton, 3 * panel.w / 4 - hapticSprite.w / 2, panel.h / 2 - hapticSprite.h / 3);
+    hapticSprite.frame = haptic ? 2 : 3;
 
     auto audioStrHandle = textureCache.handle("str/audio");
     auto audioStrEntity = createSprite(registry, parent, audioStrHandle, 20);
-    setPos(registry, audioStrEntity, panel.w / 3 - audioStrHandle->width() / 2, panel.h - 2 * audioStrHandle->height());
+    setPos(registry, audioStrEntity, panel.w / 4 - audioStrHandle->width() / 2, panel.h - 2 * audioStrHandle->height());
 
     auto videoStrHandle = textureCache.handle("str/video");
     auto videoStrEntity = createSprite(registry, parent, videoStrHandle, 20);
-    setPos(registry, videoStrEntity, 2 * panel.w / 3 - videoStrHandle->width() / 2, panel.h - 2 * videoStrHandle->height());
+    setPos(registry, videoStrEntity, panel.w / 2 - videoStrHandle->width() / 2, panel.h - 2 * videoStrHandle->height());
+
+    auto hapticStrHandle = textureCache.handle("str/haptic");
+    auto hapticStrEntity = createSprite(registry, parent, hapticStrHandle, 20);
+    setPos(registry, hapticStrEntity, 3 * panel.w / 4 - hapticStrHandle->width() / 2, panel.h - 2 * hapticStrHandle->height());
 }
 
 

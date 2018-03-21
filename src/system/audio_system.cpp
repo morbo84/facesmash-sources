@@ -20,7 +20,6 @@ AudioSystem::AudioSystem()
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<SmashEvent>(this);
     Locator::Dispatcher::ref().connect<AudioEvent>(this);
-    Locator::Dispatcher::ref().connect<EnvEvent>(this);
 }
 
 
@@ -28,7 +27,6 @@ AudioSystem::~AudioSystem() {
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().disconnect<SmashEvent>(this);
     Locator::Dispatcher::ref().disconnect<AudioEvent>(this);
-    Locator::Dispatcher::ref().disconnect<EnvEvent>(this);
 }
 
 
@@ -52,28 +50,6 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
     case AudioEvent::Type::STOP:
         Locator::Audio::ref().pause();
         Locator::Audio::set<AudioNull>();
-        break;
-    }
-}
-
-
-void AudioSystem::receive(const EnvEvent &event) noexcept {
-    switch(event.type) {
-    case EnvEvent::Type::ENTERING_BACKGROUND:
-        Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::STOP);
-        break;
-    case EnvEvent::Type::ENTERING_FOREGROUND:
-        Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::START);
-        break;
-    case EnvEvent::Type::ENTERED_BACKGROUND:
-    case EnvEvent::Type::ENTERED_FOREGROUND:
-        // nothing to do here
-        break;
-    case EnvEvent::Type::TERMINATING:
-        // audio is going to be stopped anyway, we can safely ignore this...
-        break;
-    case EnvEvent::Type::LOW_MEMORY:
-        // enjoy the last chunks of battery, my friend!!
         break;
     }
 }

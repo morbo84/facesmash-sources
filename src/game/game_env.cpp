@@ -52,11 +52,15 @@ static inline int appEventFilter(void *, SDL_Event *event) noexcept {
 
 
 void GameEnv::suspend() {
+    Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::STOP);
+    Locator::Haptic::ref().pause();
     clock.pause();
 }
 
 
 void GameEnv::resume() {
+    Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::START);
+    Locator::Haptic::ref().unpause();
     clock.unpause();
 }
 
@@ -64,7 +68,7 @@ void GameEnv::resume() {
 GameEnv::GameEnv() noexcept
     : errcode{ErrorCode::NONE}, renderer{nullptr}, loop{true}
 {
-    const Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER;
+    const Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_HAPTIC;
     const int sdlImageFlags = IMG_INIT_PNG;
     const int sdlMixerFlags = 0;
 

@@ -69,6 +69,9 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::SWITCH_VIDEO:
         setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
         break;
+    case UIAction::SWITCH_HAPTIC:
+        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8);
+        break;
     case UIAction::THE_GAME:
         setSpriteGeometry(registry, entity, 512, 128, width, height, 4_ui8);
         break;

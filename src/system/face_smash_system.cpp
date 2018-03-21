@@ -138,21 +138,28 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         event.combo = 5;
     }
 
+    auto &haptic = Locator::Haptic::ref();
+
     if(1 == event.combo && registry.empty<Face>()) {
         // no more faces to smash
         reward(textureCache.handle("str/reward/perfect"), 8_ui8);
+        haptic.rumble(RumbleEffect::SUPER_HARD);
     } else if(2 == event.combo) {
         // 2x combo
         reward(textureCache.handle("str/reward/x2"), 2_ui8);
+        haptic.rumble(RumbleEffect::SUPER_SOFT);
     } else if(3 == event.combo) {
         // 3x combo
         reward(textureCache.handle("str/reward/x3"), 4_ui8);
+        haptic.rumble(RumbleEffect::SOFT);
     } else if(4 == event.combo) {
         // 4x combo
         reward(textureCache.handle("str/reward/x4"), 6_ui8);
+        haptic.rumble(RumbleEffect::NORMAL);
     } else if(5 == event.combo) {
         // 5x combo
         reward(textureCache.handle("str/reward/x5"), 8_ui8);
+        haptic.rumble(RumbleEffect::HARD);
     }
 
     Locator::Dispatcher::ref().enqueue<SmashEvent>(event);

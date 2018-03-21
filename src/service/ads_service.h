@@ -2,7 +2,6 @@
 #define FACE_SMASH_SERVICE_ADS_SERVICE_H
 
 
-
 namespace gamee {
 
 

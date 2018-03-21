@@ -5,6 +5,8 @@
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
 #include "../service/game_services_service.h"
+#include "../service/haptic_null.h"
+#include "../service/haptic_sdl.h"
 #include "ui_button_system.h"
 
 
@@ -55,6 +57,22 @@ static void switchVideo(Registry &registry, entity_type button) {
     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
     registry.get<Sprite>(button).frame = 3;
 #endif
+}
+
+
+static void switchHaptic(Registry &registry, entity_type button) {
+    auto &settings = gamee::Locator::Settings::ref();
+    const bool haptic = settings.read("haptic/available", true);
+
+    settings.write("haptic/available", !haptic);
+
+    if(haptic) {
+        Locator::Haptic::set<HapticNull>();
+        registry.get<Sprite>(button).frame = 3;
+    } else {
+        Locator::Haptic::set<HapticSDL>();
+        registry.get<Sprite>(button).frame = 2;
+    }
 }
 
 
@@ -179,6 +197,9 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::SWITCH_VIDEO:
                     switchVideo(registry, entity);
+                    break;
+                case UIAction::SWITCH_HAPTIC:
+                    switchHaptic(registry, entity);
                     break;
                 case UIAction::LOGIN:
                     Locator::GameServices::ref().isSignedIn()

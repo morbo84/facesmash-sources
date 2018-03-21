@@ -95,6 +95,7 @@ enum class UIAction: Uint8 {
     STORAGE_PERMISSION,
     SWITCH_AUDIO,
     SWITCH_VIDEO,
+    SWITCH_HAPTIC,
     LOGIN,
     BUY,
     GPG_LICENSE

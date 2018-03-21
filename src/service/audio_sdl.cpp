@@ -6,6 +6,11 @@
 namespace gamee {
 
 
+AudioSDL::~AudioSDL() {
+    halt();
+}
+
+
 bool AudioSDL::mute() const noexcept {
     return (0 == Mix_VolumeMusic(-1));
 }
