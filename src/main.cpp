@@ -122,7 +122,7 @@ int main(int, char **) {
     // enjoy!! :-)
     auto ret = loop->exec();
 
-    // tear down standard services
+    // tear down platform services
     releasePlatformServices();
 
     // destroy the loop

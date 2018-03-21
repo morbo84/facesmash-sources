@@ -36,10 +36,10 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
         setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8);
         break;
     case UIAction::EXIT:
-        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 1024, 384, width, height, 4_ui8);
         break;
     case UIAction::MENU:
-        setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8);
         break;
     case UIAction::MENU_CLOSE_UP:
         setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8);
