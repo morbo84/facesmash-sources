@@ -10,6 +10,7 @@ namespace gamee {
 
 struct SceneChangeEvent;
 struct KeyboardEvent;
+struct PermissionEvent;
 
 
 struct SceneSystem final {
@@ -18,6 +19,7 @@ struct SceneSystem final {
 
     void receive(const SceneChangeEvent &) noexcept;
     void receive(const KeyboardEvent &) noexcept;
+    void receive(const PermissionEvent &) noexcept;
 
     void update(Registry &, delta_type);
 
@@ -26,6 +28,7 @@ public:
     SceneType next;
     delta_type remaining;
     bool isTransitioning;
+    bool forceRefreshGameOverPanel;
 };
 
 

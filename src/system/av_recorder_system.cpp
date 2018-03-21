@@ -65,13 +65,6 @@ void AvRecorderSystem::receive(const AvRecorderEvent &event) noexcept {
 }
 
 
-void AvRecorderSystem::receive(const PermissionEvent &event) noexcept {
-    if(event.permission == PermissionType::STORAGE && event.result == PermissionStatus::GRANTED) {
-        Locator::Dispatcher::ref().enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
-    }
-}
-
-
 void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
     auto &avRecorder = Locator::AvRecorder::ref();
 

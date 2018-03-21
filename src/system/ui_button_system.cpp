@@ -167,7 +167,8 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
                     break;
                 case UIAction::CAMERA_PERMISSION:
-                    // TODO
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    permissions.request(PermissionType::CAMERA);
                     break;
                 case UIAction::SETTINGS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
@@ -189,8 +190,7 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::STORAGE_PERMISSION:
                     permissions.request(PermissionType::STORAGE);
-                    registry.remove<InputReceiver>(entity);
-                    registry.get<Sprite>(entity).frame = 3;
+                    registry.remove<RotationAnimation>(entity);
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);

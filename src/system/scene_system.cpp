@@ -418,14 +418,17 @@ SceneSystem::SceneSystem()
     : curr{SceneType::UNKNOWN},
       next{SceneType::UNKNOWN},
       remaining{0_ui32},
-      isTransitioning{false}
+      isTransitioning{false},
+      forceRefreshGameOverPanel{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
+    Locator::Dispatcher::ref().connect<PermissionEvent>(this);
 }
 
 
 SceneSystem::~SceneSystem() {
+    Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
     Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
 }
@@ -480,7 +483,17 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 }
 
 
+void SceneSystem::receive(const PermissionEvent &event) noexcept {
+    forceRefreshGameOverPanel = (event.permission == PermissionType::STORAGE && event.result == PermissionStatus::GRANTED);
+}
+
+
 void SceneSystem::update(Registry &registry, delta_type delta) {
+    if(forceRefreshGameOverPanel) {
+        forceRefreshGameOverPanel = false;
+        refreshGameOverPanel(registry);
+    }
+
     if(curr != next) {
         auto &dispatcher = Locator::Dispatcher::ref();
         auto &avRecorder = Locator::AvRecorder::ref();
