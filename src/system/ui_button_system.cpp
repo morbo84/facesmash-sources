@@ -154,8 +154,7 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case UIAction::MENU:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-                    break;
+                case UIAction::CLOSE:
                 case UIAction::MENU_CLOSE_UP:
                 case UIAction::MENU_CLOSE_DOWN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);

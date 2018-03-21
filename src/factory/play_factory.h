@@ -8,8 +8,8 @@
 namespace gamee {
 
 
-entity_type createInGameMessage(Registry &, SDLTextureHandle, int);
-entity_type createInTrainingMessage(Registry &, SDLTextureHandle, int);
+entity_type createLightningMessage(Registry &, SDLTextureHandle, int);
+entity_type createLastingMessage(Registry &, SDLTextureHandle, int);
 entity_type createExplosion(Registry &, int);
 entity_type createSmashButton(Registry &, FaceType, int);
 entity_type createFaceButton(Registry &, FaceType, int);

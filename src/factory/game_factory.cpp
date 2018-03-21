@@ -38,7 +38,7 @@ void createExitPanel(Registry &registry) {
     setPos(registry, acceptButton, (panel.w - 3 * acceptSprite.w) / 2, panel.h / 2);
     setBoundingBox(registry, acceptButton, acceptSprite.w, acceptSprite.h);
 
-    auto rejectButton = createUIButton(registry, parent, UIAction::MENU, 20);
+    auto rejectButton = createUIButton(registry, parent, UIAction::CLOSE, 20);
     const auto &rejectSprite = registry.get<Sprite>(rejectButton);
     setSpriteSize(registry, rejectButton, 3 * rejectSprite.w / 4, 3 * rejectSprite.h / 4);
     setPos(registry, rejectButton, (panel.w + rejectSprite.w) / 2, panel.h / 2);

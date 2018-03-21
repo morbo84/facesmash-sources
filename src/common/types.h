@@ -79,6 +79,7 @@ enum class ItemType: Uint8 {
 enum class UIAction: Uint8 {
     EASTER_EGG,
     EXIT,
+    CLOSE,
     MENU,
     MENU_CLOSE_UP,
     MENU_CLOSE_DOWN,

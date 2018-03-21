@@ -69,7 +69,7 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
         next = TrainingState::IDLE;
 
         const auto handle = Locator::TextureCache::ref().handle("str/training/good");
-        auto entity = createInTrainingMessage(registry, handle , 200);
+        auto entity = createLastingMessage(registry, handle , 200);
         const auto &sprite = registry.get<Sprite>(entity);
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
 
@@ -81,14 +81,14 @@ TrainingSystem::TrainingState TrainingSystem::training(Registry &registry, Spawn
         }
     } else if(!hurry && remaining < (duration / 2)) {
         const auto handle = Locator::TextureCache::ref().handle("str/training/hurry");
-        auto entity = createInTrainingMessage(registry, handle , 200);
+        auto entity = createLastingMessage(registry, handle , 200);
         const auto &sprite = registry.get<Sprite>(entity);
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
     } if(!remaining) {
         next = TrainingState::IDLE;
 
         const auto handle = Locator::TextureCache::ref().handle("str/training/fail");
-        auto entity = createInTrainingMessage(registry, handle , 200);
+        auto entity = createLastingMessage(registry, handle , 200);
         const auto &sprite = registry.get<Sprite>(entity);
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
     }

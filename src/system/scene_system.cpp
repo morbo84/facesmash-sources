@@ -585,9 +585,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             disableUIButtons(registry);
             hideSmashButtons(registry);
 
-            // make faces and items on screen (if any) no longer smashable
-            registry.reset<Destroyable>();
-
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
             hidePopupButtons(registry, PanelType::CREDITS);
@@ -676,6 +673,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 assert(false);
                 break;
             }
+
+            // make faces and items on screen (if any) no longer smashable
+            registry.reset<Destroyable>();
 
             isTransitioning = true;
         }
