@@ -18,8 +18,8 @@ void TrainingSystem::enableFaceButtons(Registry &registry) {
         if(!button.enabled) {
             button.enabled = true;
             renderable.angle = 0.f;
-            registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
-            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
+            registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+            registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
         }
     });
 }
@@ -30,8 +30,8 @@ void TrainingSystem::disableFaceButtons(Registry &registry) {
         if(button.enabled) {
             button.enabled = false;
             renderable.angle = 0.f;
-            registry.accomodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
-            registry.accomodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+            registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1500_ui32, 0_ui32, false, &easeOutCubic);
+            registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
         }
     });
 }

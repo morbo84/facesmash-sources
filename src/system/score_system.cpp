@@ -72,12 +72,12 @@ void ScoreSystem::update(Registry &registry) {
             const int offset = numOfDigits(score);
 
             for(auto i = offset; i < last; ++i) {
-                registry.accomodate<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+                registry.accommodate<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
             }
 
             for(auto i = offset; i > 0; --i) {
                 auto handle = toStrSmallHandle(score % 10);
-                registry.accomodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+                registry.accommodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
                 score /= 10;
             }
         });

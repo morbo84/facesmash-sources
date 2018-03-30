@@ -177,14 +177,19 @@ void prepareDebugStrings(GameRenderer &renderer) {
 }
 
 
+void prepareCameraFrame(GameRenderer &renderer) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    const auto &cameraService = Locator::Camera::ref();
+    textureCache.reload<SDLTextureLoader>("camera/frame", renderer, internalFormat, SDL_TEXTUREACCESS_STREAMING, cameraService.width(), cameraService.height());
+}
+
+
 void prepareGameStuff(GameRenderer &renderer) {
     auto &textureCache = Locator::TextureCache::ref();
 
     textureCache.load<SDLTextureLoader>("target/logical", renderer, internalFormat, SDL_TEXTUREACCESS_TARGET, logicalWidth, logicalHeight);
     textureCache.load<SDLTextureLoader>("target/recording", renderer, internalFormat, SDL_TEXTUREACCESS_TARGET, recordingWidth, recordingHeight);
-
-    const auto &cameraService = Locator::Camera::ref();
-    textureCache.load<SDLTextureLoader>("camera/frame", renderer, internalFormat, SDL_TEXTUREACCESS_STREAMING, cameraService.width(), cameraService.height());
 }
 
 

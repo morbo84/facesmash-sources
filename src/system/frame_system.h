@@ -9,6 +9,8 @@ namespace gamee {
 
 
 struct FrameAvailableEvent;
+struct PermissionEvent;
+struct GameRenderer;
 
 
 struct FrameSystem final {
@@ -16,10 +18,12 @@ struct FrameSystem final {
     ~FrameSystem() noexcept;
 
     void receive(const FrameAvailableEvent &) noexcept;
+    void receive(const PermissionEvent &) noexcept;
 
-    void update(Registry &);
+    void update(Registry &, GameRenderer &);
 
 private:
+    bool refresh;
     bool dirty;
 };
 

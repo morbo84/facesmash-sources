@@ -19,6 +19,7 @@ void GameLoop::init(GameRenderer &renderer) {
 
     loadResources(renderer);
     prepareGameStrings(renderer);
+    prepareCameraFrame(renderer);
     prepareGameStuff(renderer);
 
     createExitPanel(registry);
@@ -72,7 +73,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // sum what remains from the previous step
         accumulator += delta;
 
-        frameSystem.update(registry);
+        frameSystem.update(registry, renderer);
         sceneSystem.update(registry, delta);
         audioSystem.update(registry,delta);
         destroyLaterSystem.update(registry, delta);

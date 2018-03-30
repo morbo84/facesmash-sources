@@ -2,9 +2,10 @@
 #define FACE_SMASH_SERVICE_CAMERA_ANDROID_H
 
 
-#include "camera_service.h"
-#include <memory>
 #include <mutex>
+#include <memory>
+#include "../common/constants.h"
+#include "camera_service.h"
 
 
 namespace gamee {
@@ -31,8 +32,8 @@ private:
     char* p0_;
     char* p1_;
     mutable std::mutex frameMtx_;
-    int width_{-1};
-    int height_{-1};
+    int width_{logicalWidth/2};
+    int height_{logicalHeight/2};
     size_t size_{0};
 };
 

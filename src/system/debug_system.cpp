@@ -15,7 +15,7 @@ void DebugSystem::update(Registry &registry, delta_type delta) {
 
         for(auto i = std::extent<decltype(DebugInfo::time)>::value; i > 0u; --i) {
             auto handle = toStrDebug(time % 10);
-            registry.accomodate<HUD>(debug.time[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+            registry.accommodate<HUD>(debug.time[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
             time /= 10;
         }
 
@@ -23,7 +23,7 @@ void DebugSystem::update(Registry &registry, delta_type delta) {
 
         for(auto i = std::extent<decltype(DebugInfo::fps)>::value; i > 0u; --i) {
             auto handle = toStrDebug(fps % 10);
-            registry.accomodate<HUD>(debug.fps[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+            registry.accommodate<HUD>(debug.fps[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
             fps /= 10;
         }
     });

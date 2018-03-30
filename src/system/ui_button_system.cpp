@@ -134,7 +134,7 @@ void UIButtonSystem::update(Registry &registry) {
             auto area = transformToPosition(registry, entity, transform) * box;
 
             if(registry.has<InputReceiver>(entity) && SDL_PointInRect(&coord, &area)) {
-                registry.accomodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                registry.accommodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
 
                 switch(button.action) {
                 case UIAction::EASTER_EGG:

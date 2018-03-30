@@ -85,7 +85,7 @@ set(
 link_libraries("-no-pie")
 link_libraries("${BLAS_LINKER_FLAGS}")
 
-option(BUILD_TESTING "Disable testing with ctest for EnTT." OFF)
+option(BUILD_TESTING "Disable testing with ctest for EnTT." ON)
 configure_file(${facesmash_SOURCE_DIR}/cmake/in/EnTT.in ${facesmash_SOURCE_DIR}/deps/EnTT/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY ${facesmash_SOURCE_DIR}/deps/EnTT)
 execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${facesmash_SOURCE_DIR}/deps/EnTT)
