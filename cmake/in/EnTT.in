@@ -6,7 +6,7 @@ include(ExternalProject)
 ExternalProject_Add(
     EnTT
     GIT_REPOSITORY https://github.com/skypjack/entt.git
-    GIT_TAG master
+    GIT_TAG v2.5.0
     DOWNLOAD_DIR ${facesmash_SOURCE_DIR}/deps/EnTT
     TMP_DIR ${facesmash_SOURCE_DIR}/deps/EnTT/tmp
     STAMP_DIR ${facesmash_SOURCE_DIR}/deps/EnTT/stamp
