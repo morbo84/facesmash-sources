@@ -363,11 +363,11 @@ void refreshCameraPermissionPanel(Registry &registry) {
 
     auto cameraStatus = permissions.status(PermissionType::CAMERA);
 
-    if(cameraStatus == PermissionStatus::SHOW_RATIONALE) {
-        cameraSprite.frame = 0;
-    } else {
+    if(cameraStatus == PermissionStatus::GRANTED) {
         registry.get<UIButton>(cameraButton).enabled = false;
         cameraSprite.frame = 3;
+    } else {
+        cameraSprite.frame = 0;
     }
 }
 
@@ -655,11 +655,8 @@ void refreshGameOverPanel(Registry &registry) {
         if(recorder.supportExport()) {
             const auto status = permissions.status(PermissionType::STORAGE);
 
-            if(status == PermissionStatus::SHOW_RATIONALE) {
+            if(status != PermissionStatus::GRANTED) {
                 registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
-                registry.get<Sprite>(saveButton).frame = 3;
-            } else if(status == PermissionStatus::DENIED) {
-                registry.get<UIButton>(saveButton).enabled = false;
                 registry.get<Sprite>(saveButton).frame = 3;
             }
         } else {
