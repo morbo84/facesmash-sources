@@ -10,7 +10,8 @@ namespace gamee {
 
 
 class HapticSDL: public HapticService {
-    static constexpr delta_type duration = 500_ui32;
+    static constexpr delta_type minimal = 100_ui32;
+    static constexpr delta_type standard = 500_ui32;
 
 public:
     HapticSDL();

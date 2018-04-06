@@ -31,20 +31,23 @@ HapticSDL::~HapticSDL() {
 void HapticSDL::rumble(RumbleEffect effect) {
     if(haptic) {
         switch(effect) {
+        case RumbleEffect::SUPER_SUPER_SOFT:
+            SDL_HapticRumblePlay(haptic, .1f, minimal);
+            break;
         case RumbleEffect::SUPER_SOFT:
-            SDL_HapticRumblePlay(haptic, .2f, duration);
+            SDL_HapticRumblePlay(haptic, .2f, standard);
             break;
         case RumbleEffect::SOFT:
-            SDL_HapticRumblePlay(haptic, .4f, duration);
+            SDL_HapticRumblePlay(haptic, .4f, standard);
             break;
         case RumbleEffect::NORMAL:
-            SDL_HapticRumblePlay(haptic, .6f, duration);
+            SDL_HapticRumblePlay(haptic, .6f, standard);
             break;
         case RumbleEffect::HARD:
-            SDL_HapticRumblePlay(haptic, .8f, duration);
+            SDL_HapticRumblePlay(haptic, .8f, standard);
             break;
         case RumbleEffect::SUPER_HARD:
-            SDL_HapticRumblePlay(haptic, 1.f, duration);
+            SDL_HapticRumblePlay(haptic, 1.f, standard);
             break;
         }
     }

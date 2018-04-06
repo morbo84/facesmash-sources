@@ -9,6 +9,7 @@ namespace gamee {
 
 
 enum class RumbleEffect: Uint8 {
+    SUPER_SUPER_SOFT,
     SUPER_SOFT,
     SOFT,
     NORMAL,

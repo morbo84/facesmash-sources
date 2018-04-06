@@ -127,14 +127,16 @@ void UIButtonSystem::update(Registry &registry) {
         auto view = registry.view<UIButton, Transform, BoundingBox>();
 
         view.each([&, this](auto entity, auto &button, auto &transform, auto &box) {
-            auto &dispatcher = Locator::Dispatcher::ref();
-            auto &gservices = Locator::GameServices::ref();
-            auto &permissions = Locator::Permissions::ref();
-
             auto area = transformToPosition(registry, entity, transform) * box;
 
             if(registry.has<InputReceiver>(entity) && SDL_PointInRect(&coord, &area)) {
+                auto &dispatcher = Locator::Dispatcher::ref();
+                auto &gservices = Locator::GameServices::ref();
+                auto &permissions = Locator::Permissions::ref();
+                auto &haptic = Locator::Haptic::ref();
+
                 registry.accommodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                haptic.rumble(RumbleEffect::SUPER_SUPER_SOFT);
 
                 switch(button.action) {
                 case UIAction::EASTER_EGG:
