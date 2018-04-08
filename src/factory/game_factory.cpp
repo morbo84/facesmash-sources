@@ -560,19 +560,23 @@ void createGameOverPanel(Registry &registry) {
 
 
 void refreshGameOverPanel(Registry &registry) {
-    if(registry.has<PlayerScore>()) {
-        auto &textureCache = Locator::TextureCache::ref();
-        entity_type parent{};
+    auto &textureCache = Locator::TextureCache::ref();
+    auto &recorder = Locator::AvRecorder::ref();
+    auto &permissions = Locator::Permissions::ref();
 
-        for(auto entity: registry.view<Panel>()) {
-            if(registry.get<Panel>(entity).type == PanelType::GAME_OVER) {
-                parent = entity;
-                break;
-            }
+    entity_type parent{};
+
+    for(auto entity: registry.view<Panel>()) {
+        if(registry.get<Panel>(entity).type == PanelType::GAME_OVER) {
+            parent = entity;
+            break;
         }
+    }
 
+    const auto &panel = registry.get<Panel>(parent);
+
+    if(registry.has<PlayerScore>()) {
         const auto &playerScore = registry.get<PlayerScore>();
-        const auto &panel = registry.get<Panel>(parent);
 
         auto printHit = [&](FaceType type, int PlayerScore:: *member, int xOffset, auto initYOffset) {
             auto faceEntity = createFaceBlueprint(registry, type, 150);
@@ -643,26 +647,23 @@ void refreshGameOverPanel(Registry &registry) {
         printScore(score % 10, -3 * sym0Handle->width() / 2);
         score /= 10;
         printScore(score % 10, -5 * sym0Handle->width() / 2);
+    }
 
-        auto &recorder = Locator::AvRecorder::ref();
-        auto &permissions = Locator::Permissions::ref();
+    auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
+    const auto &saveSprite = registry.get<Sprite>(saveButton);
+    setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
+    registry.assign<ExpiringContent>(saveButton);
 
-        auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
-        const auto &saveSprite = registry.get<Sprite>(saveButton);
-        setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
-        registry.assign<ExpiringContent>(saveButton);
+    if(recorder.supportExport()) {
+        const auto status = permissions.status(PermissionType::STORAGE);
 
-        if(recorder.supportExport()) {
-            const auto status = permissions.status(PermissionType::STORAGE);
-
-            if(status != PermissionStatus::GRANTED) {
-                registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
-                registry.get<Sprite>(saveButton).frame = 3;
-            }
-        } else {
-            registry.get<UIButton>(saveButton).enabled = false;
+        if(status != PermissionStatus::GRANTED) {
+            registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
             registry.get<Sprite>(saveButton).frame = 3;
         }
+    } else {
+        registry.get<UIButton>(saveButton).enabled = false;
+        registry.get<Sprite>(saveButton).frame = 3;
     }
 }
 

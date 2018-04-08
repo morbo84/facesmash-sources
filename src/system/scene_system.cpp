@@ -53,7 +53,7 @@ static void enableUIButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Transform>().each([parent, &registry](auto child, auto &button, const auto &transform) {
                 if(transform.parent == parent && button.enabled) {
-                    registry.assign<InputReceiver>(child);
+                    registry.accommodate<InputReceiver>(child);
                 }
             });
         }
@@ -491,7 +491,9 @@ void SceneSystem::receive(const PermissionEvent &event) noexcept {
 void SceneSystem::update(Registry &registry, delta_type delta) {
     if(forceRefreshGameOverPanel) {
         forceRefreshGameOverPanel = false;
+        for(auto entity: registry.view<UIButton, ExpiringContent>()) { registry.destroy(entity); }
         refreshGameOverPanel(registry);
+        enableUIButtons(registry, PanelType::GAME_OVER);
     }
 
     if(curr != next) {
