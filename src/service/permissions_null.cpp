@@ -16,4 +16,7 @@ void PermissionsNull::request(PermissionType p) noexcept {
 }
 
 
+void PermissionsNull::dequeue() noexcept {}
+
+
 }

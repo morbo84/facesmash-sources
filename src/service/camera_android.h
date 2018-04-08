@@ -13,7 +13,6 @@ namespace gamee {
 
 struct CameraAndroid final: CameraService {
     CameraAndroid();
-    void init();
 
     void start() override;
     void stop() override;
@@ -22,10 +21,12 @@ struct CameraAndroid final: CameraService {
     int height() const noexcept override;
     void frame(std::function<void(const void *, int)>) const noexcept override;
 
-    void setPixels(const void*);
+    void setPixels(const void*) noexcept;
+    void receive(const PermissionEvent &) noexcept;
 
 private:
-    void swapPtrs();
+    void init() noexcept;
+    void swapPtrs() noexcept;
 
     std::unique_ptr<char[]> frame0_;
     std::unique_ptr<char[]> frame1_;

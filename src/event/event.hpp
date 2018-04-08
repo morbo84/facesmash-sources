@@ -76,6 +76,7 @@ struct BonusEvent {
 struct FrameAvailableEvent {};
 struct ActivateEasterEggEvent {};
 struct TimeIsOverEvent {};
+struct CameraInitEvent {};
 
 
 struct GameServicesEvent {

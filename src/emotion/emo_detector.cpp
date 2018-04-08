@@ -51,16 +51,15 @@ static DummyVisageInitializer dummy_;
 namespace gamee {
 
 
-EmoDetector::EmoDetector(int width, int height)
-    : width_{width}
-    , height_{height}
+EmoDetector::EmoDetector()
+    : width_{-1}
+    , height_{-1}
     , tracker_{visageTrackingCfg().c_str()}
-    , image_{vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3)}
-    , internalSize_{(static_cast<size_t>(width * height) * SDL_BITSPERPIXEL(internalFormat)) / 8}
-    , internal_{std::make_unique<unsigned char[]>(internalSize_)}
+    , image_{nullptr}
+    , internalSize_{0U}
+    , internal_{}
     , dirty_{false}
     , end_{false}
-    , t_{&EmoDetector::analyzeCurrentFrame, this}
 {
     analyzer_.init(visageDataPath().c_str());
     Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
@@ -74,7 +73,22 @@ EmoDetector::~EmoDetector() {
     dirty_ = true;
     lck.unlock();
     cv_.notify_one();
-    t_.join();
+
+    if(t_.joinable())
+        t_.join();
+
+    if(image_)
+        vsReleaseImage(&image_);
+}
+
+
+void EmoDetector::start(int width, int height) {
+    width_ = width;
+    height_ = height;
+    image_ = vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3);
+    internalSize_ = (static_cast<size_t>(width * height) * SDL_BITSPERPIXEL(internalFormat)) / 8;
+    internal_ = std::make_unique<unsigned char[]>(internalSize_);
+    t_ = std::thread{&EmoDetector::analyzeCurrentFrame, this};
 }
 
 
@@ -86,6 +100,12 @@ void EmoDetector::receive(const FrameAvailableEvent &) noexcept {
     });
     dirty_ = true;
     cv_.notify_one();
+}
+
+
+void EmoDetector::receive(const CameraInitEvent&) noexcept {
+    const auto& camera = Locator::Camera::ref();
+    start(camera.width(), camera.height());
 }
 
 

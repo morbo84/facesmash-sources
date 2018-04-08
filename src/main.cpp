@@ -106,9 +106,8 @@ int main(int, char **) {
     initBasicServices();
     initPlatformServices();
 
-    const auto &camera = gamee::Locator::Camera::ref();
     // initialize the emo detector
-    auto emoDetector = std::make_unique<gamee::EmoDetector>(camera.width(), camera.height());
+    auto emoDetector = std::make_unique<gamee::EmoDetector>();
 
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();

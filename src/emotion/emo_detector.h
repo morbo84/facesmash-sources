@@ -18,21 +18,23 @@ namespace gamee {
 
 class EmoDetector {
 public:
-    EmoDetector(int width, int height);
+    EmoDetector();
     ~EmoDetector();
 
     void receive(const FrameAvailableEvent &) noexcept;
+    void receive(const CameraInitEvent &) noexcept;
 
 private:
     enum class Emotion {anger, disgust, fear, happiness, sadness, surprise, neutral};
+    void start(int width, int height);
     void analyzeCurrentFrame();
     static std::optional<FaceType> estimateEmotion(float* prob);
 
     static void ARGBtoRGB(const unsigned char* argb, VsImage& buff, int width, int height);
     static void ARGBtoRGBRotated(const unsigned char* argb, VsImage& buff, int width, int height);
 
-    const int width_;
-    const int height_;
+    int width_;
+    int height_;
     VisageSDK::VisageTracker tracker_;
     VisageSDK::VisageFaceAnalyser analyzer_;
     VsImage* image_;

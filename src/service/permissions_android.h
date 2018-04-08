@@ -11,6 +11,7 @@ namespace gamee {
 struct PermissionsAndroid : PermissionsService {
     PermissionStatus status(PermissionType) const noexcept override;
     void request(PermissionType) noexcept override;
+    void dequeue() noexcept override;
 };
 
 

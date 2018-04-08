@@ -11,6 +11,10 @@ namespace gamee {
 struct CameraService {
     virtual ~CameraService() = default;
 
+    /**
+     * It must be called ONLY after the
+     * camera permission has been granted.
+     */
     virtual void start() = 0;
     virtual void stop() = 0;
 

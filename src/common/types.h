@@ -153,16 +153,16 @@ enum class BoxBorderType: Uint8 {
 };
 
 
-enum class PermissionType {
-    CAMERA,
-    STORAGE
+enum class PermissionType: Uint8 {
+    CAMERA = 0,
+    STORAGE = 1
 };
 
 
-enum class PermissionStatus {
-    DENIED,
-    GRANTED,
-    SHOW_RATIONALE
+enum class PermissionStatus: Uint8 {
+    DENIED = 0,
+    GRANTED = 1,
+    SHOW_RATIONALE = 2
 };
 
 
