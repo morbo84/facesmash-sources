@@ -27,6 +27,8 @@
 static void initBasicServices() {
     gamee::Locator::TTFFontCache::set();
     gamee::Locator::TextureCache::set();
+    gamee::Locator::AudioChunkCache::set();
+    gamee::Locator::AudioMusicCache::set();
     gamee::Locator::Dispatcher::set();
     gamee::Locator::InputHandler::set<gamee::UserInputHandler>();
 }
@@ -36,6 +38,8 @@ static void releaseBasicServices() {
     gamee::Locator::InputHandler::reset();
     gamee::Locator::Dispatcher::reset();
     gamee::Locator::TextureCache::reset();
+    gamee::Locator::AudioMusicCache::reset();
+    gamee::Locator::AudioChunkCache::reset();
     gamee::Locator::TTFFontCache::reset();
 }
 

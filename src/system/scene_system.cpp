@@ -250,7 +250,7 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 
 
 static delta_type gameTutorialTransition(Registry &registry) {
-    static constexpr delta_type duration = 3000_ui32;
+    static constexpr delta_type duration = 1500_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -353,7 +353,7 @@ static delta_type gameOverTransition(Registry &registry) {
 
 
 static delta_type trainingTutorialTransition(Registry &registry) {
-    static constexpr delta_type duration = 3000_ui32;
+    static constexpr delta_type duration = 1500_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -537,6 +537,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::SETTINGS);
                     break;
                 case SceneType::MENU_PAGE:
+                    dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, true);
                     clearTraining(registry);
                     hideBackgroundPanels(registry);
                     curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_BOTTOM) : void();
@@ -544,6 +545,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     camera.stop();
                     break;
                 case SceneType::GAME_TUTORIAL:
+                    dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     hideBackgroundPanels(registry);
                     break;
@@ -560,6 +562,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                             : enableUIButtons(registry, PanelType::GAME_OVER);
                     break;
                 case SceneType::TRAINING_TUTORIAL:
+                    dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
                     hideBackgroundPanels(registry);
                     break;
@@ -599,6 +602,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::EXIT);
                 break;
             case SceneType::SPLASH_SCREEN:
+                dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, true);
                 enableUIButtons(registry, PanelType::SPLASH_SCREEN);
                 hidePopupButtons(registry, PanelType::MENU_BOTTOM);
                 hidePopupButtons(registry, PanelType::MENU_TOP);
@@ -638,9 +642,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
             case SceneType::MENU_PAGE:
+                dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, false);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
+                dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
                 camera.start();
                 remaining = gameTutorialTransition(registry);
                 break;
@@ -656,6 +662,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
+                dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
                 camera.start();
                 remaining = trainingTutorialTransition(registry);
                 break;

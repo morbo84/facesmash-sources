@@ -52,14 +52,12 @@ static inline int appEventFilter(void *, SDL_Event *event) noexcept {
 
 
 void GameEnv::suspend() {
-    Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::STOP);
     Locator::Haptic::ref().pause();
     clock.pause();
 }
 
 
 void GameEnv::resume() {
-    Locator::Dispatcher::ref().enqueue<AudioEvent>(AudioEvent::Type::START);
     Locator::Haptic::ref().unpause();
     clock.unpause();
 }
@@ -75,7 +73,7 @@ GameEnv::GameEnv() noexcept
     SDL_WasInit = (SDL_Init(sdlFlags) == 0);
     IMG_WasInit = ((IMG_Init(sdlImageFlags) & sdlImageFlags) == sdlImageFlags);
     Mix_WasInit = ((Mix_Init(sdlMixerFlags) & sdlMixerFlags) == sdlMixerFlags);
-    Audio_WasInit = (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) != -1);
+    Audio_WasInit = (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) != -1);
     TTF_Init();
 
     renderer = std::make_unique<GameRenderer>();

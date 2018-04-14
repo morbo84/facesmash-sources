@@ -11,6 +11,7 @@ namespace gamee {
 void loadResources(GameRenderer &renderer) {
     auto &ttfFontCache = Locator::TTFFontCache::ref();
     auto &textureCache = Locator::TextureCache::ref();
+    auto &musicCache = Locator::AudioMusicCache::ref();
 
     ttfFontCache.load<TTFFontLoader>("font/ui/tiny", "font/04B_30__.ttf", 32);
     ttfFontCache.load<TTFFontLoader>("font/ui/small", "font/04B_30__.ttf", 40);
@@ -24,6 +25,9 @@ void loadResources(GameRenderer &renderer) {
     textureCache.load<AssetTextureLoader>("game/explosion", "other/explosion.png", renderer);
     textureCache.load<AssetTextureLoader>("game/emoji", "emoji/emoji.png", renderer);
     textureCache.load<AssetTextureLoader>("game/items", "emoji/items.png", renderer);
+
+    musicCache.load<AudioMusicLoader>("music/relax", "audio/music_relax.wav");
+    musicCache.load<AudioMusicLoader>("music/play", "audio/music_play.wav");
 }
 
 

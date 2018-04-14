@@ -73,9 +73,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // sum what remains from the previous step
         accumulator += delta;
 
+        audioSystem.update();
         frameSystem.update(registry, renderer);
         sceneSystem.update(registry, delta);
-        audioSystem.update(registry,delta);
         destroyLaterSystem.update(registry, delta);
 
         uiButtonSystem.update(registry);

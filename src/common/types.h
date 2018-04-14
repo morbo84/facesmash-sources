@@ -166,6 +166,13 @@ enum class PermissionStatus: Uint8 {
 };
 
 
+enum class AudioMusicType: Uint8 {
+    AUDIO_MUSIC_UNKNOWN,
+    AUDIO_MUSIC_RELAX,
+    AUDIO_MUSIC_PLAY
+};
+
+
 }
 
 

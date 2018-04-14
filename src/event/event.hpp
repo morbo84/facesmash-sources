@@ -101,6 +101,12 @@ struct AudioEvent {
 };
 
 
+struct AudioMusicEvent {
+    const AudioMusicType type;
+    bool playOrEntering;
+};
+
+
 struct AvRecorderEvent {
     enum class Type: Uint8 {
         EXPORT,

@@ -8,30 +8,29 @@
 namespace gamee {
 
 
-struct SceneChangeEvent;
-struct SmashEvent;
 struct AudioEvent;
+struct AudioMusicEvent;
 
 
 class AudioSystem final {
-    static constexpr delta_type interval = 100_ui32;
-    static constexpr int fade = 250_ui32;
+    static constexpr auto fadeIn = 500;
+    static constexpr auto fadeOut = 750;
+
+    void start() noexcept;
+    void stop() noexcept;
 
 public:
     AudioSystem();
     ~AudioSystem();
 
-    void receive(const SceneChangeEvent &) noexcept;
-    void receive(const SmashEvent &) noexcept;
     void receive(const AudioEvent &) noexcept;
+    void receive(const AudioMusicEvent &) noexcept;
 
-    void update(Registry &, delta_type);
+    void update();
 
 private:
-    delta_type remaining;
-    unsigned int explosion;
-    SceneType curr;
-    SceneType next;
+    AudioMusicType curr;
+    AudioMusicType next;
 };
 
 
