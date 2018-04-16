@@ -68,7 +68,7 @@ GameEnv::GameEnv() noexcept
 {
     const Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_HAPTIC;
     const int sdlImageFlags = IMG_INIT_PNG;
-    const int sdlMixerFlags = 0;
+    const int sdlMixerFlags = MIX_INIT_OGG;
 
     SDL_WasInit = (SDL_Init(sdlFlags) == 0);
     IMG_WasInit = ((IMG_Init(sdlImageFlags) & sdlImageFlags) == sdlImageFlags);

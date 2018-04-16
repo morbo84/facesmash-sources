@@ -26,8 +26,8 @@ void loadResources(GameRenderer &renderer) {
     textureCache.load<AssetTextureLoader>("game/emoji", "emoji/emoji.png", renderer);
     textureCache.load<AssetTextureLoader>("game/items", "emoji/items.png", renderer);
 
-    musicCache.load<AudioMusicLoader>("music/relax", "audio/music_relax.wav");
-    musicCache.load<AudioMusicLoader>("music/play", "audio/music_play.wav");
+    musicCache.load<AudioMusicLoader>("music/relax", "audio/music_relax.ogg");
+    musicCache.load<AudioMusicLoader>("music/play", "audio/music_play.ogg");
 }
 
 
