@@ -68,7 +68,11 @@ GameEnv::GameEnv() noexcept
 {
     const Uint32 sdlFlags = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_HAPTIC;
     const int sdlImageFlags = IMG_INIT_PNG;
-    const int sdlMixerFlags = MIX_INIT_OGG;
+    // lovely bug - https://bugzilla.libsdl.org/show_bug.cgi?id=3929
+    const int sdlMixerFlags =
+            (Mix_Linked_Version()->major == 2 && Mix_Linked_Version()->minor == 0 && Mix_Linked_Version()->patch == 2)
+            ? 0 // cross your finger, who knows what's supported
+            : MIX_INIT_OGG;
 
     SDL_WasInit = (SDL_Init(sdlFlags) == 0);
     IMG_WasInit = ((IMG_Init(sdlImageFlags) & sdlImageFlags) == sdlImageFlags);
