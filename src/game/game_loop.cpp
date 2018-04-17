@@ -61,9 +61,11 @@ void GameLoop::init(GameRenderer &renderer) {
 
 
 void GameLoop::close() {
-    // reset cache (and avoid crashes)
+    // reset caches (and avoid crashes)
     Locator::TextureCache::ref().clear();
     Locator::TTFFontCache::ref().clear();
+    Locator::AudioChunkCache::ref().clear();
+    Locator::AudioMusicCache::ref().clear();
 }
 
 
