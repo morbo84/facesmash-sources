@@ -13,6 +13,7 @@ namespace gamee {
 
 struct CameraAndroid final: CameraService {
     CameraAndroid();
+    ~CameraAndroid();
 
     void start() override;
     void stop() override;

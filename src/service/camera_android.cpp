@@ -76,6 +76,11 @@ CameraAndroid::CameraAndroid() {
 }
 
 
+CameraAndroid::~CameraAndroid() {
+    cameraAndroidReady = false;
+}
+
+
 void CameraAndroid::setPixels(const void *buf) noexcept {
     SDL_ConvertPixels(width_, height_, cameraFormat, buf, width_ * SDL_BYTESPERPIXEL(cameraFormat),
                       internalFormat, p0_, width_ * SDL_BYTESPERPIXEL(internalFormat));
