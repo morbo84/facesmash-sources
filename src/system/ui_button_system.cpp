@@ -1,7 +1,9 @@
 #include "../common/ease.h"
 #include "../common/util.h"
-#include "../event/event.hpp"
 #include "../component/component.hpp"
+#include "../factory/common.h"
+#include "../factory/play_factory.h"
+#include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
 #include "../service/game_services_service.h"
@@ -73,6 +75,21 @@ static void switchHaptic(Registry &registry, entity_type button) {
         Locator::Haptic::set<HapticSDL>();
         registry.get<Sprite>(button).frame = 2;
     }
+}
+
+
+static void showCheckYourGalleryMessage(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    const auto galleryHandle = textureCache.handle("str/storage/gallery");
+    auto galleryLabel = createLastingMessage(registry, galleryHandle, 200);
+    const auto &gallerySprite = registry.get<Sprite>(galleryLabel);
+    setPos(registry, galleryLabel, (logicalWidth - gallerySprite.w) / 2, 5 * logicalHeight / 6);
+
+    const auto shareHandle = textureCache.handle("str/storage/share");
+    auto shareLabel = createLastingMessage(registry, shareHandle, 200);
+    const auto &shareSprite = registry.get<Sprite>(shareLabel);
+    setPos(registry, shareLabel, (logicalWidth - shareSprite.w) / 2, 5 * logicalHeight / 6 + 3 * gallerySprite.h / 2);
 }
 
 
@@ -186,12 +203,15 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::SAVE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
+                    showCheckYourGalleryMessage(registry);
                     registry.remove<InputReceiver>(entity);
                     registry.get<Sprite>(entity).frame = 3;
                     break;
                 case UIAction::STORAGE_PERMISSION:
                     permissions.request(PermissionType::STORAGE);
-                    registry.remove<RotationAnimation>(entity);
+                    showCheckYourGalleryMessage(registry);
+                    registry.remove<InputReceiver>(entity);
+                    registry.get<Sprite>(entity).frame = 3;
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);
