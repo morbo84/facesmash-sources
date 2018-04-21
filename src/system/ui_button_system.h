@@ -19,7 +19,6 @@ struct UIButtonSystem final {
     ~UIButtonSystem();
 
     void receive(const TouchEvent &) noexcept;
-
     void receive(const GameServicesEvent &) noexcept;
 
     void update(Registry &);

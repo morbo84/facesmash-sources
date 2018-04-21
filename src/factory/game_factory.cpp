@@ -138,14 +138,17 @@ void createMenuTopPanel(Registry &registry) {
     auto supportButton = createPopupUIButton(registry, parent, UIAction::SUPPORT, 150);
     const auto &supportSprite = registry.get<Sprite>(supportButton);
     setPos(registry, supportButton, (panel.w / 2 - supportSprite.w) / 2, 2 * panel.h / 5);
+    registry.assign<PulseAnimation>(supportButton, 10.f, .4f, .1f, 3000_ui32);
 
     auto playButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 150);
     const auto &playSprite = registry.get<Sprite>(playButton);
     setPos(registry, playButton, (panel.w - playSprite.w) / 2, 2 * panel.h / 5 - playSprite.h / 2);
+    registry.assign<PulseAnimation>(playButton, 10.f, .4f, .1f, 3000_ui32);
 
     auto trainingButton = createPopupUIButton(registry, parent, UIAction::TRAINING, 150);
     const auto &trainingSprite = registry.get<Sprite>(trainingButton);
     setPos(registry, trainingButton, (3 * panel.w / 2 - trainingSprite.w) / 2, 2 * panel.h / 5);
+    registry.assign<PulseAnimation>(trainingButton, 10.f, .4f, .1f, 3000_ui32);
 
     auto settingsButton = createPopupUIButton(registry, parent, UIAction::SETTINGS, 150);
     const auto &settingsSprite = registry.get<Sprite>(settingsButton);
@@ -175,14 +178,17 @@ void createMenuBottomPanel(Registry &registry) {
     auto achievementsButton = createPopupUIButton(registry, parent, UIAction::ACHIEVEMENTS, 150);
     const auto &achievementsSprite = registry.get<Sprite>(achievementsButton);
     setPos(registry, achievementsButton, (panel.w / 2 - achievementsSprite.w) / 2, 3 * panel.h / 5 - achievementsSprite.h);
+    registry.assign<PulseAnimation>(achievementsButton, 10.f, .4f, .1f, 3000_ui32);
 
     auto creditsButton = createPopupUIButton(registry, parent, UIAction::CREDITS, 150);
     const auto &creditsSprite = registry.get<Sprite>(creditsButton);
     setPos(registry, creditsButton, (panel.w - creditsSprite.w) / 2, 3 * panel.h / 5 - creditsSprite.h / 2);
+    registry.assign<PulseAnimation>(creditsButton, 10.f, .4f, .1f, 3000_ui32);
 
     auto leaderboardButton = createPopupUIButton(registry, parent, UIAction::LEADERBOARD, 150);
     const auto &leaderboardSprite = registry.get<Sprite>(leaderboardButton);
     setPos(registry, leaderboardButton, (3 * panel.w / 2 - leaderboardSprite.w) / 2, 3 * panel.h / 5 - leaderboardSprite.h);
+    registry.assign<PulseAnimation>(leaderboardButton, 10.f, .4f, .1f, 3000_ui32);
 }
 
 
@@ -296,6 +302,7 @@ void createSupportPanel(Registry &registry) {
     auto buyButton = createPopupUIButton(registry, parent, UIAction::BUY, 20);
     const auto &buySprite = registry.get<Sprite>(buyButton);
     setPos(registry, buyButton, (panel.w - buySprite.w) / 2, 5 * panel.h / 9);
+    registry.assign<PulseAnimation>(buyButton, 0.f, .8f, .2f, 3000_ui32);
     registry.get<Sprite>(buyButton).frame = 2;
 
     auto removeHandle = textureCache.handle("str/support/remove");
@@ -552,10 +559,12 @@ void createGameOverPanel(Registry &registry) {
     auto menuButton = createUIButton(registry, parent, UIAction::MENU, 150);
     const auto &menuSprite = registry.get<Sprite>(menuButton);
     setPos(registry, menuButton, (panel.w / 2 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
+    registry.assign<PulseAnimation>(menuButton, 10.f, .3f, .08f, 3000_ui32);
 
     auto reloadButton = createUIButton(registry, parent, UIAction::RELOAD, 150);
     const auto &reloadSprite = registry.get<Sprite>(reloadButton);
     setPos(registry, reloadButton, (panel.w - reloadSprite.w) / 2, (3 * panel.h / 2 - reloadSprite.h) / 2);
+    registry.assign<PulseAnimation>(reloadButton, 10.f, .3f, .08f, 3000_ui32);
 }
 
 
@@ -652,6 +661,7 @@ void refreshGameOverPanel(Registry &registry) {
     auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
     const auto &saveSprite = registry.get<Sprite>(saveButton);
     setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
+    registry.assign<PulseAnimation>(saveButton, 10.f, .3f, .08f, 3000_ui32);
     registry.assign<ExpiringContent>(saveButton);
 
     if(recorder.supportExport()) {
@@ -705,6 +715,7 @@ void createTrainingBottomPanel(Registry &registry) {
         setSpriteSize(registry, entity, w, h);
         setFaceButtonSize(registry, entity, w, h);
         registry.get<Transform>(entity).parent = parent;
+        registry.assign<PulseAnimation>(entity, 0.f, .6f, .06f, 2000_ui32);
     };
 
     createButton(FaceType::ANGRY, 0);

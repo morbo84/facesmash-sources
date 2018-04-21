@@ -88,6 +88,16 @@ struct SpriteAnimation {
 };
 
 
+struct PulseAnimation {
+    float angle;
+    float length;
+    float squeeze;
+    delta_type duration;
+    delta_type elapsed{0_ui32};
+    bool repeat{true};
+};
+
+
 struct RotationAnimation {
     using ease_type = float(*)(float, float, float, float);
     float from;

@@ -1,4 +1,6 @@
 #include <cmath>
+#include "../common/ease.h"
+#include "../common/util.h"
 #include "../component/component.hpp"
 #include "animation_system.h"
 
@@ -117,6 +119,49 @@ void AnimationSystem::sizeAnimation(Registry &registry, delta_type delta) {
 }
 
 
+void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
+    auto view = registry.view<PulseAnimation, Renderable, Sprite, Transform>();
+
+    view.each([&registry, delta](auto entity, auto &animation, const auto &renderable, const auto &sprite, const auto &transform) {
+        animation.elapsed += delta;
+
+        if(animation.elapsed > animation.duration) {
+            const auto position = transformToPosition(registry, entity, transform);
+            auto pulse = registry.create();
+
+            // we don't want to replace current animations
+            if(!registry.has<RotationAnimation>(entity)) {
+                registry.assign<RotationAnimation>(entity, renderable.angle - animation.angle, renderable.angle, 500_ui32, 0_ui32, false, &easeOutElastic);
+            }
+
+            // we don't want to replace current animations
+            if(!registry.has<SizeAnimation>(entity)) {
+                const int w = sprite.w * (1 - animation.squeeze);
+                const int h = sprite.h * (1 - animation.squeeze);
+                registry.accommodate<SizeAnimation>(entity, w, h, sprite.w, sprite.h, 1000_ui32, 0_ui32, &easeOutElastic);
+            }
+
+            registry.assign<DestroyLater>(pulse, 1000_ui32);
+            registry.assign<Renderable>(pulse, renderable);
+            registry.assign<Sprite>(pulse, sprite);
+            registry.assign<Transform>(pulse, pulse, 1.f * position.x, 1.f * position.y);
+            registry.assign<FadeAnimation>(pulse, 99, 0, 1000_ui32, 0_ui32, &easeOutExpo);
+
+            const auto sz = 1.f + animation.length;
+            const int w = sprite.w * sz;
+            const int h = sprite.h * sz;
+            registry.accommodate<SizeAnimation>(pulse, sprite.w, sprite.h, w, h, 1000_ui32, 0_ui32, &easeOutElastic);
+
+            if(animation.repeat) {
+                animation.elapsed = 0_ui32;
+            } else {
+                registry.remove<SpriteAnimation>(entity);
+            }
+        }
+    });
+}
+
+
 void AnimationSystem::update(Registry &registry, delta_type delta) {
     fadeAnimation(registry, delta);
     rotationAnimation(registry, delta);
@@ -124,6 +169,7 @@ void AnimationSystem::update(Registry &registry, delta_type delta) {
     horizontalAnimation(registry, delta);
     verticalAnimation(registry, delta);
     sizeAnimation(registry, delta);
+    pulseAnimation(registry, delta);
 }
 
 

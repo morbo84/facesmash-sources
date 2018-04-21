@@ -42,8 +42,8 @@ static void hideBackgroundPanels(Registry &registry) {
 
 
 static void disableUIButtons(Registry &registry) {
-    for(auto entity: registry.view<UIButton>()) {
-        registry.reset<InputReceiver>(entity);
+    for(auto entity: registry.view<UIButton, InputReceiver>()) {
+        registry.remove<InputReceiver>(entity);
     }
 }
 
@@ -107,6 +107,15 @@ static void hidePopupButtons(Registry &registry, PanelType type) {
             });
         }
     });
+}
+
+
+static void resetPulseButton(Registry &registry) {
+    auto view = registry.view<UIButton, PulseAnimation>();
+
+    for(auto entity: view) {
+        registry.get<PulseAnimation>(entity).elapsed = 0_ui32;
+    }
 }
 
 
@@ -494,6 +503,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         for(auto entity: registry.view<UIButton, ExpiringContent>()) { registry.destroy(entity); }
         refreshGameOverPanel(registry);
         enableUIButtons(registry, PanelType::GAME_OVER);
+        resetPulseButton(registry);
     }
 
     if(curr != next) {
@@ -589,7 +599,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         } else {
             disableUIButtons(registry);
             hideSmashButtons(registry);
-
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
             hidePopupButtons(registry, PanelType::CREDITS);
@@ -618,6 +627,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::SUPPORT_PAGE:
                 discardExpiringContents(registry);
                 refreshSupportPanel(registry);
+                resetPulseButton(registry);
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 showPopupButtons(registry, PanelType::SUPPORT);
@@ -659,6 +669,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::GAME_OVER:
                 discardExpiringContents(registry);
                 refreshGameOverPanel(registry);
+                resetPulseButton(registry);
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
