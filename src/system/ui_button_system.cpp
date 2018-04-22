@@ -184,10 +184,6 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::SUPPORT:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
                     break;
-                case UIAction::CAMERA_PERMISSION:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-                    permissions.request(PermissionType::CAMERA);
-                    break;
                 case UIAction::SETTINGS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
                     break;

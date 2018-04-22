@@ -27,7 +27,6 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::EXIT:
         case PanelType::CREDITS:
         case PanelType::SUPPORT:
-        case PanelType::CAMERA_PERMISSION:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
         case PanelType::LOGIN_PLEASE:
@@ -426,15 +425,18 @@ static delta_type trainingTransition(Registry &registry) {
 SceneSystem::SceneSystem()
     : curr{SceneType::UNKNOWN},
       next{SceneType::UNKNOWN},
+      pending{SceneType::UNKNOWN},
       remaining{0_ui32},
       isTransitioning{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
+    Locator::Dispatcher::ref().connect<PermissionEvent>(this);
 }
 
 
 SceneSystem::~SceneSystem() {
+    Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
     Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
 }
@@ -443,15 +445,17 @@ SceneSystem::~SceneSystem() {
 void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
     assert(!isTransitioning);
 
+    pending = event.scene;
+
     // events are filtered out during transitions
     if(curr == next) {
-        next = event.scene;
-
         // forces camera permission page if required (game/training not allowed)
         if((Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED)
-                && (next == SceneType::GAME_TUTORIAL || next == SceneType::TRAINING_TUTORIAL))
+                && (pending == SceneType::GAME_TUTORIAL || pending == SceneType::TRAINING_TUTORIAL))
         {
-            next = SceneType::CAMERA_PERMISSION;
+            Locator::Permissions::ref().request(PermissionType::CAMERA);
+        } else {
+            next = pending;
         }
     }
 }
@@ -465,7 +469,6 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         switch(curr) {
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
-        case SceneType::CAMERA_PERMISSION:
         case SceneType::SETTINGS_PAGE:
         case SceneType::LOGIN_PLEASE:
         case SceneType::TRAINING:
@@ -484,6 +487,15 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         default:
             // back is not allowed in all the other scenes
             break;
+        }
+    }
+}
+
+
+void SceneSystem::receive(const PermissionEvent &event) noexcept {
+    if(event.permission == PermissionType::CAMERA && event.result == PermissionStatus::GRANTED) {
+        if(curr == next) {
+            next = pending;
         }
     }
 }
@@ -519,11 +531,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
                     enableUIButtons(registry, PanelType::SUPPORT);
-                    break;
-                case SceneType::CAMERA_PERMISSION:
-                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::CAMERA_PERMISSION);
                     break;
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -588,7 +595,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             hidePopupButtons(registry, PanelType::CREDITS);
             hidePopupButtons(registry, PanelType::SUPPORT);
             hidePopupButtons(registry, PanelType::SETTINGS);
-            hidePopupButtons(registry, PanelType::CAMERA_PERMISSION);
 
             switch(next) {
             case SceneType::EXIT:
@@ -616,16 +622,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showPopupButtons(registry, PanelType::SUPPORT);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::SUPPORT);
-                break;
-            case SceneType::CAMERA_PERMISSION:
-                discardExpiringContents(registry);
-                refreshCameraPermissionPanel(registry);
-                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                showPopupButtons(registry, PanelType::CAMERA_PERMISSION);
-                hideBackgroundPanels(registry);
-                remaining = bgPanelTransition(registry, PanelType::CAMERA_PERMISSION);
-                break;
                 break;
             case SceneType::SETTINGS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
