@@ -43,10 +43,7 @@ void faceSmashSupporter(Registry &registry) {
 
 // easy to achieve, it gratifies the user immediately
 void myFirstCombo(const PlayerScore& score) {
-    if(score.combo2x
-            || score.combo3x
-            || score.combo4x
-            || score.combo5x) {
+    if(score.combo2x || score.combo3x || score.combo4x || score.combo5x) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::MY_FIRST_COMBO);
     }
 }
@@ -59,7 +56,8 @@ void smashMeBaby(const PlayerScore& score) {
        || score.hitDisgusted
        || score.hitSurprised
        || score.hitFearful
-       || score.hitSad) {
+       || score.hitSad)
+    {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::SMASH_ME_BABY);
     }
 }
@@ -67,7 +65,7 @@ void smashMeBaby(const PlayerScore& score) {
 
 // my first 1000 points
 void kindergarten(const PlayerScore& score) {
-    if(score.score > 1000) {
+    if(score.score >= 1000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::KINDERGARTEN);
     }
 }
@@ -75,7 +73,7 @@ void kindergarten(const PlayerScore& score) {
 
 // my first 10000 points
 void readyToSmash(const PlayerScore& score) {
-    if(score.score > 10000) {
+    if(score.score >= 10000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::READY_TO_SMASH);
     }
 }
@@ -83,7 +81,7 @@ void readyToSmash(const PlayerScore& score) {
 
 // my first 25000 points
 void smashIsMyJob(const PlayerScore& score) {
-    if(score.score > 25000) {
+    if(score.score >= 25000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::SMASH_IS_MY_JOB);
     }
 }
@@ -201,7 +199,7 @@ void surprisedSmash(const PlayerScore& delta) {
 
 // smash a face during the training
 void noPainNoGame(Registry &registry) {
-    auto &playerScore = registry.get<PlayerScore>();
+    const auto &playerScore = registry.get<PlayerScore>();
 
     if(playerScore.hitSad
        || playerScore.hitAngry
@@ -225,9 +223,9 @@ void ohMySmash(Registry &registry) {
 
 // smash only happy faces in a match
 void iAmSoHappy(Registry &registry) {
-    auto &playerScore = registry.get<PlayerScore>();
+    const auto &playerScore = registry.get<PlayerScore>();
 
-    if(playerScore.hitHappy == total(playerScore) && playerScore.hitHappy > 0) {
+    if(playerScore.hitHappy && playerScore.hitHappy == total(playerScore)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::IM_SO_HAPPY);
     }
 }
@@ -235,9 +233,9 @@ void iAmSoHappy(Registry &registry) {
 
 // smash only sad faces in a match
 void blueIsTheNewSmash(Registry &registry) {
-    auto &playerScore = registry.get<PlayerScore>();
+    const auto &playerScore = registry.get<PlayerScore>();
 
-    if(playerScore.hitSad == total(playerScore)) {
+    if(playerScore.hitSad && playerScore.hitSad == total(playerScore)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::BLUE_SMASH);
     }
 }
