@@ -9,7 +9,7 @@
 #include <gpg/leaderboard_manager.h>
 #include <gpg/platform_configuration.h>
 #include <SDL_system.h>
-#include <android/log.h>
+
 
 namespace gamee {
 
@@ -85,42 +85,43 @@ GameServicesAndroid::~GameServicesAndroid() noexcept {}
 
 
 void GameServicesAndroid::signIn() noexcept {
-    if(!ready_)
-        return;
+    if(ready_) {
+        ready_ = false;
 
-    ready_ = false;
-    if(!gs_) {
-        gpg::GameServices::Builder builder;
-        builder.SetOnAuthActionFinished([this](gpg::AuthOperation op, gpg::AuthStatus status) {
-            ready_ = true;
-            auto& dispatcher = Locator::Dispatcher::ref();
-            switch(op) {
-                case gpg::AuthOperation::SIGN_IN:
-                    switch(status) {
+        if (!gs_) {
+            gpg::GameServices::Builder builder;
+
+            builder.SetOnAuthActionFinished([this](gpg::AuthOperation op, gpg::AuthStatus status) {
+                auto &dispatcher = Locator::Dispatcher::ref();
+                ready_ = true;
+
+                switch (op) {
+                    case gpg::AuthOperation::SIGN_IN:
+                        switch (status) {
                         case gpg::AuthStatus::VALID:
                             dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_IN);
                             break;
                         default:
-                            __android_log_print(ANDROID_LOG_ERROR, "GamesNativeSDK", "sign-in error: %d", status);
                             dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_OUT);
                             break;
-                    }
-                    break;
-                case gpg::AuthOperation::SIGN_OUT:
-                    dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_OUT);
-                    break;
-            }
-        });
+                        }
+                        break;
+                    case gpg::AuthOperation::SIGN_OUT:
+                        dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_OUT);
+                        break;
+                }
+            });
 
-        JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-        jobject activity = (jobject)SDL_AndroidGetActivity();
-        gpg::PlatformConfiguration conf;
-        conf.SetActivity(activity);
-        gs_ = builder.Create(conf);
-        env->DeleteLocalRef(activity);
-        Locator::Dispatcher::ref().enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNING_IN);
-    } else {
-        gs_->StartAuthorizationUI();
+            JNIEnv *env = (JNIEnv *) SDL_AndroidGetJNIEnv();
+            jobject activity = (jobject) SDL_AndroidGetActivity();
+            gpg::PlatformConfiguration conf;
+            conf.SetActivity(activity);
+            gs_ = builder.Create(conf);
+            env->DeleteLocalRef(activity);
+            Locator::Dispatcher::ref().enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNING_IN);
+        } else {
+            gs_->StartAuthorizationUI();
+        }
     }
 }
 
@@ -135,20 +136,23 @@ void GameServicesAndroid::signOut() noexcept {
 
 
 void GameServicesAndroid::increment(FaceSmashAchievement a, uint32_t steps) noexcept {
-    if(isAuthorized())
+    if(isAuthorized()) {
         gs_->Achievements().Increment(achievementCode(a), steps);
+    }
 }
 
 
 void GameServicesAndroid::unlock(FaceSmashAchievement a) noexcept {
-    if(isAuthorized())
+    if(isAuthorized()) {
         gs_->Achievements().Unlock(achievementCode(a));
+    }
 }
 
 
 void GameServicesAndroid::showAllUI() noexcept {
-    if(isAuthorized())
+    if(isAuthorized()) {
         gs_->Achievements().ShowAllUIBlocking(std::chrono::seconds{3});
+    }
 }
 
 
@@ -158,7 +162,7 @@ bool GameServicesAndroid::isSignedIn() const noexcept {
 
 
 bool GameServicesAndroid::isAuthorized() const noexcept {
-return ready_ && gs_ && gs_->IsAuthorized();
+    return ready_ && gs_ && gs_->IsAuthorized();
 }
 
 
@@ -173,14 +177,16 @@ LeaderboardsManager& GameServicesAndroid::leaderboards() noexcept {
 
 
 void GameServicesAndroid::submitScore(FaceSmashLeaderboard l, uint64_t score) noexcept {
-    if(isAuthorized())
+    if(isAuthorized()) {
         gs_->Leaderboards().SubmitScore(leaderboardCode(l), score);
+    }
 }
 
 
 void GameServicesAndroid::showAllLeaderboardsUI() noexcept {
-    if(isAuthorized())
+    if(isAuthorized()) {
         gs_->Leaderboards().ShowAllUIBlocking(std::chrono::seconds{3});
+    }
 }
 
 
