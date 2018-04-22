@@ -783,7 +783,7 @@ void createDebugHUD(Registry &registry) {
     auto symDotHandle = textureCache.handle("str/debug/.");
     auto sym0Handle = toStrDebug(0);
 
-    auto &debug = registry.assign<DebugInfo>(registry.create());
+    auto &debug = registry.attach<DebugInfo>(registry.create());
 
     offset = sym0Handle->width();
 

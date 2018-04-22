@@ -157,6 +157,7 @@ static void initGame(Registry &registry) {
 static void initTraining(Registry &registry) {
     auto game = registry.create();
     registry.attach<LetsTrain>(game);
+    registry.attach<PlayerScore>(game);
     registry.attach<Timer>(game);
 }
 
@@ -539,7 +540,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::MENU_PAGE:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, true);
-                    clearTraining(registry);
                     hideBackgroundPanels(registry);
                     curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_BOTTOM) : void();
                     curr == SceneType::SPLASH_SCREEN ? showPopupButtons(registry, PanelType::MENU_TOP) : void();
@@ -632,6 +632,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::MENU_PAGE:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, false);
+                clearTraining(registry);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:

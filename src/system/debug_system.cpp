@@ -8,7 +8,8 @@ namespace gamee {
 
 
 void DebugSystem::update(Registry &registry, delta_type delta) {
-    registry.view<DebugInfo>().each([&](auto, auto &debug) {
+    if(registry.has<DebugInfo>()) {
+        auto &debug = registry.get<DebugInfo>();
         debug.average = (debug.average * .9f) + (delta * .1f);
 
         int time = 10 * debug.average;
@@ -26,7 +27,7 @@ void DebugSystem::update(Registry &registry, delta_type delta) {
             registry.accommodate<HUD>(debug.fps[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
             fps /= 10;
         }
-    });
+    };
 }
 
 
