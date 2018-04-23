@@ -2,3 +2,7 @@
 * acquisti in-app
 * sistemare pagina support una volta che c'è il servizio per acquisti in-app
 * c'è qualche bug negli achievements... indagare!!
+
+* passare RELEASE in release quando compila Android, al momento c'è incastonato DEBUG
+* Android flavors per ridurre dimensione apk e farli al dettaglio
+* buttare su un po' di testo (descrizione dell'applicazione e traduzioni nelle varie lingue) e assets (icone, screenshot, un video dimostrativo)

@@ -484,13 +484,6 @@ void createGameTopPanel(Registry &registry) {
 }
 
 
-void createGameBottomPanel(Registry &registry) {
-    createPanel(registry, PanelType::THE_GAME_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
-
-    // TODO
-}
-
-
 void createGameOverPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
