@@ -664,40 +664,6 @@ void createTrainingBottomPanel(Registry &registry) {
 }
 
 
-void createLoginPleasePanel(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-    auto parent = createPanel(registry, PanelType::LOGIN_PLEASE, 0, logicalHeight, logicalWidth, logicalHeight / 4);
-    const auto &panel = registry.get<Panel>(parent);
-
-    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_2_TOP, 29 * panel.w / 30, 21);
-    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_2_BOTTOM, 29 * panel.w / 30, 22);
-    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_2_LEFT, 29 * panel.h / 30, 23);
-    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_2_RIGHT, 29 * panel.h / 30, 24);
-
-    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
-    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
-    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
-    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
-
-    auto oopsHandle = textureCache.handle("str/oops");
-    auto oops = createSprite(registry, parent, oopsHandle, 20);
-    setPos(registry, oops, (panel.w - oopsHandle->width()) / 2, oopsHandle->height() / 4);
-
-    auto wrongHandle = textureCache.handle("str/wrong");
-    auto wrong = createSprite(registry, parent, wrongHandle, 20);
-    setPos(registry, wrong, (panel.w - wrongHandle->width()) / 2, panel.h / 2 - wrongHandle->height());
-
-    auto retryHandle = textureCache.handle("str/retry");
-    auto retry = createSprite(registry, parent, retryHandle, 20);
-    setPos(registry, retry, (panel.w - retryHandle->width()) / 2, panel.h / 2 + retryHandle->height() / 4);
-
-    auto pleaseHandle = textureCache.handle("str/please");
-    auto please = createSprite(registry, parent, pleaseHandle, 20);
-    setPos(registry, please, (panel.w - pleaseHandle->width()) / 2, panel.h - 3 * pleaseHandle->height() / 2);
-}
-
-
 void createCamera(Registry &registry) {
     auto camera = registry.create();
     registry.assign<Transform>(camera, camera, 0.f, 0.f);

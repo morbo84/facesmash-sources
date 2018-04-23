@@ -29,7 +29,6 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
-        case PanelType::LOGIN_PLEASE:
             transform.x = -panel.w;
             break;
         default:
@@ -466,7 +465,6 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
-        case SceneType::LOGIN_PLEASE:
         case SceneType::TRAINING:
         case SceneType::GAME_OVER:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
@@ -567,10 +565,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableCameraFrame(registry);
                     initTraining(registry);
                     break;
-                case SceneType::LOGIN_PLEASE:
-                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    break;
                 default:
                     assert(false);
                     break;
@@ -657,12 +651,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = trainingTransition(registry);
-                break;
-            case SceneType::LOGIN_PLEASE:
-                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                hideBackgroundPanels(registry);
-                remaining = bgPanelTransition(registry, PanelType::LOGIN_PLEASE);
                 break;
             default:
                 assert(false);

@@ -50,8 +50,7 @@ enum class SceneType: Uint8 {
     THE_GAME,
     GAME_OVER,
     TRAINING_TUTORIAL,
-    TRAINING,
-    LOGIN_PLEASE
+    TRAINING
 };
 
 
@@ -117,7 +116,6 @@ enum class PanelType: Uint8 {
     GAME_OVER,
     TRAINING_TOP,
     TRAINING_BOTTOM,
-    LOGIN_PLEASE
 };
 
 

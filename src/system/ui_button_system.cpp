@@ -93,7 +93,7 @@ static void showCheckYourGalleryMessage(Registry &registry) {
 }
 
 
-UIButtonSystem::UIButtonSystem(): dirty{false} {
+UIButtonSystem::UIButtonSystem(): dirty{false}, pending{nullptr} {
     Locator::Dispatcher::ref().connect<TouchEvent>(this);
     Locator::Dispatcher::ref().connect<GameServicesEvent>(this);
 }
@@ -116,26 +116,46 @@ void UIButtonSystem::receive(const GameServicesEvent &event) noexcept {
 }
 
 
+void UIButtonSystem::showAchievements() {
+    Locator::GameServices::ref().achievements().showAllUI();
+}
+
+
+void UIButtonSystem::showLeaderboard() {
+    Locator::GameServices::ref().leaderboards().showAllLeaderboardsUI();
+}
+
+
 void UIButtonSystem::update(Registry &registry) {
     if(gsEvent) {
         auto view = registry.view<UIButton, Sprite>();
 
-        view.each([this](auto, auto &button, auto &sprite) {
-            if(button.action == UIAction::LOGIN) {
-                switch(gsEvent->type) {
-                case GameServicesEvent::Type::SIGNED_IN:
+        switch(gsEvent->type) {
+        case GameServicesEvent::Type::SIGNED_IN:
+            pending = pending ? ((this->*pending)(), nullptr) : nullptr;
+            view.each([this](auto, auto &button, auto &sprite) {
+                if(button.action == UIAction::LOGIN) {
                     sprite.frame = 2;
-                    break;
-                case GameServicesEvent::Type::SIGNED_OUT:
-                    sprite.frame = 3;
-                    break;
-                case GameServicesEvent::Type::SIGNING_IN:
-                case GameServicesEvent::Type::SIGNING_OUT:
-                    sprite.frame = 1;
-                    break;
                 }
-            }
-        });
+            });
+            break;
+        case GameServicesEvent::Type::SIGNED_OUT:
+            pending = nullptr;
+            view.each([this](auto, auto &button, auto &sprite) {
+                if(button.action == UIAction::LOGIN) {
+                    sprite.frame = 3;
+                }
+            });
+            break;
+        case GameServicesEvent::Type::SIGNING_IN:
+        case GameServicesEvent::Type::SIGNING_OUT:
+            view.each([this](auto, auto &button, auto &sprite) {
+                if(button.action == UIAction::LOGIN) {
+                    sprite.frame = 1;
+                }
+            });
+            break;
+        }
 
         gsEvent.reset();
     }
@@ -189,13 +209,13 @@ void UIButtonSystem::update(Registry &registry) {
                     break;
                 case UIAction::ACHIEVEMENTS:
                     gservices.isSignedIn()
-                            ? gservices.achievements().showAllUI()
-                            : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
+                            ? showAchievements()
+                            : (pending = &UIButtonSystem::showAchievements, Locator::GameServices::ref().signIn());
                     break;
                 case UIAction::LEADERBOARD:
                     gservices.isSignedIn()
-                            ? Locator::GameServices::ref().leaderboards().showAllLeaderboardsUI()
-                            : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
+                            ? showLeaderboard()
+                            : (pending = &UIButtonSystem::showLeaderboard, Locator::GameServices::ref().signIn());
                     break;
                 case UIAction::SHARE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);

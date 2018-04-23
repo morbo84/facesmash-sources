@@ -21,11 +21,15 @@ struct UIButtonSystem final {
     void receive(const TouchEvent &) noexcept;
     void receive(const GameServicesEvent &) noexcept;
 
+    void showAchievements();
+    void showLeaderboard();
+
     void update(Registry &);
 
 private:
     SDL_Point coord;
     bool dirty;
+    void (UIButtonSystem:: *pending)();
     std::optional<GameServicesEvent> gsEvent;
 };
 
