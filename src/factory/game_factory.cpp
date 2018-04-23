@@ -299,15 +299,15 @@ void createSupportPanel(Registry &registry) {
     auto coffeeEntity = createSprite(registry, parent, coffeeHandle, 20);
     setPos(registry, coffeeEntity, (panel.w - coffeeHandle->width()) / 2, 4 * panel.h / 10);
 
-    auto buyButton = createPopupUIButton(registry, parent, UIAction::BUY, 20);
-    const auto &buySprite = registry.get<Sprite>(buyButton);
-    setPos(registry, buyButton, (panel.w - buySprite.w) / 2, 5 * panel.h / 9);
-    registry.assign<PulseAnimation>(buyButton, 0.f, .8f, .2f, 3000_ui32);
-    registry.get<Sprite>(buyButton).frame = 2;
+    auto shopButton = createPopupUIButton(registry, parent, UIAction::SHOP, 20);
+    const auto &shopSprite = registry.get<Sprite>(shopButton);
+    setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
+    registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
+    registry.get<Sprite>(shopButton).frame = 2;
 
     auto removeHandle = textureCache.handle("str/support/remove");
     auto removeEntity = createSprite(registry, parent, removeHandle, 20);
-    setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + buySprite.h + removeHandle->height() / 3);
+    setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + shopSprite.h + removeHandle->height() / 3);
 
     auto offerHandle = textureCache.handle("str/support/offer");
     auto offerEntity = createSprite(registry, parent, offerHandle, 20);
@@ -499,10 +499,10 @@ void createGameOverPanel(Registry &registry) {
     setPos(registry, menuButton, (panel.w / 2 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
     registry.assign<PulseAnimation>(menuButton, 10.f, .3f, .08f, 3000_ui32);
 
-    auto reloadButton = createUIButton(registry, parent, UIAction::RELOAD, 150);
-    const auto &reloadSprite = registry.get<Sprite>(reloadButton);
-    setPos(registry, reloadButton, (panel.w - reloadSprite.w) / 2, (3 * panel.h / 2 - reloadSprite.h) / 2);
-    registry.assign<PulseAnimation>(reloadButton, 10.f, .3f, .08f, 3000_ui32);
+    auto restartButton = createUIButton(registry, parent, UIAction::RESTART, 150);
+    const auto &restartSprite = registry.get<Sprite>(restartButton);
+    setPos(registry, restartButton, (panel.w - restartSprite.w) / 2, (3 * panel.h / 2 - restartSprite.h) / 2);
+    registry.assign<PulseAnimation>(restartButton, 10.f, .3f, .08f, 3000_ui32);
 }
 
 
@@ -596,21 +596,21 @@ void refreshGameOverPanel(Registry &registry) {
         printScore(score % 10, -5 * sym0Handle->width() / 2);
     }
 
-    auto saveButton = createUIButton(registry, parent, UIAction::SAVE, 150);
-    const auto &saveSprite = registry.get<Sprite>(saveButton);
-    setPos(registry, saveButton, (3 * panel.w / 2 - saveSprite.w) / 2, (3 * panel.h / 2 - saveSprite.h) / 2);
-    registry.assign<PulseAnimation>(saveButton, 10.f, .3f, .08f, 3000_ui32);
-    registry.assign<ExpiringContent>(saveButton);
+    auto shareButton = createUIButton(registry, parent, UIAction::SHARE, 150);
+    const auto &shareSprite = registry.get<Sprite>(shareButton);
+    setPos(registry, shareButton, (3 * panel.w / 2 - shareSprite.w) / 2, (3 * panel.h / 2 - shareSprite.h) / 2);
+    registry.assign<PulseAnimation>(shareButton, 10.f, .3f, .08f, 3000_ui32);
+    registry.assign<ExpiringContent>(shareButton);
 
     if(recorder.supportExport()) {
         const auto status = permissions.status(PermissionType::STORAGE);
 
         if(status != PermissionStatus::GRANTED) {
-            registry.get<UIButton>(saveButton).action = UIAction::STORAGE_PERMISSION;
+            registry.get<UIButton>(shareButton).action = UIAction::STORAGE_PERMISSION;
         }
     } else {
-        registry.get<UIButton>(saveButton).enabled = false;
-        registry.get<Sprite>(saveButton).frame = 3;
+        registry.get<UIButton>(shareButton).enabled = false;
+        registry.get<Sprite>(shareButton).frame = 3;
     }
 }
 

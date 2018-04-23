@@ -3,6 +3,11 @@
 * sistemare pagina support una volta che c'è il servizio per acquisti in-app
 * c'è qualche bug negli achievements... indagare!!
 
-* passare RELEASE in release quando compila Android, al momento c'è incastonato DEBUG
 * Android flavors per ridurre dimensione apk e farli al dettaglio
 * buttare su un po' di testo (descrizione dell'applicazione e traduzioni nelle varie lingue) e assets (icone, screenshot, un video dimostrativo)
+
+* togliere pannello "non loggato" e usare stesso approccio del play su achievements e leaderboard
+
+* rendere pulsante play più "visibile"
+* rilavorare pulsanti, buttare via inutili, buttare via colori non usati dei pulsanti utili, salvare rimanenti 256x256 anziché 128x128
+* play e salva video sono gli unici che devono pulsare nelle loro schermate e devono essere più grandi degli altri, devono invitarti a premerli

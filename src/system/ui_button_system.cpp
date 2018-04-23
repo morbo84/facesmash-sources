@@ -169,7 +169,7 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::TRAINING:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_TUTORIAL);
                     break;
-                case UIAction::RELOAD:
+                case UIAction::RESTART:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case UIAction::MENU:
@@ -197,7 +197,7 @@ void UIButtonSystem::update(Registry &registry) {
                             ? Locator::GameServices::ref().leaderboards().showAllLeaderboardsUI()
                             : dispatcher.enqueue<SceneChangeEvent>(SceneType::LOGIN_PLEASE);
                     break;
-                case UIAction::SAVE:
+                case UIAction::SHARE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
                     showCheckYourGalleryMessage(registry);
                     registry.remove<InputReceiver>(entity);
@@ -223,7 +223,7 @@ void UIButtonSystem::update(Registry &registry) {
                             ? Locator::GameServices::ref().signOut()
                             : Locator::GameServices::ref().signIn();
                     break;
-                case UIAction::BUY:
+                case UIAction::SHOP:
                     // TODO
                     break;
                 case UIAction::GPG_LICENSE:

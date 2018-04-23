@@ -17,7 +17,7 @@ void loadResources(GameRenderer &renderer) {
     ttfFontCache.load<TTFFontLoader>("font/ui/small", "font/04B_30__.ttf", 40);
     ttfFontCache.load<TTFFontLoader>("font/ui/normal", "font/04B_30__.ttf", 56);
     ttfFontCache.load<TTFFontLoader>("font/ui/large", "font/04B_30__.ttf", 80);
-    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_30__.ttf", 100);
+    ttfFontCache.load<TTFFontLoader>("font/ui/huge", "font/04B_30__.ttf", 104);
 
     textureCache.load<AssetTextureLoader>("ui/buttons", "ui/buttons.png", renderer);
     textureCache.load<AssetTextureLoader>("ui/win_hud", "ui/win_hud.png", renderer);

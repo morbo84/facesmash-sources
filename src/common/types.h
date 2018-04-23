@@ -89,14 +89,14 @@ enum class UIAction: Uint8 {
     LEADERBOARD,
     THE_GAME,
     TRAINING,
-    RELOAD,
-    SAVE,
+    RESTART,
+    SHARE,
     STORAGE_PERMISSION,
     SWITCH_AUDIO,
     SWITCH_VIDEO,
     SWITCH_HAPTIC,
     LOGIN,
-    BUY,
+    SHOP,
     GPG_LICENSE
 };
 
