@@ -124,6 +124,19 @@ struct PermissionEvent {
 };
 
 
+struct BillingEvent {
+    enum class Type: Uint8 {
+        PURCHASE_OK,
+        PURCHASE_ERROR,
+        ALREADY_PURCHASED,
+        NOT_PURCHASED
+    };
+
+    const Product product;
+    const Type type;
+};
+
+
 }
 
 
