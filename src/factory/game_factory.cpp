@@ -90,7 +90,7 @@ void createBackgroundTopPanel(Registry &registry) {
     };
 
     createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
-    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
+    createCloseButton([](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 
@@ -110,7 +110,7 @@ void createBackgroundBottomPanel(Registry &registry) {
     auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_BOTTOM, width, 140);
     registry.get<Renderable>(border).alpha = 120;
 
-    auto createCloseButton = [&registry, &panel, parent](auto x){
+    auto createCloseButton = [&registry, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);
         const auto &closeSprite = registry.get<Sprite>(closeButton);
         setSpriteSize(registry, closeButton, 2 * closeSprite.w / 3, 2 * closeSprite.h / 3);
@@ -121,7 +121,7 @@ void createBackgroundBottomPanel(Registry &registry) {
     };
 
     createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
-    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
+    createCloseButton([](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 

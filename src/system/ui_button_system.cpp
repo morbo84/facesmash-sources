@@ -133,7 +133,7 @@ void UIButtonSystem::update(Registry &registry) {
         switch(gsEvent->type) {
         case GameServicesEvent::Type::SIGNED_IN:
             pending = pending ? ((this->*pending)(), nullptr) : nullptr;
-            view.each([this](auto, auto &button, auto &sprite) {
+            view.each([](auto, auto &button, auto &sprite) {
                 if(button.action == UIAction::LOGIN) {
                     sprite.frame = 2;
                 }
@@ -141,7 +141,7 @@ void UIButtonSystem::update(Registry &registry) {
             break;
         case GameServicesEvent::Type::SIGNED_OUT:
             pending = nullptr;
-            view.each([this](auto, auto &button, auto &sprite) {
+            view.each([](auto, auto &button, auto &sprite) {
                 if(button.action == UIAction::LOGIN) {
                     sprite.frame = 3;
                 }
@@ -149,7 +149,7 @@ void UIButtonSystem::update(Registry &registry) {
             break;
         case GameServicesEvent::Type::SIGNING_IN:
         case GameServicesEvent::Type::SIGNING_OUT:
-            view.each([this](auto, auto &button, auto &sprite) {
+            view.each([](auto, auto &button, auto &sprite) {
                 if(button.action == UIAction::LOGIN) {
                     sprite.frame = 1;
                 }
