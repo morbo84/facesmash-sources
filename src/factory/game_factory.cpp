@@ -90,7 +90,7 @@ void createBackgroundTopPanel(Registry &registry) {
     };
 
     createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
-    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
+    createCloseButton([](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 
@@ -110,7 +110,7 @@ void createBackgroundBottomPanel(Registry &registry) {
     auto border = createBoxBorder(registry, parent, BoxBorderType::BOX_1_BOTTOM, width, 140);
     registry.get<Renderable>(border).alpha = 120;
 
-    auto createCloseButton = [&registry, &panel, parent](auto x){
+    auto createCloseButton = [&registry, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);
         const auto &closeSprite = registry.get<Sprite>(closeButton);
         setSpriteSize(registry, closeButton, 2 * closeSprite.w / 5, 2 * closeSprite.h / 5);
@@ -121,7 +121,7 @@ void createBackgroundBottomPanel(Registry &registry) {
     };
 
     createCloseButton([&panel](const auto &sprite) { return panel.w - 5 * sprite.w / 8; });
-    createCloseButton([&panel](const auto &sprite) { return 5 * sprite.w / 8; });
+    createCloseButton([](const auto &sprite) { return 5 * sprite.w / 8; });
 }
 
 
@@ -317,7 +317,7 @@ void createSupportPanel(Registry &registry) {
     setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
     setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
     setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
-    setBoundingBox(registry, shopButton, shopSprite.w, shopSprite.h);
+    setBoundingBox(registry, shopButton, 3 * shopSprite.w / 2, 3 * shopSprite.h / 2);
     registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
     registry.get<Sprite>(shopButton).frame = 0;
 

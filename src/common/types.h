@@ -167,6 +167,11 @@ enum class AudioMusicType: Uint8 {
 };
 
 
+enum class Product: Uint8 {
+    REMOVE_ADS
+};
+
+
 }
 
 

@@ -22,7 +22,7 @@ static void discardExpiringContents(Registry &registry) {
 
 
 static void hideBackgroundPanels(Registry &registry) {
-    registry.view<Panel, Transform>().each([&registry](auto, const auto &panel, auto &transform) {
+    registry.view<Panel, Transform>().each([](auto, const auto &panel, auto &transform) {
         switch(panel.type) {
         case PanelType::EXIT:
         case PanelType::CREDITS:
@@ -236,7 +236,7 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
         }
     });
 
-    registry.view<Panel, Transform>().each([&registry, type, offset](auto entity, const auto &panel, const auto &transform) {
+    registry.view<Panel, Transform>().each([&registry, offset](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::MENU_TOP:
         case PanelType::BACKGROUND_TOP:
