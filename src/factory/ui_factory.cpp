@@ -21,65 +21,65 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     auto handle = textureCache.handle("ui/buttons");
     auto entity = createSprite(registry, parent, handle, z);
 
-    const auto width = handle->width() / 12;
-    const auto height = handle->height() / 14;
+    const auto width = handle->width() / 5;
+    const auto height = handle->height() / 5;
 
     switch(action) {
     case UIAction::ACHIEVEMENTS:
-        setSpriteGeometry(registry, entity, 1024, 1280, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 0, 0, width, height, 1_ui8);
         break;
     case UIAction::LEADERBOARD:
-        setSpriteGeometry(registry, entity, 512, 1664, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 384, 384, width, height, 1_ui8);
         break;
     case UIAction::CREDITS:
     case UIAction::GPG_LICENSE:
-        setSpriteGeometry(registry, entity, 1024, 1024, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 576, 192, width, height, 1_ui8);
         break;
     case UIAction::EXIT:
-        setSpriteGeometry(registry, entity, 1024, 384, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 768, 192, width, height, 1_ui8);
         break;
     case UIAction::CLOSE:
-        setSpriteGeometry(registry, entity, 512, 384, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 192, 192, width, height, 1_ui8);
         break;
     case UIAction::MENU:
-        setSpriteGeometry(registry, entity, 512, 1536, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 576, 384, width, height, 1_ui8);
         break;
     case UIAction::MENU_CLOSE_UP:
-        setSpriteGeometry(registry, entity, 0, 512, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 384, 192, width, height, 1_ui8);
         break;
     case UIAction::MENU_CLOSE_DOWN:
-        setSpriteGeometry(registry, entity, 1024, 640, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 0, 192, width, height, 1_ui8);
         break;
     case UIAction::RESTART:
-        setSpriteGeometry(registry, entity, 0, 1536, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 384, 576, width, height, 1_ui8);
         break;
     case UIAction::SHARE:
-        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 0, 768, width, height, 2_ui8);
         break;
     case UIAction::SETTINGS:
-        setSpriteGeometry(registry, entity, 0, 1152, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 576, 576, width, height, 1_ui8);
         break;
     case UIAction::SHOP:
     case UIAction::SUPPORT:
-        setSpriteGeometry(registry, entity, 0, 896, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 384, 768, width, height, 3_ui8);
         break;
     case UIAction::SWITCH_AUDIO:
-        setSpriteGeometry(registry, entity, 0, 768, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 192, 0, width, height, 2_ui8);
         break;
     case UIAction::SWITCH_VIDEO:
-        setSpriteGeometry(registry, entity, 0, 1280, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 576, 0, width, height, 2_ui8);
         break;
     case UIAction::SWITCH_HAPTIC:
-        setSpriteGeometry(registry, entity, 1024, 128, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 0, 384, width, height, 2_ui8);
         break;
     case UIAction::THE_GAME:
-        setSpriteGeometry(registry, entity, 512, 128, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 768, 384, width, height, 1_ui8);
         break;
     case UIAction::TRAINING:
-        setSpriteGeometry(registry, entity, 0, 1664, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 768, 576, width, height, 1_ui8);
         break;
     case UIAction::LOGIN:
-        setSpriteGeometry(registry, entity, 0, 256, width, height, 4_ui8);
+        setSpriteGeometry(registry, entity, 0, 576, width, height, 2_ui8);
         break;
     case UIAction::EASTER_EGG:
     default:

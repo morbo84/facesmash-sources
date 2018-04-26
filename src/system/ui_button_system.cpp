@@ -30,10 +30,10 @@ static void switchAudio(Registry &registry, entity_type button) {
 
     if(audio) {
         dispatcher.enqueue<AudioEvent>(AudioEvent::Type::STOP);
-        registry.get<Sprite>(button).frame = 3;
+        registry.get<Sprite>(button).frame = 1;
     } else {
         dispatcher.enqueue<AudioEvent>(AudioEvent::Type::START);
-        registry.get<Sprite>(button).frame = 2;
+        registry.get<Sprite>(button).frame = 0;
     }
 }
 
@@ -49,15 +49,15 @@ static void switchVideo(Registry &registry, entity_type button) {
 
     if(video) {
         dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
-        registry.get<Sprite>(button).frame = 3;
+        registry.get<Sprite>(button).frame = 1;
     } else {
         dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::ENABLE);
-        registry.get<Sprite>(button).frame = 2;
+        registry.get<Sprite>(button).frame = 0;
     }
 #else
     settings.write("video/available", false);
     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::DISABLE);
-    registry.get<Sprite>(button).frame = 3;
+    registry.get<Sprite>(button).frame = 1;
 #endif
 }
 
@@ -70,10 +70,10 @@ static void switchHaptic(Registry &registry, entity_type button) {
 
     if(haptic) {
         Locator::Haptic::set<HapticNull>();
-        registry.get<Sprite>(button).frame = 3;
+        registry.get<Sprite>(button).frame = 1;
     } else {
         Locator::Haptic::set<HapticSDL>();
-        registry.get<Sprite>(button).frame = 2;
+        registry.get<Sprite>(button).frame = 0;
     }
 }
 
@@ -129,33 +129,30 @@ void UIButtonSystem::showLeaderboard() {
 void UIButtonSystem::update(Registry &registry) {
     if(gsEvent) {
         auto view = registry.view<UIButton, Sprite>();
+        Uint8 frame = 0;
 
         switch(gsEvent->type) {
         case GameServicesEvent::Type::SIGNED_IN:
             pending = pending ? ((this->*pending)(), nullptr) : nullptr;
-            view.each([this](auto, auto &button, auto &sprite) {
-                if(button.action == UIAction::LOGIN) {
-                    sprite.frame = 2;
-                }
-            });
+            frame = 1;
             break;
         case GameServicesEvent::Type::SIGNED_OUT:
             pending = nullptr;
-            view.each([this](auto, auto &button, auto &sprite) {
-                if(button.action == UIAction::LOGIN) {
-                    sprite.frame = 3;
-                }
-            });
+            frame = 0;
             break;
         case GameServicesEvent::Type::SIGNING_IN:
+            frame = 1;
+            break;
         case GameServicesEvent::Type::SIGNING_OUT:
-            view.each([this](auto, auto &button, auto &sprite) {
-                if(button.action == UIAction::LOGIN) {
-                    sprite.frame = 1;
-                }
-            });
+            frame = 0;
             break;
         }
+
+        view.each([frame, this](auto, auto &button, auto &sprite) {
+            if(button.action == UIAction::LOGIN) {
+                sprite.frame = frame;
+            }
+        });
 
         gsEvent.reset();
     }
