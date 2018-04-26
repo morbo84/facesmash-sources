@@ -8,6 +8,7 @@
 #include "../service/ads_service.h"
 #include "../service/audio_service.h"
 #include "../service/av_recorder_service.h"
+#include "../service/billing_service.h"
 #include "../service/camera_service.h"
 #include "../service/face_bus_service.h"
 #include "../service/game_services_service.h"
@@ -35,8 +36,8 @@ struct Locator final {
     using Haptic = entt::ServiceLocator<gamee::HapticService>;
     using FaceBus = entt::ServiceLocator<gamee::FaceBusService>;
     using AvRecorder = entt::ServiceLocator<gamee::AvRecorderService>;
-    using Permissions = entt::ServiceLocator<gamee::PermissionsService
-    >;
+    using Billing = entt::ServiceLocator<gamee::BillingService>;
+    using Permissions = entt::ServiceLocator<gamee::PermissionsService>;
     using Settings = entt::ServiceLocator<gamee::SettingsService>;
 };
 

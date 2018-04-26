@@ -185,8 +185,9 @@ int GameEnv::exec() noexcept {
 
             // dispatch the events collected so far (if any)
             Locator::FaceBus::ref().dequeue();
-            Locator::Dispatcher::ref().update();
             Locator::Permissions::ref().dequeue();
+            Locator::Billing::ref().dequeue();
+            Locator::Dispatcher::ref().update();
 
             // render the scene
             update(*renderer, elapsed);

@@ -11,7 +11,8 @@ namespace gamee {
 struct BillingService {
     virtual ~BillingService() = default;
     virtual void performPurchase(Product) noexcept = 0;
-    virtual void queryPurchase(Product) const noexcept = 0;
+    virtual void queryPurchases() const noexcept = 0;
+    virtual void dequeue() noexcept = 0;
 };
 
 

@@ -12,6 +12,8 @@
 #include "service/audio_sdl.h"
 #include "service/av_recorder_android.h"
 #include "service/av_recorder_null.h"
+#include "service/billing_android.h"
+#include "service/billing_null.h"
 #include "service/camera_android.h"
 #include "service/camera_null.h"
 #include "service/game_services_android.h"
@@ -51,12 +53,14 @@ static void initPlatformServices() {
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
     gamee::Locator::GameServices::set<gamee::GameServicesAndroid>();
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
+    gamee::Locator::Billing::set<gamee::BillingAndroid>();
 #else
     gamee::Locator::Permissions::set<gamee::PermissionsNull>();
     gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
     gamee::Locator::Camera::set<gamee::CameraNull>();
     gamee::Locator::GameServices::set<gamee::GameServicesNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
+    gamee::Locator::Billing::set<gamee::BillingNull>();
 #endif
 
 #ifdef DEBUG
@@ -81,6 +85,7 @@ static void releasePlatformServices() {
     gamee::Locator::Camera::reset();
     gamee::Locator::Settings::reset();
     gamee::Locator::Permissions::reset();
+    gamee::Locator::Billing::reset();
 }
 
 

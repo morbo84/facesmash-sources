@@ -10,7 +10,8 @@ namespace gamee {
 
 struct BillingAndroid : BillingService {
     void performPurchase(Product) noexcept override;
-    void queryPurchase(Product) const noexcept override;
+    void queryPurchases() const noexcept override;
+    void dequeue() noexcept override;
 };
 
 

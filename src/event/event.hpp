@@ -126,10 +126,11 @@ struct PermissionEvent {
 
 struct BillingEvent {
     enum class Type: Uint8 {
-        PURCHASE_OK,
-        PURCHASE_ERROR,
-        ALREADY_PURCHASED,
-        NOT_PURCHASED
+        PURCHASE_OK = 0,
+        PURCHASE_CANCELED = 1, // canceled by the user
+        PURCHASE_ERROR = 2,
+        ALREADY_PURCHASED = 3,
+        NOT_PURCHASED = 4
     };
 
     const Product product;
