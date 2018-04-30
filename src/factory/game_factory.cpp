@@ -30,18 +30,18 @@ void createExitPanel(Registry &registry) {
 
     auto exitHandle = textureCache.handle("str/exit");
     auto exit = createSprite(registry, parent, exitHandle, 20);
-    setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 3 * exitHandle->height()) / 2);
+    setPos(registry, exit, (panel.w - exitHandle->width()) / 2, (panel.h - 4 * exitHandle->height()) / 2);
 
     auto acceptButton = createUIButton(registry, parent, UIAction::EXIT, 20);
     const auto &acceptSprite = registry.get<Sprite>(acceptButton);
-    setSpriteSize(registry, acceptButton, 3 * acceptSprite.w / 4, 3 * acceptSprite.h / 4);
-    setPos(registry, acceptButton, (panel.w - 3 * acceptSprite.w) / 2, panel.h / 2);
+    setSpriteSize(registry, acceptButton, 2 * acceptSprite.w / 3, 2 * acceptSprite.h / 3);
+    setPos(registry, acceptButton, (panel.w - 3 * acceptSprite.w) / 2, panel.h / 2 - acceptSprite.h / 5);
     setBoundingBox(registry, acceptButton, acceptSprite.w, acceptSprite.h);
 
     auto rejectButton = createUIButton(registry, parent, UIAction::CLOSE, 20);
     const auto &rejectSprite = registry.get<Sprite>(rejectButton);
-    setSpriteSize(registry, rejectButton, 3 * rejectSprite.w / 4, 3 * rejectSprite.h / 4);
-    setPos(registry, rejectButton, (panel.w + rejectSprite.w) / 2, panel.h / 2);
+    setSpriteSize(registry, rejectButton, 2 * rejectSprite.w / 3, 2 * rejectSprite.h / 3);
+    setPos(registry, rejectButton, (panel.w + rejectSprite.w) / 2, panel.h / 2 - rejectSprite.h / 5);
     setBoundingBox(registry, rejectButton, rejectSprite.w, rejectSprite.h);
 }
 
@@ -82,10 +82,10 @@ void createBackgroundTopPanel(Registry &registry) {
     auto createCloseButton = [&registry, &panel, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_DOWN, 180);
         const auto &closeSprite = registry.get<Sprite>(closeButton);
-        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 3, 2 * closeSprite.h / 3);
+        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 5, 2 * closeSprite.h / 5);
         setPopupUIButtonSize(registry, closeButton, closeSprite.w, closeSprite.h);
         setPos(registry, closeButton, x(closeSprite), panel.h - 3 * closeSprite.h / 8);
-        setBoundingBox(registry, closeButton, closeSprite.w, closeSprite.h);
+        setBoundingBox(registry, closeButton, 3 * closeSprite.w / 2, 3 * closeSprite.h / 2);
         setSpriteSize(registry, closeButton, 0, 0);
     };
 
@@ -113,10 +113,10 @@ void createBackgroundBottomPanel(Registry &registry) {
     auto createCloseButton = [&registry, parent](auto x){
         auto closeButton = createPopupUIButton(registry, parent, UIAction::MENU_CLOSE_UP, 180);
         const auto &closeSprite = registry.get<Sprite>(closeButton);
-        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 3, 2 * closeSprite.h / 3);
+        setSpriteSize(registry, closeButton, 2 * closeSprite.w / 5, 2 * closeSprite.h / 5);
         setPopupUIButtonSize(registry, closeButton, closeSprite.w, closeSprite.h);
         setPos(registry, closeButton, x(closeSprite), 3 * closeSprite.h / 8);
-        setBoundingBox(registry, closeButton, closeSprite.w, closeSprite.h);
+        setBoundingBox(registry, closeButton, 3 * closeSprite.w / 2, 3 * closeSprite.h / 2);
         setSpriteSize(registry, closeButton, 0, 0);
     };
 
@@ -136,9 +136,12 @@ void createMenuTopPanel(Registry &registry) {
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, panel.h - 9 * titleHandle->height() / 8);
 
     auto supportButton = createPopupUIButton(registry, parent, UIAction::SUPPORT, 150);
-    const auto &supportSprite = registry.get<Sprite>(supportButton);
-    setPos(registry, supportButton, (panel.w / 2 - supportSprite.w) / 2, 2 * panel.h / 5);
-    registry.assign<PulseAnimation>(supportButton, 10.f, .4f, .1f, 3000_ui32);
+    auto &supportSprite = registry.get<Sprite>(supportButton);
+    setSpriteSize(registry, supportButton, 4 * supportSprite.w / 5, 4 * supportSprite.h / 5);
+    setPopupUIButtonSize(registry, supportButton, supportSprite.w, supportSprite.h);
+    setPos(registry, supportButton, (panel.w / 3 - supportSprite.w) / 2, 2 * panel.h / 5);
+    setBoundingBox(registry, supportButton, supportSprite.w, supportSprite.h);
+    supportSprite.frame = 2;
 
     auto playButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 150);
     const auto &playSprite = registry.get<Sprite>(playButton);
@@ -147,21 +150,25 @@ void createMenuTopPanel(Registry &registry) {
 
     auto trainingButton = createPopupUIButton(registry, parent, UIAction::TRAINING, 150);
     const auto &trainingSprite = registry.get<Sprite>(trainingButton);
-    setPos(registry, trainingButton, (3 * panel.w / 2 - trainingSprite.w) / 2, 2 * panel.h / 5);
-    registry.assign<PulseAnimation>(trainingButton, 10.f, .4f, .1f, 3000_ui32);
+    setSpriteSize(registry, trainingButton, 4 * trainingSprite.w / 5, 4 * trainingSprite.h / 5);
+    setPopupUIButtonSize(registry, trainingButton, trainingSprite.w, trainingSprite.h);
+    setPos(registry, trainingButton, (5 * panel.w / 3 - trainingSprite.w) / 2, 2 * panel.h / 5);
+    setBoundingBox(registry, trainingButton, trainingSprite.w, trainingSprite.h);
 
     auto settingsButton = createPopupUIButton(registry, parent, UIAction::SETTINGS, 150);
     const auto &settingsSprite = registry.get<Sprite>(settingsButton);
-    setPopupUIButtonSize(registry, settingsButton, 2 * settingsSprite.w / 3, 2 * settingsSprite.h / 3);
     setSpriteSize(registry, settingsButton, 2 * settingsSprite.w / 3, 2 * settingsSprite.h / 3);
+    setPopupUIButtonSize(registry, settingsButton, settingsSprite.w, settingsSprite.h);
     setPos(registry, settingsButton, panel.w - 9 * settingsSprite.w / 8, settingsSprite.h / 8);
+    setBoundingBox(registry, settingsButton, settingsSprite.w, settingsSprite.h);
 
     auto loginButton = createPopupUIButton(registry, parent, UIAction::LOGIN, 150);
     auto &loginSprite = registry.get<Sprite>(loginButton);
-    setPopupUIButtonSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
     setSpriteSize(registry, loginButton, 2 * loginSprite.w / 3, 2 * loginSprite.h / 3);
+    setPopupUIButtonSize(registry, loginButton, loginSprite.w, loginSprite.h);
     setPos(registry, loginButton, loginSprite.w / 8, loginSprite.h / 8);
-    loginSprite.frame = 3;
+    setBoundingBox(registry, loginButton, loginSprite.w, loginSprite.h);
+    loginSprite.frame = 1;
 }
 
 
@@ -177,18 +184,24 @@ void createMenuBottomPanel(Registry &registry) {
 
     auto achievementsButton = createPopupUIButton(registry, parent, UIAction::ACHIEVEMENTS, 150);
     const auto &achievementsSprite = registry.get<Sprite>(achievementsButton);
-    setPos(registry, achievementsButton, (panel.w / 2 - achievementsSprite.w) / 2, 3 * panel.h / 5 - achievementsSprite.h);
-    registry.assign<PulseAnimation>(achievementsButton, 10.f, .4f, .1f, 3000_ui32);
+    setSpriteSize(registry, achievementsButton, 4 * achievementsSprite.w / 5, 4 * achievementsSprite.h / 5);
+    setPopupUIButtonSize(registry, achievementsButton, achievementsSprite.w, achievementsSprite.h);
+    setPos(registry, achievementsButton, (panel.w / 3 - achievementsSprite.w) / 2, 3 * panel.h / 5 - achievementsSprite.h);
+    setBoundingBox(registry, achievementsButton, achievementsSprite.w, achievementsSprite.h);
 
     auto creditsButton = createPopupUIButton(registry, parent, UIAction::CREDITS, 150);
     const auto &creditsSprite = registry.get<Sprite>(creditsButton);
+    setSpriteSize(registry, creditsButton, 4 * creditsSprite.w / 5, 4 * creditsSprite.h / 5);
+    setPopupUIButtonSize(registry, creditsButton, creditsSprite.w, creditsSprite.h);
     setPos(registry, creditsButton, (panel.w - creditsSprite.w) / 2, 3 * panel.h / 5 - creditsSprite.h / 2);
-    registry.assign<PulseAnimation>(creditsButton, 10.f, .4f, .1f, 3000_ui32);
+    setBoundingBox(registry, creditsButton, creditsSprite.w, creditsSprite.h);
 
     auto leaderboardButton = createPopupUIButton(registry, parent, UIAction::LEADERBOARD, 150);
     const auto &leaderboardSprite = registry.get<Sprite>(leaderboardButton);
-    setPos(registry, leaderboardButton, (3 * panel.w / 2 - leaderboardSprite.w) / 2, 3 * panel.h / 5 - leaderboardSprite.h);
-    registry.assign<PulseAnimation>(leaderboardButton, 10.f, .4f, .1f, 3000_ui32);
+    setSpriteSize(registry, leaderboardButton, 4 * leaderboardSprite.w / 5, 4 * leaderboardSprite.h / 5);
+    setPopupUIButtonSize(registry, leaderboardButton, leaderboardSprite.w, leaderboardSprite.h);
+    setPos(registry, leaderboardButton, (5 * panel.w / 3 - leaderboardSprite.w) / 2, 3 * panel.h / 5 - leaderboardSprite.h);
+    setBoundingBox(registry, leaderboardButton, leaderboardSprite.w, leaderboardSprite.h);
 }
 
 
@@ -256,7 +269,7 @@ void createCreditsPanel(Registry &registry) {
 
     auto gpgLicenseButton = createPopupUIButton(registry, parent, UIAction::GPG_LICENSE, 20);
     const auto &gpgLicenseSprite = registry.get<Sprite>(gpgLicenseButton);
-    setSpriteSize(registry, gpgLicenseButton, 2 * gpgLicenseSprite.w / 3, 2 * gpgLicenseSprite.h / 3);
+    setSpriteSize(registry, gpgLicenseButton, gpgLicenseSprite.w / 2, gpgLicenseSprite.h / 2);
     setPopupUIButtonSize(registry, gpgLicenseButton, gpgLicenseSprite.w, gpgLicenseSprite.h);
     setBoundingBox(registry, gpgLicenseButton, gpgLicenseSprite.w, gpgLicenseSprite.h);
     setPos(registry, gpgLicenseButton, (panel.w - gpgLicenseSprite.w) / 2, offset);
@@ -301,9 +314,12 @@ void createSupportPanel(Registry &registry) {
 
     auto shopButton = createPopupUIButton(registry, parent, UIAction::SHOP, 20);
     const auto &shopSprite = registry.get<Sprite>(shopButton);
+    setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
+    setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
     setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
+    setBoundingBox(registry, shopButton, 3 * shopSprite.w / 2, 3 * shopSprite.h / 2);
     registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
-    registry.get<Sprite>(shopButton).frame = 2;
+    registry.get<Sprite>(shopButton).frame = 0;
 
     auto removeHandle = textureCache.handle("str/support/remove");
     auto removeEntity = createSprite(registry, parent, removeHandle, 20);
@@ -352,18 +368,27 @@ void createSettingsPanel(Registry &registry) {
 
     auto audioButton = createPopupUIButton(registry, parent, UIAction::SWITCH_AUDIO, 20);
     auto &audioSprite = registry.get<Sprite>(audioButton);
+    setSpriteSize(registry, audioButton, 2 * audioSprite.w / 3, 2 * audioSprite.h / 3);
+    setPopupUIButtonSize(registry, audioButton, audioSprite.w, audioSprite.h);
     setPos(registry, audioButton, panel.w / 4 - audioSprite.w / 2, panel.h / 2 - audioSprite.h / 3);
-    audioSprite.frame = audio ? 2 : 3;
+    setBoundingBox(registry, audioButton, audioSprite.w, audioSprite.h);
+    audioSprite.frame = audio ? 0 : 1;
 
     auto videoButton = createPopupUIButton(registry, parent, UIAction::SWITCH_VIDEO, 20);
     auto &videoSprite = registry.get<Sprite>(videoButton);
+    setSpriteSize(registry, videoButton, 2 * videoSprite.w / 3, 2 * videoSprite.h / 3);
+    setPopupUIButtonSize(registry, videoButton, videoSprite.w, videoSprite.h);
     setPos(registry, videoButton, panel.w / 2 - videoSprite.w / 2, panel.h / 2 - videoSprite.h / 3);
-    videoSprite.frame = video ? 2 : 3;
+    setBoundingBox(registry, videoButton, videoSprite.w, videoSprite.h);
+    videoSprite.frame = video ? 0 : 1;
 
     auto hapticButton = createPopupUIButton(registry, parent, UIAction::SWITCH_HAPTIC, 20);
     auto &hapticSprite = registry.get<Sprite>(hapticButton);
+    setSpriteSize(registry, hapticButton, 2 * hapticSprite.w / 3, 2 * hapticSprite.h / 3);
+    setPopupUIButtonSize(registry, hapticButton, hapticSprite.w, hapticSprite.h);
     setPos(registry, hapticButton, 3 * panel.w / 4 - hapticSprite.w / 2, panel.h / 2 - hapticSprite.h / 3);
-    hapticSprite.frame = haptic ? 2 : 3;
+    setBoundingBox(registry, hapticButton, hapticSprite.w, hapticSprite.h);
+    hapticSprite.frame = haptic ? 0 : 1;
 
     auto audioStrHandle = textureCache.handle("str/audio");
     auto audioStrEntity = createSprite(registry, parent, audioStrHandle, 20);
@@ -495,14 +520,16 @@ void createGameOverPanel(Registry &registry) {
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, (panel.h / 2 - titleHandle->height()) / 2);
 
     auto menuButton = createUIButton(registry, parent, UIAction::MENU, 150);
-    const auto &menuSprite = registry.get<Sprite>(menuButton);
-    setPos(registry, menuButton, (panel.w / 2 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
-    registry.assign<PulseAnimation>(menuButton, 10.f, .3f, .08f, 3000_ui32);
+    auto &menuSprite = registry.get<Sprite>(menuButton);
+    setSpriteSize(registry, menuButton, 4 * menuSprite.w / 5, 4 * menuSprite.h / 5);
+    setPopupUIButtonSize(registry, menuButton, menuSprite.w, menuSprite.h);
+    setPos(registry, menuButton, (panel.w / 3 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
+    setBoundingBox(registry, menuButton, menuSprite.w, menuSprite.h);
 
     auto restartButton = createUIButton(registry, parent, UIAction::RESTART, 150);
     const auto &restartSprite = registry.get<Sprite>(restartButton);
     setPos(registry, restartButton, (panel.w - restartSprite.w) / 2, (3 * panel.h / 2 - restartSprite.h) / 2);
-    registry.assign<PulseAnimation>(restartButton, 10.f, .3f, .08f, 3000_ui32);
+    registry.assign<PulseAnimation>(restartButton, 10.f, .5f, .08f, 3000_ui32);
 }
 
 
@@ -598,19 +625,22 @@ void refreshGameOverPanel(Registry &registry) {
 
     auto shareButton = createUIButton(registry, parent, UIAction::SHARE, 150);
     const auto &shareSprite = registry.get<Sprite>(shareButton);
-    setPos(registry, shareButton, (3 * panel.w / 2 - shareSprite.w) / 2, (3 * panel.h / 2 - shareSprite.h) / 2);
-    registry.assign<PulseAnimation>(shareButton, 10.f, .3f, .08f, 3000_ui32);
+    setSpriteSize(registry, shareButton, 4 * shareSprite.w / 5, 4 * shareSprite.h / 5);
+    setPopupUIButtonSize(registry, shareButton, shareSprite.w, shareSprite.h);
+    setPos(registry, shareButton, (5 * panel.w / 3 - shareSprite.w) / 2, (3 * panel.h / 2 - shareSprite.h) / 2);
+    setBoundingBox(registry, shareButton, shareSprite.w, shareSprite.h);
     registry.assign<ExpiringContent>(shareButton);
 
     if(recorder.supportExport()) {
         const auto status = permissions.status(PermissionType::STORAGE);
+        registry.get<Sprite>(shareButton).frame = 1;
 
         if(status != PermissionStatus::GRANTED) {
             registry.get<UIButton>(shareButton).action = UIAction::STORAGE_PERMISSION;
         }
     } else {
         registry.get<UIButton>(shareButton).enabled = false;
-        registry.get<Sprite>(shareButton).frame = 3;
+        registry.get<Sprite>(shareButton).frame = 0;
     }
 }
 
