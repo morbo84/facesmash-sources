@@ -10,6 +10,7 @@ namespace gamee {
 
 
 struct SceneChangeEvent;
+struct BillingEvent;
 
 
 struct AchievementsSystem final {
@@ -17,6 +18,7 @@ struct AchievementsSystem final {
     ~AchievementsSystem() noexcept;
 
     void receive(const SceneChangeEvent &) noexcept;
+    void receive(const BillingEvent &) noexcept;
 
     void update(Registry &);
 

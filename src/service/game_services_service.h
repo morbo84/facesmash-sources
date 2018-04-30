@@ -31,7 +31,8 @@ enum class FaceSmashAchievement {
     READY_TO_SMASH,
     SMASH_IS_MY_JOB,
     OH_MY_SMASH,
-    SMASH_ME_CRY
+    SMASH_ME_CRY,
+    FACE_SMASH_SUPPORTER
 };
 
 

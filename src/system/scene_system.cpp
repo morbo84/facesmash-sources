@@ -495,6 +495,13 @@ void SceneSystem::receive(const PermissionEvent &event) noexcept {
 }
 
 
+void SceneSystem::receive(const BillingEvent &) noexcept {
+    if(curr == next && curr == SceneType::SUPPORT_PAGE) {
+        Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+    }
+}
+
+
 void SceneSystem::update(Registry &registry, delta_type delta) {
     if(curr != next) {
         auto &dispatcher = Locator::Dispatcher::ref();

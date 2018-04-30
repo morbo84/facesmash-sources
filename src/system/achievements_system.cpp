@@ -35,9 +35,8 @@ int total(const PlayerScore &playerScore) {
 }
 
 
-// thanks to our supporters
-void faceSmashSupporter(Registry &registry) {
-    // TODO WTF still to do the dedicated page... coming soon, forget it in the meantime :-)
+void faceSmashSupporter() {
+    Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::FACE_SMASH_SUPPORTER);
 }
 
 
@@ -198,15 +197,13 @@ void surprisedSmash(const PlayerScore& delta) {
 
 
 // smash a face during the training
-void noPainNoGame(Registry &registry) {
-    const auto &playerScore = registry.get<PlayerScore>();
-
-    if(playerScore.hitSad
-       || playerScore.hitAngry
-       || playerScore.hitDisgusted
-       || playerScore.hitSurprised
-       || playerScore.hitFearful
-       || playerScore.hitHappy)
+void noPainNoGame(const PlayerScore &score) {
+    if(score.hitSad
+       || score.hitAngry
+       || score.hitDisgusted
+       || score.hitSurprised
+       || score.hitFearful
+       || score.hitHappy)
     {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::NO_PAIN_NO_GAME);
     }
@@ -214,44 +211,39 @@ void noPainNoGame(Registry &registry) {
 
 
 // 50 smashes or more in a match
-void ohMySmash(Registry &registry) {
-    if(50 <= total(registry.get<PlayerScore>())) {
+void ohMySmash(const PlayerScore &score) {
+    if(50 <= total(score)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::OH_MY_SMASH);
     }
 }
 
 
 // smash only happy faces in a match
-void iAmSoHappy(Registry &registry) {
-    const auto &playerScore = registry.get<PlayerScore>();
-
-    if(playerScore.hitHappy && playerScore.hitHappy == total(playerScore)) {
+void iAmSoHappy(const PlayerScore &score) {
+    if(score.hitHappy && score.hitHappy == total(score)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::IM_SO_HAPPY);
     }
 }
 
 
 // smash only sad faces in a match
-void blueIsTheNewSmash(Registry &registry) {
-    const auto &playerScore = registry.get<PlayerScore>();
-
-    if(playerScore.hitSad && playerScore.hitSad == total(playerScore)) {
+void blueIsTheNewSmash(const PlayerScore &score) {
+    if(score.hitSad && score.hitSad == total(score)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::BLUE_SMASH);
     }
 }
 
 
 // no smashes in a match
-void smashMeCry(Registry &registry) {
-    if(0 == total(registry.get<PlayerScore>())) {
+void smashMeCry(const PlayerScore &score) {
+    if(0 == total(score)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::SMASH_ME_CRY);
     }
 }
 
 
 // submit scores to leaderboards
-void submitToLeaderboards(Registry &registry) {
-    const auto& score = registry.get<PlayerScore>();
+void submitToLeaderboards(const PlayerScore &score) {
     Locator::GameServices::ref().leaderboards().submitScore(FaceSmashLeaderboard::SCORE, score.score);
     Locator::GameServices::ref().leaderboards().submitScore(FaceSmashLeaderboard::FACES, total(score));
 }
@@ -275,11 +267,16 @@ void AchievementsSystem::receive(const SceneChangeEvent &event) noexcept {
 }
 
 
-void AchievementsSystem::update(Registry &registry) {
-    faceSmashSupporter(registry);
+void AchievementsSystem::receive(const BillingEvent &event) noexcept {
+    if(event.product == Product::REMOVE_ADS && (event.type == BillingEvent::Type::PURCHASE_OK || event.type == BillingEvent::Type::ALREADY_PURCHASED)) {
+        faceSmashSupporter();
+    }
+}
 
+
+void AchievementsSystem::update(Registry &registry) {
     if(registry.has<PlayerScore>()) {
-        const auto& score = registry.get<PlayerScore>();
+        const auto &score = registry.get<PlayerScore>();
         auto delta = score - previous;
 
         if(current == SceneType::THE_GAME) {
@@ -303,15 +300,15 @@ void AchievementsSystem::update(Registry &registry) {
             surprisedSmash(delta);
             previous = score;
         } else if(current == SceneType::TRAINING) {
-            noPainNoGame(registry);
+            noPainNoGame(score);
         }
 
         if(dirtyGameOver) {
-            ohMySmash(registry);
-            iAmSoHappy(registry);
-            blueIsTheNewSmash(registry);
-            smashMeCry(registry);
-            submitToLeaderboards(registry);
+            ohMySmash(score);
+            iAmSoHappy(score);
+            blueIsTheNewSmash(score);
+            smashMeCry(score);
+            submitToLeaderboards(score);
         }
     }
 

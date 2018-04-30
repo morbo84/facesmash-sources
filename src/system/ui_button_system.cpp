@@ -168,6 +168,7 @@ void UIButtonSystem::update(Registry &registry) {
                 auto &gservices = Locator::GameServices::ref();
                 auto &permissions = Locator::Permissions::ref();
                 auto &haptic = Locator::Haptic::ref();
+                auto &billing = Locator::Billing::ref();
 
                 registry.accommodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
                 haptic.rumble(RumbleEffect::SUPER_SUPER_SOFT);
@@ -241,7 +242,7 @@ void UIButtonSystem::update(Registry &registry) {
                             : Locator::GameServices::ref().signIn();
                     break;
                 case UIAction::SHOP:
-                    // TODO
+                    billing.performPurchase(Product::REMOVE_ADS);
                     break;
                 case UIAction::GPG_LICENSE:
                     showOssLicenses();

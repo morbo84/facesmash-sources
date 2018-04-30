@@ -11,6 +11,7 @@ namespace gamee {
 struct SceneChangeEvent;
 struct KeyboardEvent;
 struct PermissionEvent;
+struct BillingEvent;
 
 
 struct SceneSystem final {
@@ -20,6 +21,7 @@ struct SceneSystem final {
     void receive(const SceneChangeEvent &) noexcept;
     void receive(const KeyboardEvent &) noexcept;
     void receive(const PermissionEvent &) noexcept;
+    void receive(const BillingEvent &) noexcept;
 
     void update(Registry &, delta_type);
 

@@ -12,7 +12,7 @@ void BillingNull::performPurchase(Product p) noexcept {
 
 
 void BillingNull::queryPurchases() const noexcept {
-    Locator::Dispatcher::ref().enqueue<BillingEvent>(Product ::REMOVE_ADS, BillingEvent::Type::NOT_PURCHASED);
+    Locator::Dispatcher::ref().enqueue<BillingEvent>(Product::REMOVE_ADS, BillingEvent::Type::NOT_PURCHASED);
 }
 
 
