@@ -21,9 +21,9 @@ void bindingStartCamera();
 void bindingStopCamera();
 #else
 static std::atomic_bool cameraAndroidReady{false};
-std::tuple<int, int> bindingGetCameraParams() { return {}; }
-void bindingStartCamera() {}
-void bindingStopCamera() {}
+static std::tuple<int, int> bindingGetCameraParams() { return {}; }
+static void bindingStartCamera() {}
+static void bindingStopCamera() {}
 #endif
 
 

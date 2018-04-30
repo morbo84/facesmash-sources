@@ -7,9 +7,15 @@
 namespace gamee {
 
 
-void initiatePurchaseFlow(int purchaseId);
-void queryPurchases();
-bool dequeuePurchaseUpdates(std::pair<int, int>& p);
+#ifdef __ANDROID__
+extern void initiatePurchaseFlow(int);
+extern void queryPurchases();
+extern bool dequeuePurchaseUpdates(std::pair<int, int> &);
+#else
+static void initiatePurchaseFlow(int) {}
+static void queryPurchases() {}
+static bool dequeuePurchaseUpdates(std::pair<int, int> &) { return {}; }
+#endif
 
 
 void BillingAndroid::performPurchase(Product p) noexcept {
@@ -18,12 +24,13 @@ void BillingAndroid::performPurchase(Product p) noexcept {
 
 
 void BillingAndroid::queryPurchases() const noexcept {
-    queryPurchases();
+    gamee::queryPurchases();
 }
 
 
 void BillingAndroid::dequeue() noexcept {
     std::pair<int, int> p;
+
     while(dequeuePurchaseUpdates(p)) {
         BillingEvent event{static_cast<Product>(p.first), static_cast<BillingEvent::Type >(p.second)};
         Locator::Dispatcher::ref().enqueue<BillingEvent>(event);
