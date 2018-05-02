@@ -10,6 +10,7 @@
 #include "../system/animation_system.h"
 #include "../system/audio_system.h"
 #include "../system/av_recorder_system.h"
+#include "../system/billing_system.h"
 #include "../system/debug_system.h"
 #include "../system/camera_system.h"
 #include "../system/destroy_later_system.h"
@@ -56,6 +57,7 @@ private:
     AnimationSystem animationSystem;
     AudioSystem audioSystem;
     AvRecorderSystem avRecorderSystem;
+    BillingSystem billingSystem;
     DebugSystem debugSystem;
     CameraSystem cameraSystem;
     DestroyLaterSystem destroyLaterSystem;

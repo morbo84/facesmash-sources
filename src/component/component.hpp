@@ -12,6 +12,9 @@
 namespace gamee {
 
 
+struct FaceSmashSupporter { /* Yay!! */ };
+
+
 struct DebugInfo {
     entity_type time[4];
     entity_type fps[2];

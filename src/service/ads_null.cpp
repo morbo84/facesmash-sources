@@ -13,4 +13,7 @@ bool AdsNull::isLoaded(AdsType) { return false; }
 void AdsNull::show(AdsType) {}
 
 
+void AdsNull::stop() {}
+
+
 }

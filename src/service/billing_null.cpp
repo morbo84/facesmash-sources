@@ -7,7 +7,7 @@ namespace gamee {
 
 
 void BillingNull::performPurchase(Product p) noexcept {
-    Locator::Dispatcher::ref().enqueue<BillingEvent>(p, BillingEvent::Type::PURCHASE_ERROR);
+    Locator::Dispatcher::ref().enqueue<BillingEvent>(p, BillingEvent::Type::ALREADY_PURCHASED);
 }
 
 

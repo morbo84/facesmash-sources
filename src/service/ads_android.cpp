@@ -21,42 +21,48 @@ void bindingShowBannerAd() {}
 #endif
 
 
-void AdsAndroid::load(AdsType t) {
-    switch (t) {
-        case AdsType::BANNER:
-            bindingLoadBannerAd();
-            break;
-        case AdsType::INTERSTITIAL:
-            bindingLoadInterstitialAd();
-            break;
+void AdsAndroid::load(AdsType type) {
+    switch(type) {
+    case AdsType::BANNER:
+        bindingLoadBannerAd();
+        break;
+    case AdsType::INTERSTITIAL:
+        bindingLoadInterstitialAd();
+        break;
     }
 }
 
 
-bool AdsAndroid::isLoaded(AdsType t) {
+bool AdsAndroid::isLoaded(AdsType type) {
     bool ret{false};
-    switch (t) {
-        case AdsType::BANNER:
-            ret = bindingIsLoadedBannerAd();
-            break;
-        case AdsType::INTERSTITIAL:
-            ret = bindingIsLoadedIntestitialAd();
-            break;
+
+    switch(type) {
+    case AdsType::BANNER:
+        ret = bindingIsLoadedBannerAd();
+        break;
+    case AdsType::INTERSTITIAL:
+        ret = bindingIsLoadedIntestitialAd();
+        break;
     }
 
     return ret;
 }
 
 
-void AdsAndroid::show(AdsType t) {
-    switch (t) {
-        case AdsType::BANNER:
-            bindingShowBannerAd();
-            break;
-        case AdsType::INTERSTITIAL:
-            bindingShowInterstitialAd();
-            break;
+void AdsAndroid::show(AdsType type) {
+    switch(type) {
+    case AdsType::BANNER:
+        bindingShowBannerAd();
+        break;
+    case AdsType::INTERSTITIAL:
+        bindingShowInterstitialAd();
+        break;
     }
+}
+
+
+void AdsAndroid::stop() {
+    // TODO
 }
 
 

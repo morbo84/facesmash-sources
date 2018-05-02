@@ -17,6 +17,7 @@ struct AdsService {
     virtual void load(AdsType) = 0;
     virtual bool isLoaded(AdsType) = 0;
     virtual void show(AdsType) = 0;
+    virtual void stop() = 0;
 };
 
 

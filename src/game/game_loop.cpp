@@ -72,6 +72,9 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         // sum what remains from the previous step
         accumulator += delta;
 
+        // check if we are dealing with a face smash supporter
+        billingSystem.update(registry);
+
         audioSystem.update();
         frameSystem.update(registry, renderer);
         sceneSystem.update(registry, delta);

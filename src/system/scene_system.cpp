@@ -495,19 +495,13 @@ void SceneSystem::receive(const PermissionEvent &event) noexcept {
 }
 
 
-void SceneSystem::receive(const BillingEvent &) noexcept {
-    if(curr == next && curr == SceneType::SUPPORT_PAGE) {
-        Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-    }
-}
-
-
 void SceneSystem::update(Registry &registry, delta_type delta) {
     if(curr != next) {
         auto &dispatcher = Locator::Dispatcher::ref();
         auto &avRecorder = Locator::AvRecorder::ref();
         auto &camera = Locator::Camera::ref();
         auto &ads = Locator::Ads::ref();
+        auto &billing = Locator::Billing::ref();
 
         if(isTransitioning) {
             remaining -= std::min(remaining, delta);
@@ -522,6 +516,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::SPLASH_SCREEN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     ads.show(AdsType::BANNER);
+                    billing.queryPurchases();
                     break;
                 case SceneType::CREDITS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);

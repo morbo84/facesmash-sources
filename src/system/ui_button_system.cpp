@@ -242,6 +242,7 @@ void UIButtonSystem::update(Registry &registry) {
                             : Locator::GameServices::ref().signIn();
                     break;
                 case UIAction::SHOP:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     billing.performPurchase(Product::REMOVE_ADS);
                     break;
                 case UIAction::GPG_LICENSE:

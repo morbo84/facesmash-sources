@@ -295,48 +295,94 @@ void createSupportPanel(Registry &registry) {
     auto titleHandle = textureCache.handle("str/support");
     auto titleEntity = createSprite(registry, parent, titleHandle, 20);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
-
-    auto makingHandle = textureCache.handle("str/support/making");
-    auto makingEntity = createSprite(registry, parent, makingHandle, 20);
-    setPos(registry, makingEntity, (panel.w - makingHandle->width()) / 2, 1 * panel.h / 6);
-
-    auto timeHandle = textureCache.handle("str/support/time");
-    auto timeEntity = createSprite(registry, parent, timeHandle, 20);
-    setPos(registry, timeEntity, (panel.w - timeHandle->width()) / 2, 2 * panel.h / 9);
-
-    auto lotHandle = textureCache.handle("str/support/lot");
-    auto lotEntity = createSprite(registry, parent, lotHandle, 20);
-    setPos(registry, lotEntity, (panel.w - lotHandle->width()) / 2, 3 * panel.h / 9);
-
-    auto coffeeHandle = textureCache.handle("str/support/coffee");
-    auto coffeeEntity = createSprite(registry, parent, coffeeHandle, 20);
-    setPos(registry, coffeeEntity, (panel.w - coffeeHandle->width()) / 2, 4 * panel.h / 10);
-
-    auto shopButton = createPopupUIButton(registry, parent, UIAction::SHOP, 20);
-    const auto &shopSprite = registry.get<Sprite>(shopButton);
-    setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
-    setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
-    setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
-    setBoundingBox(registry, shopButton, 3 * shopSprite.w / 2, 3 * shopSprite.h / 2);
-    registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
-    registry.get<Sprite>(shopButton).frame = 0;
-
-    auto removeHandle = textureCache.handle("str/support/remove");
-    auto removeEntity = createSprite(registry, parent, removeHandle, 20);
-    setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + shopSprite.h + removeHandle->height() / 3);
-
-    auto offerHandle = textureCache.handle("str/support/offer");
-    auto offerEntity = createSprite(registry, parent, offerHandle, 20);
-    setPos(registry, offerEntity, (panel.w - offerHandle->width()) / 2, 7 * panel.h / 9);
-
-    auto nextHandle = textureCache.handle("str/support/next");
-    auto nextEntity = createSprite(registry, parent, nextHandle, 20);
-    setPos(registry, nextEntity, (panel.w - nextHandle->width()) / 2, 8 * panel.h / 9);
 }
 
 
 void refreshSupportPanel(Registry &registry) {
-    // TODO
+    auto &textureCache = Locator::TextureCache::ref();
+
+    entity_type parent{};
+
+    for(auto entity: registry.view<Panel>()) {
+        if(registry.get<Panel>(entity).type == PanelType::SUPPORT) {
+            parent = entity;
+            break;
+        }
+    }
+
+    const auto &panel = registry.get<Panel>(parent);
+
+    if(registry.has<FaceSmashSupporter>()) {
+        auto thankHandle = textureCache.handle("str/support/thank");
+        auto thankEntity = createSprite(registry, parent, thankHandle, 20);
+        setPos(registry, thankEntity, (panel.w - thankHandle->width()) / 2, 1 * panel.h / 5);
+        registry.assign<ExpiringContent>(thankEntity);
+
+        auto youHandle = textureCache.handle("str/support/you");
+        auto youEntity = createSprite(registry, parent, youHandle, 20);
+        setPos(registry, youEntity, (panel.w - youHandle->width()) / 2, 3 * panel.h / 10);
+        registry.assign<ExpiringContent>(youEntity);
+
+        auto beingHandle = textureCache.handle("str/support/being");
+        auto beingEntity = createSprite(registry, parent, beingHandle, 20);
+        setPos(registry, beingEntity, (panel.w - beingHandle->width()) / 2, 3 * panel.h / 6);
+        registry.assign<ExpiringContent>(beingEntity);
+
+        auto facesmashHandle = textureCache.handle("str/support/facesmash");
+        auto facesmashEntity = createSprite(registry, parent, facesmashHandle, 20);
+        setPos(registry, facesmashEntity, (panel.w - facesmashHandle->width()) / 2, 4 * panel.h / 6);
+        registry.assign<ExpiringContent>(facesmashEntity);
+
+        auto supporterHandle = textureCache.handle("str/support/supporter");
+        auto supporterEntity = createSprite(registry, parent, supporterHandle, 20);
+        setPos(registry, supporterEntity, (panel.w - supporterHandle->width()) / 2, 8 * panel.h / 11);
+        registry.assign<ExpiringContent>(supporterEntity);
+    } else {
+        auto makingHandle = textureCache.handle("str/support/making");
+        auto makingEntity = createSprite(registry, parent, makingHandle, 20);
+        setPos(registry, makingEntity, (panel.w - makingHandle->width()) / 2, 1 * panel.h / 6);
+        registry.assign<ExpiringContent>(makingEntity);
+
+        auto timeHandle = textureCache.handle("str/support/time");
+        auto timeEntity = createSprite(registry, parent, timeHandle, 20);
+        setPos(registry, timeEntity, (panel.w - timeHandle->width()) / 2, 2 * panel.h / 9);
+        registry.assign<ExpiringContent>(timeEntity);
+
+        auto lotHandle = textureCache.handle("str/support/lot");
+        auto lotEntity = createSprite(registry, parent, lotHandle, 20);
+        setPos(registry, lotEntity, (panel.w - lotHandle->width()) / 2, 3 * panel.h / 9);
+        registry.assign<ExpiringContent>(lotEntity);
+
+        auto coffeeHandle = textureCache.handle("str/support/coffee");
+        auto coffeeEntity = createSprite(registry, parent, coffeeHandle, 20);
+        setPos(registry, coffeeEntity, (panel.w - coffeeHandle->width()) / 2, 4 * panel.h / 10);
+        registry.assign<ExpiringContent>(coffeeEntity);
+
+        auto shopButton = createPopupUIButton(registry, parent, UIAction::SHOP, 20);
+        const auto &shopSprite = registry.get<Sprite>(shopButton);
+        setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
+        setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
+        setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
+        setBoundingBox(registry, shopButton, 3 * shopSprite.w / 2, 3 * shopSprite.h / 2);
+        registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
+        registry.get<Sprite>(shopButton).frame = 0;
+        registry.assign<ExpiringContent>(shopButton);
+
+        auto removeHandle = textureCache.handle("str/support/remove");
+        auto removeEntity = createSprite(registry, parent, removeHandle, 20);
+        setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + shopSprite.h + removeHandle->height() / 3);
+        registry.assign<ExpiringContent>(removeEntity);
+
+        auto offerHandle = textureCache.handle("str/support/offer");
+        auto offerEntity = createSprite(registry, parent, offerHandle, 20);
+        setPos(registry, offerEntity, (panel.w - offerHandle->width()) / 2, 7 * panel.h / 9);
+        registry.assign<ExpiringContent>(offerEntity);
+
+        auto nextHandle = textureCache.handle("str/support/next");
+        auto nextEntity = createSprite(registry, parent, nextHandle, 20);
+        setPos(registry, nextEntity, (panel.w - nextHandle->width()) / 2, 8 * panel.h / 9);
+        registry.assign<ExpiringContent>(nextEntity);
+    }
 }
 
 

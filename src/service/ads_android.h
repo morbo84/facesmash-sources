@@ -12,6 +12,7 @@ struct AdsAndroid : AdsService {
     void load(AdsType) override;
     bool isLoaded(AdsType) override;
     void show(AdsType) override;
+    void stop() override;
 };
 
 

@@ -110,6 +110,12 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/support/next", "The next one", renderer, *fontNormal, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/support/remove", "Remove ADS", renderer, *fontTiny, colorWhite);
 
+    textureCache.load<TTFFontTextureLoader>("str/support/thank", "THANK", renderer, *fontHuge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/support/you", "YOU", renderer, *fontHuge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/support/being", "for being a", renderer, *fontNormal, colorYellow);
+    textureCache.load<TTFFontTextureLoader>("str/support/facesmash", "FACE SMASH", renderer, *fontNormal, colorBlue);
+    textureCache.load<TTFFontTextureLoader>("str/support/supporter", "SUPPORTER", renderer, *fontLarge, colorBlue);
+
     textureCache.load<TTFFontTextureLoader>("str/credits/thanks", "Thank YOU", renderer, *fontNormal, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/credits/playing", "For playing", renderer, *fontSmall, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/credits/facesmash", "FACE SMASH", renderer, *fontNormal, colorWhite);

@@ -40,6 +40,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/audio_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/av_recorder_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/billing_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/destroy_later_system.cpp

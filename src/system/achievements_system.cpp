@@ -253,10 +253,12 @@ AchievementsSystem::AchievementsSystem() noexcept
     : dirtyGameOver{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
+    Locator::Dispatcher::ref().connect<BillingEvent>(this);
 }
 
 
 AchievementsSystem::~AchievementsSystem() noexcept {
+    Locator::Dispatcher::ref().disconnect<BillingEvent>(this);
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
 }
 
