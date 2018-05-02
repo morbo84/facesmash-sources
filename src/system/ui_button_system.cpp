@@ -129,22 +129,22 @@ void UIButtonSystem::showLeaderboard() {
 void UIButtonSystem::update(Registry &registry) {
     if(gsEvent) {
         auto view = registry.view<UIButton, Sprite>();
-        Uint8 frame = 0;
+        Uint8 frame{};
 
         switch(gsEvent->type) {
         case GameServicesEvent::Type::SIGNED_IN:
             pending = pending ? ((this->*pending)(), nullptr) : nullptr;
-            frame = 1;
+            frame = 0;
             break;
         case GameServicesEvent::Type::SIGNED_OUT:
             pending = nullptr;
-            frame = 0;
-            break;
-        case GameServicesEvent::Type::SIGNING_IN:
             frame = 1;
             break;
-        case GameServicesEvent::Type::SIGNING_OUT:
+        case GameServicesEvent::Type::SIGNING_IN:
             frame = 0;
+            break;
+        case GameServicesEvent::Type::SIGNING_OUT:
+            frame = 1;
             break;
         }
 
