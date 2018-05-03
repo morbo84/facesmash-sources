@@ -219,13 +219,13 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
                     showCheckYourGalleryMessage(registry);
                     registry.remove<InputReceiver>(entity);
-                    registry.get<Sprite>(entity).frame = 3;
+                    registry.get<Sprite>(entity).frame = 0;
                     break;
                 case UIAction::STORAGE_PERMISSION:
                     permissions.request(PermissionType::STORAGE);
                     showCheckYourGalleryMessage(registry);
                     registry.remove<InputReceiver>(entity);
-                    registry.get<Sprite>(entity).frame = 3;
+                    registry.get<Sprite>(entity).frame = 0;
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);
