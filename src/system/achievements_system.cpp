@@ -250,7 +250,7 @@ void submitToLeaderboards(const PlayerScore &score) {
 
 
 AchievementsSystem::AchievementsSystem() noexcept
-    : dirtyGameOver{false}
+    : thankYouSupporter{false}, dirtyGameOver{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<BillingEvent>(this);
@@ -265,14 +265,14 @@ AchievementsSystem::~AchievementsSystem() noexcept {
 
 void AchievementsSystem::receive(const SceneChangeEvent &event) noexcept {
     current = event.scene;
+    // just entered game over transition
     dirtyGameOver = (current == SceneType::GAME_OVER);
 }
 
 
 void AchievementsSystem::receive(const BillingEvent &event) noexcept {
-    if(event.product == Product::REMOVE_ADS && (event.type == BillingEvent::Type::PURCHASE_OK || event.type == BillingEvent::Type::ALREADY_PURCHASED)) {
-        faceSmashSupporter();
-    }
+    thankYouSupporter = (event.product == Product::REMOVE_ADS)
+            && (event.type == BillingEvent::Type::PURCHASE_OK || event.type == BillingEvent::Type::ALREADY_PURCHASED);
 }
 
 
@@ -314,6 +314,11 @@ void AchievementsSystem::update(Registry &registry) {
         }
     }
 
+    if(thankYouSupporter) {
+        faceSmashSupporter();
+    }
+
+    thankYouSupporter = false;
     dirtyGameOver = false;
 }
 

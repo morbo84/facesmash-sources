@@ -23,6 +23,7 @@ struct AchievementsSystem final {
     void update(Registry &);
 
 private:
+    bool thankYouSupporter;
     bool dirtyGameOver;
     SceneType current;
     PlayerScore previous{};
