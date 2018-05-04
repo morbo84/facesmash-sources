@@ -11,6 +11,7 @@ void bindingShowInterstitialAd();
 void bindingLoadBannerAd();
 bool bindingIsLoadedBannerAd();
 void bindingShowBannerAd();
+void bindingHideBannerAd();
 #else
 void bindingLoadInterstitialAd() {}
 bool bindingIsLoadedIntestitialAd() { return false; }
@@ -18,7 +19,13 @@ void bindingShowInterstitialAd() {}
 void bindingLoadBannerAd() {}
 bool bindingIsLoadedBannerAd() { return false; }
 void bindingShowBannerAd() {}
+void bindingHideBannerAd() {}
 #endif
+
+
+AdsAndroid::~AdsAndroid() noexcept {
+    bindingHideBannerAd();
+}
 
 
 void AdsAndroid::load(AdsType type) {
@@ -58,11 +65,6 @@ void AdsAndroid::show(AdsType type) {
         bindingShowInterstitialAd();
         break;
     }
-}
-
-
-void AdsAndroid::stop() {
-    // TODO
 }
 
 

@@ -35,7 +35,6 @@ void BillingSystem::update(Registry &registry) {
         registry.attach<FaceSmashSupporter>(registry.create());
         // stop and disable services that are no longer required
         Locator::Billing::set<BillingNull>();
-        Locator::Ads::ref().stop();
         Locator::Ads::set<AdsNull>();
     }
 }

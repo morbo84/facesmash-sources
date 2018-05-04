@@ -9,10 +9,10 @@ namespace gamee {
 
 
 struct AdsAndroid : AdsService {
+    ~AdsAndroid() noexcept override;
     void load(AdsType) override;
     bool isLoaded(AdsType) override;
     void show(AdsType) override;
-    void stop() override;
 };
 
 
