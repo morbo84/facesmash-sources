@@ -63,7 +63,7 @@ static constexpr const char* achievementCode(FaceSmashAchievement a) {
     case FaceSmashAchievement::SMASH_ME_CRY:
         return "CgkI5IbdrqUREAIQFw";
     case FaceSmashAchievement::FACE_SMASH_SUPPORTER:
-        return "CgkI5IbdrqUREAIQHQ"
+        return "CgkI5IbdrqUREAIQHQ";
     }
 }
 
