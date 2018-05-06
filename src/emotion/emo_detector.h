@@ -45,7 +45,6 @@ private:
     SDL_Thread *t_;
     SDL_mutex *mtx_;
     SDL_cond *cv_;
-    bool dirty_;
     bool end_;
 };
 
