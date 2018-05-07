@@ -180,9 +180,6 @@ int GameEnv::exec() noexcept {
 
             previous = current;
 
-            // poll events for the next loop
-            Locator::InputHandler::ref().poll();
-
             // dispatch the events collected so far (if any)
             Locator::FaceBus::ref().dequeue();
             Locator::Permissions::ref().dequeue();
@@ -197,6 +194,9 @@ int GameEnv::exec() noexcept {
             if(previous + msPerFrame > current) {
                 clock.delay(previous + msPerFrame - current);
             }
+
+            // poll events for the next loop
+            Locator::InputHandler::ref().poll();
         }
 
         close();
