@@ -79,10 +79,7 @@ EmoDetector::~EmoDetector() {
     SDL_UnlockMutex(mtx_);
 
     SDL_CondSignal(cv_);
-
-    if(t_) {
-        SDL_WaitThread(t_, nullptr);
-    }
+    SDL_WaitThread(t_, nullptr);
 
     SDL_DestroyMutex(mtx_);
     SDL_DestroyCond(cv_);
