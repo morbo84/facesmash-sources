@@ -115,6 +115,9 @@ int main(int, char **) {
     initBasicServices();
     initPlatformServices();
 
+    // try to log in for fun and profit
+    gamee::Locator::GameServices::ref().signIn();
+
     // initialize the emo detector
     auto emoDetector = std::make_unique<gamee::EmoDetector>();
 
@@ -123,9 +126,6 @@ int main(int, char **) {
 
     // read settings and adjust services if required
     readSettings();
-
-    // try to log in for fun and profit
-    gamee::Locator::GameServices::ref().signIn();
 
     // enjoy!! :-)
     auto ret = loop->exec();
