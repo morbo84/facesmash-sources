@@ -2,6 +2,7 @@
 #define FACE_SMASH_SERVICE_ACHIEVEMENTS_SERVICE_H
 
 
+#include <SDL_types.h>
 #include <cstdint>
 
 
@@ -59,8 +60,16 @@ struct LeaderboardsManager {
 
 
 struct GameServicesService {
+    enum class Status: Uint8 {
+        SIGNING_IN,
+        SIGNED_IN,
+        SIGNING_OUT,
+        SIGNED_OUT
+    };
+
     virtual ~GameServicesService() = default;
 
+    virtual Status status() const noexcept = 0;
     virtual void signIn() noexcept = 0;
     virtual void signOut() noexcept = 0;
     virtual bool isSignedIn() const noexcept = 0;

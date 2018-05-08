@@ -19,6 +19,9 @@ void GameServicesNull::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {}
 void GameServicesNull::showAllLeaderboardsUI() noexcept {}
 
 
+GameServicesService::Status GameServicesNull::status() const noexcept {  return GameServicesService::Status::SIGNED_OUT; }
+
+
 void GameServicesNull::signIn() noexcept {}
 
 

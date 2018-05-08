@@ -9,6 +9,8 @@ namespace gamee {
 
 
 struct GameServicesNull : GameServicesService, AchievementsManager, LeaderboardsManager {
+    Status status() const noexcept override;
+
     void signIn() noexcept override;
     void signOut() noexcept override;
     bool isSignedIn() const noexcept override;

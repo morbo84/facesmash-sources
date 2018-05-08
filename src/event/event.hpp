@@ -79,18 +79,6 @@ struct TimeIsOverEvent {};
 struct CameraInitEvent {};
 
 
-struct GameServicesEvent {
-    enum class Type: Uint8 {
-        SIGNING_IN,
-        SIGNED_IN,
-        SIGNING_OUT,
-        SIGNED_OUT
-    };
-
-    const Type type;
-};
-
-
 struct AudioEvent {
     enum class Type: Uint8 {
         START,

@@ -21,6 +21,7 @@ struct GameServicesAndroid : GameServicesService, AchievementsManager, Leaderboa
     ~GameServicesAndroid() noexcept override;
 
     // GameServicesService interface
+    Status status() const noexcept override;
     void signIn() noexcept override;
     void signOut() noexcept override;
     bool isSignedIn() const noexcept override;
@@ -40,6 +41,7 @@ private:
     bool isAuthorized() const noexcept;
 
     std::unique_ptr<gpg::GameServices> gs_;
+    Status status_;
     bool ready_;
 };
 

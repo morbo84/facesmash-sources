@@ -1,7 +1,7 @@
 #include "game_services_android.h"
-#include "../locator/locator.hpp"
-#include "../event/event.hpp"
 #include <chrono>
+
+
 #ifdef __ANDROID__
 #include <gpg/achievement_manager.h>
 #include <gpg/builder.h>
@@ -79,11 +79,17 @@ static constexpr const char* leaderboardCode(FaceSmashLeaderboard l) {
 
 
 GameServicesAndroid::GameServicesAndroid() noexcept
-    : ready_{true}
+    : status_{Status::SIGNED_OUT}
+    , ready_{true}
 {}
 
 
 GameServicesAndroid::~GameServicesAndroid() noexcept {}
+
+
+GameServicesService::Status GameServicesAndroid::status() const noexcept {
+    return status_;
+}
 
 
 void GameServicesAndroid::signIn() noexcept {
@@ -94,23 +100,22 @@ void GameServicesAndroid::signIn() noexcept {
             gpg::GameServices::Builder builder;
 
             builder.SetOnAuthActionFinished([this](gpg::AuthOperation op, gpg::AuthStatus status) {
-                auto &dispatcher = Locator::Dispatcher::ref();
                 ready_ = true;
 
                 switch (op) {
-                    case gpg::AuthOperation::SIGN_IN:
-                        switch (status) {
-                        case gpg::AuthStatus::VALID:
-                            dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_IN);
-                            break;
-                        default:
-                            dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_OUT);
-                            break;
-                        }
+                case gpg::AuthOperation::SIGN_IN:
+                    switch (status) {
+                    case gpg::AuthStatus::VALID:
+                        status_ = Status::SIGNED_IN;
                         break;
-                    case gpg::AuthOperation::SIGN_OUT:
-                        dispatcher.enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNED_OUT);
+                    default:
+                        status_ = Status::SIGNED_OUT;
                         break;
+                    }
+                    break;
+                case gpg::AuthOperation::SIGN_OUT:
+                    status_ = Status::SIGNED_OUT;
+                    break;
                 }
             });
 
@@ -120,7 +125,7 @@ void GameServicesAndroid::signIn() noexcept {
             conf.SetActivity(activity);
             gs_ = builder.Create(conf);
             env->DeleteLocalRef(activity);
-            Locator::Dispatcher::ref().enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNING_IN);
+            status_ = Status::SIGNING_IN;
         } else {
             gs_->StartAuthorizationUI();
         }
@@ -132,7 +137,7 @@ void GameServicesAndroid::signOut() noexcept {
     if(isAuthorized()) {
         ready_ = false;
         gs_->SignOut();
-        Locator::Dispatcher::ref().enqueue<GameServicesEvent>(GameServicesEvent::Type::SIGNING_OUT);
+        status_ = Status::SIGNING_OUT;
     }
 }
 
@@ -205,6 +210,7 @@ namespace gamee {
 
 GameServicesAndroid::GameServicesAndroid() noexcept {}
 GameServicesAndroid::~GameServicesAndroid() noexcept {}
+GameServicesService::Status GameServicesAndroid::status() const noexcept {  return GameServicesService::Status::SIGNED_OUT; }
 void GameServicesAndroid::signIn() noexcept {}
 void GameServicesAndroid::signOut() noexcept {}
 void GameServicesAndroid::unlock(FaceSmashAchievement) noexcept {}

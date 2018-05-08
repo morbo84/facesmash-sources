@@ -95,12 +95,10 @@ static void showCheckYourGalleryMessage(Registry &registry) {
 
 UIButtonSystem::UIButtonSystem(): dirty{false}, pending{nullptr} {
     Locator::Dispatcher::ref().connect<TouchEvent>(this);
-    Locator::Dispatcher::ref().connect<GameServicesEvent>(this);
 }
 
 
 UIButtonSystem::~UIButtonSystem() {
-    Locator::Dispatcher::ref().disconnect<GameServicesEvent>(this);
     Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
 }
 
@@ -108,11 +106,6 @@ UIButtonSystem::~UIButtonSystem() {
 void UIButtonSystem::receive(const TouchEvent &event) noexcept {
     coord = event;
     dirty = true;
-}
-
-
-void UIButtonSystem::receive(const GameServicesEvent &event) noexcept {
-    gsEvent.emplace(event);
 }
 
 
@@ -126,36 +119,38 @@ void UIButtonSystem::showLeaderboard() {
 }
 
 
-void UIButtonSystem::update(Registry &registry) {
-    if(gsEvent) {
-        auto view = registry.view<UIButton, Sprite>();
-        Uint8 frame{};
+void UIButtonSystem::updateLoginButton(Registry &registry) {
+    const auto &gameServices = Locator::GameServices::ref();
+    auto view = registry.view<UIButton, Sprite>();
+    Uint8 frame{};
 
-        switch(gsEvent->type) {
-        case GameServicesEvent::Type::SIGNED_IN:
+    switch(gameServices.status()) {
+        case GameServicesService::Status ::SIGNED_IN:
             pending = pending ? ((this->*pending)(), nullptr) : nullptr;
             frame = 0;
             break;
-        case GameServicesEvent::Type::SIGNED_OUT:
+        case GameServicesService::Status ::SIGNED_OUT:
             pending = nullptr;
             frame = 1;
             break;
-        case GameServicesEvent::Type::SIGNING_IN:
+        case GameServicesService::Status ::SIGNING_IN:
             frame = 0;
             break;
-        case GameServicesEvent::Type::SIGNING_OUT:
+        case GameServicesService::Status ::SIGNING_OUT:
             frame = 1;
             break;
-        }
-
-        view.each([frame, this](auto, auto &button, auto &sprite) {
-            if(button.action == UIAction::LOGIN) {
-                sprite.frame = frame;
-            }
-        });
-
-        gsEvent.reset();
     }
+
+    view.each([frame, this](auto, auto &button, auto &sprite) {
+        if(button.action == UIAction::LOGIN) {
+            sprite.frame = frame;
+        }
+    });
+}
+
+
+void UIButtonSystem::update(Registry &registry) {
+    updateLoginButton(registry);
 
     if(dirty) {
         auto view = registry.view<UIButton, Transform, BoundingBox>();
