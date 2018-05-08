@@ -12,6 +12,9 @@
 #include "av_recorder_service.h"
 
 
+struct SDL_Thread;
+
+
 namespace gamee {
 
 
@@ -30,12 +33,14 @@ struct AvRecorderAndroid : AvRecorderService {
     void exportMedia() const override;
 
 private:
-    void recordVideo(int width, int height);
+    static int recordVideo(void *);
 
-    std::thread t_;
+    SDL_Thread *t_{nullptr};
+    int width{0};
+    int height{0};
     std::atomic_bool stopped_{true};
-    std::condition_variable cv_;
-    mutable std::mutex mtx_;
+    std::condition_variable cv_{};
+    mutable std::mutex mtx_{};
     VideoFrame frame_{nullptr, 0U};
     std::atomic_bool ready_{true};
 };

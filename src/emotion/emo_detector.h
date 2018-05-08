@@ -1,6 +1,7 @@
 #ifndef FACE_SMASH_EMOTION_EMO_DETECTOR_H
 #define FACE_SMASH_EMOTION_EMO_DETECTOR_H
 
+
 #include <mutex>
 #include <condition_variable>
 #include <atomic>
@@ -11,6 +12,9 @@
 #include "VisageFaceAnalyser.h"
 #include "../common/types.h"
 #include "../event/event.hpp"
+
+
+struct SDL_Thread;
 
 
 namespace gamee {
@@ -27,7 +31,8 @@ public:
 private:
     enum class Emotion {anger, disgust, fear, happiness, sadness, surprise, neutral};
     void start(int width, int height);
-    void analyzeCurrentFrame();
+
+    static int analyzeCurrentFrame(void *);
     static std::optional<FaceType> estimateEmotion(float* prob);
 
     static void ARGBtoRGB(const unsigned char* argb, VsImage& buff, int width, int height);
@@ -44,7 +49,7 @@ private:
     std::condition_variable cv_;
     std::atomic_bool dirty_;
     std::atomic_bool end_;
-    std::thread t_;
+    SDL_Thread *t_;
 };
 
 

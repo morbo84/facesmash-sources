@@ -3,6 +3,7 @@
 #include <string>
 #include <SDL_surface.h>
 #include <SDL_system.h>
+#include <SDL_thread.h>
 #include "../common/constants.h"
 #include "../locator/locator.hpp"
 #include "emo_detector.h"
@@ -60,6 +61,7 @@ EmoDetector::EmoDetector()
     , internal_{}
     , dirty_{false}
     , end_{false}
+    , t_{nullptr}
 {
     analyzer_.init(visageDataPath().c_str());
     Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
@@ -74,11 +76,12 @@ EmoDetector::~EmoDetector() {
     lck.unlock();
     cv_.notify_one();
 
-    if(t_.joinable())
-        t_.join();
+    SDL_WaitThread(t_, nullptr);
+    t_ = nullptr;
 
-    if(image_)
+    if(image_) {
         vsReleaseImage(&image_);
+    }
 }
 
 
@@ -88,7 +91,7 @@ void EmoDetector::start(int width, int height) {
     image_ = vsCreateImage(width > height ? vsSize(height, width) : vsSize(width, height), VS_DEPTH_8U, 3);
     internalSize_ = (static_cast<size_t>(width * height) * SDL_BITSPERPIXEL(internalFormat)) / 8;
     internal_ = std::make_unique<unsigned char[]>(internalSize_);
-    t_ = std::thread{&EmoDetector::analyzeCurrentFrame, this};
+    t_ = SDL_CreateThread(&EmoDetector::analyzeCurrentFrame, "detector", this);
 }
 
 
@@ -109,34 +112,43 @@ void EmoDetector::receive(const CameraInitEvent&) noexcept {
 }
 
 
-void EmoDetector::analyzeCurrentFrame() {
+int EmoDetector::analyzeCurrentFrame(void *ptr) {
+    auto &detector = *static_cast<EmoDetector *>(ptr);
     VisageSDK::FaceData faceData;
-    while(true) {
-        std::unique_lock lck{mtx_};
-        if(!dirty_)
-            cv_.wait(lck, [this] { return bool{dirty_}; });
 
-        if(end_) return;
+    while(true) {
+        std::unique_lock lck{detector.mtx_};
+        if(!detector.dirty_)
+            detector.cv_.wait(lck, [&detector] { return bool{detector.dirty_}; });
+
+        if(detector.end_) break;
 
         // TODO: height_ >= width_ is constant...
-        if (height_ >= width_) {
-            ARGBtoRGB(internal_.get(), *image_, width_, height_);
+        if (detector.height_ >= detector.width_) {
+            ARGBtoRGB(detector.internal_.get(), *detector.image_, detector.width_, detector.height_);
         }
         else {
-            ARGBtoRGBRotated(internal_.get(), *image_, width_, height_);
+            ARGBtoRGBRotated(detector.internal_.get(), *detector.image_, detector.width_, detector.height_);
         }
 
-        auto* statuses = tracker_.track(image_->width, image_->height, image_->imageData, &faceData, VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
+        auto* statuses = detector.tracker_.track(detector.image_->width, detector.image_->height,
+                                                 detector.image_->imageData, &faceData,
+                                                 VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL,
+                                                 0, -1, 1);
+
         if(statuses[0] == TRACK_STAT_OK) {
             std::array<float, 7> prob;
-            if(analyzer_.estimateEmotion(image_, &faceData, prob.data())) {
+            if(detector.analyzer_.estimateEmotion(detector.image_, &faceData, prob.data())) {
                 if(auto emo = estimateEmotion(prob.data())) {
                     Locator::FaceBus::ref().enqueue({*emo});
                 }
             }
         }
-        dirty_ = false;
+
+        detector.dirty_ = false;
     }
+
+    return 0;
 }
 
 

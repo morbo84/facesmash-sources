@@ -3,6 +3,7 @@
 #ifdef __ANDROID__
 #include "common/constants.h"
 #include <SDL_surface.h>
+#include <SDL_thread.h>
 #include <media/NdkMediaCodec.h>
 #include <media/NdkMediaFormat.h>
 #include <media/NdkMediaMuxer.h>
@@ -25,16 +26,19 @@ AvRecorderAndroid::~AvRecorderAndroid() {
     frame_.first = nullptr;
     lck.unlock();
     AvRecorderAndroid::stop();
-    if(t_.joinable())
-        t_.join();
+    SDL_WaitThread(t_, nullptr);
+    t_ = nullptr;
 }
 
 
-void AvRecorderAndroid::start(int width, int height) {
-    if(t_.joinable())
-        t_.join();
+void AvRecorderAndroid::start(int w, int h) {
+    SDL_WaitThread(t_, nullptr);
+
+    width = w;
+    height = h;
+
     stopped_ = false;
-    t_ = std::thread{&AvRecorderAndroid::recordVideo, this, width, height};
+    t_ = SDL_CreateThread(&AvRecorderAndroid::recordVideo, "recorder", this);
 }
 
 
@@ -61,14 +65,16 @@ bool AvRecorderAndroid::recording() const noexcept {
 }
 
 
-void AvRecorderAndroid::recordVideo(int width, int height) {
+int AvRecorderAndroid::recordVideo(void *ptr) {
+    auto &recorder = *static_cast<AvRecorderAndroid *>(ptr);
+
     constexpr auto outputFormat = SDL_PIXELFORMAT_NV12;
-    const auto outputBufferSize = static_cast<size_t>(width * height) * 12U / 8U;
+    const auto outputBufferSize = static_cast<size_t>(recorder.width * recorder.height) * 12U / 8U;
     constexpr auto frameRate = 30;
     auto* videoMediaFormat = AMediaFormat_new();
     AMediaFormat_setString(videoMediaFormat, AMEDIAFORMAT_KEY_MIME, "video/avc");
-    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_WIDTH, width);
-    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_HEIGHT, height);
+    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_WIDTH, recorder.width);
+    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_HEIGHT, recorder.height);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 2500000);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_FRAME_RATE, frameRate);
     AMediaFormat_setInt32(videoMediaFormat, "capture-rate", frameRate);
@@ -92,27 +98,27 @@ void AvRecorderAndroid::recordVideo(int width, int height) {
             size_t size;
             auto* buf = AMediaCodec_getInputBuffer(encoder, inputBuffer, &size);
 
-            std::unique_lock lck{mtx_};
-            cv_.wait(lck, [this] { return stopped_ || !ready_; });
+            std::unique_lock lck{recorder.mtx_};
+            recorder.cv_.wait(lck, [&recorder] { return recorder.stopped_ || !recorder.ready_; });
             lck.unlock();
 
-            if (!ready_) {
-                SDL_ConvertPixels(width, height, internalFormat, frame_.first,
-                                  width * SDL_BYTESPERPIXEL(internalFormat), outputFormat, buf,
-                                  width * SDL_BYTESPERPIXEL(outputFormat));
+            if (!recorder.ready_) {
+                SDL_ConvertPixels(recorder.width, recorder.height, internalFormat, recorder.frame_.first,
+                                  recorder.width * SDL_BYTESPERPIXEL(internalFormat), outputFormat, buf,
+                                  recorder.width * SDL_BYTESPERPIXEL(outputFormat));
                 AMediaCodec_queueInputBuffer(encoder, inputBuffer, 0, outputBufferSize,
-                                             frame_.second * 1000, 0);
-            } else if (stopped_ && !eos) {
+                                             recorder.frame_.second * 1000, 0);
+            } else if (recorder.stopped_ && !eos) {
                 eos = true;
                 AMediaCodec_queueInputBuffer(encoder, inputBuffer, 0, 0,
-                                             frame_.second * 1000,
+                                             recorder.frame_.second * 1000,
                                              AMEDIACODEC_BUFFER_FLAG_END_OF_STREAM);
             }
-        } else if (stopped_ && frame_.first == nullptr)
+        } else if (recorder.stopped_ && recorder.frame_.first == nullptr)
             eos = true;
 
-        frame_.first = nullptr;
-        ready_ = true;
+        recorder.frame_.first = nullptr;
+        recorder.ready_ = true;
 
         AMediaCodecBufferInfo info;
         auto signedOutputBufId = AMediaCodec_dequeueOutputBuffer(encoder, &info, 100000);
@@ -121,7 +127,7 @@ void AvRecorderAndroid::recordVideo(int width, int height) {
             auto* outFmt = AMediaCodec_getOutputFormat(encoder);
             auto res = AMediaMuxer_addTrack(muxer, outFmt);
             if(res < 0) {
-                stopped_ = true;
+                recorder.stopped_ = true;
                 break;
             }
             videoTrack = static_cast<size_t>(res);
@@ -145,6 +151,8 @@ void AvRecorderAndroid::recordVideo(int width, int height) {
     AMediaCodec_stop(encoder);
     AMediaCodec_delete(encoder);
     AMediaFormat_delete(videoMediaFormat);
+
+    return 0;
 }
 
 
