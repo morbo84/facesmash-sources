@@ -81,7 +81,11 @@ static void releasePlatformServices() {
     gamee::Locator::FaceBus::reset();
     gamee::Locator::AvRecorder::reset();
     gamee::Locator::Ads::reset();
-    gamee::Locator::GameServices::reset();
+    /* the following line is commented out to avoid
+     * gpg having to mess with a defunct activity
+     * e.g. in case of transition to multi-window mode
+     */
+    // gamee::Locator::GameServices::reset();
     gamee::Locator::Camera::reset();
     gamee::Locator::Settings::reset();
     gamee::Locator::Permissions::reset();
