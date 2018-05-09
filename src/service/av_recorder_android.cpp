@@ -195,7 +195,7 @@ void AvRecorderAndroid::stop() {}
 bool AvRecorderAndroid::recording() const noexcept { return false; }
 
 
-void AvRecorderAndroid::recordVideo(int width, int height) {}
+int AvRecorderAndroid::recordVideo(void *) { return {}; }
 
 
 bool AvRecorderAndroid::ready() const noexcept { return false; }
