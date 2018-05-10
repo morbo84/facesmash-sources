@@ -35,6 +35,7 @@ struct AvRecorderAndroid : AvRecorderService {
 private:
     static int recordVideo(void *);
 
+#ifdef __ANDROID__
     SDL_Thread *t_{nullptr};
     int width{0};
     int height{0};
@@ -43,6 +44,7 @@ private:
     mutable std::mutex mtx_{};
     VideoFrame frame_{nullptr, 0U};
     std::atomic_bool ready_{true};
+#endif
 };
 
 

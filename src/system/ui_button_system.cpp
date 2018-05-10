@@ -141,7 +141,7 @@ void UIButtonSystem::updateLoginButton(Registry &registry) {
             break;
     }
 
-    view.each([frame, this](auto, auto &button, auto &sprite) {
+    view.each([frame](auto, auto &button, auto &sprite) {
         if(button.action == UIAction::LOGIN) {
             sprite.frame = frame;
         }
