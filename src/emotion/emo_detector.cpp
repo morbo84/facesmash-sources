@@ -64,6 +64,7 @@ EmoDetector::EmoDetector()
     , t_{nullptr}
 {
     analyzer_.init(visageDataPath().c_str());
+    Locator::Dispatcher::ref().connect<CameraInitEvent>(this);
     Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
 }
 
@@ -71,6 +72,7 @@ EmoDetector::EmoDetector()
 EmoDetector::~EmoDetector() {
     std::unique_lock lck{mtx_};
     Locator::Dispatcher::ref().disconnect<FrameAvailableEvent>(this);
+    Locator::Dispatcher::ref().disconnect<CameraInitEvent>(this);
     end_ = true;
     dirty_ = true;
     lck.unlock();
