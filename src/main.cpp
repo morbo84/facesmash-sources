@@ -47,6 +47,8 @@ static void releaseBasicServices() {
 
 
 static void initPlatformServices() {
+    gamee::Locator::FaceBus::set<gamee::FaceBusService>();
+
 #ifdef __ANDROID__
     gamee::Locator::Permissions::set<gamee::PermissionsAndroid>();
     gamee::Locator::Settings::set<gamee::SettingsOnFile>();
@@ -69,7 +71,6 @@ static void initPlatformServices() {
 #endif
 
     gamee::Locator::AvRecorder::set<gamee::AvRecorderNull>();
-    gamee::Locator::FaceBus::set<gamee::FaceBusService>();
     gamee::Locator::Audio::set<gamee::AudioNull>();
     gamee::Locator::Haptic::set<gamee::HapticNull>();
 }
@@ -78,7 +79,6 @@ static void initPlatformServices() {
 static void releasePlatformServices() {
     gamee::Locator::Haptic::reset();
     gamee::Locator::Audio::reset();
-    gamee::Locator::FaceBus::reset();
     gamee::Locator::AvRecorder::reset();
     gamee::Locator::Ads::reset();
     /* the following line is commented out to avoid
@@ -90,6 +90,7 @@ static void releasePlatformServices() {
     gamee::Locator::Settings::reset();
     gamee::Locator::Permissions::reset();
     gamee::Locator::Billing::reset();
+    gamee::Locator::FaceBus::reset();
 }
 
 
@@ -122,26 +123,26 @@ int main(int, char **) {
     // try to log in for fun and profit
     gamee::Locator::GameServices::ref().signIn();
 
-    // initialize the emo detector
-    auto emoDetector = std::make_unique<gamee::EmoDetector>();
-
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();
 
     // read settings and adjust services if required
     readSettings();
 
+    // initialize the emo detector
+    auto emoDetector = std::make_unique<gamee::EmoDetector>();
+
     // enjoy!! :-)
     auto ret = loop->exec();
+
+    // reset the emo detector before to shutdown all the other services
+    emoDetector.reset();
 
     // tear down platform services
     releasePlatformServices();
 
     // destroy the loop
     loop.reset();
-
-    // reset the emo detector before to shutdown all the other services
-    emoDetector.reset();
 
     // tear down standard services
     releaseBasicServices();
