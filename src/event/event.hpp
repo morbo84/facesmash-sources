@@ -9,18 +9,7 @@
 namespace gamee {
 
 
-struct EnvEvent {
-    enum class Type: Uint8 {
-        TERMINATING,
-        LOW_MEMORY,
-        ENTERING_BACKGROUND,
-        ENTERED_BACKGROUND,
-        ENTERING_FOREGROUND,
-        ENTERED_FOREGROUND
-    };
-
-    const Type type;
-};
+struct QuitEvent {};
 
 
 struct KeyboardEvent {

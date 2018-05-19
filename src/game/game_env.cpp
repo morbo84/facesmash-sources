@@ -13,28 +13,40 @@ namespace gamee {
 
 
 // we use this static function as event filter on mobile (see SDL docs)
-static inline int appEventFilter(void *, SDL_Event *event) noexcept {
+int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
+    auto &env = *static_cast<GameEnv *>(ptr);
+    std::unique_lock lock{env.system, std::defer_lock_t{}};
+
     // consume the event and force it to be dropped from the internal queue
     int queue = 0;
 
     switch(event->type) {
     case SDL_APP_TERMINATING:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::TERMINATING);
+        // the user is exiting the game... :-(
+        lock.lock();
+        env.loop = false;
+        lock.unlock();
         break;
     case SDL_APP_LOWMEMORY:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::LOW_MEMORY);
+        // well, I really don't know what to do here in such a small game...
         break;
     case SDL_APP_WILLENTERBACKGROUND:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::ENTERING_BACKGROUND);
+        lock.lock();
+        Locator::Haptic::ref().pause();
+        env.clock.pause();
+        lock.unlock();
         break;
     case SDL_APP_DIDENTERBACKGROUND:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::ENTERED_BACKGROUND);
+        // nothing to do here, thanks anyway
         break;
     case SDL_APP_WILLENTERFOREGROUND:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::ENTERING_FOREGROUND);
+        lock.lock();
+        Locator::Haptic::ref().unpause();
+        env.clock.unpause();
+        lock.unlock();
         break;
     case SDL_APP_DIDENTERFOREGROUND:
-        Locator::Dispatcher::ref().trigger<EnvEvent>(EnvEvent::Type::ENTERED_FOREGROUND);
+        // nothing to do here, thanks anyway
         break;
     case SDL_MOUSEMOTION:
         queue = event->motion.which == SDL_TOUCH_MOUSEID ? 0 : 1;
@@ -48,18 +60,6 @@ static inline int appEventFilter(void *, SDL_Event *event) noexcept {
     }
 
     return queue;
-}
-
-
-void GameEnv::suspend() {
-    Locator::Haptic::ref().pause();
-    clock.pause();
-}
-
-
-void GameEnv::resume() {
-    Locator::Haptic::ref().unpause();
-    clock.unpause();
 }
 
 
@@ -88,16 +88,16 @@ GameEnv::GameEnv() noexcept
         errcode = ErrorCode::RENDERER_INITIALIZATION;
     } else {
         // set event filter on SDL events
-        SDL_SetEventFilter(&appEventFilter, nullptr);
+        SDL_SetEventFilter(&appEventFilter, this);
         // bind services to the surrounding environment
         Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
-        Locator::Dispatcher::ref().connect<EnvEvent>(this);
+        Locator::Dispatcher::ref().connect<QuitEvent>(this);
     }
 }
 
 
 GameEnv::~GameEnv() noexcept {
-    Locator::Dispatcher::ref().disconnect<EnvEvent>(this);
+    Locator::Dispatcher::ref().disconnect<QuitEvent>(this);
     Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
     SDL_SetEventFilter(nullptr, nullptr);
     if(TTF_WasInit()) { TTF_Quit(); }
@@ -121,7 +121,7 @@ GameEnv::ErrorCode GameEnv::error() const noexcept {
 void GameEnv::receive(const KeyboardEvent &event) noexcept {
     switch(event.type) {
     case KeyboardEvent::Type::ESCAPE:
-        Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+        Locator::Dispatcher::ref().enqueue<QuitEvent>();
         break;
     default:
         // does nothing (suppress warnings)
@@ -130,28 +130,8 @@ void GameEnv::receive(const KeyboardEvent &event) noexcept {
 }
 
 
-void GameEnv::receive(const EnvEvent &event) noexcept {
-    switch(event.type) {
-    case EnvEvent::Type::TERMINATING:
-        // the user is exiting the game... :-(
-        loop = false;
-        break;
-    case EnvEvent::Type::LOW_MEMORY:
-        // well, I really don't know what to do here in such a small game...
-        break;
-    case EnvEvent::Type::ENTERING_BACKGROUND:
-        suspend();
-        break;
-    case EnvEvent::Type::ENTERED_BACKGROUND:
-        // nothing to do here, thanks anyway
-        break;
-    case EnvEvent::Type::ENTERING_FOREGROUND:
-        resume();
-        break;
-    case EnvEvent::Type::ENTERED_FOREGROUND:
-        // nothing to do here, thanks anyway
-        break;
-    }
+void GameEnv::receive(const QuitEvent &event) noexcept {
+    loop = false;
 }
 
 
@@ -163,6 +143,8 @@ int GameEnv::exec() noexcept {
      * battery consumption... or I'm wrong and that's the worst loop ever
      * seen before!! :-)
      */
+
+    std::unique_lock lock{system};
 
     // in case of errors, the game won't start
     loop = loop && valid();
@@ -189,11 +171,15 @@ int GameEnv::exec() noexcept {
             // render the scene
             update(*renderer, elapsed);
 
+            lock.unlock();
+
             // try to keep the game at 30 FPS at least
             current = clock.ticks();
             if(previous + msPerFrame > current) {
                 clock.delay(previous + msPerFrame - current);
             }
+
+            lock.lock();
 
             // poll events for the next loop
             Locator::InputHandler::ref().poll();

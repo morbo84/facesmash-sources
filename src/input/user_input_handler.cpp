@@ -55,7 +55,7 @@ void UserInputHandler::keyboard(const SDL_KeyboardEvent &event) noexcept {
 
 
 void UserInputHandler::quit() noexcept {
-    Locator::Dispatcher::ref().enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+    Locator::Dispatcher::ref().enqueue<QuitEvent>();
 }
 
 

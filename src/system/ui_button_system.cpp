@@ -174,7 +174,7 @@ void UIButtonSystem::update(Registry &registry) {
                     registry.remove<RotationAnimation>(entity);
                     break;
                 case UIAction::EXIT:
-                    dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+                    dispatcher.enqueue<QuitEvent>();
                     break;
                 case UIAction::THE_GAME:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
