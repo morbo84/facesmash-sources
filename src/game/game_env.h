@@ -12,15 +12,14 @@ namespace gamee {
 
 
 struct KeyboardEvent;
-struct EnvEvent;
+struct QuitEvent;
 
 
 class GameEnv {
     static constexpr delta_type clampOverElapsed = 25;
     static constexpr delta_type msPerFrame = 16;
 
-    virtual void suspend();
-    virtual void resume();
+    static int appEventFilter(void *, SDL_Event *) noexcept;
 
     virtual void init(GameRenderer &) = 0;
     virtual void close() = 0;
@@ -47,7 +46,7 @@ public:
     ErrorCode error() const noexcept;
 
     void receive(const KeyboardEvent &) noexcept;
-    void receive(const EnvEvent &) noexcept;
+    void receive(const QuitEvent &) noexcept;
 
     int exec() noexcept;
 

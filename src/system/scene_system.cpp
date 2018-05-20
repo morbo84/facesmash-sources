@@ -473,7 +473,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
             dispatcher.enqueue<SceneChangeEvent>(SceneType::EXIT);
             break;
         case SceneType::EXIT:
-            dispatcher.enqueue<EnvEvent>(EnvEvent::Type::TERMINATING);
+            dispatcher.enqueue<QuitEvent>();
             break;
         case SceneType::THE_GAME:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
