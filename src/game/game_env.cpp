@@ -15,7 +15,6 @@ namespace gamee {
 // we use this static function as event filter on mobile (see SDL docs)
 int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
     auto &env = *static_cast<GameEnv *>(ptr);
-    std::unique_lock lock{env.system, std::defer_lock_t{}};
 
     // consume the event and force it to be dropped from the internal queue
     int queue = 0;
@@ -23,27 +22,19 @@ int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
     switch(event->type) {
     case SDL_APP_TERMINATING:
         // the user is exiting the game... :-(
-        lock.lock();
         env.loop = false;
-        lock.unlock();
         break;
     case SDL_APP_LOWMEMORY:
         // well, I really don't know what to do here in such a small game...
         break;
     case SDL_APP_WILLENTERBACKGROUND:
-        lock.lock();
-        Locator::Haptic::ref().pause();
         env.clock.pause();
-        lock.unlock();
         break;
     case SDL_APP_DIDENTERBACKGROUND:
         // nothing to do here, thanks anyway
         break;
     case SDL_APP_WILLENTERFOREGROUND:
-        lock.lock();
-        Locator::Haptic::ref().unpause();
         env.clock.unpause();
-        lock.unlock();
         break;
     case SDL_APP_DIDENTERFOREGROUND:
         // nothing to do here, thanks anyway
@@ -144,8 +135,6 @@ int GameEnv::exec() noexcept {
      * seen before!! :-)
      */
 
-    std::unique_lock lock{system};
-
     // in case of errors, the game won't start
     loop = loop && valid();
 
@@ -171,15 +160,11 @@ int GameEnv::exec() noexcept {
             // render the scene
             update(*renderer, elapsed);
 
-            lock.unlock();
-
             // try to keep the game at 30 FPS at least
             current = clock.ticks();
             if(previous + msPerFrame > current) {
                 clock.delay(previous + msPerFrame - current);
             }
-
-            lock.lock();
 
             // poll events for the next loop
             Locator::InputHandler::ref().poll();

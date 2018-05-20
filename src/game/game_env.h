@@ -2,7 +2,6 @@
 #define FACE_SMASH_GAME_GAME_ENV_H
 
 
-#include <mutex>
 #include <memory>
 #include "../common/types.h"
 #include "../time/clock.h"
@@ -62,8 +61,6 @@ private:
     std::unique_ptr<GameRenderer> renderer;
     Clock clock;
     bool loop;
-    // used to deal with devices' specific async events like terminating and so on
-    std::mutex system;
 };
 
 
