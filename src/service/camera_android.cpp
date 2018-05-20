@@ -29,8 +29,8 @@ static void bindingStopCamera() {}
 
 void CameraAndroid::init() noexcept {
     if(cameraAndroidReady) return;
-    std::lock_guard lck{frameMtx_};
     auto params = bindingGetCameraParams();
+    std::lock_guard lck{frameMtx_};
     width_ = std::get<0>(params);
     height_ = std::get<1>(params);
     auto bitsPerPixel = SDL_BITSPERPIXEL(internalFormat);
