@@ -258,6 +258,8 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 
 static delta_type gameTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 1500_ui32;
+    // sligthly shorter transition time to respect the requirements of video recording (if enabled)
+    static constexpr delta_type transition = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -287,7 +289,7 @@ static delta_type gameTutorialTransition(Registry &registry) {
         }
     });
 
-    return duration;
+    return transition;
 }
 
 
@@ -326,6 +328,8 @@ static delta_type theGameTransition(Registry &registry) {
 
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
+    // sligthly longer transition time to respect the requirements of video recording (if enabled)
+    static constexpr delta_type transition = 1100_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -351,7 +355,10 @@ static delta_type gameOverTransition(Registry &registry) {
         }
     });
 
-    return duration;
+    // this suppresses wrong warnings from GCC, damnit
+    (void)duration;
+
+    return transition;
 }
 
 
@@ -542,8 +549,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING);
                     hideBackgroundPanels(registry);
+                    break;
+                case SceneType::VIDEO_RECORDING:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
                 case SceneType::THE_GAME:
                     ads.load(AdsType::INTERSTITIAL);
@@ -631,8 +641,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 camera.start();
                 remaining = gameTutorialTransition(registry);
                 break;
-            case SceneType::THE_GAME:
+            case SceneType::VIDEO_RECORDING:
+                // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
+                remaining = 500_ui32;
+                break;
+            case SceneType::THE_GAME:
                 showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = theGameTransition(registry);

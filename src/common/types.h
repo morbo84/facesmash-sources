@@ -47,6 +47,7 @@ enum class SceneType: Uint8 {
     SUPPORT_PAGE,
     SETTINGS_PAGE,
     GAME_TUTORIAL,
+    VIDEO_RECORDING,
     THE_GAME,
     GAME_OVER,
     TRAINING_TUTORIAL,
