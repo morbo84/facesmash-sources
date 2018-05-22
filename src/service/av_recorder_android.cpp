@@ -7,7 +7,9 @@
 #include <media/NdkMediaCodec.h>
 #include <media/NdkMediaFormat.h>
 #include <media/NdkMediaMuxer.h>
+#include <media/NdkMediaExtractor.h>
 #include <algorithm>
+#include <array>
 #include <string>
 // _linux stuff_ needed to open and close the file descriptor for the muxer
 #include <fcntl.h>
@@ -89,8 +91,16 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     auto fd = open(filePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
+    auto* extractor = AMediaExtractor_new();
+    AMediaExtractor_setDataSource(extractor, "/data/user/0/com.gamee.facesmash/files/audio/music_play.aac"); // TODO
+    AMediaExtractor_selectTrack(extractor, 0U);
+    auto* audioFormat = AMediaExtractor_getTrackFormat(extractor, 0U);
+    auto audioTrack = (size_t)AMediaMuxer_addTrack(muxer, audioFormat); // TODO: cast
+    AMediaExtractor_seekTo(extractor, 0, AMEDIAEXTRACTOR_SEEK_CLOSEST_SYNC);
+
     size_t videoTrack{};
-    bool eos{false};
+    AMediaCodecBufferInfo videoBufInfo;
+    bool videoEos{false};
     while (true) {
         auto signedInputBufId = AMediaCodec_dequeueInputBuffer(encoder, 100000);
         if (signedInputBufId >= 0) {
@@ -108,20 +118,19 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
                                   recorder.width * SDL_BYTESPERPIXEL(outputFormat));
                 AMediaCodec_queueInputBuffer(encoder, inputBuffer, 0, outputBufferSize,
                                              recorder.frame_.second * 1000, 0);
-            } else if (recorder.stopped_ && !eos) {
-                eos = true;
+            } else if (recorder.stopped_ && !videoEos) {
+                videoEos = true;
                 AMediaCodec_queueInputBuffer(encoder, inputBuffer, 0, 0,
                                              recorder.frame_.second * 1000,
                                              AMEDIACODEC_BUFFER_FLAG_END_OF_STREAM);
             }
         } else if (recorder.stopped_ && recorder.frame_.first == nullptr)
-            eos = true;
+            videoEos = true;
 
         recorder.frame_.first = nullptr;
         recorder.ready_ = true;
 
-        AMediaCodecBufferInfo info;
-        auto signedOutputBufId = AMediaCodec_dequeueOutputBuffer(encoder, &info, 100000);
+        auto signedOutputBufId = AMediaCodec_dequeueOutputBuffer(encoder, &videoBufInfo, 100000);
         if(signedOutputBufId == AMEDIACODEC_INFO_OUTPUT_FORMAT_CHANGED) {
             // here the encoder want to add a new track to the muxer
             auto* outFmt = AMediaCodec_getOutputFormat(encoder);
@@ -137,12 +146,27 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
             auto outputBuffer = static_cast<size_t>(signedOutputBufId);
             size_t size;
             const auto* buf = AMediaCodec_getOutputBuffer(encoder, outputBuffer, &size);
-            AMediaMuxer_writeSampleData(muxer, videoTrack, buf, &info);
+            AMediaMuxer_writeSampleData(muxer, videoTrack, buf, &videoBufInfo);
             AMediaCodec_releaseOutputBuffer(encoder, outputBuffer, false);
-        } else if (eos) {
+        } else if (videoEos) {
             break;
         }
+    }
 
+    // mux the audio track
+    std::array<uint8_t, 256U * 1024U> audioBuf;
+    AMediaCodecBufferInfo audioBufInfo{};
+    audioBufInfo.flags = AMediaExtractor_getSampleFlags(extractor);
+    bool audioEos{};
+    while (!audioEos) {
+        audioBufInfo.size = AMediaExtractor_readSampleData(extractor, audioBuf.data(), audioBuf.size());
+        if(audioBufInfo.size < 0 || audioBufInfo.presentationTimeUs >= videoBufInfo.presentationTimeUs) {
+            audioEos = true;
+        } else {
+            audioBufInfo.presentationTimeUs = AMediaExtractor_getSampleTime(extractor);
+            AMediaMuxer_writeSampleData(muxer, audioTrack, audioBuf.data(), &audioBufInfo);
+            AMediaExtractor_advance(extractor);
+        }
     }
 
     AMediaMuxer_stop(muxer);
@@ -151,6 +175,8 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     AMediaCodec_stop(encoder);
     AMediaCodec_delete(encoder);
     AMediaFormat_delete(videoMediaFormat);
+    AMediaFormat_delete(audioFormat);
+    AMediaExtractor_delete(extractor);
 
     return 0;
 }
