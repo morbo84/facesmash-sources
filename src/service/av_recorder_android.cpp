@@ -91,7 +91,7 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
     auto* extractor = AMediaExtractor_new();
-    AMediaExtractor_setDataSource(extractor, "/data/user/0/com.gamee.facesmash/files/audio/music_play.aac"); // TODO
+    AMediaExtractor_setDataSource(extractor, "/data/user/0/com.gamee.facesmash/files/audio/music_video.aac"); // TODO
     AMediaExtractor_selectTrack(extractor, 0U);
     auto* audioFormat = AMediaExtractor_getTrackFormat(extractor, 0U);
     auto audioTrack = (size_t)AMediaMuxer_addTrack(muxer, audioFormat); // TODO: cast
