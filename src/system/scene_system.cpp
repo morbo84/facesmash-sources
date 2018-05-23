@@ -258,8 +258,6 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 
 static delta_type gameTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 1500_ui32;
-    // sligthly shorter transition time to respect the requirements of video recording (if enabled)
-    static constexpr delta_type transition = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -289,7 +287,7 @@ static delta_type gameTutorialTransition(Registry &registry) {
         }
     });
 
-    return transition;
+    return duration;
 }
 
 
@@ -511,9 +509,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         auto &billing = Locator::Billing::ref();
 
         if(isTransitioning) {
+            // tracks remaining before to update it (mainly for video recording purposes)
+            const bool finished = !remaining;
             remaining -= std::min(remaining, delta);
 
-            if(!remaining) {
+            if(finished) {
                 disableCameraFrame(registry);
 
                 switch(next) {
@@ -644,7 +644,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::VIDEO_RECORDING:
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
-                remaining = 500_ui32;
+                remaining = 100_ui32;
                 break;
             case SceneType::THE_GAME:
                 showSmashButtons(registry);

@@ -26,13 +26,12 @@ AvRecorderAndroid::~AvRecorderAndroid() {
     frame_.first = nullptr;
     lck.unlock();
     AvRecorderAndroid::stop();
-    SDL_WaitThread(t_, nullptr);
-    t_ = nullptr;
+    waitRecording();
 }
 
 
 void AvRecorderAndroid::start(int w, int h) {
-    SDL_WaitThread(t_, nullptr);
+    waitRecording();
 
     width = w;
     height = h;
@@ -167,7 +166,14 @@ bool AvRecorderAndroid::supportExport() const {
 
 
 void AvRecorderAndroid::exportMedia() const {
+    waitRecording();
     bindingVideoExport();
+}
+
+
+void AvRecorderAndroid::waitRecording() {
+    SDL_WaitThread(t_, nullptr);
+    t_ = nullptr;
 }
 
 

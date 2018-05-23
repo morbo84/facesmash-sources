@@ -36,6 +36,8 @@ private:
     static int recordVideo(void *);
 
 #ifdef __ANDROID__
+    void waitRecording();
+
     SDL_Thread *t_{nullptr};
     int width{0};
     int height{0};
