@@ -30,7 +30,7 @@ struct AvRecorderAndroid : AvRecorderService {
     bool ready() const noexcept override;
 
     bool supportExport() const override;
-    void exportMedia() const override;
+    void exportMedia() override;
 
 private:
     static int recordVideo(void *);

@@ -22,7 +22,7 @@ bool AvRecorderNull::ready() const noexcept { return false; }
 bool AvRecorderNull::supportExport() const { return false; }
 
 
-void AvRecorderNull::exportMedia() const {}
+void AvRecorderNull::exportMedia() {}
 
 
 }

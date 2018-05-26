@@ -19,7 +19,7 @@ struct AvRecorderService {
     virtual bool ready() const noexcept = 0;
 
     virtual bool supportExport() const = 0;
-    virtual void exportMedia() const = 0;
+    virtual void exportMedia() = 0;
 };
 
 

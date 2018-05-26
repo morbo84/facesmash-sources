@@ -20,6 +20,7 @@ namespace gamee {
 
 
 std::string bindingVideoOutputPath();
+const std::string& bindingAudioInputPath();
 void bindingVideoExport();
 
 
@@ -91,14 +92,13 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
     auto* extractor = AMediaExtractor_new();
-    AMediaExtractor_setDataSource(extractor, "/data/user/0/com.gamee.facesmash/files/audio/music_video.aac"); // TODO
+    AMediaExtractor_setDataSource(extractor, bindingAudioInputPath().c_str());
     AMediaExtractor_selectTrack(extractor, 0U);
     auto* audioFormat = AMediaExtractor_getTrackFormat(extractor, 0U);
     auto audioTrack = (size_t)AMediaMuxer_addTrack(muxer, audioFormat); // TODO: cast
     AMediaExtractor_seekTo(extractor, 0, AMEDIAEXTRACTOR_SEEK_CLOSEST_SYNC);
 
     size_t videoTrack{};
-    AMediaCodecBufferInfo videoBufInfo;
     bool videoEos{false};
     while (true) {
         auto signedInputBufId = AMediaCodec_dequeueInputBuffer(encoder, 100000);
@@ -129,6 +129,7 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
         recorder.frame_.first = nullptr;
         recorder.ready_ = true;
 
+        AMediaCodecBufferInfo videoBufInfo;
         auto signedOutputBufId = AMediaCodec_dequeueOutputBuffer(encoder, &videoBufInfo, 100000);
         if(signedOutputBufId == AMEDIACODEC_INFO_OUTPUT_FORMAT_CHANGED) {
             // here the encoder want to add a new track to the muxer
@@ -159,7 +160,7 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     bool audioEos{};
     while (!audioEos) {
         audioBufInfo.size = AMediaExtractor_readSampleData(extractor, audioBuf.data(), audioBuf.size());
-        if(audioBufInfo.size < 0 || audioBufInfo.presentationTimeUs >= videoBufInfo.presentationTimeUs) {
+        if(audioBufInfo.size < 0) {
             audioEos = true;
         } else {
             audioBufInfo.presentationTimeUs = AMediaExtractor_getSampleTime(extractor);
@@ -191,7 +192,7 @@ bool AvRecorderAndroid::supportExport() const {
 }
 
 
-void AvRecorderAndroid::exportMedia() const {
+void AvRecorderAndroid::exportMedia() {
     waitRecording();
     bindingVideoExport();
 }
