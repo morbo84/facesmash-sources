@@ -15,6 +15,8 @@ namespace gamee {
 // we use this static function as event filter on mobile (see SDL docs)
 int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
     auto &env = *static_cast<GameEnv *>(ptr);
+    auto &haptic = Locator::Haptic::ref();
+    auto &audio = Locator::Audio::ref();
 
     // consume the event and force it to be dropped from the internal queue
     int queue = 0;
@@ -29,11 +31,15 @@ int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
         break;
     case SDL_APP_WILLENTERBACKGROUND:
         env.clock.pause();
+        haptic.pause();
+        audio.pause();
         break;
     case SDL_APP_DIDENTERBACKGROUND:
         // nothing to do here, thanks anyway
         break;
     case SDL_APP_WILLENTERFOREGROUND:
+        audio.resume();
+        haptic.unpause();
         env.clock.unpause();
         break;
     case SDL_APP_DIDENTERFOREGROUND:
