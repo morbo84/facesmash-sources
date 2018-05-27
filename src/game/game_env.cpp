@@ -31,15 +31,11 @@ int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
         break;
     case SDL_APP_WILLENTERBACKGROUND:
         env.clock.pause();
-        haptic.pause();
-        audio.pause();
         break;
     case SDL_APP_DIDENTERBACKGROUND:
         // nothing to do here, thanks anyway
         break;
     case SDL_APP_WILLENTERFOREGROUND:
-        audio.resume();
-        haptic.unpause();
         env.clock.unpause();
         break;
     case SDL_APP_DIDENTERFOREGROUND:

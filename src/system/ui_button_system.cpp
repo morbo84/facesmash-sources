@@ -183,7 +183,7 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_TUTORIAL);
                     break;
                 case UIAction::RESTART:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
                 case UIAction::MENU:
                 case UIAction::CLOSE:

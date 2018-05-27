@@ -257,7 +257,7 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 
 
 static delta_type gameTutorialTransition(Registry &registry) {
-    static constexpr delta_type duration = 1500_ui32;
+    static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -280,6 +280,9 @@ static delta_type gameTutorialTransition(Registry &registry) {
             break;
         case PanelType::TUTORIAL_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::GAME_OVER:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -310,9 +313,6 @@ static delta_type theGameTransition(Registry &registry) {
             break;
         case PanelType::THE_GAME_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::GAME_OVER:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -638,13 +638,15 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
-                camera.start();
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::VIDEO_RECORDING:
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
-                remaining = 100_ui32;
+                // starting the camera freezes the app, this seems to be a good point to risk a lag
+                camera.start();
+                // read carefully the rules of the game!
+                remaining = 2000_ui32;
                 break;
             case SceneType::THE_GAME:
                 showSmashButtons(registry);
