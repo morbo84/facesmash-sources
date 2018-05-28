@@ -71,12 +71,14 @@ void ItemSystem::message(Registry &registry, ItemType type) {
 }
 
 
-ItemSystem::ItemSystem(): dirty{false} {
+ItemSystem::ItemSystem(): dirty{false}, armageddon{false} {
     Locator::Dispatcher::ref().connect<TouchEvent>(this);
+    Locator::Dispatcher::ref().connect<ArmageddonEvent>(this);
 }
 
 
 ItemSystem::~ItemSystem() {
+    Locator::Dispatcher::ref().disconnect<ArmageddonEvent>(this);
     Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
 }
 
@@ -104,33 +106,44 @@ void ItemSystem::receive(const TouchEvent &event) noexcept {
 }
 
 
+void ItemSystem::receive(const ArmageddonEvent &) noexcept {
+    armageddon = true;
+    remaining = {};
+}
+
+
 void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
     auto view = registry.view<Item, Transform, BoundingBox>();
 
     view.each([&, this](auto entity, const auto &item, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
 
-        if(SDL_HasIntersection(&logicalScreen, &area)) {
-            if(dirty && registry.has<Destroyable>(entity) && SDL_PointInRect(&coord, &area)) {
-                curr = item.type;
+        const auto x = area.x + area.w / 2;
+        const auto y = area.y + area.h / 2;
 
-                while(curr == ItemType::RANDOM) {
-                    curr = itemBag.get();
+        if(registry.has<Destroyable>(entity)) {
+            if(SDL_HasIntersection(&logicalScreen, &area)) {
+                if(dirty && SDL_PointInRect(&coord, &area)) {
+                    curr = item.type;
+
+                    while(curr == ItemType::RANDOM) {
+                        curr = itemBag.get();
+                    }
+
+                    remaining = toRemaining(curr);
+
+                    message(registry, curr);
+                    spawner.spawnExplosion(registry, x, y);
+                    registry.destroy(entity);
+
+                    auto &haptic = Locator::Haptic::ref();
+                    haptic.rumble(RumbleEffect::SUPER_HARD);
                 }
-
-                remaining = toRemaining(curr);
-
-                const auto x = area.x + area.w / 2;
-                const auto y = area.y + area.h / 2;
-
-                message(registry, curr);
-                spawner.spawnExplosion(registry, x, y);
+            } else {
                 registry.destroy(entity);
-
-                auto &haptic = Locator::Haptic::ref();
-                haptic.rumble(RumbleEffect::SUPER_HARD);
             }
-        } else {
+        } else if(armageddon) {
+            spawner.spawnExplosion(registry, x, y);
             registry.destroy(entity);
         }
     });
@@ -164,6 +177,7 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
     }
 
     remaining -= std::min(remaining, delta);
+    armageddon = false;
     dirty = false;
 }
 

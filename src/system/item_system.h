@@ -11,6 +11,7 @@ namespace gamee {
 
 
 struct TouchEvent;
+struct ArmageddonEvent;
 struct Spawner;
 
 
@@ -28,12 +29,14 @@ public:
     delta_type toRemaining(ItemType);
 
     void receive(const TouchEvent &) noexcept;
+    void receive(const ArmageddonEvent &) noexcept;
 
     void update(Registry &, Spawner &, delta_type);
 
 private:
     SDL_Point coord;
     bool dirty;
+    bool armageddon;
     ItemType curr;
     delta_type remaining;
     FaceBag faceBag;
