@@ -250,7 +250,7 @@ void submitToLeaderboards(const PlayerScore &score) {
 
 
 AchievementsSystem::AchievementsSystem() noexcept
-    : thankYouSupporter{false}, dirtyGameOver{false}
+    : thankYouSupporter{false}, timeIsOver{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
     Locator::Dispatcher::ref().connect<BillingEvent>(this);
@@ -265,8 +265,12 @@ AchievementsSystem::~AchievementsSystem() noexcept {
 
 void AchievementsSystem::receive(const SceneChangeEvent &event) noexcept {
     current = event.scene;
-    // just entered game over transition
-    dirtyGameOver = (current == SceneType::GAME_OVER);
+}
+
+
+void AchievementsSystem::receive(const TimeIsOverEvent &event) noexcept {
+    // did we entered game over transition correctly after a full match?
+    timeIsOver = !event.forced;
 }
 
 
@@ -305,7 +309,7 @@ void AchievementsSystem::update(Registry &registry) {
             noPainNoGame(score);
         }
 
-        if(dirtyGameOver) {
+        if(timeIsOver) {
             ohMySmash(score);
             iAmSoHappy(score);
             blueIsTheNewSmash(score);
@@ -319,7 +323,7 @@ void AchievementsSystem::update(Registry &registry) {
     }
 
     thankYouSupporter = false;
-    dirtyGameOver = false;
+    timeIsOver = false;
 }
 
 

@@ -157,7 +157,6 @@ static void initTraining(Registry &registry) {
     auto game = registry.create();
     registry.attach<LetsTrain>(game);
     registry.attach<PlayerScore>(game);
-    registry.attach<Timer>(game);
 }
 
 
@@ -326,8 +325,6 @@ static delta_type theGameTransition(Registry &registry) {
 
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
-    // sligthly longer transition time to respect the requirements of video recording (if enabled)
-    static constexpr delta_type transition = 1100_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -353,10 +350,7 @@ static delta_type gameOverTransition(Registry &registry) {
         }
     });
 
-    // this suppresses wrong warnings from GCC, damnit
-    (void)duration;
-
-    return transition;
+    return duration;
 }
 
 
@@ -471,7 +465,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
         case SceneType::TRAINING:
-        case SceneType::GAME_OVER:
+        case SceneType::VIDEO_RECORDING_STOP:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
             break;
         case SceneType::MENU_PAGE:
@@ -481,7 +475,8 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
             dispatcher.enqueue<QuitEvent>();
             break;
         case SceneType::THE_GAME:
-            dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
+            static constexpr auto forced = true;
+            dispatcher.enqueue<TimeIsOverEvent>(forced);
             break;
         default:
             // back is not allowed in all the other scenes
@@ -549,11 +544,16 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING_START);
                     hideBackgroundPanels(registry);
+                    // starting the camera freezes the app, this seems to be a good point to risk a lag
+                    camera.start();
                     break;
-                case SceneType::VIDEO_RECORDING:
+                case SceneType::VIDEO_RECORDING_START:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
+                    break;
+                case SceneType::VIDEO_RECORDING_STOP:
+                    enableUIButtons(registry, PanelType::GAME_OVER);
                     break;
                 case SceneType::THE_GAME:
                     ads.load(AdsType::INTERSTITIAL);
@@ -561,11 +561,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     initGame(registry);
                     break;
                 case SceneType::GAME_OVER:
-                    avRecorder.stop();
-                    clearGame(registry);
-                    ads.isLoaded(AdsType::INTERSTITIAL)
-                            ? (ads.show(AdsType::INTERSTITIAL), enableUIButtons(registry, PanelType::GAME_OVER))
-                            : enableUIButtons(registry, PanelType::GAME_OVER);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING_STOP);
                     break;
                 case SceneType::TRAINING_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
@@ -638,15 +634,21 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::GAME_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
+                dispatcher.enqueue<ArmageddonEvent>();
                 remaining = gameTutorialTransition(registry);
                 break;
-            case SceneType::VIDEO_RECORDING:
+            case SceneType::VIDEO_RECORDING_START:
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
-                // starting the camera freezes the app, this seems to be a good point to risk a lag
-                camera.start();
                 // read carefully the rules of the game!
                 remaining = 2000_ui32;
+                break;
+            case SceneType::VIDEO_RECORDING_STOP:
+                avRecorder.stop();
+                showPopupButtons(registry, PanelType::GAME_OVER);
+                ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
+                // we try to create enough room to finalize the video
+                remaining = 1000_ui32;
                 break;
             case SceneType::THE_GAME:
                 showSmashButtons(registry);
@@ -654,9 +656,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = theGameTransition(registry);
                 break;
             case SceneType::GAME_OVER:
+                dispatcher.enqueue<ArmageddonEvent>();
                 discardExpiringContents(registry);
                 refreshGameOverPanel(registry);
+                clearGame(registry);
                 resetPulseButton(registry);
+                hidePopupButtons(registry, PanelType::GAME_OVER);
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:

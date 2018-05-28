@@ -18,14 +18,17 @@ FaceSmashSystem::FaceSmashSystem()
     : type{FaceType::HAPPY},
       dirty{false},
       smashAll{false},
-      richMan{false}
+      richMan{false},
+      armageddon{false}
 {
     Locator::Dispatcher::ref().connect<FaceEvent>(this);
     Locator::Dispatcher::ref().connect<BonusEvent>(this);
+    Locator::Dispatcher::ref().connect<ArmageddonEvent>(this);
 }
 
 
 FaceSmashSystem::~FaceSmashSystem() {
+    Locator::Dispatcher::ref().disconnect<ArmageddonEvent>(this);
     Locator::Dispatcher::ref().disconnect<BonusEvent>(this);
     Locator::Dispatcher::ref().disconnect<FaceEvent>(this);
 }
@@ -40,6 +43,11 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 void FaceSmashSystem::receive(const BonusEvent &event) noexcept {
     smashAll = (event.type == BonusEvent::Type::SMASH_ALL);
     richMan = (event.type == BonusEvent::Type::I_AM_RICH);
+}
+
+
+void FaceSmashSystem::receive(const ArmageddonEvent &) noexcept {
+    armageddon = true;
 }
 
 
@@ -60,10 +68,10 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
     view.each([&, this](auto entity, auto &face, const auto &transform, const auto &box) {
         const auto area = transformToPosition(registry, entity, transform) * box;
 
-        if(registry.has<Destroyable>(entity)) {
-            const auto x = area.x + area.w / 2;
-            const auto y = area.y + area.h / 2;
+        const auto x = area.x + area.w / 2;
+        const auto y = area.y + area.h / 2;
 
+        if(registry.has<Destroyable>(entity)) {
             if(SDL_HasIntersection(&smashArea, &area)) {
                 if(smashAll || (dirty && face.type == type)) {
                     switch(face.type) {
@@ -111,11 +119,15 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
                 event.miss += face.miss;
                 registry.destroy(entity);
             }
+        } else if(armageddon) {
+            spawner.spawnExplosion(registry, x, y);
+            registry.destroy(entity);
         } else if(!SDL_HasIntersection(&logicalScreen, &area)) {
             registry.destroy(entity);
         }
     });
 
+    armageddon = false;
     smashAll = false;
     richMan = false;
     dirty = false;

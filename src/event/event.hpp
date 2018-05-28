@@ -62,10 +62,17 @@ struct BonusEvent {
 };
 
 
+struct ArmageddonEvent {};
+
+
 struct FrameAvailableEvent {};
 struct ActivateEasterEggEvent {};
-struct TimeIsOverEvent {};
 struct CameraInitEvent {};
+
+
+struct TimeIsOverEvent {
+    bool forced{false};
+};
 
 
 struct AudioEvent {

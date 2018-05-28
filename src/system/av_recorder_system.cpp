@@ -82,7 +82,7 @@ void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::fun
         auto logical = textureCache.handle("target/logical");
         auto recording = textureCache.handle("target/recording");
 
-        accumulator += firstFrame ? 0_ui32 : delta;
+        accumulator = firstFrame ? firstFrameDuration : (accumulator + delta);
 
         if(hasFrame) {
             if(avRecorder.ready()) {

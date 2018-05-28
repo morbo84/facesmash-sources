@@ -193,6 +193,7 @@ bool AvRecorderAndroid::supportExport() const {
 
 
 void AvRecorderAndroid::exportMedia() {
+    stop();
     waitRecording();
     bindingVideoExport();
 }

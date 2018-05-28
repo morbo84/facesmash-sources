@@ -565,14 +565,14 @@ void createGameOverPanel(Registry &registry) {
     auto titleEntity = createSprite(registry, parent, titleHandle, 150);
     setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, (panel.h / 2 - titleHandle->height()) / 2);
 
-    auto menuButton = createUIButton(registry, parent, UIAction::MENU, 150);
+    auto menuButton = createPopupUIButton(registry, parent, UIAction::MENU, 150);
     auto &menuSprite = registry.get<Sprite>(menuButton);
     setSpriteSize(registry, menuButton, 4 * menuSprite.w / 5, 4 * menuSprite.h / 5);
     setPopupUIButtonSize(registry, menuButton, menuSprite.w, menuSprite.h);
     setPos(registry, menuButton, (panel.w / 3 - menuSprite.w) / 2, (3 * panel.h / 2 - menuSprite.h) / 2);
     setBoundingBox(registry, menuButton, menuSprite.w, menuSprite.h);
 
-    auto restartButton = createUIButton(registry, parent, UIAction::RESTART, 150);
+    auto restartButton = createPopupUIButton(registry, parent, UIAction::RESTART, 150);
     const auto &restartSprite = registry.get<Sprite>(restartButton);
     setPos(registry, restartButton, (panel.w - restartSprite.w) / 2, (3 * panel.h / 2 - restartSprite.h) / 2);
     registry.assign<PulseAnimation>(restartButton, 10.f, .5f, .08f, 3000_ui32);
@@ -669,7 +669,7 @@ void refreshGameOverPanel(Registry &registry) {
         printScore(score % 10, -5 * sym0Handle->width() / 2);
     }
 
-    auto shareButton = createUIButton(registry, parent, UIAction::SHARE, 150);
+    auto shareButton = createPopupUIButton(registry, parent, UIAction::SHARE, 150);
     const auto &shareSprite = registry.get<Sprite>(shareButton);
     setSpriteSize(registry, shareButton, 4 * shareSprite.w / 5, 4 * shareSprite.h / 5);
     setPopupUIButtonSize(registry, shareButton, shareSprite.w, shareSprite.h);

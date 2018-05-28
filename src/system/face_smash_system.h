@@ -12,6 +12,7 @@ namespace gamee {
 
 struct FaceEvent;
 struct BonusEvent;
+struct ArmageddonEvent;
 struct Spawner;
 
 
@@ -21,6 +22,7 @@ struct FaceSmashSystem final {
 
     void receive(const FaceEvent &) noexcept;
     void receive(const BonusEvent &) noexcept;
+    void receive(const ArmageddonEvent &) noexcept;
 
     void update(Registry &, Spawner &);
 
@@ -29,6 +31,7 @@ private:
     bool dirty;
     bool smashAll;
     bool richMan;
+    bool armageddon;
 };
 
 
