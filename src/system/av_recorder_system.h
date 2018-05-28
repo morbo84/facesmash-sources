@@ -16,8 +16,6 @@ struct GameRenderer;
 
 
 struct AvRecorderSystem final {
-    static auto constexpr firstFrameDuration = 3000_ui32;
-
     AvRecorderSystem();
     ~AvRecorderSystem();
 

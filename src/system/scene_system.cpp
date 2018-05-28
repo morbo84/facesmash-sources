@@ -325,6 +325,7 @@ static delta_type theGameTransition(Registry &registry) {
 
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
+    static constexpr delta_type transition = 3000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -350,7 +351,10 @@ static delta_type gameOverTransition(Registry &registry) {
         }
     });
 
-    return duration;
+    // used to suppress wrong warnings from g++
+    (void)duration;
+
+    return transition;
 }
 
 
@@ -641,7 +645,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
                 // read carefully the rules of the game!
-                remaining = 2000_ui32;
+                remaining = 3000_ui32;
                 break;
             case SceneType::VIDEO_RECORDING_STOP:
                 avRecorder.stop();
