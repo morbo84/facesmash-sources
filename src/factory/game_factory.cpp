@@ -777,7 +777,7 @@ void createCameraFrame(Registry &registry) {
             height = logicalWidth;
         }
 
-        angle = -90.f;
+        angle = 90.f;
     }
 
     registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
