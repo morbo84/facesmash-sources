@@ -40,7 +40,7 @@ void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
             SDL_Texture *texture = sprite.handle.get();
             SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
             SDL_SetTextureAlphaMod(texture, renderable.alpha);
-            SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
+            SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, renderable.flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         }
     });
 }
@@ -68,7 +68,7 @@ void RenderingSystem::hud(Registry &registry, GameRenderer &renderer) {
         SDL_Texture *texture = hud.handle.get();
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
         SDL_SetTextureAlphaMod(texture, renderable.alpha);
-        SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer, texture, &src, &dst, renderable.angle, nullptr, renderable.flip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     });
 }
 

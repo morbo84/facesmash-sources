@@ -57,6 +57,7 @@ struct Renderable {
     float angle{0.f};
     int z{127};
     int alpha{255};
+    bool flip{false};
 };
 
 

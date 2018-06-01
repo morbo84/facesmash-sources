@@ -782,7 +782,7 @@ void createCameraFrame(Registry &registry) {
 
     registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
     registry.assign<Transform>(frame, frame, (logicalWidth - width) / 2.f, (logicalHeight - height) / 2.f);
-    registry.assign<Renderable>(frame, angle, 90, 0);
+    registry.assign<Renderable>(frame, angle, 90, 0, true);
 }
 
 
