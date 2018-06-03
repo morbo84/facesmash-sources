@@ -104,6 +104,8 @@ enum class UIAction: Uint8 {
 
 enum class PanelType: Uint8 {
     EXIT,
+    TITLE_TOP,
+    TITLE_BOTTOM,
     SPLASH_SCREEN,
     BACKGROUND_TOP,
     BACKGROUND_BOTTOM,

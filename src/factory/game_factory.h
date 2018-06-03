@@ -9,6 +9,8 @@ namespace gamee {
 
 
 void createExitPanel(Registry &);
+void createTitleTopPanel(Registry &);
+void createTitleBottomPanel(Registry &);
 void createSplashScreenPanel(Registry &);
 void createBackgroundTopPanel(Registry &);
 void createBackgroundBottomPanel(Registry &);

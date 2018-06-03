@@ -46,6 +46,30 @@ void createExitPanel(Registry &registry) {
 }
 
 
+void createTitleTopPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::TITLE_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto titleHandle = textureCache.handle("str/face");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height());
+}
+
+
+void createTitleBottomPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::TITLE_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto titleHandle = textureCache.handle("str/smash");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 150);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, panel.h - 2 * titleHandle->height());
+}
+
+
 void createSplashScreenPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 

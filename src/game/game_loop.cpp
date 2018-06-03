@@ -23,6 +23,8 @@ void GameLoop::init(GameRenderer &renderer) {
     prepareGameStuff(renderer);
 
     createExitPanel(registry);
+    createTitleTopPanel(registry);
+    createTitleBottomPanel(registry);
     createSplashScreenPanel(registry);
     createBackgroundTopPanel(registry);
     createBackgroundBottomPanel(registry);
