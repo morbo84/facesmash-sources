@@ -108,6 +108,38 @@ static void hidePopupButtons(Registry &registry, PanelType type) {
 }
 
 
+static void enableFaceButtons(Registry &registry) {
+    registry.view<FaceButton, Renderable>().each([](auto, auto &button, auto &renderable) {
+        button.enabled = true;
+        renderable.angle = 0.f;
+    });
+}
+
+
+static void disableFaceButtons(Registry &registry) {
+    registry.view<FaceButton, Renderable>().each([](auto, auto &button, auto &renderable) {
+        button.enabled = false;
+        renderable.angle = 0.f;
+    });
+}
+
+
+static void showFaceButtons(Registry &registry) {
+    registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
+        registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
+        registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1000_ui32, 0_ui32, &easeOutElastic);
+    });
+}
+
+
+static void hideFaceButtons(Registry &registry) {
+    registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
+        registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutCubic);
+        registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 1000_ui32, 0_ui32, &easeInCubic);
+    });
+}
+
+
 static void resetPulseButton(Registry &registry) {
     auto view = registry.view<UIButton, PulseAnimation>();
 
@@ -402,6 +434,36 @@ static delta_type trainingTutorialTransition(Registry &registry) {
 }
 
 
+static delta_type trainingSelectTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::BACKGROUND_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::BACKGROUND_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::TUTORIAL_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TRAINING_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TRAINING_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
+        }
+    });
+
+    return duration;
+}
+
+
 static delta_type trainingTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
@@ -413,14 +475,11 @@ static delta_type trainingTransition(Registry &registry) {
         case PanelType::BACKGROUND_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
             break;
-        case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
-            break;
         case PanelType::TRAINING_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -480,9 +539,12 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
-        case SceneType::TRAINING:
+        case SceneType::TRAINING_SELECT:
         case SceneType::VIDEO_RECORDING_STOP:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+            break;
+        case SceneType::TRAINING:
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
             break;
         case SceneType::MENU_PAGE:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::EXIT);
@@ -572,8 +634,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::GAME_OVER);
                     break;
                 case SceneType::THE_GAME:
-                    ads.load(AdsType::INTERSTITIAL);
                     enableCameraFrame(registry);
+                    ads.load(AdsType::INTERSTITIAL);
                     initGame(registry);
                     break;
                 case SceneType::GAME_OVER:
@@ -581,11 +643,15 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::TRAINING_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
                     hideBackgroundPanels(registry);
                     break;
-                case SceneType::TRAINING:
+                case SceneType::TRAINING_SELECT:
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
+                    enableFaceButtons(registry);
+                    enableCameraFrame(registry);
+                    break;
+                case SceneType::TRAINING:
                     enableCameraFrame(registry);
                     initTraining(registry);
                     break;
@@ -601,7 +667,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 curr = next;
             }
         } else {
+            disableFaceButtons(registry);
             disableUIButtons(registry);
+            hideFaceButtons(registry);
             hideSmashButtons(registry);
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
@@ -645,7 +713,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::MENU_PAGE:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, false);
-                clearTraining(registry);
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
@@ -685,9 +752,16 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 camera.start();
                 remaining = trainingTutorialTransition(registry);
                 break;
+            case SceneType::TRAINING_SELECT:
+                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showSmashButtons(registry);
+                showFaceButtons(registry);
+                clearTraining(registry);
+                enableCameraFrame(registry);
+                remaining = trainingSelectTransition(registry);
+                break;
             case SceneType::TRAINING:
                 showSmashButtons(registry);
-                enableCameraFrame(registry);
                 remaining = trainingTransition(registry);
                 break;
             default:

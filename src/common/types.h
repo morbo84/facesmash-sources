@@ -52,6 +52,7 @@ enum class SceneType: Uint8 {
     THE_GAME,
     GAME_OVER,
     TRAINING_TUTORIAL,
+    TRAINING_SELECT,
     TRAINING
 };
 

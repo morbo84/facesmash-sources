@@ -16,18 +16,8 @@ class Spawner;
 class TrainingSystem final {
     static constexpr delta_type duration = 10000_ui32;
     static constexpr delta_type interval = 500_ui32;
+    static constexpr delta_type bonus = 2000_ui32;
     static constexpr auto steps = 10;
-
-    enum class TrainingState: Uint8 {
-        START_TRAINING,
-        TRAINING,
-        IDLE
-    };
-
-    void enableFaceButtons(Registry &);
-    void disableFaceButtons(Registry &);
-
-    TrainingState training(Registry &, Spawner &, delta_type);
 
 public:
     TrainingSystem();
@@ -44,7 +34,7 @@ private:
     Uint8 progress;
     delta_type range;
     delta_type remaining;
-    TrainingState state;
+    bool userDidIt;
 };
 
 
