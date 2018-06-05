@@ -1,12 +1,9 @@
-* ripulire assets!!
-* c'è qualche bug negli achievements... indagare!!
-
 * Android flavors per ridurre dimensione apk e farli al dettaglio
 * buttare su un po' di testo (descrizione dell'applicazione e traduzioni nelle varie lingue) e assets (icone, screenshot, un video dimostrativo)
 
 * provare su titolo menu: scritte che cambiano coloro stile giochi retrò o ombreggiature bianche autonome animate per lettera
 * abbassare volume di base, così spacca i timpani
 
-* gioco: 30s, sistemare anche the game system e achievements
-* video velocità doppia + musica ad hoc
+* sistemare musica per video 15s
 * diverse intensità per il volume, non solo on/off
+* sistemare scritte che si sovrappongono

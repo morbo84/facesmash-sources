@@ -62,25 +62,25 @@ void smashMeBaby(const PlayerScore& score) {
 }
 
 
-// my first 1000 points
+// my first 100 points
 void kindergarten(const PlayerScore& score) {
-    if(score.score >= 1000) {
+    if(score.score >= 100) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::KINDERGARTEN);
     }
 }
 
 
-// my first 10000 points
+// my first 5000 points
 void readyToSmash(const PlayerScore& score) {
-    if(score.score >= 10000) {
+    if(score.score >= 5000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::READY_TO_SMASH);
     }
 }
 
 
-// my first 25000 points
+// my first 10000 points
 void smashIsMyJob(const PlayerScore& score) {
-    if(score.score >= 25000) {
+    if(score.score >= 10000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::SMASH_IS_MY_JOB);
     }
 }
@@ -210,9 +210,9 @@ void noPainNoGame(const PlayerScore &score) {
 }
 
 
-// 50 smashes or more in a match
+// 25 smashes or more in a match
 void ohMySmash(const PlayerScore &score) {
-    if(50 <= total(score)) {
+    if(25 <= total(score)) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::OH_MY_SMASH);
     }
 }

@@ -69,6 +69,7 @@ bool AvRecorderAndroid::recording() const noexcept {
 
 int AvRecorderAndroid::recordVideo(void *ptr) {
     auto &recorder = *static_cast<AvRecorderAndroid *>(ptr);
+    std::unique_lock lck{recorder.mtx_};
 
     constexpr auto outputFormat = SDL_PIXELFORMAT_NV12;
     const auto outputBufferSize = static_cast<size_t>(recorder.width * recorder.height) * 12U / 8U;
@@ -100,16 +101,16 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
 
     size_t videoTrack{};
     bool videoEos{false};
+
     while (true) {
         auto signedInputBufId = AMediaCodec_dequeueInputBuffer(encoder, 100000);
+
         if (signedInputBufId >= 0) {
             auto inputBuffer = static_cast<size_t>(signedInputBufId);
             size_t size;
             auto* buf = AMediaCodec_getInputBuffer(encoder, inputBuffer, &size);
 
-            std::unique_lock lck{recorder.mtx_};
             recorder.cv_.wait(lck, [&recorder] { return recorder.stopped_ || !recorder.ready_; });
-            lck.unlock();
 
             if (!recorder.ready_) {
                 SDL_ConvertPixels(recorder.width, recorder.height, internalFormat, recorder.frame_.first,
@@ -123,8 +124,9 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
                                              recorder.frame_.second * 1000,
                                              AMEDIACODEC_BUFFER_FLAG_END_OF_STREAM);
             }
-        } else if (recorder.stopped_ && recorder.frame_.first == nullptr)
+        } else if (recorder.stopped_ && recorder.frame_.first == nullptr) {
             videoEos = true;
+        }
 
         recorder.frame_.first = nullptr;
         recorder.ready_ = true;
@@ -141,8 +143,7 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
             }
             videoTrack = static_cast<size_t>(res);
             AMediaMuxer_start(muxer);
-        }
-        else if(signedOutputBufId >= 0) {
+        } else if(signedOutputBufId >= 0) {
             auto outputBuffer = static_cast<size_t>(signedOutputBufId);
             size_t size;
             const auto* buf = AMediaCodec_getOutputBuffer(encoder, outputBuffer, &size);
@@ -152,6 +153,8 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
             break;
         }
     }
+
+    lck.unlock();
 
     // mux the audio track
     std::array<uint8_t, 256U * 1024U> audioBuf;

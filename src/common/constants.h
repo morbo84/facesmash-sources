@@ -31,7 +31,7 @@ constexpr int numberOfItems = 6;
 constexpr int numberOfFaces = 6;
 
 constexpr delta_type shakeDuration = 250_ui32;
-constexpr delta_type gameDuration = 60999_ui32;
+constexpr delta_type gameDuration = 30999_ui32;
 constexpr delta_type trainingDuration = 10999_ui32;
 
 constexpr SDL_Color colorWhite{233_ui8, 241_ui8, 223_ui8, 255_ui8};

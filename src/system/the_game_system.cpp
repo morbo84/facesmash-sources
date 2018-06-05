@@ -32,15 +32,15 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
         } else {
             const auto &timer = registry.get<Timer>();
 
-            if(timer.remaining > 30000 && !registry.size<Face>()) {
+            if(timer.remaining > 15000 && !registry.size<Face>()) {
                 spawner.spawnFaceBottom(registry, 50_ui16, 10_ui16, faceBag.get());
-            } else if(timer.remaining <= 30000 && registry.size<Face>() < 2) {
+            } else if(timer.remaining <= 15000 && registry.size<Face>() < 2) {
                 spawner.spawnFaceBottom(registry, 100_ui16, 20_ui16, faceBag.get());
             }
 
             const auto &score = registry.get<PlayerScore>();
 
-            if(timer.remaining > 50000 && timer.remaining < 55000) {
+            if(timer.remaining > 25000 && timer.remaining < 27500) {
                 if(registry.size<Face>() < 2
                         && !registry.size<Item>()
                         && score.hitHappy > score.hitAngry
@@ -58,13 +58,13 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining > 40000 && timer.remaining < 45000) {
+            if(timer.remaining > 20000 && timer.remaining < 22500) {
                 if(registry.size<Face>() < 3 && !registry.size<Item>()) {
                     spawner.spawnItemTop(registry, itemBag.get());
                 }
 
                 if(registry.size<Face>() < 2) {
-                    if(!(score.hitFearful % 3) || !(score.hitFearful % 7)) {
+                    if(!(score.hitFearful % 3) || !(score.hitFearful % 5)) {
                         spawner.spawnFaceTop(registry, 50_ui16, 10_ui16, faceBag.get());
                         spawner.spawnFaceBottom(registry, 50_ui16, 10_ui16, faceBag.get());
                     } else if(!(score.hitSurprised % 3)) {
@@ -74,14 +74,14 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining > 30000 && timer.remaining < 32500) {
+            if(timer.remaining > 15000 && timer.remaining < 17500) {
                 if(registry.size<Face>() < 2) {
                     if(score.hitDisgusted > score.hitHappy) {
                         spawner.spawnFaceBottom(registry, 100_ui16, 50_ui16, faceBag.get());
                         spawner.spawnFaceBottom(registry, 100_ui16, 50_ui16, faceBag.get());
                     } else if(score.hitSad > score.hitHappy) {
                         spawner.spawnFaceTop(registry, 100_ui16, 10_ui16, faceBag.get());
-                    } else if(score.hitHappy > 8) {
+                    } else if(score.hitHappy > 4) {
                         spawner.spawnFaceLeft(registry, 250_ui16, 10_ui16, faceBag.get());
                         spawner.spawnFaceRight(registry, 250_ui16, 10_ui16, faceBag.get());
                         spawner.spawnItemBottom(registry, itemBag.get());
@@ -91,14 +91,14 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining > 20000 && timer.remaining < 22500) {
+            if(timer.remaining > 10000 && timer.remaining < 12500) {
                 if(registry.size<Face>() < 3) {
-                    if(score.score > 7000) {
+                    if(score.score > 3500) {
                         spawner.spawnFaceRight(registry, 250_ui16, 100_ui16, faceBag.get());
                         spawner.spawnFaceLeft(registry, 250_ui16, 100_ui16, faceBag.get());
-                    } else if(score.score > 5000) {
+                    } else if(score.score > 2500) {
                         spawner.spawnFaceTop(registry, 200_ui16, 50_ui16, faceBag.get());
-                    } else if(score.score > 3000) {
+                    } else if(score.score > 1500) {
                         spawner.spawnFaceBottom(registry, 50_ui16, 10_ui16, faceBag.get());
                     }
 
@@ -108,7 +108,7 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining > 10000 && timer.remaining < 15000) {
+            if(timer.remaining > 5000 && timer.remaining < 7500) {
                 if((timer.remaining % 1000) < 250 && registry.size<Face>() < 5) {
                     spawner.spawnFaceBottom(registry, 250_ui16, 10_ui16, faceBag.get());
                     spawner.spawnFaceLeft(registry, 250_ui16, 10_ui16, faceBag.get());
@@ -120,7 +120,7 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining < 5000) {
+            if(timer.remaining < 2500) {
                 if(registry.size<Face>() < 6) {
                     spawner.spawnFaceBottom(registry, 250_ui16, 100_ui16, faceBag.get());
                     spawner.spawnFaceBottom(registry, 250_ui16, 100_ui16, faceBag.get());
