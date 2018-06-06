@@ -39,7 +39,12 @@ void ItemSystem::fountain(Registry &registry, Spawner &spawner) {
 
 
 void ItemSystem::message(Registry &registry, SDLTextureHandle handle) {
+    for(auto entity: registry.view<ItemMessage>()) {
+        registry.destroy(entity);
+    }
+
     auto entity = createLastingMessage(registry, handle, 200);
+    registry.assign<ItemMessage>(entity);
     const auto &sprite = registry.get<Sprite>(entity);
     setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
 }

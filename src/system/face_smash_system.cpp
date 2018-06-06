@@ -139,7 +139,12 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
         camera.shake = shake;
 
         if(registry.has<LetsPlay>()) {
+            for(auto entity: registry.view<FaceSmashMessage>()) {
+                registry.destroy(entity);
+            }
+
             auto entity = createLightningMessage(registry, handle, 200);
+            registry.assign<FaceSmashMessage>(entity);
             const auto &sprite = registry.get<Sprite>(entity);
             setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight / 4 - sprite.h) / 2);
         }

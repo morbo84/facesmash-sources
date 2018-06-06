@@ -19,8 +19,8 @@ class Spawner final {
     static constexpr float sideImpulseX = .5f;
     static constexpr float sideImpulseY = .35f;
     static constexpr float scoreDrift = -.1f;
-    static constexpr int zBase = 180;
-    static constexpr int zCount = 10;
+    static constexpr int zBase = 170;
+    static constexpr int zCount = 20;
 
     int zNext();
 
