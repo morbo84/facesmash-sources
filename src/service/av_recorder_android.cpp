@@ -81,8 +81,19 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 2500000);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_FRAME_RATE, frameRate);
     AMediaFormat_setInt32(videoMediaFormat, "capture-rate", frameRate);
-    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_COLOR_FORMAT, 0x7f420888); // COLOR_FormatYUV420Flexible
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_I_FRAME_INTERVAL, 3);
+    /**
+     * NOTE: the 0x15 value (COLOR_FormatYUV420PackedSemiPlanar) is deprecated;
+     * instead, we should use COLOR_FormatYUV420Flexible (0x7f420888), because the Media Codec
+     * documentations states that "All video codecs support flexible YUV 4:2:0 buffers since LOLLIPOP_MR1".
+     * But flexibility comes at a cost:  we cannot impose Android anymore what color format to
+     * accept, so it will be free to pick a format from the YUV420 set.
+     *
+     * For now, we try to force 0x15 (NV12, actually) and see whether someone complains.
+     * In the future, we might try to query the videoMediaFormat for the actual color format used
+     * and use the corresponding SDL pixelformat.
+     */
+    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_COLOR_FORMAT, 0x15);
 
     auto* encoder = AMediaCodec_createEncoderByType("video/avc");
     AMediaCodec_configure(encoder, videoMediaFormat, nullptr, nullptr, AMEDIACODEC_CONFIGURE_FLAG_ENCODE);
