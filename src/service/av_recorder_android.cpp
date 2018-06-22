@@ -7,7 +7,6 @@
 #include <media/NdkMediaCodec.h>
 #include <media/NdkMediaFormat.h>
 #include <media/NdkMediaMuxer.h>
-#include <media/NdkMediaExtractor.h>
 #include <algorithm>
 #include <array>
 #include <string>
@@ -20,8 +19,8 @@ namespace gamee {
 
 
 std::string bindingVideoOutputPath();
-const std::string& bindingAudioInputPath();
 void bindingVideoExport();
+void bindingMuxAudioVideo();
 
 
 AvRecorderAndroid::~AvRecorderAndroid() {
@@ -103,13 +102,6 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     auto fd = open(filePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
     auto* muxer = AMediaMuxer_new(fd, AMEDIAMUXER_OUTPUT_FORMAT_MPEG_4);
 
-    auto* extractor = AMediaExtractor_new();
-    AMediaExtractor_setDataSource(extractor, bindingAudioInputPath().c_str());
-    AMediaExtractor_selectTrack(extractor, 0U);
-    auto* audioFormat = AMediaExtractor_getTrackFormat(extractor, 0U);
-    auto audioTrack = (size_t)AMediaMuxer_addTrack(muxer, audioFormat); // TODO: cast
-    AMediaExtractor_seekTo(extractor, 0, AMEDIAEXTRACTOR_SEEK_CLOSEST_SYNC);
-
     size_t videoTrack{};
     bool videoEos{false};
 
@@ -167,30 +159,14 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
 
     lck.unlock();
 
-    // mux the audio track
-    std::array<uint8_t, 256U * 1024U> audioBuf;
-    AMediaCodecBufferInfo audioBufInfo{};
-    audioBufInfo.flags = AMediaExtractor_getSampleFlags(extractor);
-    bool audioEos{};
-    while (!audioEos) {
-        audioBufInfo.size = AMediaExtractor_readSampleData(extractor, audioBuf.data(), audioBuf.size());
-        if(audioBufInfo.size < 0) {
-            audioEos = true;
-        } else {
-            audioBufInfo.presentationTimeUs = AMediaExtractor_getSampleTime(extractor);
-            AMediaMuxer_writeSampleData(muxer, audioTrack, audioBuf.data(), &audioBufInfo);
-            AMediaExtractor_advance(extractor);
-        }
-    }
-
     AMediaMuxer_stop(muxer);
     AMediaMuxer_delete(muxer);
     close(fd);
     AMediaCodec_stop(encoder);
     AMediaCodec_delete(encoder);
     AMediaFormat_delete(videoMediaFormat);
-    AMediaFormat_delete(audioFormat);
-    AMediaExtractor_delete(extractor);
+
+    bindingMuxAudioVideo();
 
     return 0;
 }
