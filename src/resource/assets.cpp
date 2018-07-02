@@ -76,9 +76,6 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/game/score", "SCORE", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/game/timer", "TIME", renderer, *fontSmall, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/storage/gallery", "CHECK YOUR GALLERY", renderer, *fontSmall, colorGreen);
-    textureCache.load<TTFFontTextureLoader>("str/storage/share", "SHARE WITH YOUR FRIENDS", renderer, *fontTiny, colorGreen);
-
     textureCache.load<TTFFontTextureLoader>("str/training/smash", "SMASH", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/training/good", "GOOD JOB", renderer, *fontLarge, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/training/hurry", "HURRY UP", renderer, *fontLarge, colorRed);
