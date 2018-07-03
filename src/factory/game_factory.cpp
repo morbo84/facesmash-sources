@@ -702,12 +702,7 @@ void refreshGameOverPanel(Registry &registry) {
     registry.assign<ExpiringContent>(shareButton);
 
     if(recorder.supportExport()) {
-        const auto status = permissions.status(PermissionType::STORAGE);
         registry.get<Sprite>(shareButton).frame = 1;
-
-        if(status != PermissionStatus::GRANTED) {
-            registry.get<UIButton>(shareButton).action = UIAction::STORAGE_PERMISSION;
-        }
     } else {
         registry.get<UIButton>(shareButton).enabled = false;
         registry.get<Sprite>(shareButton).frame = 0;

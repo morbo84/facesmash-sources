@@ -93,7 +93,6 @@ enum class UIAction: Uint8 {
     TRAINING,
     RESTART,
     SHARE,
-    STORAGE_PERMISSION,
     SWITCH_AUDIO,
     SWITCH_VIDEO,
     SWITCH_HAPTIC,
@@ -153,15 +152,13 @@ enum class BoxBorderType: Uint8 {
 
 
 enum class PermissionType: Uint8 {
-    CAMERA = 0,
-    STORAGE = 1
+    CAMERA = 0
 };
 
 
 enum class PermissionStatus: Uint8 {
     DENIED = 0,
-    GRANTED = 1,
-    SHOW_RATIONALE = 2
+    GRANTED = 1
 };
 
 

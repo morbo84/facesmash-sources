@@ -21,12 +21,10 @@ AvRecorderSystem::AvRecorderSystem()
       pitch{0}
 {
     Locator::Dispatcher::ref().connect<AvRecorderEvent>(this);
-    Locator::Dispatcher::ref().connect<PermissionEvent>(this);
 }
 
 
 AvRecorderSystem::~AvRecorderSystem() {
-    Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
     Locator::Dispatcher::ref().disconnect<AvRecorderEvent>(this);
 }
 
@@ -63,13 +61,6 @@ void AvRecorderSystem::receive(const AvRecorderEvent &event) noexcept {
     case AvRecorderEvent::Type::EXPORT:
         Locator::AvRecorder::ref().exportMedia();
         break;
-    }
-}
-
-
-void AvRecorderSystem::receive(const PermissionEvent &event) noexcept {
-    if(event.permission == PermissionType::STORAGE && event.result == PermissionStatus::GRANTED) {
-        Locator::Dispatcher::ref().enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
     }
 }
 

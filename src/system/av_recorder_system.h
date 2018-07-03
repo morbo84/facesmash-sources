@@ -11,7 +11,6 @@ namespace gamee {
 
 
 struct AvRecorderEvent;
-struct PermissionEvent;
 struct GameRenderer;
 
 
@@ -22,7 +21,6 @@ struct AvRecorderSystem final {
     void init();
 
     void receive(const AvRecorderEvent &) noexcept;
-    void receive(const PermissionEvent &) noexcept;
 
     void update(GameRenderer &, delta_type, std::function<void(void)>);
 

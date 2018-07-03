@@ -198,9 +198,6 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::SHARE:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
                     break;
-                case UIAction::STORAGE_PERMISSION:
-                    permissions.request(PermissionType::STORAGE);
-                    break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);
                     break;
