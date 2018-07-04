@@ -18,7 +18,7 @@
 namespace gamee {
 
 
-std::string bindingVideoOutputPath();
+const std::string& bindingVideoOutputPath();
 void bindingVideoExport();
 void bindingMuxAudioVideo();
 

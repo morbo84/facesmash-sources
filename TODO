@@ -8,3 +8,5 @@
 * sistemare scritte che si sovrappongono
 
 * disabilitare modalità multi-window per android
+
+* trovare un modo funzionale per abilitare gli ads "reali" solo quando si builda in release (meglio ancora se solo col martello)
