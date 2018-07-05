@@ -37,7 +37,7 @@ void SmashButtonSystem::update(Registry &registry) {
             auto area = transformToPosition(registry, entity, transform) * box;
 
             if(SDL_PointInRect(&coord, &area)) {
-                std::uniform_real_distribution<> dis(probabilityTreshold, 1.f);
+                std::uniform_real_distribution<> dis(probabilityThreshold, 1.f);
                 float probability = dis(generator);
                 Locator::Dispatcher::ref().enqueue<FaceEvent>(button.type, probability);
             }

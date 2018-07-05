@@ -36,8 +36,9 @@ struct FaceEvent {
 };
 
 
-// different meaning, same structure... why not? :-)
-struct FaceRequest: FaceEvent {};
+struct FaceRequest {
+    FaceType type;
+};
 
 
 struct SmashEvent {

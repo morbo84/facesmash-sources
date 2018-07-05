@@ -37,7 +37,6 @@ void GameLoop::init(GameRenderer &renderer) {
     createTutorialBottomPanel(registry);
     createGameTopPanel(registry);
     createGameOverPanel(registry);
-    createTrainingTopPanel(registry);
     createTrainingBottomPanel(registry);
     createCamera(registry);
     createCameraFrame(registry);

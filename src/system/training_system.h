@@ -2,6 +2,7 @@
 #define FACE_SMASH_SYSTEM_TRAINING_SYSTEM_H
 
 
+#include <SDL_types.h>
 #include "../common/types.h"
 
 
@@ -14,10 +15,9 @@ class Spawner;
 
 
 class TrainingSystem final {
-    static constexpr delta_type duration = 10000_ui32;
-    static constexpr delta_type interval = 500_ui32;
-    static constexpr delta_type bonus = 2000_ui32;
-    static constexpr auto steps = 10;
+    static constexpr delta_type interval = 250_ui32;
+    static constexpr Uint8 steps = 32_ui32;
+    static constexpr Uint8 bonus = 8_ui32;
 
 public:
     TrainingSystem();
@@ -29,12 +29,10 @@ public:
     void update(Registry &, Spawner &, delta_type);
 
 private:
-    FaceType current;
-    FaceType match;
-    Uint8 progress;
-    delta_type range;
     delta_type remaining;
-    bool userDidIt;
+    float probability;
+    FaceType current;
+    Uint8 counter;
 };
 
 

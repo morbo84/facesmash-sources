@@ -709,25 +709,6 @@ void refreshGameOverPanel(Registry &registry) {
 }
 
 
-void createTrainingTopPanel(Registry &registry) {
-    auto &textureCache = Locator::TextureCache::ref();
-
-    auto smashHandle = textureCache.handle("str/training/smash");
-
-    auto parent = createPanel(registry, PanelType::TRAINING_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
-    const auto &panel = registry.get<Panel>(parent);
-
-    auto smashEntity = createHUD(registry, parent, smashHandle, 160);
-    setPos(registry, smashEntity, .1f * smashHandle->width(), .4f * smashHandle->height());
-
-    auto progressEntity = createProgressBar(registry, parent, 160);
-    setSpriteSize(registry, progressEntity, panel.w - 5 * smashHandle->width() / 4, smashHandle->height());
-    const auto &progressSprite = registry.get<Sprite>(progressEntity);
-    setPos(registry, progressEntity, panel.w - progressSprite.w - .1f * smashHandle->width(), .4f * smashHandle->height());
-    registry.assign<FaceProgress>(progressEntity);
-}
-
-
 void createTrainingBottomPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::TRAINING_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
