@@ -1,3 +1,4 @@
+#include "../common/constants.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
@@ -9,7 +10,10 @@
 namespace gamee {
 
 
-SmashButtonSystem::SmashButtonSystem(): dirty{false} {
+SmashButtonSystem::SmashButtonSystem()
+    : generator{std::random_device{}()},
+      dirty{false}
+{
     Locator::Dispatcher::ref().connect<TouchEvent>(this);
 }
 
@@ -33,7 +37,9 @@ void SmashButtonSystem::update(Registry &registry) {
             auto area = transformToPosition(registry, entity, transform) * box;
 
             if(SDL_PointInRect(&coord, &area)) {
-                Locator::Dispatcher::ref().enqueue<FaceEvent>(button.type);
+                std::uniform_real_distribution<> dis(probabilityTreshold, 1.f);
+                float probability = dis(generator);
+                Locator::Dispatcher::ref().enqueue<FaceEvent>(button.type, probability);
             }
         });
 

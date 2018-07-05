@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <array>
 #include <string>
 #include <SDL_rect.h>
 #include <SDL_surface.h>
@@ -173,12 +172,11 @@ int EmoDetector::analyzeCurrentFrame(void *ptr) {
                                                      &faceData, VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
 
             if(statuses[0] == TRACK_STAT_OK) {
-                std::array<float, 7> prob;
+                std::array<float, 7> probs;
 
-                if(detector.analyzer_.estimateEmotion(detector.image_, &faceData, prob.data())) {
-                    if(auto emo = estimateEmotion(prob.data())) {
-                        Locator::FaceBus::ref().enqueue({*emo});
-                    }
+                if(detector.analyzer_.estimateEmotion(detector.image_, &faceData, probs.data())) {
+                    auto [face, prob] = estimateEmotion(probs);
+                    Locator::FaceBus::ref().enqueue({ face, prob });
                 }
             }
         }
@@ -190,39 +188,29 @@ int EmoDetector::analyzeCurrentFrame(void *ptr) {
 }
 
 
-std::optional<FaceType> EmoDetector::estimateEmotion(float* prob) {
-    auto found = std::max_element(prob, prob + 7);
-    std::optional<FaceType> ret;
+std::pair<FaceType, float> EmoDetector::estimateEmotion(const std::array<float, length> &prob) {
+    const auto it = std::max_element(prob.cbegin(), prob.cend());
+    const auto diff = std::distance(prob.cbegin(), it);
+    const auto emo = static_cast<Emotion>(diff);
 
-    if(!(found == prob + 7 || *found < minProb)) {
-        auto diff = std::distance(prob, found);
-        auto emo = static_cast<Emotion>(diff);
-
-        switch (emo) {
-        case Emotion::anger:
-            ret = FaceType::ANGRY;
-            break;
-        case Emotion::disgust:
-            ret = FaceType::DISGUSTED;
-            break;
-        case Emotion::fear:
-            ret = FaceType::FEARFUL;
-            break;
-        case Emotion::happiness:
-            ret = FaceType::HAPPY;
-            break;
-        case Emotion::sadness:
-            ret = FaceType::SAD;
-            break;
-        case Emotion::surprise:
-            ret = FaceType::SURPRISED;
-            break;
-        default:
-            break;
-        }
+    switch (emo) {
+    case Emotion::anger:
+        return { FaceType::ANGRY, *it };
+    case Emotion::disgust:
+        return { FaceType::DISGUSTED, *it };
+    case Emotion::fear:
+        return { FaceType::FEARFUL, *it };
+    case Emotion::happiness:
+        return { FaceType::HAPPY, *it };
+    case Emotion::sadness:
+        return { FaceType::SAD, *it };
+    case Emotion::surprise:
+        return { FaceType::SURPRISED, *it };
+    default: // suppress warnings due to neutral face
+        break;
     }
 
-    return ret;
+    return { FaceType::ANGRY, 0.f };
 }
 
 

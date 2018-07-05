@@ -45,7 +45,9 @@ void TrainingSystem::receive(const FaceRequest &event) noexcept {
 
 
 void TrainingSystem::receive(const FaceEvent &event) noexcept {
-    match = event.type;
+    if(event.probability >= probabilityTreshold) {
+        match = event.type;
+    }
 }
 
 

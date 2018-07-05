@@ -2,12 +2,13 @@
 #define FACE_SMASH_EMOTION_EMO_DETECTOR_H
 
 
+#include <array>
 #include <mutex>
 #include <condition_variable>
 #include <atomic>
 #include <thread>
 #include <memory>
-#include <optional>
+#include <utility>
 #include <SDL_timer.h>
 #include "VisageTracker.h"
 #include "VisageFaceAnalyser.h"
@@ -23,9 +24,9 @@ namespace gamee {
 
 
 class EmoDetector {
+    static constexpr auto length = 7;
     static constexpr auto visageChannels = 3;
     static constexpr Uint32 interval = 200u;
-    static constexpr auto minProb = 0.80f;
 
 public:
     EmoDetector();
@@ -38,7 +39,7 @@ private:
     enum class Emotion {anger, disgust, fear, happiness, sadness, surprise, neutral};
 
     static int analyzeCurrentFrame(void *);
-    static std::optional<FaceType> estimateEmotion(float* prob);
+    static std::pair<FaceType, float> estimateEmotion(const std::array<float, length> &);
 
     Uint32 timeout;
     VisageSDK::VisageTracker tracker_;

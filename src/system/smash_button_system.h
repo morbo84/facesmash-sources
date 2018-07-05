@@ -2,6 +2,7 @@
 #define FACE_SMASH_SYSTEM_SMASH_BUTTON_SYSTEM_H
 
 
+#include <random>
 #include <SDL_rect.h>
 #include "../common/types.h"
 
@@ -21,6 +22,7 @@ struct SmashButtonSystem final {
     void update(Registry &);
 
 private:
+    std::mt19937 generator;
     SDL_Point coord;
     bool dirty;
 };

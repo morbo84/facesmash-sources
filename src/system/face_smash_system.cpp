@@ -35,8 +35,10 @@ FaceSmashSystem::~FaceSmashSystem() {
 
 
 void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
-    type = event.type;
-    dirty = true;
+    if(event.probability >= probabilityTreshold) {
+        type = event.type;
+        dirty = true;
+    }
 }
 
 

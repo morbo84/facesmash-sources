@@ -30,6 +30,8 @@ const SDL_Rect trainingArea = { 0, logicalHeight / 6, logicalWidth, 4 * logicalH
 constexpr int numberOfItems = 6;
 constexpr int numberOfFaces = 6;
 
+constexpr auto probabilityTreshold = .8f;
+
 constexpr delta_type shakeDuration = 250_ui32;
 constexpr delta_type gameDuration = 30999_ui32;
 constexpr delta_type trainingDuration = 10999_ui32;

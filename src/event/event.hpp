@@ -32,6 +32,7 @@ struct SceneChangeEvent {
 
 struct FaceEvent {
     FaceType type;
+    float probability;
 };
 
 
