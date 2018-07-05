@@ -4,7 +4,9 @@
 #include "../common/ease.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
+#include "../factory/common.h"
 #include "../factory/game_factory.h"
+#include "../factory/play_factory.h"
 #include "../locator/locator.hpp"
 #include "scene_system.h"
 
@@ -146,6 +148,16 @@ static void resetPulseButton(Registry &registry) {
     for(auto entity: view) {
         registry.get<PulseAnimation>(entity).elapsed = 0_ui32;
     }
+}
+
+
+static void showShareMessage(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    const auto inviteHandle = textureCache.handle("str/share");
+    auto inviteLabel = createLastingMessage(registry, inviteHandle, 200);
+    const auto &inviteSprite = registry.get<Sprite>(inviteLabel);
+    setPos(registry, inviteLabel, (logicalWidth - inviteSprite.w) / 2, 7 * logicalHeight / 8);
 }
 
 
@@ -728,6 +740,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::VIDEO_RECORDING_STOP:
                 avRecorder.stop();
+                showShareMessage(registry);
                 showPopupButtons(registry, PanelType::GAME_OVER);
                 ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
                 // we try to create enough room to finalize the video

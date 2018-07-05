@@ -1,8 +1,6 @@
 #include "../common/ease.h"
 #include "../common/util.h"
 #include "../component/component.hpp"
-#include "../factory/common.h"
-#include "../factory/play_factory.h"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
@@ -146,7 +144,6 @@ void UIButtonSystem::update(Registry &registry) {
             if(registry.has<InputReceiver>(entity) && SDL_PointInRect(&coord, &area)) {
                 auto &dispatcher = Locator::Dispatcher::ref();
                 auto &gservices = Locator::GameServices::ref();
-                auto &permissions = Locator::Permissions::ref();
                 auto &haptic = Locator::Haptic::ref();
                 auto &billing = Locator::Billing::ref();
 

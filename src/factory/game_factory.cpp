@@ -49,7 +49,7 @@ void createExitPanel(Registry &registry) {
 void createTitleTopPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::TITLE_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::TITLE_TOP, 0, -logicalHeight / 2, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/face");
@@ -61,7 +61,7 @@ void createTitleTopPanel(Registry &registry) {
 void createTitleBottomPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    auto parent = createPanel(registry, PanelType::TITLE_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight);
+    auto parent = createPanel(registry, PanelType::TITLE_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight / 4);
     const auto &panel = registry.get<Panel>(parent);
 
     auto titleHandle = textureCache.handle("str/smash");
@@ -606,7 +606,6 @@ void createGameOverPanel(Registry &registry) {
 void refreshGameOverPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
     auto &recorder = Locator::AvRecorder::ref();
-    auto &permissions = Locator::Permissions::ref();
 
     entity_type parent{};
 
