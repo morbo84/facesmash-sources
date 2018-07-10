@@ -709,16 +709,6 @@ void refreshGameOverPanel(Registry &registry) {
 }
 
 
-void createTrainingLeftPanel(Registry &registry) {
-    auto parent = createPanel(registry, PanelType::TRAINING_LEFT, -logicalWidth/8, 0, logicalWidth/8, logicalHeight);
-    const auto &panel = registry.get<Panel>(parent);
-
-    const auto progressBarEntity = createVerticalProgressBar(registry, parent, 160);
-    const auto &progressBarSprite = registry.get<Sprite>(progressBarEntity);
-    setPos(registry, progressBarEntity, (panel.w - progressBarSprite.w) / 2, (panel.h - progressBarSprite.h) / 2);
-}
-
-
 void createTrainingRightPanel(Registry &registry) {
     auto parent = createPanel(registry, PanelType::TRAINING_RIGHT, logicalWidth, 0, logicalWidth/8, logicalHeight);
     const auto &panel = registry.get<Panel>(parent);

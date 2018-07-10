@@ -25,7 +25,6 @@ void createTutorialBottomPanel(Registry &);
 void createGameTopPanel(Registry &);
 void createGameOverPanel(Registry &);
 void refreshGameOverPanel(Registry &);
-void createTrainingLeftPanel(Registry &);
 void createTrainingRightPanel(Registry &);
 void createTrainingTopPanel(Registry &);
 void createTrainingBottomPanel(Registry &);
