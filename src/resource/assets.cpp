@@ -91,10 +91,17 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/smash", "SMASH", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/exit", "Are you sure?", renderer, *fontNormal, colorWhite);
 
+    textureCache.load<TTFFontTextureLoader>("str/training", "Training", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/credits", "Credits", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/support", "Support us", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/settings", "Settings", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/gameover", "Game Over", renderer, *fontLarge, colorRed);
+
+    textureCache.load<TTFFontTextureLoader>("str/feedback/wow", "Let's Play", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/feedback/good", "Good Job", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/feedback/basic", "Not so Bad", renderer, *fontLarge, colorYellow);
+    textureCache.load<TTFFontTextureLoader>("str/feedback/bad", "Try Again", renderer, *fontLarge, colorYellow);
+    textureCache.load<TTFFontTextureLoader>("str/feedback/fail", "Epic Fail", renderer, *fontLarge, colorRed);
 
     textureCache.load<TTFFontTextureLoader>("str/support/making", "Making Games", renderer, *fontNormal, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/support/time", "In the free time", renderer, *fontSmall, colorWhite);

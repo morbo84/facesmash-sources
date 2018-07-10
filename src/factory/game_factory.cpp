@@ -481,7 +481,7 @@ void createTutorialTopPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](FaceType type, int idx) {
-        auto entity = createFaceBlueprint(registry, type, 160);
+        auto entity = createFaceBlueprint(registry, type, 150);
         const auto &sprite = registry.get<Sprite>(entity);
 
         const auto width = 3 * sprite.w / 5;
@@ -514,7 +514,7 @@ void createTutorialBottomPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
 
     auto addButton = [&](ItemType type, int idx) {
-        auto entity = createItemBlueprint(registry, type, 160);
+        auto entity = createItemBlueprint(registry, type, 150);
         const auto &sprite = registry.get<Sprite>(entity);
 
         const auto width = 3 * sprite.w / 5;
@@ -706,6 +706,38 @@ void refreshGameOverPanel(Registry &registry) {
         registry.get<UIButton>(shareButton).enabled = false;
         registry.get<Sprite>(shareButton).frame = 0;
     }
+}
+
+
+void createTrainingLeftPanel(Registry &registry) {
+    auto parent = createPanel(registry, PanelType::TRAINING_LEFT, -logicalWidth/8, 0, logicalWidth/8, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    const auto progressBarEntity = createVerticalProgressBar(registry, parent, 160);
+    const auto &progressBarSprite = registry.get<Sprite>(progressBarEntity);
+    setPos(registry, progressBarEntity, (panel.w - progressBarSprite.w) / 2, (panel.h - progressBarSprite.h) / 2);
+}
+
+
+void createTrainingRightPanel(Registry &registry) {
+    auto parent = createPanel(registry, PanelType::TRAINING_RIGHT, logicalWidth, 0, logicalWidth/8, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    const auto progressBarEntity = createVerticalProgressBar(registry, parent, 160);
+    const auto &progressBarSprite = registry.get<Sprite>(progressBarEntity);
+    setPos(registry, progressBarEntity, (panel.w - progressBarSprite.w) / 2, (panel.h - progressBarSprite.h) / 2);
+}
+
+
+void createTrainingTopPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::TRAINING_TOP, 0, -logicalHeight / 4, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto titleHandle = textureCache.handle("str/training");
+    auto titleEntity = createSprite(registry, parent, titleHandle, 160);
+    setPos(registry, titleEntity, (panel.w - titleHandle->width()) / 2, titleHandle->height() / 2);
 }
 
 

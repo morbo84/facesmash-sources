@@ -14,10 +14,13 @@ namespace gamee {
 
 
 TrainingSystem::TrainingSystem()
-    : remaining{},
+    : watchdog{},
+      remaining{},
       probability{},
+      total{},
+      counter{},
       current{FaceType::HAPPY},
-      counter{}
+      steps{}
 {
     Locator::Dispatcher::ref().connect<FaceRequest>(this);
     Locator::Dispatcher::ref().connect<FaceEvent>(this);
@@ -31,27 +34,42 @@ TrainingSystem::~TrainingSystem() {
 
 
 void TrainingSystem::receive(const FaceRequest &event) noexcept {
+    watchdog = expectation;
     remaining = interval;
     current = event.type;
     probability = 0.f;
-    counter = steps;
+    total = 0.f;
+    counter = 0_ui16;
+    steps = length;
     // starts a training session
     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING);
 }
 
 
 void TrainingSystem::receive(const FaceEvent &event) noexcept {
-    probability = (event.type == current) ? event.probability : 0.f;
+    const auto match = event.type == current;
+    probability = match ? event.probability : std::max(0.f, probability - .1f);
+    total += match ? event.probability : 0.f;
+    ++counter;
+    watchdog = expectation;
 }
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
+
     if(registry.has<LetsTrain>()) {
-        if(counter) {
+        watchdog -= std::min(watchdog, delta);
+
+        if(!watchdog) {
+            probability = std::max(0.f, probability - .1f);
+            watchdog = expectation;
+        }
+
+        if(steps) {
             // training phase
 
             remaining -= std::min(remaining, delta);
-            const auto amount = ((steps - counter) * interval) / 1000_ui32;
+            const auto amount = ((length - steps) * interval) / 1000_ui32;
             const auto size = registry.size<Face>();
 
             // ensure there is at least a face on screen
@@ -60,11 +78,39 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
             }
 
             if(!remaining) {
-                // TODO plot report line
+                --steps;
 
-                --counter;
-                // bonus time to allow user to smash everything
-                remaining = counter ? interval : (bonus * interval);
+                if(steps) {
+                    remaining = interval;
+                } else {
+                    // bonus time to allow user to smash everything
+                    remaining = bonus * interval;
+
+                    // feedback message
+                    const auto result = counter ? (total / counter) : 0.f;
+
+                    auto feedbackMsg = [&registry, this](const auto handle) {
+                        auto entity = createLastingMessage(registry, handle , 200);
+                        const auto &sprite = registry.get<Sprite>(entity);
+                        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+                    };
+
+                    if(result < .2f) {
+                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/fail"));
+                    } else if(result < .4f) {
+                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/bad"));
+                    } else if(result < .6f) {
+                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/basic"));
+                    } else if(result < .8f) {
+                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/good"));
+                    } else {
+                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/wow"));
+                        // spawns extra faces to celebrate the great result
+                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
+                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
+                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
+                    }
+                }
 
                 // spawn extra faces whether required
                 if(size < amount) {
@@ -76,6 +122,10 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
         } else {
             Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
         }
+
+        registry.view<VerticalProgressBar, Sprite>().each([this](auto entity, auto &, auto &sprite) {
+            sprite.frame = (sprite.frames - 1) * probability;
+        });
     }
 }
 

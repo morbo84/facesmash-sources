@@ -15,6 +15,7 @@ entity_type createHUD(Registry &, entity_type, SDLTextureHandle, int);
 entity_type createHUD(Registry &, SDLTextureHandle, int);
 entity_type createBoxBorder(Registry &, entity_type, BoxBorderType, int, int);
 entity_type createBoxBorder(Registry &, entity_type, BoxBorderType, int, int);
+entity_type createVerticalProgressBar(Registry &, entity_type, int);
 
 
 }

@@ -251,8 +251,10 @@ static delta_type menuPageTransition(Registry &registry) {
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_TOP:
-        case PanelType::TRAINING_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TRAINING_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
@@ -395,6 +397,8 @@ static delta_type gameOverTransition(Registry &registry) {
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
         case PanelType::TRAINING_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
@@ -460,8 +464,14 @@ static delta_type trainingSelectTransition(Registry &registry) {
         case PanelType::TUTORIAL_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
+        case PanelType::TRAINING_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 2, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TRAINING_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 2, 0_ui32, &easeInCubic);
+            break;
         case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
@@ -487,8 +497,14 @@ static delta_type trainingTransition(Registry &registry) {
         case PanelType::BACKGROUND_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
             break;
+        case PanelType::TRAINING_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::TRAINING_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
         case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);

@@ -234,6 +234,7 @@ struct CameraFrame {
 
 struct FaceSmashMessage {};
 struct ItemMessage {};
+struct VerticalProgressBar {};
 
 
 }
