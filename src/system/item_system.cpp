@@ -77,14 +77,14 @@ void ItemSystem::message(Registry &registry, ItemType type) {
 
 
 ItemSystem::ItemSystem(): dirty{false}, armageddon{false} {
-    Locator::Dispatcher::ref().connect<TouchEvent>(this);
-    Locator::Dispatcher::ref().connect<ArmageddonEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect(this);
 }
 
 
 ItemSystem::~ItemSystem() {
-    Locator::Dispatcher::ref().disconnect<ArmageddonEvent>(this);
-    Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().disconnect(this);
 }
 
 

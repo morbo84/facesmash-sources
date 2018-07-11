@@ -22,14 +22,14 @@ TrainingSystem::TrainingSystem()
       current{FaceType::HAPPY},
       steps{}
 {
-    Locator::Dispatcher::ref().connect<FaceRequest>(this);
-    Locator::Dispatcher::ref().connect<FaceEvent>(this);
+    Locator::Dispatcher::ref().sink<FaceRequest>().connect(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
 }
 
 
 TrainingSystem::~TrainingSystem() {
-    Locator::Dispatcher::ref().disconnect<FaceRequest>(this);
-    Locator::Dispatcher::ref().disconnect<FaceEvent>(this);
+    Locator::Dispatcher::ref().sink<FaceRequest>().disconnect(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().disconnect(this);
 }
 
 

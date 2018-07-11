@@ -252,14 +252,14 @@ void submitToLeaderboards(const PlayerScore &score) {
 AchievementsSystem::AchievementsSystem() noexcept
     : thankYouSupporter{false}, timeIsOver{false}
 {
-    Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
-    Locator::Dispatcher::ref().connect<BillingEvent>(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<BillingEvent>().connect(this);
 }
 
 
 AchievementsSystem::~AchievementsSystem() noexcept {
-    Locator::Dispatcher::ref().disconnect<BillingEvent>(this);
-    Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
+    Locator::Dispatcher::ref().sink<BillingEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().disconnect(this);
 }
 
 

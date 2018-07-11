@@ -17,14 +17,14 @@ FrameSystem::FrameSystem() noexcept
     : refresh{false},
       dirty{false}
 {
-    Locator::Dispatcher::ref().connect<FrameAvailableEvent>(this);
-    Locator::Dispatcher::ref().connect<PermissionEvent>(this);
+    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().connect(this);
 }
 
 
 FrameSystem::~FrameSystem() noexcept {
-    Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
-    Locator::Dispatcher::ref().disconnect<FrameAvailableEvent>(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().disconnect(this);
 }
 
 

@@ -12,12 +12,12 @@ namespace gamee {
 BillingSystem::BillingSystem()
     : isFaceSmashSupporter{false}
 {
-    Locator::Dispatcher::ref().connect<BillingEvent>(this);
+    Locator::Dispatcher::ref().sink<BillingEvent>().connect(this);
 }
 
 
 BillingSystem::~BillingSystem() {
-    Locator::Dispatcher::ref().disconnect<BillingEvent>(this);
+    Locator::Dispatcher::ref().sink<BillingEvent>().disconnect(this);
 }
 
 
@@ -32,7 +32,7 @@ void BillingSystem::receive(const BillingEvent &event) noexcept {
 void BillingSystem::update(Registry &registry) {
     // we only add it and never remove the face smash supporter tag (yay!)
     if(isFaceSmashSupporter && !registry.has<FaceSmashSupporter>()) {
-        registry.attach<FaceSmashSupporter>(registry.create());
+        registry.assign<FaceSmashSupporter>(entt::tag_t{}, registry.create());
         // stop and disable services that are no longer required
         Locator::Billing::set<BillingNull>();
         Locator::Ads::set<AdsNull>();

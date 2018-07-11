@@ -20,12 +20,12 @@ AvRecorderSystem::AvRecorderSystem()
       hasFrame{false},
       pitch{0}
 {
-    Locator::Dispatcher::ref().connect<AvRecorderEvent>(this);
+    Locator::Dispatcher::ref().sink<AvRecorderEvent>().connect(this);
 }
 
 
 AvRecorderSystem::~AvRecorderSystem() {
-    Locator::Dispatcher::ref().disconnect<AvRecorderEvent>(this);
+    Locator::Dispatcher::ref().sink<AvRecorderEvent>().disconnect(this);
 }
 
 

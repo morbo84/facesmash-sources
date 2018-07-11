@@ -31,7 +31,7 @@ using AudioMusicCache = entt::ResourceCache<AudioMusicResource>;
 using AudioChunkCache = entt::ResourceCache<AudioChunkResource>;
 using TextureCache = entt::ResourceCache<SDLTextureResource>;
 using TTFFontCache = entt::ResourceCache<TTFFontResource>;
-using Dispatcher = entt::UnmanagedDispatcher;
+using Dispatcher = entt::Dispatcher;
 using Registry = entt::DefaultRegistry;
 
 
