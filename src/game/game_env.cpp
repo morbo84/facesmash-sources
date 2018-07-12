@@ -81,15 +81,15 @@ GameEnv::GameEnv() noexcept
         // set event filter on SDL events
         SDL_SetEventFilter(&appEventFilter, this);
         // bind services to the surrounding environment
-        Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
-        Locator::Dispatcher::ref().connect<QuitEvent>(this);
+        Locator::Dispatcher::ref().sink<KeyboardEvent>().connect(this);
+        Locator::Dispatcher::ref().sink<QuitEvent>().connect(this);
     }
 }
 
 
 GameEnv::~GameEnv() noexcept {
-    Locator::Dispatcher::ref().disconnect<QuitEvent>(this);
-    Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
+    Locator::Dispatcher::ref().sink<QuitEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<KeyboardEvent>().disconnect(this);
     SDL_SetEventFilter(nullptr, nullptr);
     if(TTF_WasInit()) { TTF_Quit(); }
     if(Audio_WasInit) { Mix_CloseAudio(); }

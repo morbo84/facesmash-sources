@@ -37,14 +37,14 @@ AudioSystem::AudioSystem()
     : curr{AudioMusicType::AUDIO_MUSIC_UNKNOWN},
       next{AudioMusicType::AUDIO_MUSIC_UNKNOWN}
 {
-    Locator::Dispatcher::ref().connect<AudioEvent>(this);
-    Locator::Dispatcher::ref().connect<AudioMusicEvent>(this);
+    Locator::Dispatcher::ref().sink<AudioEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<AudioMusicEvent>().connect(this);
 }
 
 
 AudioSystem::~AudioSystem() {
-    Locator::Dispatcher::ref().disconnect<AudioMusicEvent>(this);
-    Locator::Dispatcher::ref().disconnect<AudioEvent>(this);
+    Locator::Dispatcher::ref().sink<AudioMusicEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<AudioEvent>().disconnect(this);
 }
 
 

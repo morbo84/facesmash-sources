@@ -14,12 +14,12 @@ SmashButtonSystem::SmashButtonSystem()
     : generator{std::random_device{}()},
       dirty{false}
 {
-    Locator::Dispatcher::ref().connect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().connect(this);
 }
 
 
 SmashButtonSystem::~SmashButtonSystem() {
-    Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().disconnect(this);
 }
 
 

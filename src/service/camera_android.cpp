@@ -70,7 +70,7 @@ int CameraAndroid::height() const noexcept {
 
 CameraAndroid::CameraAndroid() {
     if(Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED)
-        Locator::Dispatcher::ref().connect<PermissionEvent>(this);
+        Locator::Dispatcher::ref().sink<PermissionEvent>().connect(this);
     else
         init();
 }
@@ -91,7 +91,7 @@ void CameraAndroid::setPixels(const void *buf) noexcept {
 
 void CameraAndroid::receive(const PermissionEvent& e) noexcept {
     if(e.permission == PermissionType::CAMERA && e.result == PermissionStatus::GRANTED) {
-        Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
+        Locator::Dispatcher::ref().sink<PermissionEvent>().disconnect(this);
         init();
     }
 }

@@ -11,12 +11,12 @@ namespace gamee {
 TheGameSystem::TheGameSystem()
     : timeIsOver{false}
 {
-    Locator::Dispatcher::ref().connect<TimeIsOverEvent>(this);
+    Locator::Dispatcher::ref().sink<TimeIsOverEvent>().connect(this);
 }
 
 
 TheGameSystem::~TheGameSystem() {
-    Locator::Dispatcher::ref().disconnect<TimeIsOverEvent>(this);
+    Locator::Dispatcher::ref().sink<TimeIsOverEvent>().disconnect(this);
 }
 
 

@@ -21,16 +21,16 @@ FaceSmashSystem::FaceSmashSystem()
       richMan{false},
       armageddon{false}
 {
-    Locator::Dispatcher::ref().connect<FaceEvent>(this);
-    Locator::Dispatcher::ref().connect<BonusEvent>(this);
-    Locator::Dispatcher::ref().connect<ArmageddonEvent>(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<BonusEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect(this);
 }
 
 
 FaceSmashSystem::~FaceSmashSystem() {
-    Locator::Dispatcher::ref().disconnect<ArmageddonEvent>(this);
-    Locator::Dispatcher::ref().disconnect<BonusEvent>(this);
-    Locator::Dispatcher::ref().disconnect<FaceEvent>(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<BonusEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().disconnect(this);
 }
 
 

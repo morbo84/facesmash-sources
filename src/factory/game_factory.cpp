@@ -764,7 +764,7 @@ void createTrainingBottomPanel(Registry &registry) {
 void createCamera(Registry &registry) {
     auto camera = registry.create();
     registry.assign<Transform>(camera, camera, 0.f, 0.f);
-    registry.attach<Camera>(camera);
+    registry.assign<Camera>(entt::tag_t{}, camera);
 }
 
 
@@ -773,7 +773,7 @@ void createCameraFrame(Registry &registry) {
     auto &cameraService = Locator::Camera::ref();
 
     auto frame = registry.create();
-    registry.attach<CameraFrame>(frame);
+    registry.assign<CameraFrame>(entt::tag_t{}, frame);
 
     int width = 0;
     int height = 0;
@@ -839,7 +839,7 @@ void createDebugHUD(Registry &registry) {
     auto symDotHandle = textureCache.handle("str/debug/.");
     auto sym0Handle = toStrDebug(0);
 
-    auto &debug = registry.attach<DebugInfo>(registry.create());
+    auto &debug = registry.assign<DebugInfo>(entt::tag_t{}, registry.create());
 
     offset = sym0Handle->width();
 

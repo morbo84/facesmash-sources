@@ -191,16 +191,16 @@ static void clearTraining(Registry &registry) {
 
 static void initGame(Registry &registry) {
     auto game = registry.create();
-    registry.attach<LetsPlay>(game);
-    registry.attach<PlayerScore>(game);
-    registry.attach<Timer>(game, gameDuration);
+    registry.assign<LetsPlay>(entt::tag_t{}, game);
+    registry.assign<PlayerScore>(entt::tag_t{}, game);
+    registry.assign<Timer>(entt::tag_t{}, game, gameDuration);
 }
 
 
 static void initTraining(Registry &registry) {
     auto game = registry.create();
-    registry.attach<LetsTrain>(game);
-    registry.attach<PlayerScore>(game);
+    registry.assign<LetsTrain>(entt::tag_t{}, game);
+    registry.assign<PlayerScore>(entt::tag_t{}, game);
 }
 
 
@@ -526,16 +526,16 @@ SceneSystem::SceneSystem()
       remaining{0_ui32},
       isTransitioning{false}
 {
-    Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
-    Locator::Dispatcher::ref().connect<KeyboardEvent>(this);
-    Locator::Dispatcher::ref().connect<PermissionEvent>(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<KeyboardEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().connect(this);
 }
 
 
 SceneSystem::~SceneSystem() {
-    Locator::Dispatcher::ref().disconnect<PermissionEvent>(this);
-    Locator::Dispatcher::ref().disconnect<KeyboardEvent>(this);
-    Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<KeyboardEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().disconnect(this);
 }
 
 

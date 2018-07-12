@@ -13,12 +13,12 @@ namespace gamee {
 ScoreSystem::ScoreSystem() noexcept
     : current{0}, dirty{false}
 {
-    Locator::Dispatcher::ref().connect<SmashEvent>(this);
+    Locator::Dispatcher::ref().sink<SmashEvent>().connect(this);
 }
 
 
 ScoreSystem::~ScoreSystem() noexcept {
-    Locator::Dispatcher::ref().disconnect<SmashEvent>(this);
+    Locator::Dispatcher::ref().sink<SmashEvent>().disconnect(this);
 }
 
 

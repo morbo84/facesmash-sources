@@ -77,12 +77,12 @@ static void switchHaptic(Registry &registry, entity_type button) {
 
 
 UIButtonSystem::UIButtonSystem(): dirty{false}, pending{nullptr} {
-    Locator::Dispatcher::ref().connect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().connect(this);
 }
 
 
 UIButtonSystem::~UIButtonSystem() {
-    Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().disconnect(this);
 }
 
 

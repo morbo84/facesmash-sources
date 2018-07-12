@@ -10,12 +10,12 @@ namespace gamee {
 
 
 FaceButtonSystem::FaceButtonSystem(): dirty{false} {
-    Locator::Dispatcher::ref().connect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().connect(this);
 }
 
 
 FaceButtonSystem::~FaceButtonSystem() {
-    Locator::Dispatcher::ref().disconnect<TouchEvent>(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().disconnect(this);
 }
 
 

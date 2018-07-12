@@ -9,12 +9,12 @@ namespace gamee {
 
 
 EasterEggSystem::EasterEggSystem(): dirty{false} {
-    Locator::Dispatcher::ref().connect<ActivateEasterEggEvent>(this);
+    Locator::Dispatcher::ref().sink<ActivateEasterEggEvent>().connect(this);
 }
 
 
 EasterEggSystem::~EasterEggSystem() {
-    Locator::Dispatcher::ref().disconnect<ActivateEasterEggEvent>(this);
+    Locator::Dispatcher::ref().sink<ActivateEasterEggEvent>().disconnect(this);
 }
 
 
