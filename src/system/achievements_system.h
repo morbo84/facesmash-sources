@@ -9,6 +9,7 @@
 namespace gamee {
 
 
+struct AchievementEvent;
 struct SceneChangeEvent;
 struct TimeIsOverEvent;
 struct BillingEvent;
@@ -18,6 +19,7 @@ struct AchievementsSystem final {
     AchievementsSystem() noexcept;
     ~AchievementsSystem() noexcept;
 
+    void receive(const AchievementEvent &) noexcept;
     void receive(const SceneChangeEvent &) noexcept;
     void receive(const TimeIsOverEvent &) noexcept;
     void receive(const BillingEvent &) noexcept;
@@ -26,6 +28,7 @@ struct AchievementsSystem final {
 
 private:
     bool thankYouSupporter;
+    bool moreGamesUnlocked;
     bool timeIsOver;
     SceneType current;
     PlayerScore previous{};

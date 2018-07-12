@@ -167,7 +167,7 @@ void createMenuTopPanel(Registry &registry) {
     setBoundingBox(registry, supportButton, supportSprite.w, supportSprite.h);
     supportSprite.frame = 2;
 
-    auto playButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 150);
+    auto playButton = createPopupUIButton(registry, parent, UIAction::PLAY, 150);
     const auto &playSprite = registry.get<Sprite>(playButton);
     setPos(registry, playButton, (panel.w - playSprite.w) / 2, 2 * panel.h / 5 - playSprite.h / 2);
     registry.assign<PulseAnimation>(playButton, 10.f, .4f, .1f, 3000_ui32);
@@ -229,6 +229,96 @@ void createMenuBottomPanel(Registry &registry) {
 }
 
 
+void createPlayPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::PLAY_GAME, logicalWidth, 0, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto borderTop = createBoxBorder(registry, parent, BoxBorderType::BOX_6_TOP, 29 * panel.w / 30, 21);
+    auto borderBottom = createBoxBorder(registry, parent, BoxBorderType::BOX_6_BOTTOM, 29 * panel.w / 30, 22);
+    auto borderLeft = createBoxBorder(registry, parent, BoxBorderType::BOX_6_LEFT, 29 * panel.h / 30, 23);
+    auto borderRight = createBoxBorder(registry, parent, BoxBorderType::BOX_6_RIGHT, 29 * panel.h / 30, 24);
+
+    setPos(registry, borderTop, panel.w / 60, panel.h / 60);
+    setPos(registry, borderBottom, panel.w / 60, 59 * panel.h / 60 - 5);
+    setPos(registry, borderLeft, panel.w / 60, panel.h / 60);
+    setPos(registry, borderRight, 59 * panel.w / 60 - 5, panel.h / 60);
+
+    auto theGameButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 20);
+    auto &theGameSprite = registry.get<Sprite>(theGameButton);
+    setSpriteSize(registry, theGameButton, 2 * theGameSprite.w / 3, 2 * theGameSprite.h / 3);
+    setPopupUIButtonSize(registry, theGameButton, theGameSprite.w, theGameSprite.h);
+    setPos(registry, theGameButton, (panel.w - theGameSprite.w) / 2, panel.h / 2 - 2 * theGameSprite.h / 3);
+    setBoundingBox(registry, theGameButton, theGameSprite.w, theGameSprite.h);
+    registry.assign<PulseAnimation>(theGameButton, 0.f, .5f, .1f, 5000_ui32);
+
+    auto theGameStrHandle = textureCache.handle("str/game/the_game");
+    auto theGameStrEntity = createSprite(registry, parent, theGameStrHandle, 20);
+    setPos(registry, theGameStrEntity, panel.w / 2 - theGameStrHandle->width() / 2, panel.h / 2 + (theGameSprite.h + theGameStrHandle->height()) / 3);
+
+    auto endlessStrHandle = textureCache.handle("str/game/endless");
+    auto endlessStrEntity = createSprite(registry, parent, endlessStrHandle, 20);
+    setPos(registry, endlessStrEntity, panel.w / 5 - endlessStrHandle->width() / 2, panel.h / 2 + (theGameSprite.h + endlessStrHandle->height()) / 3);
+
+    auto tetrisStrHandle = textureCache.handle("str/game/tetris");
+    auto tetrisStrEntity = createSprite(registry, parent, tetrisStrHandle, 20);
+    setPos(registry, tetrisStrEntity, 4 * panel.w / 5 - tetrisStrHandle->width() / 2, panel.h / 2 + (theGameSprite.h + tetrisStrHandle->height()) / 3);
+}
+
+
+void refreshPlayPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    entity_type parent{};
+
+    for(auto entity: registry.view<Panel>()) {
+        if(registry.get<Panel>(entity).type == PanelType::PLAY_GAME) {
+            parent = entity;
+            break;
+        }
+    }
+
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto addOtherGamesButtons = [&](auto endlessAction, auto tetrisAction) {
+        auto endlessButton = createPopupUIButton(registry, parent, endlessAction, 20);
+        auto &endlessSprite = registry.get<Sprite>(endlessButton);
+        setSpriteSize(registry, endlessButton, 2 * endlessSprite.w / 3, 2 * endlessSprite.h / 3);
+        setPopupUIButtonSize(registry, endlessButton, endlessSprite.w, endlessSprite.h);
+        setPos(registry, endlessButton, panel.w / 5 - endlessSprite.w / 2, panel.h / 2 - 2 * endlessSprite.h / 3);
+        setBoundingBox(registry, endlessButton, endlessSprite.w, endlessSprite.h);
+        registry.assign<ExpiringContent>(endlessButton);
+
+        auto tetrisButton = createPopupUIButton(registry, parent, tetrisAction, 20);
+        auto &tetrisSprite = registry.get<Sprite>(tetrisButton);
+        setSpriteSize(registry, tetrisButton, 2 * tetrisSprite.w / 3, 2 * tetrisSprite.h / 3);
+        setPopupUIButtonSize(registry, tetrisButton, tetrisSprite.w, tetrisSprite.h);
+        setPos(registry, tetrisButton, 4 * panel.w / 5 - tetrisSprite.w / 2, panel.h / 2 - 2 * tetrisSprite.h / 3);
+        setBoundingBox(registry, tetrisButton, tetrisSprite.w, tetrisSprite.h);
+        registry.assign<ExpiringContent>(tetrisButton);
+    };
+
+    if(registry.has<FaceSmashSupporter>() || registry.has<MoreGamesUnlocked>()) {
+        // if unlocked, give access to all the other games ...
+        addOtherGamesButtons(UIAction::ENDLESS, UIAction::TETRIS);
+    } else {
+        // ... otherwise the other games around are locked
+        addOtherGamesButtons(UIAction::LOCKED, UIAction::LOCKED);
+
+        auto unlock1StrHandle = textureCache.handle("str/howto/unlock/1");
+        auto unlock1StrEntity = createSprite(registry, parent, unlock1StrHandle, 20);
+        setPos(registry, unlock1StrEntity, (panel.w - unlock1StrHandle->width()) / 2, unlock1StrHandle->height() / 2);
+        registry.assign<ExpiringContent>(unlock1StrEntity);
+
+        auto unlock2StrHandle = textureCache.handle("str/howto/unlock/2");
+        auto unlock2StrEntity = createSprite(registry, parent, unlock2StrHandle, 20);
+        setPos(registry, unlock2StrEntity, (panel.w - unlock2StrHandle->width()) / 2, panel.h - 3 * unlock2StrHandle->height() / 2);
+        registry.assign<ExpiringContent>(unlock2StrEntity);
+    }
+}
+
+
 void createCreditsPanel(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
@@ -264,7 +354,7 @@ void createCreditsPanel(Registry &registry) {
     auto facesmashHandle = textureCache.handle("str/credits/facesmash");
     auto facesmashEntity = createSprite(registry, parent, facesmashHandle, 20);
     setPos(registry, facesmashEntity, (panel.w - facesmashHandle->width()) / 2, offset);
-    offset += 2 * facesmashHandle->height();
+    offset += 4 * facesmashHandle->height();
 
     auto wearegameeHandle = textureCache.handle("str/credits/wearegamee");
     auto wearegameeEntity = createSprite(registry, parent, wearegameeHandle, 20);
@@ -274,17 +364,7 @@ void createCreditsPanel(Registry &registry) {
     auto authorsHandle = textureCache.handle("str/credits/authors");
     auto authorsEntity = createSprite(registry, parent, authorsHandle, 20);
     setPos(registry, authorsEntity, (panel.w - authorsHandle->width()) / 2, offset);
-    offset += 3 * authorsHandle->height();
-
-    auto emojiHandle = textureCache.handle("str/credits/emoji");
-    auto emojiEntity = createSprite(registry, parent, emojiHandle, 20);
-    setPos(registry, emojiEntity, (panel.w - emojiHandle->width()) / 2, offset);
-    offset += 2 * emojiHandle->height();
-
-    auto emojitwoHandle = textureCache.handle("str/credits/emojitwo");
-    auto emojitwoEntity = createSprite(registry, parent, emojitwoHandle, 20);
-    setPos(registry, emojitwoEntity, (panel.w - emojitwoHandle->width()) / 2, offset);
-    offset += 2 * emojitwoHandle->height();
+    offset += 5 * authorsHandle->height();
 
     auto oslicensesHandle = textureCache.handle("str/credits/oslicenses");
     auto oslicensesEntity = createSprite(registry, parent, oslicensesHandle, 20);
@@ -383,6 +463,7 @@ void refreshSupportPanel(Registry &registry) {
         registry.assign<ExpiringContent>(coffeeEntity);
 
         auto shopButton = createPopupUIButton(registry, parent, UIAction::SHOP, 20);
+        const auto &shopTransform = registry.get<Transform>(shopButton);
         const auto &shopSprite = registry.get<Sprite>(shopButton);
         setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
         setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
@@ -394,8 +475,23 @@ void refreshSupportPanel(Registry &registry) {
 
         auto removeHandle = textureCache.handle("str/support/remove");
         auto removeEntity = createSprite(registry, parent, removeHandle, 20);
-        setPos(registry, removeEntity, (panel.w - removeHandle->width()) / 2, 5 * panel.h / 9 + shopSprite.h + removeHandle->height() / 3);
+        setPos(registry, removeEntity, shopTransform.x - removeHandle->width() - shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 - 3 * removeHandle->height() / 2);
         registry.assign<ExpiringContent>(removeEntity);
+
+        auto adsHandle = textureCache.handle("str/support/ads");
+        auto adsEntity = createSprite(registry, parent, adsHandle, 20);
+        setPos(registry, adsEntity, shopTransform.x - adsHandle->width() - shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 + adsHandle->height() / 2);
+        registry.assign<ExpiringContent>(adsEntity);
+
+        auto unlockHandle = textureCache.handle("str/support/unlock");
+        auto unlockEntity = createSprite(registry, parent, unlockHandle, 20);
+        setPos(registry, unlockEntity, shopTransform.x + 5 * shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 - 3 * unlockHandle->height() / 2);
+        registry.assign<ExpiringContent>(unlockEntity);
+
+        auto gamesHandle = textureCache.handle("str/support/games");
+        auto gamesEntity = createSprite(registry, parent, gamesHandle, 20);
+        setPos(registry, gamesEntity, shopTransform.x + 5 * shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 + gamesHandle->height() / 2);
+        registry.assign<ExpiringContent>(gamesEntity);
 
         auto offerHandle = textureCache.handle("str/support/offer");
         auto offerEntity = createSprite(registry, parent, offerHandle, 20);

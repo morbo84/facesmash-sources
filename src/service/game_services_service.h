@@ -2,39 +2,12 @@
 #define FACE_SMASH_SERVICE_ACHIEVEMENTS_SERVICE_H
 
 
+#include "../common/types.h"
 #include <SDL_types.h>
 #include <cstdint>
 
 
 namespace gamee {
-
-
-enum class FaceSmashAchievement {
-    SMASH_ME_BABY,
-    LITTLE_SMASHER,
-    THE_SNIPER,
-    GOD_SMASHER,
-    MY_FIRST_COMBO,
-    COMBO_COLLECTOR_2X,
-    COMBO_COLLECTOR_3X,
-    COMBO_COLLECTOR_4X,
-    COMBO_COLLECTOR_5X,
-    SMASH_THE_ANGRY,
-    SMASH_THE_DISGUSTED,
-    SMASH_THE_FEARFUL,
-    SMASH_THE_HAPPY,
-    SMASH_THE_SAD,
-    SMASH_THE_SURPRISED,
-    IM_SO_HAPPY,
-    BLUE_SMASH,
-    NO_PAIN_NO_GAME,
-    KINDERGARTEN,
-    READY_TO_SMASH,
-    SMASH_IS_MY_JOB,
-    OH_MY_SMASH,
-    SMASH_ME_CRY,
-    FACE_SMASH_SUPPORTER
-};
 
 
 enum class FaceSmashLeaderboard {
@@ -45,8 +18,9 @@ enum class FaceSmashLeaderboard {
 struct AchievementsManager {
     virtual ~AchievementsManager() = default;
 
-    virtual void increment(FaceSmashAchievement a, uint32_t steps = 1) noexcept = 0;
-    virtual void unlock(FaceSmashAchievement a) noexcept = 0;
+    virtual void query(FaceSmashAchievement) noexcept = 0;
+    virtual void increment(FaceSmashAchievement, uint32_t = 1) noexcept = 0;
+    virtual void unlock(FaceSmashAchievement) noexcept = 0;
     virtual void showAllUI() noexcept = 0;
 };
 

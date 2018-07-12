@@ -43,6 +43,7 @@ enum class SceneType: Uint8 {
     EXIT,
     SPLASH_SCREEN,
     MENU_PAGE,
+    PLAY_PAGE,
     CREDITS_PAGE,
     SUPPORT_PAGE,
     SETTINGS_PAGE,
@@ -53,7 +54,11 @@ enum class SceneType: Uint8 {
     GAME_OVER,
     TRAINING_TUTORIAL,
     TRAINING_SELECT,
-    TRAINING
+    TRAINING,
+    ENDLESS_TUTORIAL,
+    ENDLESS,
+    TETRIS_TUTORIAL,
+    TETRIS
 };
 
 
@@ -84,12 +89,15 @@ enum class UIAction: Uint8 {
     MENU,
     MENU_CLOSE_UP,
     MENU_CLOSE_DOWN,
+    PLAY,
     CREDITS,
     SUPPORT,
     SETTINGS,
     ACHIEVEMENTS,
     LEADERBOARD,
     THE_GAME,
+    ENDLESS,
+    TETRIS,
     TRAINING,
     RESTART,
     SHARE,
@@ -98,7 +106,8 @@ enum class UIAction: Uint8 {
     SWITCH_HAPTIC,
     LOGIN,
     SHOP,
-    GPG_LICENSE
+    GPG_LICENSE,
+    LOCKED
 };
 
 
@@ -111,6 +120,7 @@ enum class PanelType: Uint8 {
     BACKGROUND_BOTTOM,
     MENU_TOP,
     MENU_BOTTOM,
+    PLAY_GAME,
     CREDITS,
     SUPPORT,
     SETTINGS,
@@ -121,7 +131,7 @@ enum class PanelType: Uint8 {
     TRAINING_LEFT,
     TRAINING_RIGHT,
     TRAINING_TOP,
-    TRAINING_BOTTOM,
+    TRAINING_BOTTOM
 };
 
 
@@ -168,6 +178,34 @@ enum class AudioMusicType: Uint8 {
     AUDIO_MUSIC_UNKNOWN,
     AUDIO_MUSIC_RELAX,
     AUDIO_MUSIC_PLAY
+};
+
+
+enum class FaceSmashAchievement: Uint8 {
+    SMASH_ME_BABY,
+    LITTLE_SMASHER,
+    THE_SNIPER,
+    GOD_SMASHER,
+    MY_FIRST_COMBO,
+    COMBO_COLLECTOR_2X,
+    COMBO_COLLECTOR_3X,
+    COMBO_COLLECTOR_4X,
+    COMBO_COLLECTOR_5X,
+    SMASH_THE_ANGRY,
+    SMASH_THE_DISGUSTED,
+    SMASH_THE_FEARFUL,
+    SMASH_THE_HAPPY,
+    SMASH_THE_SAD,
+    SMASH_THE_SURPRISED,
+    IM_SO_HAPPY,
+    BLUE_SMASH,
+    NO_PAIN_NO_GAME,
+    KINDERGARTEN,
+    READY_TO_SMASH,
+    SMASH_IS_MY_JOB,
+    OH_MY_SMASH,
+    SMASH_ME_CRY,
+    FACE_SMASH_SUPPORTER
 };
 
 

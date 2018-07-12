@@ -1,3 +1,4 @@
+#include "../common/types.h"
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
@@ -250,8 +251,11 @@ void submitToLeaderboards(const PlayerScore &score) {
 
 
 AchievementsSystem::AchievementsSystem() noexcept
-    : thankYouSupporter{false}, timeIsOver{false}
+    : thankYouSupporter{false},
+      moreGamesUnlocked{false},
+      timeIsOver{false}
 {
+    Locator::Dispatcher::ref().sink<AchievementEvent>().connect(this);
     Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
     Locator::Dispatcher::ref().sink<TimeIsOverEvent>().connect(this);
     Locator::Dispatcher::ref().sink<BillingEvent>().connect(this);
@@ -262,6 +266,13 @@ AchievementsSystem::~AchievementsSystem() noexcept {
     Locator::Dispatcher::ref().sink<BillingEvent>().disconnect(this);
     Locator::Dispatcher::ref().sink<TimeIsOverEvent>().disconnect(this);
     Locator::Dispatcher::ref().sink<SceneChangeEvent>().disconnect(this);
+    Locator::Dispatcher::ref().sink<AchievementEvent>().disconnect(this);
+}
+
+
+void AchievementsSystem::receive(const AchievementEvent &event) noexcept {
+    moreGamesUnlocked = event.achievement == FaceSmashAchievement::LITTLE_SMASHER
+            && event.type == AchievementEvent::Type::UNLOCKED;
 }
 
 
@@ -324,7 +335,13 @@ void AchievementsSystem::update(Registry &registry) {
         faceSmashSupporter();
     }
 
+    // we only add it and never remove the more games unlocked tag (yay!)
+    if(moreGamesUnlocked && !registry.has<MoreGamesUnlocked>()) {
+        registry.assign<MoreGamesUnlocked>(entt::tag_t{}, registry.create());
+    }
+
     thankYouSupporter = false;
+    moreGamesUnlocked = false;
     timeIsOver = false;
 }
 

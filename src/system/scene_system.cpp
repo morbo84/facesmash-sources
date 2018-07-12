@@ -3,6 +3,7 @@
 #include "../common/constants.h"
 #include "../common/ease.h"
 #include "../component/component.hpp"
+#include "../common/types.h"
 #include "../event/event.hpp"
 #include "../factory/common.h"
 #include "../factory/game_factory.h"
@@ -31,6 +32,7 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
+        case PanelType::PLAY_GAME:
             transform.x = -panel.w;
             break;
         default:
@@ -177,7 +179,7 @@ static void enableCameraFrame(Registry &registry) {
 }
 
 
-static void clearGame(Registry &registry) {
+static void clearTheGame(Registry &registry) {
     registry.destroy(registry.attachee<LetsPlay>());
 }
 
@@ -189,7 +191,17 @@ static void clearTraining(Registry &registry) {
 }
 
 
-static void initGame(Registry &registry) {
+static void clearEndless(Registry &registry) {
+    registry.destroy(registry.attachee<LetsEndless>());
+}
+
+
+static void clearTetris(Registry &registry) {
+    registry.destroy(registry.attachee<LetsTetris>());
+}
+
+
+static void initTheGame(Registry &registry) {
     auto game = registry.create();
     registry.assign<LetsPlay>(entt::tag_t{}, game);
     registry.assign<PlayerScore>(entt::tag_t{}, game);
@@ -201,6 +213,20 @@ static void initTraining(Registry &registry) {
     auto game = registry.create();
     registry.assign<LetsTrain>(entt::tag_t{}, game);
     registry.assign<PlayerScore>(entt::tag_t{}, game);
+}
+
+
+static void initEndless(Registry &registry) {
+    auto endless = registry.create();
+    registry.assign<LetsEndless>(entt::tag_t{}, endless);
+    // TODO
+}
+
+
+static void initTetris(Registry &registry) {
+    auto tetris = registry.create();
+    registry.assign<LetsEndless>(entt::tag_t{}, tetris);
+    // TODO
 }
 
 
@@ -307,10 +333,10 @@ static delta_type gameTutorialTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TITLE_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
@@ -424,10 +450,10 @@ static delta_type trainingTutorialTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
@@ -564,6 +590,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         auto &dispatcher = Locator::Dispatcher::ref();
 
         switch(curr) {
+        case SceneType::PLAY_PAGE:
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
@@ -608,6 +635,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         auto &camera = Locator::Camera::ref();
         auto &ads = Locator::Ads::ref();
         auto &billing = Locator::Billing::ref();
+        auto &gameServices = Locator::GameServices::ref();
 
         if(isTransitioning) {
             // tracks remaining before to update it (mainly for video recording purposes)
@@ -625,6 +653,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     ads.show(AdsType::BANNER);
                     billing.queryPurchases();
+                    gameServices.achievements().query(FaceSmashAchievement::LITTLE_SMASHER);
+                    break;
+                case SceneType::PLAY_PAGE:
+                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
+                    enableUIButtons(registry, PanelType::PLAY_GAME);
                     break;
                 case SceneType::CREDITS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -664,7 +698,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::THE_GAME:
                     enableCameraFrame(registry);
                     ads.load(AdsType::INTERSTITIAL);
-                    initGame(registry);
+                    initTheGame(registry);
                     break;
                 case SceneType::GAME_OVER:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING_STOP);
@@ -682,6 +716,18 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::TRAINING:
                     enableCameraFrame(registry);
                     initTraining(registry);
+                    break;
+                case SceneType::ENDLESS_TUTORIAL:
+                    // TODO
+                    break;
+                case SceneType::ENDLESS:
+                    // TODO
+                    break;
+                case SceneType::TETRIS_TUTORIAL:
+                    // TODO
+                    break;
+                case SceneType::TETRIS:
+                    // TODO
                     break;
                 default:
                     assert(false);
@@ -701,6 +747,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             hideSmashButtons(registry);
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
+            hidePopupButtons(registry, PanelType::PLAY_GAME);
             hidePopupButtons(registry, PanelType::CREDITS);
             hidePopupButtons(registry, PanelType::SUPPORT);
             hidePopupButtons(registry, PanelType::SETTINGS);
@@ -715,6 +762,15 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hidePopupButtons(registry, PanelType::MENU_BOTTOM);
                 hidePopupButtons(registry, PanelType::MENU_TOP);
                 remaining = splashScreenTransition(registry);
+                break;
+            case SceneType::PLAY_PAGE:
+                discardExpiringContents(registry);
+                refreshPlayPanel(registry);
+                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showPopupButtons(registry, PanelType::PLAY_GAME);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition(registry, PanelType::PLAY_GAME);
                 break;
             case SceneType::CREDITS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -771,7 +827,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 dispatcher.enqueue<ArmageddonEvent>();
                 discardExpiringContents(registry);
                 refreshGameOverPanel(registry);
-                clearGame(registry);
+                clearTheGame(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
                 remaining = gameOverTransition(registry);
@@ -792,6 +848,18 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::TRAINING:
                 showSmashButtons(registry);
                 remaining = trainingTransition(registry);
+                break;
+            case SceneType::ENDLESS_TUTORIAL:
+                // TODO
+                break;
+            case SceneType::ENDLESS:
+                // TODO
+                break;
+            case SceneType::TETRIS_TUTORIAL:
+                // TODO
+                break;
+            case SceneType::TETRIS:
+                // TODO
                 break;
             default:
                 assert(false);

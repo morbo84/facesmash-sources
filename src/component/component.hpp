@@ -13,6 +13,7 @@ namespace gamee {
 
 
 struct FaceSmashSupporter { /* Yay!! */ };
+struct MoreGamesUnlocked { /* Yay!! */ };
 
 
 struct DebugInfo {
@@ -92,7 +93,8 @@ struct SpriteAnimation {
 };
 
 
-struct PulseAnimation {
+struct
+        PulseAnimation {
     float angle;
     float length;
     float squeeze;
@@ -218,6 +220,8 @@ struct PlayerScoreObserver {
 
 struct LetsPlay {};
 struct LetsTrain {};
+struct LetsEndless {};
+struct LetsTetris {};
 
 
 struct Panel {

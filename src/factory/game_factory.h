@@ -16,6 +16,8 @@ void createBackgroundTopPanel(Registry &);
 void createBackgroundBottomPanel(Registry &);
 void createMenuTopPanel(Registry &);
 void createMenuBottomPanel(Registry &);
+void createPlayPanel(Registry &);
+void refreshPlayPanel(Registry &);
 void createCreditsPanel(Registry &);
 void createSupportPanel(Registry &);
 void refreshSupportPanel(Registry &);
