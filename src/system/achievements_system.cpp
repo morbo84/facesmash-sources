@@ -118,7 +118,7 @@ void collector5x(const PlayerScore& delta) {
 }
 
 
-// 100th smash
+// 200th smash
 void littleSmasher(const PlayerScore& delta) {
     const auto smash = total(delta);
 
@@ -128,7 +128,7 @@ void littleSmasher(const PlayerScore& delta) {
 }
 
 
-// 1000th smash
+// 500th smash
 void theSniper(const PlayerScore& delta) {
     const auto smash = total(delta);
 
@@ -138,7 +138,7 @@ void theSniper(const PlayerScore& delta) {
 }
 
 
-// 10000th smash
+// 1000th smash
 void godSmasher(const PlayerScore& delta) {
     const auto smash = total(delta);
 
@@ -253,12 +253,14 @@ AchievementsSystem::AchievementsSystem() noexcept
     : thankYouSupporter{false}, timeIsOver{false}
 {
     Locator::Dispatcher::ref().connect<SceneChangeEvent>(this);
+    Locator::Dispatcher::ref().connect<TimeIsOverEvent>(this);
     Locator::Dispatcher::ref().connect<BillingEvent>(this);
 }
 
 
 AchievementsSystem::~AchievementsSystem() noexcept {
     Locator::Dispatcher::ref().disconnect<BillingEvent>(this);
+    Locator::Dispatcher::ref().disconnect<TimeIsOverEvent>(this);
     Locator::Dispatcher::ref().disconnect<SceneChangeEvent>(this);
 }
 
