@@ -160,6 +160,7 @@ static void showShareMessage(Registry &registry) {
     auto inviteLabel = createLastingMessage(registry, inviteHandle, 200);
     const auto &inviteSprite = registry.get<Sprite>(inviteLabel);
     setPos(registry, inviteLabel, (logicalWidth - inviteSprite.w) / 2, 7 * logicalHeight / 8);
+    registry.assign<ExpiringContent>(inviteLabel);
 }
 
 
@@ -721,13 +722,17 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     // TODO
                     break;
                 case SceneType::ENDLESS:
-                    // TODO
+                    enableCameraFrame(registry);
+                    ads.load(AdsType::INTERSTITIAL);
+                    initEndless(registry);
                     break;
                 case SceneType::TETRIS_TUTORIAL:
                     // TODO
                     break;
                 case SceneType::TETRIS:
-                    // TODO
+                    enableCameraFrame(registry);
+                    ads.load(AdsType::INTERSTITIAL);
+                    initTetris(registry);
                     break;
                 default:
                     assert(false);
@@ -802,6 +807,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             case SceneType::GAME_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
                 dispatcher.enqueue<ArmageddonEvent>();
+                discardExpiringContents(registry);
                 remaining = gameTutorialTransition(registry);
                 break;
             case SceneType::VIDEO_RECORDING_START:
@@ -854,12 +860,14 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::ENDLESS:
                 // TODO
+                clearEndless(registry);
                 break;
             case SceneType::TETRIS_TUTORIAL:
                 // TODO
                 break;
             case SceneType::TETRIS:
                 // TODO
+                clearTetris(registry);
                 break;
             default:
                 assert(false);
