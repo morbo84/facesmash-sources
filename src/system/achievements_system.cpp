@@ -63,9 +63,9 @@ void smashMeBaby(const PlayerScore& score) {
 }
 
 
-// my first 100 points
+// my first 1000 points
 void kindergarten(const PlayerScore& score) {
-    if(score.score >= 100) {
+    if(score.score >= 1000) {
         Locator::GameServices::ref().achievements().unlock(FaceSmashAchievement::KINDERGARTEN);
     }
 }
