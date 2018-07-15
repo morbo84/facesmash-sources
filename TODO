@@ -1,12 +1,15 @@
 * Android flavors per ridurre dimensione apk e farli al dettaglio
-* buttare su un po' di testo (descrizione dell'applicazione e traduzioni nelle varie lingue) e assets (icone, screenshot, un video dimostrativo)
 
 * provare su titolo menu: scritte che cambiano coloro stile giochi retrò o ombreggiature bianche autonome animate per lettera
 * abbassare volume di base, così spacca i timpani
 
 * diverse intensità per il volume, non solo on/off
-* sistemare scritte che si sovrappongono
-
 * disabilitare modalità multi-window per android
-
 * trovare un modo funzionale per abilitare gli ads "reali" solo quando si builda in release (meglio ancora se solo col martello)
+
+PER IL RILASCIO:
+
+* togliere emojitwo da store
+* aggiornare icona gioco con nuove emoji sia su store che su facesmash-android
+* allungare 2/3 secondi traccia audio
+* screenshot

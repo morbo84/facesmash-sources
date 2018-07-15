@@ -24,7 +24,6 @@ void loadResources(GameRenderer &renderer) {
 
     textureCache.load<AssetTextureLoader>("game/explosion", "other/explosion.png", renderer);
     textureCache.load<AssetTextureLoader>("game/emoji", "emoji/emoji.png", renderer);
-    textureCache.load<AssetTextureLoader>("game/items", "emoji/items.png", renderer);
 
     musicCache.load<AudioMusicLoader>("music/relax", "audio/music_relax.ogg");
     musicCache.load<AudioMusicLoader>("music/play", "audio/music_play.ogg");
@@ -87,8 +86,10 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/score", "SCORE", renderer, *fontNormal, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/game/the_game", "SOLO", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/game/endless", "ENDLESS", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/game/tetris", "VINTAGE", renderer, *fontTiny, colorWhite);
+    // textureCache.load<TTFFontTextureLoader>("str/game/endless", "ENDLESS", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/game/endless", "COMING", renderer, *fontTiny, colorWhite);
+    // textureCache.load<TTFFontTextureLoader>("str/game/tetris", "VINTAGE", renderer, *fontTiny, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/game/tetris", "SOON", renderer, *fontTiny, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/howto/unlock/1", "Support us to unlock", renderer, *fontTiny, colorBlue);
     textureCache.load<TTFFontTextureLoader>("str/howto/unlock/2", "Or smash 200+ faces", renderer, *fontTiny, colorBlue);

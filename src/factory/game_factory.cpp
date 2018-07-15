@@ -247,7 +247,7 @@ void createPlayPanel(Registry &registry) {
 
     auto theGameButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 20);
     auto &theGameSprite = registry.get<Sprite>(theGameButton);
-    setSpriteSize(registry, theGameButton, 2 * theGameSprite.w / 3, 2 * theGameSprite.h / 3);
+    setSpriteSize(registry, theGameButton, 4 * theGameSprite.w / 5, 4 * theGameSprite.h / 5);
     setPopupUIButtonSize(registry, theGameButton, theGameSprite.w, theGameSprite.h);
     setPos(registry, theGameButton, (panel.w - theGameSprite.w) / 2, panel.h / 2 - 2 * theGameSprite.h / 3);
     setBoundingBox(registry, theGameButton, theGameSprite.w, theGameSprite.h);
@@ -299,7 +299,11 @@ void refreshPlayPanel(Registry &registry) {
         registry.assign<ExpiringContent>(tetrisButton);
     };
 
-    if(registry.has<FaceSmashSupporter>() || registry.has<MoreGamesUnlocked>()) {
+    const bool unlocked = registry.has<FaceSmashSupporter>()
+            || registry.has<MoreGamesUnlocked>();
+
+    // we have still to develop them after all :-)
+    if(false && unlocked) {
         // if unlocked, give access to all the other games ...
         addOtherGamesButtons(UIAction::ENDLESS, UIAction::TETRIS);
     } else {
@@ -309,11 +313,13 @@ void refreshPlayPanel(Registry &registry) {
         auto unlock1StrHandle = textureCache.handle("str/howto/unlock/1");
         auto unlock1StrEntity = createSprite(registry, parent, unlock1StrHandle, 20);
         setPos(registry, unlock1StrEntity, (panel.w - unlock1StrHandle->width()) / 2, unlock1StrHandle->height() / 2);
+        registry.assign<FadeAnimation>(unlock1StrEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
         registry.assign<ExpiringContent>(unlock1StrEntity);
 
         auto unlock2StrHandle = textureCache.handle("str/howto/unlock/2");
         auto unlock2StrEntity = createSprite(registry, parent, unlock2StrHandle, 20);
         setPos(registry, unlock2StrEntity, (panel.w - unlock2StrHandle->width()) / 2, panel.h - 3 * unlock2StrHandle->height() / 2);
+        registry.assign<FadeAnimation>(unlock2StrEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
         registry.assign<ExpiringContent>(unlock2StrEntity);
     }
 }
