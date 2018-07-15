@@ -17,6 +17,7 @@ struct Spawner;
 
 class ItemSystem final {
     void movement(Registry &, float);
+    void timer(Registry &, ItemType, delta_type);
     void fountain(Registry &, Spawner &);
 
     void message(Registry &, SDLTextureHandle);

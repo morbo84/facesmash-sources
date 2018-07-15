@@ -25,6 +25,26 @@ void ItemSystem::movement(Registry &registry, float mod) {
 }
 
 
+void ItemSystem::timer(Registry &registry, ItemType type, delta_type delta) {
+    if(registry.has<Timer>()) {
+        auto &timer = registry.get<Timer>();
+
+        if(timer.enabled) {
+            switch(type) {
+            case ItemType::SLOW_DOWN:
+                timer.remaining += delta;
+                break;
+            case ItemType::SPEED_UP:
+                timer.remaining -= std::min(timer.remaining, delta);
+            default:
+                // something went wrong here, give up and that's all
+                break;
+            }
+        }
+    }
+}
+
+
 void ItemSystem::fountain(Registry &registry, Spawner &spawner) {
     const auto face = faceBag.get();
 
@@ -161,9 +181,11 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
             fountain(registry, spawner);
             break;
         case ItemType::SLOW_DOWN:
+            timer(registry, curr, delta/2);
             movement(registry, .3f);
             break;
         case ItemType::SPEED_UP:
+            timer(registry, curr, delta/2);
             movement(registry, 1.8f);
             break;
         case ItemType::BOMB:
