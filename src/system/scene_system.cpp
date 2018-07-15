@@ -814,7 +814,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
                 // read carefully the rules of the game!
-                remaining = 2000_ui32;
+                remaining = 3000_ui32;
                 break;
             case SceneType::VIDEO_RECORDING_STOP:
                 avRecorder.stop();
