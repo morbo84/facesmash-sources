@@ -15,10 +15,10 @@ class Spawner;
 
 
 class TrainingSystem final {
-    static constexpr delta_type expectation = 500_ui32;
-    static constexpr delta_type interval = 250_ui32;
-    static constexpr Uint8 length = 32_ui32;
-    static constexpr Uint8 bonus = 8_ui32;
+    static constexpr delta_type expectation = 250_ui32;
+    static constexpr delta_type duration = 10000_ui32;
+    static constexpr delta_type bonus = 2000_ui32;
+    static constexpr float factor = .025f;
 
 public:
     TrainingSystem();
@@ -33,10 +33,10 @@ private:
     delta_type watchdog;
     delta_type remaining;
     float probability;
+    float target;
     float total;
     Uint16 counter;
     FaceType current;
-    Uint8 steps;
 };
 
 

@@ -636,7 +636,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
         auto &camera = Locator::Camera::ref();
         auto &ads = Locator::Ads::ref();
         auto &billing = Locator::Billing::ref();
-        auto &gameServices = Locator::GameServices::ref();
+        // auto &gameServices = Locator::GameServices::ref();
 
         if(isTransitioning) {
             // tracks remaining before to update it (mainly for video recording purposes)
@@ -654,8 +654,9 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     ads.show(AdsType::BANNER);
                     billing.queryPurchases();
-                    gameServices.achievements().query(FaceSmashAchievement::LITTLE_SMASHER);
-                    gameServices.achievements().query(FaceSmashAchievement::THE_SNIPER);
+                    // TODO currently they are sync and freeze everything, disabled while waiting to have async queries
+                    // gameServices.achievements().query(FaceSmashAchievement::LITTLE_SMASHER);
+                    // gameServices.achievements().query(FaceSmashAchievement::THE_SNIPER);
                     break;
                 case SceneType::PLAY_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -841,6 +842,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::TRAINING_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
+                dispatcher.enqueue<ArmageddonEvent>();
                 camera.start();
                 remaining = trainingTutorialTransition(registry);
                 break;

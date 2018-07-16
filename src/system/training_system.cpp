@@ -17,10 +17,10 @@ TrainingSystem::TrainingSystem()
     : watchdog{},
       remaining{},
       probability{},
+      target{},
       total{},
       counter{},
-      current{FaceType::HAPPY},
-      steps{}
+      current{FaceType::HAPPY}
 {
     Locator::Dispatcher::ref().sink<FaceRequest>().connect(this);
     Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
@@ -35,20 +35,19 @@ TrainingSystem::~TrainingSystem() {
 
 void TrainingSystem::receive(const FaceRequest &event) noexcept {
     watchdog = expectation;
-    remaining = interval;
+    remaining = duration;
     current = event.type;
-    probability = 0.f;
+    target = 0.f;
     total = 0.f;
     counter = 0_ui16;
-    steps = length;
     // starts a training session
     Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING);
 }
 
 
 void TrainingSystem::receive(const FaceEvent &event) noexcept {
-    const auto match = event.type == current;
-    probability = match ? event.probability : std::max(0.f, probability - .1f);
+    const auto match = (event.type == current);
+    target = match ? std::min(1.f, target + .1f) : std::max(0.f, target - .1f);
     total += match ? event.probability : 0.f;
     ++counter;
     watchdog = expectation;
@@ -56,76 +55,63 @@ void TrainingSystem::receive(const FaceEvent &event) noexcept {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
-
     if(registry.has<LetsTrain>()) {
-        watchdog -= std::min(watchdog, delta);
+        const auto amount = 1 + (duration - remaining) / 1000_ui32;
+        const auto size = registry.size<Face>();
 
-        if(!watchdog) {
-            probability = std::max(0.f, probability - .1f);
-            watchdog = expectation;
-        }
-
-        if(steps) {
+        if(remaining > bonus) {
             // training phase
-
             remaining -= std::min(remaining, delta);
-            const auto amount = ((length - steps) * interval) / 1000_ui32;
-            const auto size = registry.size<Face>();
 
-            // ensure there is at least a face on screen
-            if(!size) {
-                spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
-            }
+            if(remaining < bonus) {
+                // feedback message
+                const auto result = counter ? (total / counter) : 0.f;
 
-            if(!remaining) {
-                --steps;
+                auto feedbackMsg = [&registry, this](const auto handle) {
+                    auto entity = createLastingMessage(registry, handle , 200);
+                    const auto &sprite = registry.get<Sprite>(entity);
+                    setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+                };
 
-                if(steps) {
-                    remaining = interval;
+                if(result < .2f) {
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/fail"));
+                } else if(result < .4f) {
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/bad"));
+                } else if(result < .6f) {
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/basic"));
+                } else if(result < .8f) {
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/good"));
                 } else {
-                    // bonus time to allow user to smash everything
-                    remaining = bonus * interval;
-
-                    // feedback message
-                    const auto result = counter ? (total / counter) : 0.f;
-
-                    auto feedbackMsg = [&registry, this](const auto handle) {
-                        auto entity = createLastingMessage(registry, handle , 200);
-                        const auto &sprite = registry.get<Sprite>(entity);
-                        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
-                    };
-
-                    if(result < .2f) {
-                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/fail"));
-                    } else if(result < .4f) {
-                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/bad"));
-                    } else if(result < .6f) {
-                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/basic"));
-                    } else if(result < .8f) {
-                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/good"));
-                    } else {
-                        feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/wow"));
-                        // spawns extra faces to celebrate the great result
-                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
-                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
-                        spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
-                    }
-                }
-
-                // spawn extra faces whether required
-                if(size < amount) {
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/wow"));
+                    // spawns extra faces to celebrate the great result
+                    spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
+                    spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
                     spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
                 }
             }
-        } else if(remaining && registry.size<Face>()) {
-            remaining -= std::min(remaining, delta);
-        } else {
+
+            // spawn extra faces whether required
+            if(size < amount) {
+                spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
+            }
+        } else if(!remaining || !size) {
             Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
         }
 
-        registry.view<VerticalProgressBar, Sprite>().each([this](auto entity, auto &, auto &sprite) {
+        watchdog -= std::min(watchdog, delta);
+
+        if(!watchdog) {
+            target = std::max(0.f, target - .1f);
+            watchdog = expectation;
+        }
+
+        // lerp used to obtain a smoother progress bar
+        probability -= factor * (probability - target) * delta;
+
+        for(const auto entity: registry.view<VerticalProgressBar, Sprite>()) {
+            auto &sprite = registry.get<Sprite>(entity);
             sprite.frame = (sprite.frames - 1) * probability;
-        });
+        }
     }
 }
 
