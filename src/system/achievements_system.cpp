@@ -252,7 +252,8 @@ void submitToLeaderboards(const PlayerScore &score) {
 
 AchievementsSystem::AchievementsSystem() noexcept
     : thankYouSupporter{false},
-      moreGamesUnlocked{false},
+      littleSmasherUnlocked{false},
+      theSniperUnlocked{false},
       timeIsOver{false}
 {
     Locator::Dispatcher::ref().sink<AchievementEvent>().connect(this);
@@ -271,8 +272,11 @@ AchievementsSystem::~AchievementsSystem() noexcept {
 
 
 void AchievementsSystem::receive(const AchievementEvent &event) noexcept {
-    moreGamesUnlocked = event.achievement == FaceSmashAchievement::LITTLE_SMASHER
-            && event.type == AchievementEvent::Type::UNLOCKED;
+    if(event.achievement == FaceSmashAchievement::LITTLE_SMASHER) {
+        littleSmasherUnlocked = event.type == AchievementEvent::Type::UNLOCKED;
+    } else if(event.achievement == FaceSmashAchievement::THE_SNIPER) {
+        theSniperUnlocked = event.type == AchievementEvent::Type::UNLOCKED;
+    }
 }
 
 
@@ -335,13 +339,19 @@ void AchievementsSystem::update(Registry &registry) {
         faceSmashSupporter();
     }
 
-    // we only add it and never remove the more games unlocked tag (yay!)
-    if(moreGamesUnlocked && !registry.has<MoreGamesUnlocked>()) {
-        registry.assign<MoreGamesUnlocked>(entt::tag_t{}, registry.create());
+    // we only add it and never remove the little smasher unlocked tag (yay!)
+    if(littleSmasherUnlocked && !registry.has<LittleSmasherUnlocked>()) {
+        registry.assign<LittleSmasherUnlocked>(entt::tag_t{}, registry.create());
+    }
+
+    // we only add it and never remove the little smasher unlocked tag (yay!)
+    if(theSniperUnlocked && !registry.has<TheSniperUnlocked>()) {
+        registry.assign<TheSniperUnlocked>(entt::tag_t{}, registry.create());
     }
 
     thankYouSupporter = false;
-    moreGamesUnlocked = false;
+    littleSmasherUnlocked = false;
+    theSniperUnlocked = false;
     timeIsOver = false;
 }
 

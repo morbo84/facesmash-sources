@@ -13,7 +13,8 @@ namespace gamee {
 
 
 struct FaceSmashSupporter { /* Yay!! */ };
-struct MoreGamesUnlocked { /* Yay!! */ };
+struct LittleSmasherUnlocked { /* Yay!! */ };
+struct TheSniperUnlocked { /* Yay!! */ };
 
 
 struct DebugInfo {

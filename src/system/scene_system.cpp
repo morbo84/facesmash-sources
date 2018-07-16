@@ -655,6 +655,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     ads.show(AdsType::BANNER);
                     billing.queryPurchases();
                     gameServices.achievements().query(FaceSmashAchievement::LITTLE_SMASHER);
+                    gameServices.achievements().query(FaceSmashAchievement::THE_SNIPER);
                     break;
                 case SceneType::PLAY_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);

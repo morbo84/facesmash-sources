@@ -299,28 +299,38 @@ void refreshPlayPanel(Registry &registry) {
         registry.assign<ExpiringContent>(tetrisButton);
     };
 
-    const bool unlocked = registry.has<FaceSmashSupporter>()
-            || registry.has<MoreGamesUnlocked>();
+    auto addHowToMessages = [&](auto topMessageHandle, auto bottomMessageHandle) {
+        auto topMessageEntity = createSprite(registry, parent, topMessageHandle, 20);
+        setPos(registry, topMessageEntity, (panel.w - topMessageHandle->width()) / 2, topMessageHandle->height() / 2);
+        registry.assign<FadeAnimation>(topMessageEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
+        registry.assign<ExpiringContent>(topMessageEntity);
+
+        auto bottomMessageEntity = createSprite(registry, parent, bottomMessageHandle, 20);
+        setPos(registry, bottomMessageEntity, (panel.w - bottomMessageHandle->width()) / 2, panel.h - 3 * bottomMessageHandle->height() / 2);
+        registry.assign<FadeAnimation>(bottomMessageEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
+        registry.assign<ExpiringContent>(bottomMessageEntity);
+
+    };
 
     // we have still to develop them after all :-)
-    if(false && unlocked) {
-        // if unlocked, give access to all the other games ...
+    const bool unlockEverything = false;
+    //const bool unlockEverything = registry.has<FaceSmashSupporter>() || (registry.has<LittleSmasherUnlocked>() && registry.has<TheSniperUnlocked>());
+
+    // we have still to develop them after all :-)
+    const bool unlockSomething = false;
+    //const bool unlockSomething = registry.has<FaceSmashSupporter>() || (registry.has<LittleSmasherUnlocked>() && !registry.has<TheSniperUnlocked>());
+
+    if(unlockEverything) {
+        // if everything is unlocked, give access to all the other games ...
         addOtherGamesButtons(UIAction::ENDLESS, UIAction::TETRIS);
+    } else if(unlockSomething) {
+        // ... or maybe only to some of them ...
+        addOtherGamesButtons(UIAction::ENDLESS, UIAction::LOCKED);
+        addHowToMessages(textureCache.handle("str/howto/unlock/1"), textureCache.handle("str/howto/unlock/3"));
     } else {
         // ... otherwise the other games around are locked
         addOtherGamesButtons(UIAction::LOCKED, UIAction::LOCKED);
-
-        auto unlock1StrHandle = textureCache.handle("str/howto/unlock/1");
-        auto unlock1StrEntity = createSprite(registry, parent, unlock1StrHandle, 20);
-        setPos(registry, unlock1StrEntity, (panel.w - unlock1StrHandle->width()) / 2, unlock1StrHandle->height() / 2);
-        registry.assign<FadeAnimation>(unlock1StrEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
-        registry.assign<ExpiringContent>(unlock1StrEntity);
-
-        auto unlock2StrHandle = textureCache.handle("str/howto/unlock/2");
-        auto unlock2StrEntity = createSprite(registry, parent, unlock2StrHandle, 20);
-        setPos(registry, unlock2StrEntity, (panel.w - unlock2StrHandle->width()) / 2, panel.h - 3 * unlock2StrHandle->height() / 2);
-        registry.assign<FadeAnimation>(unlock2StrEntity, 255, 0, 3000_ui32, 0_ui32, &easeInExpo);
-        registry.assign<ExpiringContent>(unlock2StrEntity);
+        addHowToMessages(textureCache.handle("str/howto/unlock/1"), textureCache.handle("str/howto/unlock/2"));
     }
 }
 

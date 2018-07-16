@@ -93,6 +93,7 @@ void prepareGameStrings(GameRenderer &renderer) {
 
     textureCache.load<TTFFontTextureLoader>("str/howto/unlock/1", "Support us to unlock", renderer, *fontTiny, colorBlue);
     textureCache.load<TTFFontTextureLoader>("str/howto/unlock/2", "Or smash 200+ faces", renderer, *fontTiny, colorBlue);
+    textureCache.load<TTFFontTextureLoader>("str/howto/unlock/3", "Or smash 500+ faces", renderer, *fontTiny, colorBlue);
 
     textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/face", "FACE", renderer, *fontHuge, colorWhite);

@@ -28,7 +28,8 @@ struct AchievementsSystem final {
 
 private:
     bool thankYouSupporter;
-    bool moreGamesUnlocked;
+    bool littleSmasherUnlocked;
+    bool theSniperUnlocked;
     bool timeIsOver;
     SceneType current;
     PlayerScore previous{};
