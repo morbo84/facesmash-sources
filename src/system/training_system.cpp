@@ -47,7 +47,7 @@ void TrainingSystem::receive(const FaceRequest &event) noexcept {
 
 void TrainingSystem::receive(const FaceEvent &event) noexcept {
     const auto match = (event.type == current);
-    target = match ? std::min(1.f, target + .1f) : std::max(0.f, target - .1f);
+    target = match ? event.probability : std::max(0.f, target - .1f);
     total += match ? event.probability : 0.f;
     ++counter;
     watchdog = expectation;
@@ -63,23 +63,24 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
             // training phase
             remaining -= std::min(remaining, delta);
 
-            if(remaining < bonus) {
+            if (remaining < bonus) {
                 // feedback message
                 const auto result = counter ? (total / counter) : 0.f;
 
                 auto feedbackMsg = [&registry, this](const auto handle) {
-                    auto entity = createLastingMessage(registry, handle , 200);
+                    auto entity = createLastingMessage(registry, handle, 200);
                     const auto &sprite = registry.get<Sprite>(entity);
-                    setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+                    setPos(registry, entity, (logicalWidth - sprite.w) / 2,
+                           (logicalHeight - sprite.h) / 2);
                 };
 
-                if(result < .2f) {
+                if (result < .2f) {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/fail"));
-                } else if(result < .4f) {
+                } else if (result < .4f) {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/bad"));
-                } else if(result < .6f) {
+                } else if (result < .6f) {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/basic"));
-                } else if(result < .8f) {
+                } else if (result < .8f) {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/good"));
                 } else {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/wow"));
@@ -91,10 +92,13 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
             }
 
             // spawn extra faces whether required
-            if(size < amount) {
+            if (size < amount) {
                 spawner.spawnFaceBottom(registry, 0_ui16, 0_ui16, current);
             }
-        } else if(!remaining || !size) {
+        } else if(remaining) {
+            remaining -= std::min(remaining, delta);
+        } else {
+            registry.reset<Destroyable>();
             Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
         }
 
@@ -106,11 +110,11 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
         }
 
         // lerp used to obtain a smoother progress bar
-        probability -= factor * (probability - target) * delta;
+        probability += factor * (target - probability) * delta;
 
         for(const auto entity: registry.view<VerticalProgressBar, Sprite>()) {
             auto &sprite = registry.get<Sprite>(entity);
-            sprite.frame = (sprite.frames - 1) * probability;
+            sprite.frame = sprite.frames * probability;
         }
     }
 }
