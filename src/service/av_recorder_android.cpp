@@ -77,7 +77,7 @@ int AvRecorderAndroid::recordVideo(void *ptr) {
     AMediaFormat_setString(videoMediaFormat, AMEDIAFORMAT_KEY_MIME, "video/avc");
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_WIDTH, recorder.width);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_HEIGHT, recorder.height);
-    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 2500000);
+    AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 4000000);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_FRAME_RATE, frameRate);
     AMediaFormat_setInt32(videoMediaFormat, "capture-rate", frameRate);
     AMediaFormat_setInt32(videoMediaFormat, AMEDIAFORMAT_KEY_I_FRAME_INTERVAL, 3);
