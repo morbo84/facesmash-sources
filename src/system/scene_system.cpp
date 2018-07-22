@@ -277,6 +277,12 @@ static delta_type menuPageTransition(Registry &registry) {
         case PanelType::GAME_OVER:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
+        case PanelType::INVITE_TRAIN_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::INVITE_TRAIN_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            break;
         case PanelType::THE_GAME_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
@@ -360,7 +366,40 @@ static delta_type gameTutorialTransition(Registry &registry) {
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
+            break;
+        case PanelType::INVITE_TRAIN_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
+            break;
+        case PanelType::INVITE_TRAIN_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
+        }
+    });
+
+    return duration;
+}
+
+
+static delta_type videoRecordingStartTransition(Registry &registry) {
+    static constexpr delta_type duration = 3000_ui32;
+    return duration;
+}
+
+
+static delta_type videoRecordingStopTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::INVITE_TRAIN_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::INVITE_TRAIN_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -466,6 +505,15 @@ static delta_type trainingTutorialTransition(Registry &registry) {
             break;
         case PanelType::TUTORIAL_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::GAME_OVER:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
+            break;
+        case PanelType::INVITE_TRAIN_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
+            break;
+        case PanelType::INVITE_TRAIN_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -697,6 +745,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::VIDEO_RECORDING_STOP:
                     enableUIButtons(registry, PanelType::GAME_OVER);
+                    enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
                     break;
                 case SceneType::THE_GAME:
                     enableCameraFrame(registry);
@@ -816,7 +865,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
                 // read carefully the rules of the game!
-                remaining = 3000_ui32;
+                remaining = videoRecordingStartTransition(registry);
                 break;
             case SceneType::VIDEO_RECORDING_STOP:
                 avRecorder.stop();
@@ -824,7 +873,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showPopupButtons(registry, PanelType::GAME_OVER);
                 ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
                 // we try to create enough room to finalize the video
-                remaining = 1000_ui32;
+                remaining = videoRecordingStopTransition(registry);
                 break;
             case SceneType::THE_GAME:
                 showSmashButtons(registry);

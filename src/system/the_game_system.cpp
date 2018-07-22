@@ -120,7 +120,7 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 }
             }
 
-            if(timer.remaining < 2500) {
+            if(timer.remaining < 3000) {
                 if(registry.size<Face>() < 6) {
                     spawner.spawnFaceBottom(registry, 250_ui16, 100_ui16, faceBag.get());
                     spawner.spawnFaceBottom(registry, 250_ui16, 100_ui16, faceBag.get());

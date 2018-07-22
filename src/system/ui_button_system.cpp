@@ -180,7 +180,9 @@ void UIButtonSystem::update(Registry &registry) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
                 case UIAction::PLAY:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::PLAY_PAGE);
+                    // TODO dispatcher.enqueue<SceneChangeEvent>(SceneType::PLAY_PAGE);
+                    // temporary shortcut until we developed the extra mini games ;-)
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
                 case UIAction::CREDITS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);

@@ -55,24 +55,46 @@ void TrainingSystem::receive(const FaceEvent &event) noexcept {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
+    auto feedbackMsg = [&registry, this](const auto handle) {
+        auto entity = createLastingMessage(registry, handle, 200);
+        const auto &sprite = registry.get<Sprite>(entity);
+        setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
+    };
+
     if(registry.has<LetsTrain>()) {
         const auto amount = 1 + (duration - remaining) / 1000_ui32;
         const auto size = registry.size<Face>();
 
         if(remaining > bonus) {
+            if(remaining == duration) {
+                switch(current) {
+                case FaceType::ANGRY:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/angry"));
+                    break;
+                case FaceType::DISGUSTED:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/disgusted"));
+                    break;
+                case FaceType::FEARFUL:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/fearful"));
+                    break;
+                case FaceType::HAPPY:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/happy"));
+                    break;
+                case FaceType::SAD:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/sad"));
+                    break;
+                case FaceType::SURPRISED:
+                    feedbackMsg(Locator::TextureCache::ref().handle("str/emotion/surprised"));
+                    break;
+                }
+            }
+
             // training phase
             remaining -= std::min(remaining, delta);
 
             if (remaining < bonus) {
                 // feedback message
                 const auto result = counter ? (total / counter) : 0.f;
-
-                auto feedbackMsg = [&registry, this](const auto handle) {
-                    auto entity = createLastingMessage(registry, handle, 200);
-                    const auto &sprite = registry.get<Sprite>(entity);
-                    setPos(registry, entity, (logicalWidth - sprite.w) / 2,
-                           (logicalHeight - sprite.h) / 2);
-                };
 
                 if (result < .2f) {
                     feedbackMsg(Locator::TextureCache::ref().handle("str/feedback/fail"));

@@ -30,6 +30,8 @@ void refreshGameOverPanel(Registry &);
 void createTrainingRightPanel(Registry &);
 void createTrainingTopPanel(Registry &);
 void createTrainingBottomPanel(Registry &);
+void createInviteTrainLeft(Registry &);
+void createInviteTrainRight(Registry &);
 void createCamera(Registry &);
 void createCameraFrame(Registry &);
 void createSmashButtons(Registry &);

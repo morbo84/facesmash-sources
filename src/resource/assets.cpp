@@ -75,7 +75,7 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/game/score", "SCORE", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/game/timer", "TIME", renderer, *fontSmall, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/share", "Join Us #FaceSmasherLeague", renderer, *fontTiny, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/share", "#FaceSmashChallenge", renderer, *fontTiny, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/item/fountain", "COME ON", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/item/slow", "KEEP CALM", renderer, *fontLarge, colorGreen);
@@ -105,6 +105,15 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/support", "Support us", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/settings", "Settings", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/gameover", "Game Over", renderer, *fontLarge, colorRed);
+
+    textureCache.load<TTFFontTextureLoader>("str/gameover/training", "Need to TRAIN?", renderer, *fontSmall, colorWhite);
+
+    textureCache.load<TTFFontTextureLoader>("str/emotion/angry", "ANGRY", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/emotion/disgusted", "DISGUSTED", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/emotion/happy", "HAPPY", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/emotion/surprised", "SURPRISED", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/emotion/fearful", "FEARFUL", renderer, *fontLarge, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/emotion/sad", "SAD", renderer, *fontLarge, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/feedback/wow", "Let's Play", renderer, *fontLarge, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/feedback/good", "Good Job", renderer, *fontLarge, colorGreen);

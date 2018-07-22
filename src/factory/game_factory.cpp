@@ -874,6 +874,29 @@ void createTrainingBottomPanel(Registry &registry) {
 }
 
 
+void createInviteTrainLeft(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::INVITE_TRAIN_LEFT, -logicalWidth, 0, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto trainingHandle = textureCache.handle("str/gameover/training");
+    auto trainingEntity = createSprite(registry, parent, trainingHandle, 150);
+    setPos(registry, trainingEntity, trainingHandle->width() / 10, (panel.h - trainingHandle->height()) / 2);
+}
+
+
+void createInviteTrainRight(Registry &registry) {
+    auto parent = createPanel(registry, PanelType::INVITE_TRAIN_RIGHT, logicalWidth, 0, logicalWidth, logicalHeight / 4);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto trainingButton = createUIButton(registry, parent, UIAction::TRAINING, 150);
+    const auto &trainingSprite = registry.get<Sprite>(trainingButton);
+    setSpriteSize(registry, trainingButton, 3 * trainingSprite.w / 5, 3 * trainingSprite.h / 5);
+    setPos(registry, trainingButton, panel.w - 4 * trainingSprite.w / 3, (panel.h - trainingSprite.h) / 2);
+    setBoundingBox(registry, trainingButton, trainingSprite.w, trainingSprite.h);
+}
+
 void createCamera(Registry &registry) {
     auto camera = registry.create();
     registry.assign<Transform>(camera, camera, 0.f, 0.f);
