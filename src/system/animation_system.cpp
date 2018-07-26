@@ -95,8 +95,8 @@ void AnimationSystem::sizeAnimation(Registry &registry, delta_type delta) {
     view.each([delta, &registry](auto entity, auto &animation, auto &sprite, auto &transform) {
         animation.elapsed += delta;
 
-        const int xC = transform.x + sprite.w / 2;
-        const int yC = transform.y + sprite.h / 2;
+        const float xC = transform.x + sprite.w / 2.f;
+        const float yC = transform.y + sprite.h / 2.f;
 
         if(animation.elapsed < animation.duration) {
             sprite.w = animation.ease(animation.elapsed, animation.duration, animation.fromW, animation.toW);
@@ -107,8 +107,8 @@ void AnimationSystem::sizeAnimation(Registry &registry, delta_type delta) {
             registry.remove<SizeAnimation>(entity);
         }
 
-        transform.x = xC - sprite.w / 2;
-        transform.y = yC - sprite.h / 2;
+        transform.x = xC - sprite.w / 2.f;
+        transform.y = yC - sprite.h / 2.f;
 
         if(registry.has<BoundingBox>(entity)) {
             auto &box = registry.get<BoundingBox>(entity);
@@ -155,7 +155,7 @@ void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
             if(animation.repeat) {
                 animation.elapsed = 0_ui32;
             } else {
-                registry.remove<SpriteAnimation>(entity);
+                registry.remove<PulseAnimation>(entity);
             }
         }
     });

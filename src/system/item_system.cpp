@@ -146,8 +146,8 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
         const auto x = area.x + area.w / 2;
         const auto y = area.y + area.h / 2;
 
-        if(registry.has<Destroyable>(entity)) {
-            if(SDL_HasIntersection(&logicalScreen, &area)) {
+        if(SDL_HasIntersection(&logicalScreen, &area)) {
+            if(registry.has<Destroyable>(entity)) {
                 if(dirty && SDL_PointInRect(&coord, &area)) {
                     curr = item.type;
 
@@ -164,11 +164,11 @@ void ItemSystem::update(Registry &registry, Spawner &spawner, delta_type delta) 
                     auto &haptic = Locator::Haptic::ref();
                     haptic.rumble(RumbleEffect::SUPER_HARD);
                 }
-            } else {
+            } else if(armageddon) {
+                spawner.spawnExplosion(registry, x, y);
                 registry.destroy(entity);
             }
-        } else if(armageddon) {
-            spawner.spawnExplosion(registry, x, y);
+        } else {
             registry.destroy(entity);
         }
     });
