@@ -161,12 +161,6 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::THE_GAME:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
-                case UIAction::ENDLESS:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::ENDLESS_TUTORIAL);
-                    break;
-                case UIAction::TETRIS:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::TETRIS_TUTORIAL);
-                    break;
                 case UIAction::TRAINING:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_TUTORIAL);
                     break;
@@ -178,11 +172,6 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::MENU_CLOSE_UP:
                 case UIAction::MENU_CLOSE_DOWN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
-                    break;
-                case UIAction::PLAY:
-                    // TODO dispatcher.enqueue<SceneChangeEvent>(SceneType::PLAY_PAGE);
-                    // temporary shortcut until we developed the extra mini games ;-)
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_TUTORIAL);
                     break;
                 case UIAction::CREDITS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);

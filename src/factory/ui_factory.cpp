@@ -72,10 +72,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::SWITCH_HAPTIC:
         setSpriteGeometry(registry, entity, 0, 384, width, height, 2_ui8);
         break;
-    case UIAction::PLAY:
     case UIAction::THE_GAME:
-    case UIAction::ENDLESS:
-    case UIAction::TETRIS:
         setSpriteGeometry(registry, entity, 768, 384, width, height, 1_ui8);
         break;
     case UIAction::TRAINING:

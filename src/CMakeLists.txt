@@ -54,6 +54,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/score_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/smash_button_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/stanza_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/the_game_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/timer_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/training_system.cpp

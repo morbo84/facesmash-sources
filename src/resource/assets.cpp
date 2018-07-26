@@ -75,7 +75,8 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/game/score", "SCORE", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/game/timer", "TIME", renderer, *fontSmall, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/share", "#FaceSmashChallenge", renderer, *fontTiny, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/share/facesmashchallenge", "#FaceSmashChallenge", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/share/facesmash", "#FaceSmash", renderer, *fontSmall, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/item/fountain", "COME ON", renderer, *fontLarge, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/item/slow", "KEEP CALM", renderer, *fontLarge, colorGreen);
@@ -84,16 +85,6 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/item/money", "HOORAY", renderer, *fontLarge, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/score", "SCORE", renderer, *fontNormal, colorGreen);
-
-    textureCache.load<TTFFontTextureLoader>("str/game/the_game", "SOLO", renderer, *fontTiny, colorWhite);
-    // textureCache.load<TTFFontTextureLoader>("str/game/endless", "ENDLESS", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/game/endless", "COMING", renderer, *fontTiny, colorWhite);
-    // textureCache.load<TTFFontTextureLoader>("str/game/tetris", "VINTAGE", renderer, *fontTiny, colorWhite);
-    textureCache.load<TTFFontTextureLoader>("str/game/tetris", "SOON", renderer, *fontTiny, colorWhite);
-
-    textureCache.load<TTFFontTextureLoader>("str/howto/unlock/1", "Support us to unlock", renderer, *fontTiny, colorBlue);
-    textureCache.load<TTFFontTextureLoader>("str/howto/unlock/2", "Or smash 200+ faces", renderer, *fontTiny, colorBlue);
-    textureCache.load<TTFFontTextureLoader>("str/howto/unlock/3", "Or smash 500+ faces", renderer, *fontTiny, colorBlue);
 
     textureCache.load<TTFFontTextureLoader>("str/gamee", "GAMEE", renderer, *fontHuge, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/face", "FACE", renderer, *fontHuge, colorWhite);
@@ -175,6 +166,7 @@ void prepareGameStrings(GameRenderer &renderer) {
 
     textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *fontNormal, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "TOUCH THESE", renderer, *fontNormal, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/tutorial/touchme", "TOUCH ME", renderer, *fontSmall, colorRed);
 }
 
 

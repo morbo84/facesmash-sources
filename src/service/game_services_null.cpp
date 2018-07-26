@@ -4,9 +4,6 @@
 namespace gamee {
 
 
-void GameServicesNull::query(FaceSmashAchievement) noexcept {}
-
-
 void GameServicesNull::increment(FaceSmashAchievement, uint32_t) noexcept {}
 
 

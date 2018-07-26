@@ -252,11 +252,8 @@ void submitToLeaderboards(const PlayerScore &score) {
 
 AchievementsSystem::AchievementsSystem() noexcept
     : thankYouSupporter{false},
-      littleSmasherUnlocked{false},
-      theSniperUnlocked{false},
       timeIsOver{false}
 {
-    Locator::Dispatcher::ref().sink<AchievementEvent>().connect(this);
     Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
     Locator::Dispatcher::ref().sink<TimeIsOverEvent>().connect(this);
     Locator::Dispatcher::ref().sink<BillingEvent>().connect(this);
@@ -267,16 +264,6 @@ AchievementsSystem::~AchievementsSystem() noexcept {
     Locator::Dispatcher::ref().sink<BillingEvent>().disconnect(this);
     Locator::Dispatcher::ref().sink<TimeIsOverEvent>().disconnect(this);
     Locator::Dispatcher::ref().sink<SceneChangeEvent>().disconnect(this);
-    Locator::Dispatcher::ref().sink<AchievementEvent>().disconnect(this);
-}
-
-
-void AchievementsSystem::receive(const AchievementEvent &event) noexcept {
-    if(event.achievement == FaceSmashAchievement::LITTLE_SMASHER) {
-        littleSmasherUnlocked = event.type == AchievementEvent::Type::UNLOCKED;
-    } else if(event.achievement == FaceSmashAchievement::THE_SNIPER) {
-        theSniperUnlocked = event.type == AchievementEvent::Type::UNLOCKED;
-    }
 }
 
 
@@ -339,19 +326,7 @@ void AchievementsSystem::update(Registry &registry) {
         faceSmashSupporter();
     }
 
-    // we only add it and never remove the little smasher unlocked tag (yay!)
-    if(littleSmasherUnlocked && !registry.has<LittleSmasherUnlocked>()) {
-        registry.assign<LittleSmasherUnlocked>(entt::tag_t{}, registry.create());
-    }
-
-    // we only add it and never remove the little smasher unlocked tag (yay!)
-    if(theSniperUnlocked && !registry.has<TheSniperUnlocked>()) {
-        registry.assign<TheSniperUnlocked>(entt::tag_t{}, registry.create());
-    }
-
     thankYouSupporter = false;
-    littleSmasherUnlocked = false;
-    theSniperUnlocked = false;
     timeIsOver = false;
 }
 

@@ -24,6 +24,7 @@
 #include "../system/scene_system.h"
 #include "../system/score_system.h"
 #include "../system/smash_button_system.h"
+#include "../system/stanza_system.h"
 #include "../system/the_game_system.h"
 #include "../system/timer_system.h"
 #include "../system/training_system.h"
@@ -71,6 +72,7 @@ private:
     SceneSystem sceneSystem;
     ScoreSystem scoreSystem;
     SmashButtonSystem smashButtonSystem;
+    StanzaSystem stanzaSystem;
     TheGameSystem theGameSystem;
     TimerSystem timerSystem;
     TrainingSystem trainingSystem;

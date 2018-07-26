@@ -121,7 +121,7 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
             remaining -= std::min(remaining, delta);
         } else {
             registry.reset<Destroyable>();
-            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
+            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::TRAINING_IS_OVER);
         }
 
         watchdog -= std::min(watchdog, delta);

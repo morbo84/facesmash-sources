@@ -124,18 +124,6 @@ struct BillingEvent {
 };
 
 
-struct AchievementEvent {
-    enum class Type: Uint8 {
-        LOCKED,
-        UNLOCKED,
-        UNKNOWN
-    };
-
-    const FaceSmashAchievement achievement;
-    const Type type;
-};
-
-
 }
 
 

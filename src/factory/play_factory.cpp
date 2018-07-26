@@ -71,6 +71,7 @@ entity_type createFace(Registry &registry, FaceType type, Uint16 smash, Uint16 m
 entity_type createItem(Registry &registry, ItemType type, int z) {
     auto entity = createItemBlueprint(registry, type, z);
     const auto &sprite = registry.get<Sprite>(entity);
+    registry.assign<PulseAnimation>(entity, 90.f, .5f, 0.f, 200_ui32);
     registry.assign<BoundingBox>(entity, sprite.w, sprite.h);
     registry.assign<Item>(entity, type);
     return entity;

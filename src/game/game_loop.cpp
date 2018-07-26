@@ -30,7 +30,6 @@ void GameLoop::init(GameRenderer &renderer) {
     createBackgroundBottomPanel(registry);
     createMenuTopPanel(registry);
     createMenuBottomPanel(registry);
-    createPlayPanel(registry);
     createCreditsPanel(registry);
     createSupportPanel(registry);
     createSettingsPanel(registry);
@@ -43,6 +42,7 @@ void GameLoop::init(GameRenderer &renderer) {
     createTrainingBottomPanel(registry);
     createInviteTrainLeft(registry);
     createInviteTrainRight(registry);
+    createStanza(registry);
     createCamera(registry);
     createCameraFrame(registry);
 
@@ -92,6 +92,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
 
         itemSystem.update(registry, spawner, delta);
         faceSmashSystem.update(registry, spawner);
+        stanzaSystem.update(registry, delta);
 
         achievementsSystem.update(registry);
         scoreSystem.update(registry);

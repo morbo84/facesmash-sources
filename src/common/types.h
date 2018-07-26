@@ -43,7 +43,6 @@ enum class SceneType: Uint8 {
     EXIT,
     SPLASH_SCREEN,
     MENU_PAGE,
-    PLAY_PAGE,
     CREDITS_PAGE,
     SUPPORT_PAGE,
     SETTINGS_PAGE,
@@ -55,10 +54,7 @@ enum class SceneType: Uint8 {
     TRAINING_TUTORIAL,
     TRAINING_SELECT,
     TRAINING,
-    ENDLESS_TUTORIAL,
-    ENDLESS,
-    TETRIS_TUTORIAL,
-    TETRIS
+    TRAINING_IS_OVER
 };
 
 
@@ -89,15 +85,12 @@ enum class UIAction: Uint8 {
     MENU,
     MENU_CLOSE_UP,
     MENU_CLOSE_DOWN,
-    PLAY,
     CREDITS,
     SUPPORT,
     SETTINGS,
     ACHIEVEMENTS,
     LEADERBOARD,
     THE_GAME,
-    ENDLESS,
-    TETRIS,
     TRAINING,
     RESTART,
     SHARE,
@@ -120,7 +113,6 @@ enum class PanelType: Uint8 {
     BACKGROUND_BOTTOM,
     MENU_TOP,
     MENU_BOTTOM,
-    PLAY_GAME,
     CREDITS,
     SUPPORT,
     SETTINGS,
@@ -213,6 +205,11 @@ enum class FaceSmashAchievement: Uint8 {
 
 enum class Product: Uint8 {
     REMOVE_ADS
+};
+
+
+enum class StanzaType: Uint8 {
+    IN_GAME_ITEM_TUTORIAL
 };
 
 

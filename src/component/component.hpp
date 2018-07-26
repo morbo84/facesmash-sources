@@ -13,8 +13,6 @@ namespace gamee {
 
 
 struct FaceSmashSupporter { /* Yay!! */ };
-struct LittleSmasherUnlocked { /* Yay!! */ };
-struct TheSniperUnlocked { /* Yay!! */ };
 
 
 struct DebugInfo {
@@ -94,8 +92,7 @@ struct SpriteAnimation {
 };
 
 
-struct
-        PulseAnimation {
+struct PulseAnimation {
     float angle;
     float length;
     float squeeze;
@@ -221,8 +218,6 @@ struct PlayerScoreObserver {
 
 struct LetsPlay {};
 struct LetsTrain {};
-struct LetsEndless {};
-struct LetsTetris {};
 
 
 struct Panel {
@@ -240,6 +235,16 @@ struct CameraFrame {
 struct FaceSmashMessage {};
 struct ItemMessage {};
 struct VerticalProgressBar {};
+
+
+struct Stanza final: SDL_Rect {
+    Stanza (int x, int y, int w, int h, StanzaType type)
+        : SDL_Rect{x, y, w, h}, type{type}
+    {}
+
+    StanzaType type;
+    bool enabled{false};
+};
 
 
 }

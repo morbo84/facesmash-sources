@@ -32,7 +32,6 @@ struct GameServicesAndroid : GameServicesService, AchievementsManager, Leaderboa
     LeaderboardsManager& leaderboards() noexcept override;
 
     // AchievementsManager interface
-    void query(FaceSmashAchievement) noexcept override;
     void increment(FaceSmashAchievement a, uint32_t steps) noexcept override;
     void unlock(FaceSmashAchievement a) noexcept override;
     void showAllUI() noexcept override;

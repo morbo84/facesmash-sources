@@ -15,6 +15,22 @@
 namespace gamee {
 
 
+static void enableStanza(Registry &registry, StanzaType type) {
+    registry.view<Stanza>().each([type](const auto, auto &stanza) {
+        if(stanza.type == type) {
+            stanza.enabled = true;
+        }
+    });
+}
+
+
+static void disableStanza(Registry &registry) {
+    registry.view<Stanza>().each([](const auto, auto &stanza) {
+        stanza.enabled = false;
+    });
+}
+
+
 static void discardExpiringContents(Registry &registry) {
     auto view = registry.view<ExpiringContent>();
 
@@ -32,7 +48,6 @@ static void hideBackgroundPanels(Registry &registry) {
         case PanelType::SUPPORT:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
-        case PanelType::PLAY_GAME:
             transform.x = -panel.w;
             break;
         default:
@@ -153,14 +168,20 @@ static void resetPulseButton(Registry &registry) {
 }
 
 
-static void showShareMessage(Registry &registry) {
+static void showShareMessages(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    const auto inviteHandle = textureCache.handle("str/share");
-    auto inviteLabel = createLastingMessage(registry, inviteHandle, 200);
-    const auto &inviteSprite = registry.get<Sprite>(inviteLabel);
-    setPos(registry, inviteLabel, (logicalWidth - inviteSprite.w) / 2, 7 * logicalHeight / 8);
-    registry.assign<ExpiringContent>(inviteLabel);
+    const auto faceSmashChallengeHandle = textureCache.handle("str/share/facesmashchallenge");
+    auto topLabel = createLastingMessage(registry, faceSmashChallengeHandle, 200);
+    const auto &topSprite = registry.get<Sprite>(topLabel);
+    setPos(registry, topLabel, (logicalWidth - topSprite.w) / 2, logicalHeight / 8);
+    registry.assign<ExpiringContent>(topLabel);
+
+    const auto faceSmashHandle = textureCache.handle("str/share/facesmash");
+    auto bottomLabel = createLastingMessage(registry, faceSmashHandle, 200);
+    const auto &bottomSprite = registry.get<Sprite>(bottomLabel);
+    setPos(registry, bottomLabel, (logicalWidth - bottomSprite.w) / 2, 3 * logicalHeight / 4);
+    registry.assign<ExpiringContent>(bottomLabel);
 }
 
 
@@ -192,16 +213,6 @@ static void clearTraining(Registry &registry) {
 }
 
 
-static void clearEndless(Registry &registry) {
-    registry.destroy(registry.attachee<LetsEndless>());
-}
-
-
-static void clearTetris(Registry &registry) {
-    registry.destroy(registry.attachee<LetsTetris>());
-}
-
-
 static void initTheGame(Registry &registry) {
     auto game = registry.create();
     registry.assign<LetsPlay>(entt::tag_t{}, game);
@@ -214,20 +225,6 @@ static void initTraining(Registry &registry) {
     auto game = registry.create();
     registry.assign<LetsTrain>(entt::tag_t{}, game);
     registry.assign<PlayerScore>(entt::tag_t{}, game);
-}
-
-
-static void initEndless(Registry &registry) {
-    auto endless = registry.create();
-    registry.assign<LetsEndless>(entt::tag_t{}, endless);
-    // TODO
-}
-
-
-static void initTetris(Registry &registry) {
-    auto tetris = registry.create();
-    registry.assign<LetsEndless>(entt::tag_t{}, tetris);
-    // TODO
 }
 
 
@@ -384,7 +381,7 @@ static delta_type gameTutorialTransition(Registry &registry) {
 }
 
 
-static delta_type videoRecordingStartTransition(Registry &registry) {
+static delta_type videoRecordingStartTransition(Registry &) {
     static constexpr delta_type duration = 3000_ui32;
     return duration;
 }
@@ -449,7 +446,7 @@ static delta_type theGameTransition(Registry &registry) {
 
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
-    static constexpr delta_type transition = 3000_ui32;
+    static constexpr delta_type transition = 3200_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
@@ -639,7 +636,6 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         auto &dispatcher = Locator::Dispatcher::ref();
 
         switch(curr) {
-        case SceneType::PLAY_PAGE:
         case SceneType::CREDITS_PAGE:
         case SceneType::SUPPORT_PAGE:
         case SceneType::SETTINGS_PAGE:
@@ -648,7 +644,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
             break;
         case SceneType::TRAINING:
-            dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_IS_OVER);
             break;
         case SceneType::MENU_PAGE:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::EXIT);
@@ -702,14 +698,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     ads.show(AdsType::BANNER);
                     billing.queryPurchases();
-                    // TODO currently they are sync and freeze everything, disabled while waiting to have async queries
-                    // gameServices.achievements().query(FaceSmashAchievement::LITTLE_SMASHER);
-                    // gameServices.achievements().query(FaceSmashAchievement::THE_SNIPER);
-                    break;
-                case SceneType::PLAY_PAGE:
-                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::PLAY_GAME);
                     break;
                 case SceneType::CREDITS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -749,6 +737,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::THE_GAME:
                     enableCameraFrame(registry);
+                    enableStanza(registry, StanzaType::IN_GAME_ITEM_TUTORIAL);
                     ads.load(AdsType::INTERSTITIAL);
                     initTheGame(registry);
                     break;
@@ -767,23 +756,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::TRAINING:
                     enableCameraFrame(registry);
+                    ads.load(AdsType::INTERSTITIAL);
                     initTraining(registry);
                     break;
-                case SceneType::ENDLESS_TUTORIAL:
-                    // TODO
-                    break;
-                case SceneType::ENDLESS:
+                case SceneType::TRAINING_IS_OVER:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_SELECT);
                     enableCameraFrame(registry);
-                    ads.load(AdsType::INTERSTITIAL);
-                    initEndless(registry);
-                    break;
-                case SceneType::TETRIS_TUTORIAL:
-                    // TODO
-                    break;
-                case SceneType::TETRIS:
-                    enableCameraFrame(registry);
-                    ads.load(AdsType::INTERSTITIAL);
-                    initTetris(registry);
                     break;
                 default:
                     assert(false);
@@ -797,13 +775,13 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 curr = next;
             }
         } else {
+            disableStanza(registry);
             disableFaceButtons(registry);
             disableUIButtons(registry);
             hideFaceButtons(registry);
             hideSmashButtons(registry);
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
-            hidePopupButtons(registry, PanelType::PLAY_GAME);
             hidePopupButtons(registry, PanelType::CREDITS);
             hidePopupButtons(registry, PanelType::SUPPORT);
             hidePopupButtons(registry, PanelType::SETTINGS);
@@ -818,15 +796,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hidePopupButtons(registry, PanelType::MENU_BOTTOM);
                 hidePopupButtons(registry, PanelType::MENU_TOP);
                 remaining = splashScreenTransition(registry);
-                break;
-            case SceneType::PLAY_PAGE:
-                discardExpiringContents(registry);
-                refreshPlayPanel(registry);
-                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                showPopupButtons(registry, PanelType::PLAY_GAME);
-                hideBackgroundPanels(registry);
-                remaining = bgPanelTransition(registry, PanelType::PLAY_GAME);
                 break;
             case SceneType::CREDITS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -869,7 +838,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::VIDEO_RECORDING_STOP:
                 avRecorder.stop();
-                showShareMessage(registry);
                 showPopupButtons(registry, PanelType::GAME_OVER);
                 ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
                 // we try to create enough room to finalize the video
@@ -885,6 +853,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 discardExpiringContents(registry);
                 refreshGameOverPanel(registry);
                 clearTheGame(registry);
+                showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
                 remaining = gameOverTransition(registry);
@@ -899,7 +868,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
                 showSmashButtons(registry);
                 showFaceButtons(registry);
-                clearTraining(registry);
                 enableCameraFrame(registry);
                 remaining = trainingSelectTransition(registry);
                 break;
@@ -907,19 +875,10 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showSmashButtons(registry);
                 remaining = trainingTransition(registry);
                 break;
-            case SceneType::ENDLESS_TUTORIAL:
-                // TODO
-                break;
-            case SceneType::ENDLESS:
-                // TODO
-                clearEndless(registry);
-                break;
-            case SceneType::TETRIS_TUTORIAL:
-                // TODO
-                break;
-            case SceneType::TETRIS:
-                // TODO
-                clearTetris(registry);
+            case SceneType::TRAINING_IS_OVER:
+                ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
+                clearTraining(registry);
+                remaining = {};
                 break;
             default:
                 assert(false);

@@ -18,7 +18,6 @@ enum class FaceSmashLeaderboard {
 struct AchievementsManager {
     virtual ~AchievementsManager() = default;
 
-    virtual void query(FaceSmashAchievement) noexcept = 0;
     virtual void increment(FaceSmashAchievement, uint32_t = 1) noexcept = 0;
     virtual void unlock(FaceSmashAchievement) noexcept = 0;
     virtual void showAllUI() noexcept = 0;

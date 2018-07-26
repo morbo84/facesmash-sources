@@ -155,19 +155,6 @@ void GameServicesAndroid::signOut() noexcept {
 
 }
 
-void GameServicesAndroid::query(FaceSmashAchievement a) noexcept {
-    auto response = gs_->Achievements().FetchBlocking(achievementCode(a));
-    auto &dispatcher = Locator::Dispatcher::ref();
-
-    if(response.status != gpg::ResponseStatus::VALID) {
-        dispatcher.enqueue<AchievementEvent>(a, AchievementEvent::Type::UNKNOWN);
-    } else if(response.data.State() == gpg::AchievementState::UNLOCKED) {
-        dispatcher.enqueue<AchievementEvent>(a, AchievementEvent::Type::UNLOCKED);
-    } else {
-        dispatcher.enqueue<AchievementEvent>(a, AchievementEvent::Type::LOCKED);
-    }
-}
-
 
 void GameServicesAndroid::increment(FaceSmashAchievement a, uint32_t steps) noexcept {
     std::unique_lock lock{mutex};
@@ -256,7 +243,6 @@ GameServicesService::Status GameServicesAndroid::status() const noexcept {  retu
 void GameServicesAndroid::signIn() noexcept {}
 void GameServicesAndroid::signOut() noexcept {}
 void GameServicesAndroid::unlock(FaceSmashAchievement) noexcept {}
-void GameServicesAndroid::query(FaceSmashAchievement) noexcept {}
 void GameServicesAndroid::increment(FaceSmashAchievement, uint32_t) noexcept {}
 void GameServicesAndroid::showAllUI() noexcept {}
 bool GameServicesAndroid::isSignedIn() const noexcept { return false; }

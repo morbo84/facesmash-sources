@@ -1,3 +1,12 @@
+****** VISAGE ******
+
+http://www.visagetechnologies.com/download/download-center/
+Username: visage
+Password: svt2002
+
+****** VISAGE ******
+
+
 * Android flavors per ridurre dimensione apk e farli al dettaglio
 
 * provare su titolo menu: scritte che cambiano coloro stile giochi retrò o ombreggiature bianche autonome animate per lettera
@@ -9,9 +18,9 @@
 
 PER IL RILASCIO:
 
+* preparare ed innestare servizi ios nel codice
+
 * check achievements da fare quando si va al menu e asincrono, non sincrono su splash screen!!
-* completare mini giochi endless e training, scene system e altro già sistemati
 * crash background -> foreground, vedere se lo risolviamo
 * screenshot
-* let's play stile need train nel training per andare diretto al gioco
-* tutorial in-game per spiegare cosa devono fare con gli item!!
+* better smash area management, so that not all the faces explode at once in the low end of the screen during the training
