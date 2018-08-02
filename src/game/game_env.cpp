@@ -31,13 +31,13 @@ int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
         env.clock.pause();
         break;
     case SDL_APP_DIDENTERBACKGROUND:
-        // nothing to do here, thanks anyway
+        env.clock.pause();
         break;
     case SDL_APP_WILLENTERFOREGROUND:
         env.clock.unpause();
         break;
     case SDL_APP_DIDENTERFOREGROUND:
-        // nothing to do here, thanks anyway
+        env.clock.unpause();
         break;
     case SDL_MOUSEMOTION:
         queue = event->motion.which == SDL_TOUCH_MOUSEID ? 0 : 1;

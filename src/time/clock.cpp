@@ -13,14 +13,18 @@ Clock::Clock()
 
 
 void Clock::pause() noexcept {
-    previous = SDL_GetTicks();
-    paused = true;
+    if(!paused) {
+        previous = SDL_GetTicks();
+        paused = true;
+    }
 }
 
 
 void Clock::unpause() noexcept {
-    gap += (SDL_GetTicks() - previous);
-    paused = false;
+    if(paused) {
+        gap += (SDL_GetTicks() - previous);
+        paused = false;
+    }
 }
 
 
