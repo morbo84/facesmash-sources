@@ -100,7 +100,8 @@ enum class UIAction: Uint8 {
     LOGIN,
     SHOP,
     GPG_LICENSE,
-    LOCKED
+    LOCKED,
+    MORE
 };
 
 

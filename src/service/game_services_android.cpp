@@ -186,6 +186,21 @@ void GameServicesAndroid::showAllUI() noexcept {
 }
 
 
+void GameServicesAndroid::query(FaceSmashAchievement a, std::function<void(bool)> func) {
+    std::unique_lock lock{mutex};
+
+    if(isAuthorized()) {
+        lock.unlock();
+        gs_->Achievements().Fetch(achievementCode(a), [func = std::move(func)](const FetchResponse &res) {
+            func((res.status == gpg::ResponseStatus::VALID || res.status == gpg::ResponseStatus::VALID_BUT_STALE) && (res.data.State() == gpg::AchievementState::UNLOCKED));
+        });
+    } else {
+        lock.unlock();
+        func(false);
+    }
+}
+
+
 bool GameServicesAndroid::isSignedIn() const noexcept {
     return gs_ && gs_->IsAuthorized();
 }
@@ -245,6 +260,7 @@ void GameServicesAndroid::signOut() noexcept {}
 void GameServicesAndroid::unlock(FaceSmashAchievement) noexcept {}
 void GameServicesAndroid::increment(FaceSmashAchievement, uint32_t) noexcept {}
 void GameServicesAndroid::showAllUI() noexcept {}
+void GameServicesAndroid::query(FaceSmashAchievement, std::function<void(bool)> func) { func(true); }
 bool GameServicesAndroid::isSignedIn() const noexcept { return false; }
 void GameServicesAndroid::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {}
 void GameServicesAndroid::showAllLeaderboardsUI() noexcept {}

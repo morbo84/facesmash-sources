@@ -5,6 +5,7 @@
 #include "../common/types.h"
 #include <SDL_types.h>
 #include <cstdint>
+#include <functional>
 
 
 namespace gamee {
@@ -21,6 +22,7 @@ struct AchievementsManager {
     virtual void increment(FaceSmashAchievement, uint32_t = 1) noexcept = 0;
     virtual void unlock(FaceSmashAchievement) noexcept = 0;
     virtual void showAllUI() noexcept = 0;
+    virtual void query(FaceSmashAchievement, std::function<void(bool)>) = 0;
 };
 
 

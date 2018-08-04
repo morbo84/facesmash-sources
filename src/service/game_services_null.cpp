@@ -13,6 +13,9 @@ void GameServicesNull::unlock(FaceSmashAchievement) noexcept {}
 void GameServicesNull::showAllUI() noexcept {}
 
 
+void GameServicesNull::query(FaceSmashAchievement, std::function<void(bool)> func) { func(true); }
+
+
 void GameServicesNull::submitScore(FaceSmashLeaderboard, uint64_t) noexcept {}
 
 

@@ -20,6 +20,7 @@ struct GameServicesNull : GameServicesService, AchievementsManager, Leaderboards
     void increment(FaceSmashAchievement a, uint32_t steps) noexcept override;
     void unlock(FaceSmashAchievement a) noexcept override;
     void showAllUI() noexcept override;
+    void query(FaceSmashAchievement, std::function<void(bool)>) override;
 
     void submitScore(FaceSmashLeaderboard, uint64_t) noexcept override;
     void showAllLeaderboardsUI() noexcept override;

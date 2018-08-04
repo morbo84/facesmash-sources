@@ -84,7 +84,9 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::LOCKED:
         setSpriteGeometry(registry, entity, 0, 960, width, height, 1_ui8);
         break;
-    case UIAction::EASTER_EGG:
+    case UIAction::MORE:
+        setSpriteGeometry(registry, entity, 192, 960, width, height, 1_ui8);
+        break;
     default:
         assert(false);
         break;

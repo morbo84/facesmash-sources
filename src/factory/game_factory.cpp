@@ -377,31 +377,16 @@ void refreshSupportPanel(Registry &registry) {
         const auto &shopSprite = registry.get<Sprite>(shopButton);
         setSpriteSize(registry, shopButton, 4 * shopSprite.w / 5, 4 * shopSprite.h / 5);
         setPopupUIButtonSize(registry, shopButton, shopSprite.w, shopSprite.h);
-        setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 5 * panel.h / 9);
+        setPos(registry, shopButton, (panel.w - shopSprite.w) / 2, 6 * panel.h / 11);
         setBoundingBox(registry, shopButton, 3 * shopSprite.w / 2, 3 * shopSprite.h / 2);
         registry.assign<PulseAnimation>(shopButton, 0.f, .8f, .2f, 3000_ui32);
         registry.get<Sprite>(shopButton).frame = 0;
         registry.assign<ExpiringContent>(shopButton);
 
-        auto removeHandle = textureCache.handle("str/support/remove");
-        auto removeEntity = createSprite(registry, parent, removeHandle, 20);
-        setPos(registry, removeEntity, shopTransform.x - removeHandle->width() - shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 - 3 * removeHandle->height() / 2);
-        registry.assign<ExpiringContent>(removeEntity);
-
         auto adsHandle = textureCache.handle("str/support/ads");
         auto adsEntity = createSprite(registry, parent, adsHandle, 20);
-        setPos(registry, adsEntity, shopTransform.x - adsHandle->width() - shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 + adsHandle->height() / 2);
+        setPos(registry, adsEntity, shopTransform.x + (shopSprite.w - adsHandle->width()) / 2, shopTransform.y + shopSprite.h + adsHandle->height() / 2);
         registry.assign<ExpiringContent>(adsEntity);
-
-        auto unlockHandle = textureCache.handle("str/support/unlock");
-        auto unlockEntity = createSprite(registry, parent, unlockHandle, 20);
-        setPos(registry, unlockEntity, shopTransform.x + 5 * shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 - 3 * unlockHandle->height() / 2);
-        registry.assign<ExpiringContent>(unlockEntity);
-
-        auto gamesHandle = textureCache.handle("str/support/games");
-        auto gamesEntity = createSprite(registry, parent, gamesHandle, 20);
-        setPos(registry, gamesEntity, shopTransform.x + 5 * shopSprite.w / 4, shopTransform.y + shopSprite.h / 2 + gamesHandle->height() / 2);
-        registry.assign<ExpiringContent>(gamesEntity);
 
         auto offerHandle = textureCache.handle("str/support/offer");
         auto offerEntity = createSprite(registry, parent, offerHandle, 20);
@@ -554,7 +539,7 @@ void createGameTopPanel(Registry &registry) {
     auto scoreHandle = textureCache.handle("str/game/score");
     auto timerHandle = textureCache.handle("str/game/timer");
 
-    auto offset = 0;
+    float offset = 0.f;
 
     auto parent = createPanel(registry, PanelType::THE_GAME_TOP, 0, -logicalHeight / 8, logicalWidth, logicalHeight / 8);
     const auto &panel = registry.get<Panel>(parent);

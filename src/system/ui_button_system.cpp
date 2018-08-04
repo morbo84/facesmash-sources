@@ -219,6 +219,9 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::LOCKED:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
                     break;
+                case UIAction::MORE:
+                    // TODO
+                    break;
                 }
             }
         });

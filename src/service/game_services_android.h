@@ -4,6 +4,7 @@
 
 #include "game_services_service.h"
 #include <memory>
+
 #ifdef __ANDROID__
 #include <mutex>
 #endif
@@ -28,13 +29,15 @@ struct GameServicesAndroid : GameServicesService, AchievementsManager, Leaderboa
     void signIn() noexcept override;
     void signOut() noexcept override;
     bool isSignedIn() const noexcept override;
+
     AchievementsManager& achievements() noexcept override;
     LeaderboardsManager& leaderboards() noexcept override;
 
     // AchievementsManager interface
-    void increment(FaceSmashAchievement a, uint32_t steps) noexcept override;
-    void unlock(FaceSmashAchievement a) noexcept override;
+    void increment(FaceSmashAchievement, uint32_t) noexcept override;
+    void unlock(FaceSmashAchievement) noexcept override;
     void showAllUI() noexcept override;
+    void query(FaceSmashAchievement, std::function<void(bool)>) override;
 
     // LeaderboardsManager interface
     void submitScore(FaceSmashLeaderboard, uint64_t) noexcept override;
