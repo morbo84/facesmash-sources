@@ -11,7 +11,7 @@
 #include "../service/billing_service.h"
 #include "../service/camera_service.h"
 #include "../service/face_bus_service.h"
-#include "../service/game_services_service.h"
+#include "../service/game_services.h"
 #include "../service/haptic_service.h"
 #include "../service/permissions_service.h"
 #include "../service/settings_service.h"

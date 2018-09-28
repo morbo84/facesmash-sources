@@ -1,5 +1,5 @@
-#ifndef FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H
-#define FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H
+#ifndef FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H
+#define FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H
 
 
 #include <memory>
@@ -14,9 +14,9 @@ struct AvRecorderEvent;
 struct GameRenderer;
 
 
-struct AvRecorderSystem final {
-    AvRecorderSystem();
-    ~AvRecorderSystem();
+struct RecordingSystem final {
+    RecordingSystem();
+    ~RecordingSystem();
 
     void init();
 
@@ -37,4 +37,4 @@ private:
 }
 
 
-#endif // FACE_SMASH_SYSTEM_AV_RECORDER_SYSTEM_H
+#endif // FACE_SMASH_SYSTEM_RECORDING_SYSTEM_H

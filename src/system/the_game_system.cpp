@@ -28,7 +28,8 @@ void TheGameSystem::receive(const TimeIsOverEvent &) noexcept {
 void TheGameSystem::update(Registry &registry, Spawner &spawner) {
     if(registry.has<LetsPlay>()) {
         if(timeIsOver) {
-            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::GAME_OVER);
+            const auto multiplayer = registry.get<LetsPlay>().multiplayer;
+            Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(multiplayer ? SceneType::MULTIPLAYER_RESULTS : SceneType::GAME_OVER);
         } else {
             const auto &timer = registry.get<Timer>();
 

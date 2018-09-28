@@ -22,6 +22,7 @@ int GameEnv::appEventFilter(void *ptr, SDL_Event *event) noexcept {
     switch(event->type) {
     case SDL_APP_TERMINATING:
         // the user is exiting the game... :-(
+        Locator::GameServices::ref().multiplayer().terminateMatch();
         env.loop = false;
         break;
     case SDL_APP_LOWMEMORY:

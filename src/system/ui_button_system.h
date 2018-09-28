@@ -18,6 +18,7 @@ struct UIButtonSystem final {
 
     void receive(const TouchEvent &) noexcept;
 
+    void showMultiplayerPage();
     void showAchievements();
     void showLeaderboard();
 

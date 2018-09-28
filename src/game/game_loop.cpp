@@ -20,6 +20,7 @@ void GameLoop::init(GameRenderer &renderer) {
     loadResources(renderer);
     prepareGameStrings(renderer);
     prepareCameraFrame(renderer);
+    prepareOpponentFrame(renderer);
     prepareGameStuff(renderer);
 
     createExitPanel(registry);
@@ -30,18 +31,22 @@ void GameLoop::init(GameRenderer &renderer) {
     createBackgroundBottomPanel(registry);
     createMenuTopPanel(registry);
     createMenuBottomPanel(registry);
-    createCreditsPanel(registry);
-    createSupportPanel(registry);
+    createInfoPanel(registry);
+    createMultiplayerPanel(registry);
     createSettingsPanel(registry);
     createTutorialTopPanel(registry);
     createTutorialBottomPanel(registry);
     createGameTopPanel(registry);
+    createGameBottomPanel(registry);
     createGameOverPanel(registry);
+    createMultiplayerResultsPanel(registry);
     createTrainingRightPanel(registry);
     createTrainingTopPanel(registry);
     createTrainingBottomPanel(registry);
     createInviteTrainLeft(registry);
     createInviteTrainRight(registry);
+    createInviteShareLeft(registry);
+    createInviteShareRight(registry);
     createStanza(registry);
     createCamera(registry);
     createCameraFrame(registry);
@@ -55,7 +60,7 @@ void GameLoop::init(GameRenderer &renderer) {
 #endif // DEBUG
 
     // init systems explicitly if required
-    avRecorderSystem.init();
+    recordingSystem.init();
 
     // request immediately a transition to the main menu from the splash screen
     Locator::Dispatcher::ref().trigger<SceneChangeEvent>(SceneType::SPLASH_SCREEN);
@@ -74,12 +79,15 @@ void GameLoop::close() {
 
 void GameLoop::update(GameRenderer &renderer, delta_type delta) {
     // do the best to record if required and then render everything
-    avRecorderSystem.update(renderer, delta, [&, this]() {
+    recordingSystem.update(renderer, delta, [&, this]() {
         // sum what remains from the previous step
         accumulator += delta;
 
         // check if we are dealing with a face smash supporter
         billingSystem.update(registry);
+
+        // dequeue incoming messages as soon as possible
+        multiplayerSystem.update(registry, delta);
 
         audioSystem.update();
         frameSystem.update(registry, renderer);

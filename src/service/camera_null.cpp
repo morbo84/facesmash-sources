@@ -23,8 +23,8 @@ int CameraNull::height() const noexcept {
 }
 
 
-void CameraNull::frame(std::function<void(const void *, int)> func) const noexcept {
-    func(nullptr, 0);
+void CameraNull::frame(std::function<void(const void *, int)>) const noexcept {
+    // does nothing to avoid crashes :-)
 }
 
 

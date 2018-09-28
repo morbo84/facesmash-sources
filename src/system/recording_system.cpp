@@ -6,13 +6,13 @@
 #include "../locator/locator.hpp"
 #include "../service/av_recorder_android.h"
 #include "../service/av_recorder_null.h"
-#include "av_recorder_system.h"
+#include "recording_system.h"
 
 
 namespace gamee {
 
 
-AvRecorderSystem::AvRecorderSystem()
+RecordingSystem::RecordingSystem()
     : pixels{nullptr},
       accumulator{0_ui32},
       frameTime{0_ui32},
@@ -24,12 +24,12 @@ AvRecorderSystem::AvRecorderSystem()
 }
 
 
-AvRecorderSystem::~AvRecorderSystem() {
+RecordingSystem::~RecordingSystem() {
     Locator::Dispatcher::ref().sink<AvRecorderEvent>().disconnect(this);
 }
 
 
-void AvRecorderSystem::init() {
+void RecordingSystem::init() {
     auto &textureCache = Locator::TextureCache::ref();
     auto recording = textureCache.handle("target/recording");
 
@@ -46,7 +46,7 @@ void AvRecorderSystem::init() {
 }
 
 
-void AvRecorderSystem::receive(const AvRecorderEvent &event) noexcept {
+void RecordingSystem::receive(const AvRecorderEvent &event) noexcept {
     switch(event.type) {
 #ifdef __ANDROID__
     case AvRecorderEvent::Type::ENABLE:
@@ -65,7 +65,7 @@ void AvRecorderSystem::receive(const AvRecorderEvent &event) noexcept {
 }
 
 
-void AvRecorderSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
+void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::function<void(void)> next) {
     auto &avRecorder = Locator::AvRecorder::ref();
 
     if(avRecorder.recording()) {

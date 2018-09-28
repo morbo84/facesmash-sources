@@ -61,24 +61,26 @@ void ScoreSystem::update(Registry &registry) {
         }
 
         registry.view<PlayerScoreObserver>().each([&](auto, auto &observer) {
-            auto &textureCache = Locator::TextureCache::ref();
-            auto symEmptyHandle = textureCache.handle("str/small/ ");
+            if(observer.local) {
+                auto &textureCache = Locator::TextureCache::ref();
+                auto symEmptyHandle = textureCache.handle("str/small/ ");
 
-            // cap the score to the limit imposed by the number of entities used to represent it
-            const int cap = std::pow(10, std::extent<decltype(PlayerScoreObserver::entities)>::value);
-            auto score = std::min(current, cap - 1);
+                // cap the score to the limit imposed by the number of entities used to represent it
+                const int cap = std::pow(10, std::extent<decltype(PlayerScoreObserver::entities)>::value);
+                auto score = std::min(current, cap - 1);
 
-            const int last = std::extent<decltype(PlayerScoreObserver::entities)>::value;
-            const int offset = numOfDigits(score);
+                const int last = std::extent<decltype(PlayerScoreObserver::entities)>::value;
+                const int offset = numOfDigits(score);
 
-            for(auto i = offset; i < last; ++i) {
-                registry.accommodate<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
-            }
+                for(auto i = offset; i < last; ++i) {
+                    registry.accommodate<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+                }
 
-            for(auto i = offset; i > 0; --i) {
-                auto handle = toStrSmallHandle(score % 10);
-                registry.accommodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
-                score /= 10;
+                for(auto i = offset; i > 0; --i) {
+                    auto handle = toStrSmallHandle(score % 10);
+                    registry.accommodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+                    score /= 10;
+                }
             }
         });
     } else {

@@ -14,6 +14,7 @@ void loadDebugResources();
 void prepareGameStrings(GameRenderer &);
 void prepareDebugStrings(GameRenderer &);
 void prepareCameraFrame(GameRenderer &);
+void prepareOpponentFrame(GameRenderer &);
 void prepareGameStuff(GameRenderer &);
 
 

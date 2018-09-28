@@ -213,10 +213,14 @@ struct PlayerScore {
 
 struct PlayerScoreObserver {
     entity_type entities[5];
+    bool local{true};
 };
 
 
-struct LetsPlay {};
+struct LetsPlay {
+    bool multiplayer{false};
+};
+
 struct LetsTrain {};
 
 

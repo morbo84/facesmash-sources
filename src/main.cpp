@@ -53,7 +53,11 @@ static void initPlatformServices() {
     gamee::Locator::Permissions::set<gamee::PermissionsAndroid>();
     gamee::Locator::Settings::set<gamee::SettingsOnFile>();
     gamee::Locator::Camera::set<gamee::CameraAndroid>();
-    gamee::Locator::GameServices::set<gamee::GameServicesAndroid>();
+    /* the following line is protected by a guard to avoid
+     * gpg having to mess with a pending instance
+     * e.g. in case of transition to multi-window mode
+     */
+    if(gamee::Locator::GameServices::empty()) { gamee::Locator::GameServices::set<gamee::GameServicesAndroid>(); }
     gamee::Locator::Ads::set<gamee::AdsAndroid>();
     gamee::Locator::Billing::set<gamee::BillingAndroid>();
 #else
@@ -119,9 +123,6 @@ int main(int, char **) {
     // set up services
     initBasicServices();
     initPlatformServices();
-
-    // try to log in for fun and profit
-    gamee::Locator::GameServices::ref().signIn();
 
     // create a new game loop and initialize the environment
     auto loop = std::make_unique<gamee::GameLoop>();

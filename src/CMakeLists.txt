@@ -39,7 +39,6 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/achievements_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/animation_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/audio_system.cpp
-    ${facesmash_SOURCE_DIR}/src/system/av_recorder_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/billing_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/camera_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/debug_system.cpp
@@ -50,6 +49,8 @@ set(
     ${facesmash_SOURCE_DIR}/src/system/frame_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/item_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/movement_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/multiplayer_system.cpp
+    ${facesmash_SOURCE_DIR}/src/system/recording_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/rendering_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/scene_system.cpp
     ${facesmash_SOURCE_DIR}/src/system/score_system.cpp

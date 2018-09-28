@@ -2,7 +2,7 @@
 #include "../component/component.hpp"
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
-#include "../service/game_services_service.h"
+#include "../service/game_services.h"
 #include "achievements_system.h"
 
 
@@ -289,7 +289,7 @@ void AchievementsSystem::update(Registry &registry) {
         const auto &score = registry.get<PlayerScore>();
         auto delta = score - previous;
 
-        if(current == SceneType::THE_GAME) {
+        if(current == SceneType::THE_GAME || current == SceneType::MULTIPLAYER) {
             myFirstCombo(score);
             smashMeBaby(score);
             kindergarten(score);

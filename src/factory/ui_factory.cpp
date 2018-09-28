@@ -31,9 +31,9 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::LEADERBOARD:
         setSpriteGeometry(registry, entity, 384, 384, width, height, 1_ui8);
         break;
-    case UIAction::CREDITS:
+    case UIAction::INFO:
     case UIAction::GPG_LICENSE:
-        setSpriteGeometry(registry, entity, 576, 192, width, height, 1_ui8);
+        setSpriteGeometry(registry, entity, 192, 960, width, height, 1_ui8);
         break;
     case UIAction::EXIT:
         setSpriteGeometry(registry, entity, 768, 192, width, height, 1_ui8);
@@ -53,6 +53,7 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::RESTART:
         setSpriteGeometry(registry, entity, 384, 576, width, height, 1_ui8);
         break;
+    case UIAction::STREAM:
     case UIAction::SHARE:
         setSpriteGeometry(registry, entity, 0, 768, width, height, 2_ui8);
         break;
@@ -60,7 +61,6 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
         setSpriteGeometry(registry, entity, 576, 576, width, height, 1_ui8);
         break;
     case UIAction::SHOP:
-    case UIAction::SUPPORT:
         setSpriteGeometry(registry, entity, 384, 768, width, height, 3_ui8);
         break;
     case UIAction::SWITCH_AUDIO:
@@ -84,8 +84,17 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
     case UIAction::LOCKED:
         setSpriteGeometry(registry, entity, 0, 960, width, height, 1_ui8);
         break;
-    case UIAction::MORE:
-        setSpriteGeometry(registry, entity, 192, 960, width, height, 1_ui8);
+    case UIAction::MULTIPLAYER:
+        setSpriteGeometry(registry, entity, 576, 192, width, height, 1_ui8);
+        break;
+    case UIAction::YOU_VS_ME:
+        setSpriteGeometry(registry, entity, 768, 384, width, height, 1_ui8);
+        break;
+    case UIAction::INVITE:
+        setSpriteGeometry(registry, entity, 576, 960, width, height, 1_ui8);
+        break;
+    case UIAction::INVITATION:
+        setSpriteGeometry(registry, entity, 384, 960, width, height, 1_ui8);
         break;
     default:
         assert(false);

@@ -44,8 +44,8 @@ static void hideBackgroundPanels(Registry &registry) {
     registry.view<Panel, Transform>().each([](auto, const auto &panel, auto &transform) {
         switch(panel.type) {
         case PanelType::EXIT:
-        case PanelType::CREDITS:
-        case PanelType::SUPPORT:
+        case PanelType::INFO:
+        case PanelType::MULTIPLAYER:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
             transform.x = -panel.w;
@@ -102,7 +102,7 @@ static void hideSmashButtons(Registry &registry) {
 static void showPopupButtons(Registry &registry, PanelType type) {
     registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
         if(panel.type == type) {
-            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
+            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, auto &button, const auto &sprite, const auto &, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
                     registry.accommodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutElastic);
                     registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
@@ -116,7 +116,7 @@ static void showPopupButtons(Registry &registry, PanelType type) {
 static void hidePopupButtons(Registry &registry, PanelType type) {
     registry.view<Panel>().each([&registry, type](auto parent, const auto &panel) {
         if(panel.type == type) {
-            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &renderable, const auto &transform) {
+            registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
                     registry.accommodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutCubic);
                     registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
@@ -152,7 +152,7 @@ static void showFaceButtons(Registry &registry) {
 
 
 static void hideFaceButtons(Registry &registry) {
-    registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
+    registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &, const auto &sprite, auto &renderable) {
         registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutCubic);
         registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 1000_ui32, 0_ui32, &easeInCubic);
     });
@@ -201,8 +201,15 @@ static void enableCameraFrame(Registry &registry) {
 }
 
 
-static void clearTheGame(Registry &registry) {
-    registry.destroy(registry.attachee<LetsPlay>());
+static void clearGame(Registry &registry) {
+    // this way we support both solo games and multiplayer matches
+    registry.destroy(registry.attachee<PlayerScore>());
+}
+
+
+static void clearMultiplayerGame(Registry &registry) {
+    registry.remove<LetsPlay>();
+    registry.remove<Timer>();
 }
 
 
@@ -213,9 +220,9 @@ static void clearTraining(Registry &registry) {
 }
 
 
-static void initTheGame(Registry &registry) {
+static void initGame(Registry &registry, bool multiplayer = false) {
     auto game = registry.create();
-    registry.assign<LetsPlay>(entt::tag_t{}, game);
+    registry.assign<LetsPlay>(entt::tag_t{}, game, multiplayer);
     registry.assign<PlayerScore>(entt::tag_t{}, game);
     registry.assign<Timer>(entt::tag_t{}, game, gameDuration);
 }
@@ -274,14 +281,22 @@ static delta_type menuPageTransition(Registry &registry) {
         case PanelType::GAME_OVER:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
+        case PanelType::MULTIPLAYER_RESULTS:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            break;
         case PanelType::INVITE_TRAIN_LEFT:
+        case PanelType::INVITE_SHARE_LEFT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_TRAIN_RIGHT:
+        case PanelType::INVITE_SHARE_RIGHT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::THE_GAME_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
@@ -316,10 +331,32 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
         case PanelType::MENU_TOP:
         case PanelType::BACKGROUND_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::MENU_BOTTOM:
         case PanelType::BACKGROUND_BOTTOM:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::GAME_OVER:
+        case PanelType::MULTIPLAYER_RESULTS:
+        case PanelType::INVITE_TRAIN_RIGHT:
+        case PanelType::INVITE_SHARE_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::INVITE_TRAIN_LEFT:
+        case PanelType::INVITE_SHARE_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::THE_GAME_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::THE_GAME_BOTTOM:
+        case PanelType::TRAINING_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TRAINING_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -331,7 +368,7 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 }
 
 
-static delta_type gameTutorialTransition(Registry &registry) {
+static delta_type gameAndMultiplayerTutorialTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
 
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
@@ -363,13 +400,14 @@ static delta_type gameTutorialTransition(Registry &registry) {
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
+        case PanelType::MULTIPLAYER_RESULTS:
+        case PanelType::INVITE_TRAIN_RIGHT:
+        case PanelType::INVITE_SHARE_RIGHT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         case PanelType::INVITE_TRAIN_LEFT:
+        case PanelType::INVITE_SHARE_LEFT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
-            break;
-        case PanelType::INVITE_TRAIN_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -393,8 +431,6 @@ static delta_type videoRecordingStopTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::INVITE_TRAIN_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
-            break;
         case PanelType::INVITE_TRAIN_RIGHT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
             break;
@@ -405,6 +441,28 @@ static delta_type videoRecordingStopTransition(Registry &registry) {
     });
 
     return duration;
+}
+
+
+static delta_type multiplayerRecordingStopTransition(Registry &registry) {
+     static constexpr delta_type duration = 1000_ui32;
+
+     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+         switch(panel.type) {
+         case PanelType::THE_GAME_BOTTOM:
+             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutExpo);
+             break;
+         case PanelType::INVITE_TRAIN_LEFT:
+         case PanelType::INVITE_TRAIN_RIGHT:
+             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+             break;
+         default:
+             // all the other panels are already out of scene (they ought to be at least)
+             break;
+         }
+     });
+
+     return duration;
 }
 
 
@@ -444,6 +502,70 @@ static delta_type theGameTransition(Registry &registry) {
 }
 
 
+static delta_type multiplayerTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::BACKGROUND_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::BACKGROUND_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::TITLE_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TITLE_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TUTORIAL_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::TUTORIAL_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::THE_GAME_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::INVITE_SHARE_LEFT:
+        case PanelType::INVITE_SHARE_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
+        }
+    });
+
+    return duration;
+}
+
+
+static delta_type multiplayerShareTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::INVITE_SHARE_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::INVITE_SHARE_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::THE_GAME_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        default:
+            // all the other panels are already in the right place (they ought to be at least)
+            break;
+        }
+    });
+
+    return {};
+}
+
+
 static delta_type gameOverTransition(Registry &registry) {
     static constexpr delta_type duration = 1000_ui32;
     static constexpr delta_type transition = 3200_ui32;
@@ -462,12 +584,6 @@ static delta_type gameOverTransition(Registry &registry) {
         case PanelType::THE_GAME_TOP:
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
-        case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
-            break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
             break;
@@ -476,6 +592,40 @@ static delta_type gameOverTransition(Registry &registry) {
 
     // used to suppress wrong warnings from g++
     (void)duration;
+
+    return transition;
+}
+
+
+static delta_type multiplayerResultsTransition(Registry &registry) {
+    static constexpr delta_type duration = 1000_ui32;
+    static constexpr delta_type transition = 3200_ui32;
+
+    registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
+        switch(panel.type) {
+        case PanelType::BACKGROUND_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::BACKGROUND_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::MULTIPLAYER_RESULTS:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::THE_GAME_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            break;
+        case PanelType::INVITE_SHARE_RIGHT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::INVITE_SHARE_LEFT:
+            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            break;
+        default:
+            // all the other panels are already out of scene (they ought to be at least)
+            break;
+        }
+    });
 
     return transition;
 }
@@ -504,13 +654,14 @@ static delta_type trainingTutorialTransition(Registry &registry) {
             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
+        case PanelType::MULTIPLAYER_RESULTS:
+        case PanelType::INVITE_TRAIN_RIGHT:
+        case PanelType::INVITE_SHARE_RIGHT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         case PanelType::INVITE_TRAIN_LEFT:
+        case PanelType::INVITE_SHARE_LEFT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
-            break;
-        case PanelType::INVITE_TRAIN_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -612,19 +763,18 @@ SceneSystem::~SceneSystem() {
 
 
 void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
-    assert(!isTransitioning);
-
-    pending = event.scene;
-
     // events are filtered out during transitions
     if(curr == next) {
+        const auto nextRequiresCamera = event.scene == SceneType::GAME_TUTORIAL
+                || event.scene == SceneType::TRAINING_TUTORIAL
+                || event.scene == SceneType::MULTIPLAYER_PAGE;
+
         // forces camera permission page if required (game/training not allowed)
-        if((Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED)
-                && (pending == SceneType::GAME_TUTORIAL || pending == SceneType::TRAINING_TUTORIAL))
-        {
+        if(nextRequiresCamera && Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED) {
+            pending = event.scene;
             Locator::Permissions::ref().request(PermissionType::CAMERA);
         } else {
-            next = pending;
+            next = event.scene;
         }
     }
 }
@@ -636,11 +786,12 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         auto &dispatcher = Locator::Dispatcher::ref();
 
         switch(curr) {
-        case SceneType::CREDITS_PAGE:
-        case SceneType::SUPPORT_PAGE:
+        case SceneType::INFO_PAGE:
+        case SceneType::MULTIPLAYER_PAGE:
         case SceneType::SETTINGS_PAGE:
         case SceneType::TRAINING_SELECT:
-        case SceneType::VIDEO_RECORDING_STOP:
+        case SceneType::GAME_RECORDING_STOP:
+        case SceneType::MULTIPLAYER_RECORDING_STOP:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
             break;
         case SceneType::TRAINING:
@@ -653,6 +804,8 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
             dispatcher.enqueue<QuitEvent>();
             break;
         case SceneType::THE_GAME:
+        case SceneType::MULTIPLAYER:
+        case SceneType::MULTIPLAYER_SHARE:
             static constexpr auto forced = true;
             dispatcher.enqueue<TimeIsOverEvent>(forced);
             break;
@@ -666,21 +819,19 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 
 void SceneSystem::receive(const PermissionEvent &event) noexcept {
     if(event.permission == PermissionType::CAMERA && event.result == PermissionStatus::GRANTED) {
-        if(curr == next) {
-            next = pending;
-        }
+        next = (curr == next) ? pending : next;
     }
 }
 
 
 void SceneSystem::update(Registry &registry, delta_type delta) {
+    auto &dispatcher = Locator::Dispatcher::ref();
+
     if(curr != next) {
-        auto &dispatcher = Locator::Dispatcher::ref();
         auto &avRecorder = Locator::AvRecorder::ref();
         auto &camera = Locator::Camera::ref();
         auto &ads = Locator::Ads::ref();
         auto &billing = Locator::Billing::ref();
-        // auto &gameServices = Locator::GameServices::ref();
 
         if(isTransitioning) {
             // tracks remaining before to update it (mainly for video recording purposes)
@@ -699,15 +850,15 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     ads.show(AdsType::BANNER);
                     billing.queryPurchases();
                     break;
-                case SceneType::CREDITS_PAGE:
+                case SceneType::INFO_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::CREDITS);
+                    enableUIButtons(registry, PanelType::INFO);
                     break;
-                case SceneType::SUPPORT_PAGE:
+                case SceneType::MULTIPLAYER_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
-                    enableUIButtons(registry, PanelType::SUPPORT);
+                    enableUIButtons(registry, PanelType::MULTIPLAYER);
                     break;
                 case SceneType::SETTINGS_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -723,26 +874,54 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING_START);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_RECORDING_START);
                     hideBackgroundPanels(registry);
                     // starting the camera freezes the app, this seems to be a good point to risk a lag
                     camera.start();
                     break;
-                case SceneType::VIDEO_RECORDING_START:
+                case SceneType::MULTIPLAYER_TUTORIAL:
+                    dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_RECORDING_START);
+                    hideBackgroundPanels(registry);
+                    // starting the camera freezes the app, this seems to be a good point to risk a lag
+                    camera.start();
+                    break;
+                case SceneType::GAME_RECORDING_START:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::THE_GAME);
                     break;
-                case SceneType::VIDEO_RECORDING_STOP:
+                case SceneType::MULTIPLAYER_RECORDING_START:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER);
+                    break;
+                case SceneType::GAME_RECORDING_STOP:
                     enableUIButtons(registry, PanelType::GAME_OVER);
                     enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
+                    break;
+                case SceneType::MULTIPLAYER_RECORDING_STOP:
+                    enableUIButtons(registry, PanelType::MULTIPLAYER_RESULTS);
+                    enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
+                    // terminates the match and therefore leaves the room
+                    Locator::GameServices::ref().multiplayer().terminateMatch();
                     break;
                 case SceneType::THE_GAME:
                     enableCameraFrame(registry);
                     enableStanza(registry, StanzaType::IN_GAME_ITEM_TUTORIAL);
                     ads.load(AdsType::INTERSTITIAL);
-                    initTheGame(registry);
+                    initGame(registry);
+                    break;
+                case SceneType::MULTIPLAYER:
+                    enableCameraFrame(registry);
+                    enableUIButtons(registry, PanelType::INVITE_SHARE_RIGHT);
+                    ads.load(AdsType::INTERSTITIAL);
+                    initGame(registry, true);
+                    break;
+                case SceneType::MULTIPLAYER_SHARE:
+                    enableCameraFrame(registry);
                     break;
                 case SceneType::GAME_OVER:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::VIDEO_RECORDING_STOP);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_RECORDING_STOP);
+                    break;
+                case SceneType::MULTIPLAYER_RESULTS:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_RECORDING_STOP);
                     break;
                 case SceneType::TRAINING_TUTORIAL:
                     dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, true);
@@ -782,8 +961,8 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
             hideSmashButtons(registry);
             hidePopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
             hidePopupButtons(registry, PanelType::BACKGROUND_TOP);
-            hidePopupButtons(registry, PanelType::CREDITS);
-            hidePopupButtons(registry, PanelType::SUPPORT);
+            hidePopupButtons(registry, PanelType::INFO);
+            hidePopupButtons(registry, PanelType::MULTIPLAYER);
             hidePopupButtons(registry, PanelType::SETTINGS);
 
             switch(next) {
@@ -797,21 +976,21 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 hidePopupButtons(registry, PanelType::MENU_TOP);
                 remaining = splashScreenTransition(registry);
                 break;
-            case SceneType::CREDITS_PAGE:
-                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
-                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                showPopupButtons(registry, PanelType::CREDITS);
-                hideBackgroundPanels(registry);
-                remaining = bgPanelTransition(registry, PanelType::CREDITS);
-                break;
-            case SceneType::SUPPORT_PAGE:
+            case SceneType::INFO_PAGE:
                 discardExpiringContents(registry);
-                refreshSupportPanel(registry);
+                refreshInfoPanel(registry);
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
                 showPopupButtons(registry, PanelType::BACKGROUND_TOP);
-                showPopupButtons(registry, PanelType::SUPPORT);
+                showPopupButtons(registry, PanelType::INFO);
                 hideBackgroundPanels(registry);
-                remaining = bgPanelTransition(registry, PanelType::SUPPORT);
+                remaining = bgPanelTransition(registry, PanelType::INFO);
+                break;
+            case SceneType::MULTIPLAYER_PAGE:
+                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showPopupButtons(registry, PanelType::MULTIPLAYER);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition(registry, PanelType::MULTIPLAYER);
                 break;
             case SceneType::SETTINGS_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -822,41 +1001,82 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 break;
             case SceneType::MENU_PAGE:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, false);
+                Locator::GameServices::ref().multiplayer().terminateMatch();
                 remaining = menuPageTransition(registry);
                 break;
             case SceneType::GAME_TUTORIAL:
+            case SceneType::MULTIPLAYER_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
                 dispatcher.enqueue<ArmageddonEvent>();
                 discardExpiringContents(registry);
-                remaining = gameTutorialTransition(registry);
+                remaining = gameAndMultiplayerTutorialTransition(registry);
                 break;
-            case SceneType::VIDEO_RECORDING_START:
+            case SceneType::GAME_RECORDING_START:
                 // video recording has a bootstrap time we want to manage to create better videos
                 avRecorder.start(recordingWidth, recordingHeight);
                 // read carefully the rules of the game!
                 remaining = videoRecordingStartTransition(registry);
                 break;
-            case SceneType::VIDEO_RECORDING_STOP:
+            case SceneType::MULTIPLAYER_RECORDING_START:
+#ifdef DEBUG
+                // video recording has a bootstrap time we want to manage to create better videos
+                avRecorder.start(recordingWidth, recordingHeight);
+#endif // DEBUG
+                // read carefully the rules of the game!
+                remaining = videoRecordingStartTransition(registry);
+                break;
+            case SceneType::GAME_RECORDING_STOP:
                 avRecorder.stop();
                 showPopupButtons(registry, PanelType::GAME_OVER);
                 ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
                 // we try to create enough room to finalize the video
                 remaining = videoRecordingStopTransition(registry);
                 break;
+            case SceneType::MULTIPLAYER_RECORDING_STOP:
+#ifdef DEBUG
+                avRecorder.stop();
+#endif // DEBUG
+                refreshResultsMultiplayerResultsPanel(registry);
+                clearGame(registry);
+                showPopupButtons(registry, PanelType::MULTIPLAYER_RESULTS);
+                ads.isLoaded(AdsType::INTERSTITIAL) ? ads.show(AdsType::INTERSTITIAL) : void();
+                // we try to create enough room to finalize the video
+                remaining = multiplayerRecordingStopTransition(registry);
+                break;
             case SceneType::THE_GAME:
                 showSmashButtons(registry);
                 enableCameraFrame(registry);
                 remaining = theGameTransition(registry);
                 break;
+            case SceneType::MULTIPLAYER:
+                showSmashButtons(registry);
+                enableCameraFrame(registry);
+                remaining = multiplayerTransition(registry);
+                break;
+            case SceneType::MULTIPLAYER_SHARE:
+                showSmashButtons(registry);
+                enableCameraFrame(registry);
+                remaining = multiplayerShareTransition(registry);
+                break;
             case SceneType::GAME_OVER:
                 dispatcher.enqueue<ArmageddonEvent>();
                 discardExpiringContents(registry);
                 refreshGameOverPanel(registry);
-                clearTheGame(registry);
+                clearGame(registry);
                 showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
                 remaining = gameOverTransition(registry);
+                break;
+            case SceneType::MULTIPLAYER_RESULTS:
+                dispatcher.enqueue<ArmageddonEvent>();
+                discardExpiringContents(registry);
+                refreshButtonsMultiplayerResultsPanel(registry);
+                clearMultiplayerGame(registry);
+                showShareMessages(registry);
+                resetPulseButton(registry);
+                hidePopupButtons(registry, PanelType::MULTIPLAYER_RESULTS);
+                remaining = multiplayerResultsTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_PLAY, false);
@@ -890,7 +1110,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
 
             isTransitioning = true;
         }
+    } else if((curr == SceneType::MENU_PAGE || curr == SceneType::MULTIPLAYER_PAGE) && Locator::GameServices::ref().multiplayer().readyPlayerOne()) {
+        // in case there is a pending request for a multiplayer match, let's start the game immediately
+        dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_TUTORIAL);
     }
+
 }
 
 

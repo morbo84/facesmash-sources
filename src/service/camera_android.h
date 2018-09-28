@@ -28,6 +28,7 @@ struct CameraAndroid final: CameraService {
 private:
     void init() noexcept;
     void swapPtrs() noexcept;
+    void yuvNV21ToARGB(const void* yuv, char* argb) noexcept;
 
     std::unique_ptr<char[]> frame0_;
     std::unique_ptr<char[]> frame1_;
@@ -36,6 +37,7 @@ private:
     mutable std::mutex frameMtx_;
     int width_{logicalWidth/2};
     int height_{logicalHeight/2};
+    int rotation_{};
     size_t size_{0};
 };
 

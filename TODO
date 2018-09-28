@@ -9,9 +9,6 @@ Password: svt2002
 
 * Android flavors per ridurre dimensione apk e farli al dettaglio
 
-* provare su titolo menu: scritte che cambiano coloro stile giochi retrò o ombreggiature bianche autonome animate per lettera
-* abbassare volume di base, così spacca i timpani
-
 * diverse intensità per il volume, non solo on/off
 * disabilitare modalità multi-window per android
 * trovare un modo funzionale per abilitare gli ads "reali" solo quando si builda in release (meglio ancora se solo col martello)
@@ -19,13 +16,12 @@ Password: svt2002
 PER IL RILASCIO:
 
 * preparare ed innestare servizi ios nel codice
-
 * check achievements da fare quando si va al menu e asincrono, non sincrono su splash screen!!
-* crash background -> foreground, vedere se lo risolviamo
-* screenshot
 * better smash area management, so that not all the faces explode at once in the low end of the screen during the training
 
-* Primo item:
-  - allungare durata fermo
-  - farlo oscillare (size animation minima?)
-  - presentarlo ad ogni partita solo se l'utente non ha mai fatto touch, sennò si salva nei settings e ciao
+MULTIPLAYER
+
+* lasciare la room quando si va in background
+* mandare immagine con contatore e fare dual buffer, client e server non sono sincronizzati
+* trattare ShareStreamEvent in scene system per togliere pulsante a schermo
+* manca pagina game over

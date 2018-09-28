@@ -4,7 +4,7 @@
 #include "../event/event.hpp"
 #include "../locator/locator.hpp"
 #include "../math/math.hpp"
-#include "../service/game_services_service.h"
+#include "../service/game_services.h"
 #include "../service/haptic_null.h"
 #include "../service/haptic_sdl.h"
 #include "ui_button_system.h"
@@ -92,6 +92,11 @@ void UIButtonSystem::receive(const TouchEvent &event) noexcept {
 }
 
 
+void UIButtonSystem::showMultiplayerPage() {
+    Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_PAGE);
+}
+
+
 void UIButtonSystem::showAchievements() {
     Locator::GameServices::ref().achievements().showAllUI();
 }
@@ -108,18 +113,18 @@ void UIButtonSystem::updateLoginButton(Registry &registry) {
     Uint8 frame{};
 
     switch(gameServices.status()) {
-        case GameServicesService::Status ::SIGNED_IN:
+        case GameServicesService::Status::SIGNED_IN:
             pending = pending ? ((this->*pending)(), nullptr) : nullptr;
             frame = 0;
             break;
-        case GameServicesService::Status ::SIGNED_OUT:
+        case GameServicesService::Status::SIGNED_OUT:
             pending = nullptr;
             frame = 1;
             break;
-        case GameServicesService::Status ::SIGNING_IN:
+        case GameServicesService::Status::SIGNING_IN:
             frame = 0;
             break;
-        case GameServicesService::Status ::SIGNING_OUT:
+        case GameServicesService::Status::SIGNING_OUT:
             frame = 1;
             break;
     }
@@ -173,11 +178,13 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::MENU_CLOSE_DOWN:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
                     break;
-                case UIAction::CREDITS:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::CREDITS_PAGE);
+                case UIAction::INFO:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::INFO_PAGE);
                     break;
-                case UIAction::SUPPORT:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
+                case UIAction::MULTIPLAYER:
+                    gservices.isSignedIn()
+                            ? showMultiplayerPage()
+                            : (pending = &UIButtonSystem::showMultiplayerPage, Locator::GameServices::ref().signIn());
                     break;
                 case UIAction::SETTINGS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::SETTINGS_PAGE);
@@ -217,10 +224,19 @@ void UIButtonSystem::update(Registry &registry) {
                     showOssLicenses();
                     break;
                 case UIAction::LOCKED:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::SUPPORT_PAGE);
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::INFO_PAGE);
                     break;
-                case UIAction::MORE:
-                    // TODO
+                case UIAction::YOU_VS_ME:
+                    gservices.multiplayer().quickMatch();
+                    break;
+                case UIAction::INVITE:
+                    gservices.multiplayer().inviteFriend();
+                    break;
+                case UIAction::INVITATION:
+                    gservices.multiplayer().invitationInbox();
+                    break;
+                case UIAction::STREAM:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_SHARE);
                     break;
                 }
             }

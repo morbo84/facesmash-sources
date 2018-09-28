@@ -103,7 +103,7 @@ void RenderingSystem::debug(Registry &registry, GameRenderer &renderer) {
 
 void RenderingSystem::update(Registry &registry, GameRenderer &renderer) {
     registry.sort<Renderable>([](const auto &lhs, const auto &rhs) {
-        return (lhs.z == rhs.z) ? (&lhs < &rhs) : (lhs.z < rhs.z);
+        return (lhs.z == rhs.z) ? (&lhs > &rhs) : (lhs.z < rhs.z);
     });
 
     game(registry, renderer);
