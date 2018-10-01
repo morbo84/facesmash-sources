@@ -89,6 +89,7 @@ static constexpr const char* leaderboardCode(FaceSmashLeaderboard l) {
 GameServicesAndroid::GameServicesAndroid() noexcept
     : remoteFrameBuffer{std::make_unique<unsigned char[]>(frameSize)},
       localFrameBuffer{std::make_unique<unsigned char[]>(frameSize)},
+      hasPendingInvitations{false},
       remoteFrameCounter{},
       partAccumulator{},
       sizeAccumulator{},
@@ -129,12 +130,8 @@ GameServicesAndroid::GameServicesAndroid() noexcept
         }
 
         (void)guard;
-    }).SetOnMultiplayerInvitationEvent([this](gpg::MultiplayerEvent event, std::string id, gpg::MultiplayerInvitation invitation) {
-        if(event == gpg::MultiplayerEvent::UPDATED_FROM_APP_LAUNCH) {
-            acceptInvitation(invitation);
-        } else {
-            invitationInbox();
-        }
+    }).SetOnMultiplayerInvitationEvent([this](gpg::MultiplayerEvent, std::string, gpg::MultiplayerInvitation) {
+        hasPendingInvitations = true;
 #ifdef DEBUG
     }).SetOnLog([](gpg::LogLevel lvl, const std::string &msg) {
         SDL_Log("GPG Log: %s", msg.c_str());
@@ -149,7 +146,6 @@ GameServicesAndroid::GameServicesAndroid() noexcept
     AMediaCodec_configure(decoder, decMediaFormat, nullptr, nullptr, 0);
     AMediaCodec_start(decoder);
 }
-
 
 GameServicesAndroid::~GameServicesAndroid() noexcept {
     AMediaCodec_delete(encoder);
@@ -264,7 +260,7 @@ void GameServicesAndroid::invitationInbox() noexcept {
                         acceptInvitation(res.invitation);
 #ifdef DEBUG
                     } else {
-                        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges",
+                        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges [Invitation Inbox]",
                                                  gpg::DebugString(res.status).c_str(), nullptr);
 #endif
                     }
@@ -366,6 +362,22 @@ bool GameServicesAndroid::readyPlayerOne() const noexcept {
 }
 
 
+void GameServicesAndroid::fetchInvitations() noexcept {
+    gservice->RealTimeMultiplayer().FetchInvitations([this](const gpg::RealTimeMultiplayerManager::FetchInvitationsResponse &response) {
+        hasPendingInvitations = gpg::IsSuccess(response.status) && !response.invitations.empty();
+    });
+}
+
+
+void GameServicesAndroid::handleInvitations() noexcept {
+    if(hasPendingInvitations) {
+        hasPendingInvitations = false;
+        invitationInbox();
+    }
+
+}
+
+
 void GameServicesAndroid::updateRoom(const gpg::RealTimeRoom &room) {
     std::lock_guard guard{mutex};
     this->room = room;
@@ -382,7 +394,7 @@ void GameServicesAndroid::acceptInvitation(gpg::MultiplayerInvitation invitation
         showWaitingRoom();
 #ifdef DEBUG
     } else {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges", gpg::DebugString(result.status).c_str(), nullptr);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges [Accept Invitation]", gpg::DebugString(result.status).c_str(), nullptr);
 #endif
     }
 }
@@ -395,7 +407,7 @@ void GameServicesAndroid::createRealTimeRoom(const gpg::RealTimeRoomConfig &conf
             showWaitingRoom();
 #ifdef DEBUG
         } else {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges", gpg::DebugString(res.status).c_str(), nullptr);
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges [Create RealTime Room]", gpg::DebugString(res.status).c_str(), nullptr);
 #endif
         }
     });
@@ -420,7 +432,7 @@ void GameServicesAndroid::showWaitingRoom() {
             updateRoom(res.room);
 #ifdef DEBUG
         } else {
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges", gpg::DebugString(res.status).c_str(), nullptr);
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Challenges [Show Waiting Room]", gpg::DebugString(res.status).c_str(), nullptr);
 #endif
         }
     });
@@ -664,8 +676,8 @@ void GameServicesAndroid::getOpponentScore(std::function<void(int)> func) const 
 void GameServicesAndroid::sendCameraFrame(const void *, int) {}
 void GameServicesAndroid::sendPlayerScore(int) {}
 bool GameServicesAndroid::readyPlayerOne() const noexcept { return false; }
-
-
+void GameServicesAndroid::fetchInvitations() noexcept {}
+void GameServicesAndroid::handleInvitations() noexcept {}
 AchievementsService& GameServicesAndroid::achievements() noexcept { return *this; }
 LeaderboardsService& GameServicesAndroid::leaderboards() noexcept { return *this; }
 MultiplayerService& GameServicesAndroid::multiplayer() noexcept { return *this; }

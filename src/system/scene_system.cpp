@@ -767,7 +767,7 @@ void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
     if(curr == next) {
         const auto nextRequiresCamera = event.scene == SceneType::GAME_TUTORIAL
                 || event.scene == SceneType::TRAINING_TUTORIAL
-                || event.scene == SceneType::MULTIPLAYER_PAGE;
+                || event.scene == SceneType::MULTIPLAYER_TUTORIAL;
 
         // forces camera permission page if required (game/training not allowed)
         if(nextRequiresCamera && Locator::Permissions::ref().status(PermissionType::CAMERA) != PermissionStatus::GRANTED) {
@@ -819,12 +819,15 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 
 void SceneSystem::receive(const PermissionEvent &event) noexcept {
     if(event.permission == PermissionType::CAMERA && event.result == PermissionStatus::GRANTED) {
+        Locator::GameServices::ref().multiplayer().terminateMatch();
         next = (curr == next) ? pending : next;
+        pending = SceneType::UNKNOWN;
     }
 }
 
 
 void SceneSystem::update(Registry &registry, delta_type delta) {
+    auto &gameServices = Locator::GameServices::ref();
     auto &dispatcher = Locator::Dispatcher::ref();
 
     if(curr != next) {
@@ -1000,6 +1003,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 remaining = bgPanelTransition(registry, PanelType::SETTINGS);
                 break;
             case SceneType::MENU_PAGE:
+                gameServices.multiplayer().fetchInvitations();
                 dispatcher.enqueue<AudioMusicEvent>(AudioMusicType::AUDIO_MUSIC_RELAX, false);
                 Locator::GameServices::ref().multiplayer().terminateMatch();
                 remaining = menuPageTransition(registry);
@@ -1110,9 +1114,14 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
 
             isTransitioning = true;
         }
-    } else if((curr == SceneType::MENU_PAGE || curr == SceneType::MULTIPLAYER_PAGE) && Locator::GameServices::ref().multiplayer().readyPlayerOne()) {
-        // in case there is a pending request for a multiplayer match, let's start the game immediately
-        dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_TUTORIAL);
+    } else if((curr == SceneType::MENU_PAGE || curr == SceneType::MULTIPLAYER_PAGE)) {
+        if(gameServices.multiplayer().readyPlayerOne() && pending != SceneType::MULTIPLAYER_TUTORIAL) {
+            // in case there is a pending request for a multiplayer match, let's start the game immediately
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_TUTORIAL);
+        } else if(!gameServices.multiplayer().readyPlayerOne()) {
+            // someone invited me to a multiplayer match in the meantime? let's see...
+            gameServices.multiplayer().handleInvitations();
+        }
     }
 
 }

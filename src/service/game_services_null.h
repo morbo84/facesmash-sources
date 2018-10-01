@@ -36,6 +36,8 @@ struct GameServicesNull : GameServicesService, AchievementsService, Leaderboards
     void sendCameraFrame(const void *, int) override;
     void sendPlayerScore(int) override;
     bool readyPlayerOne() const noexcept override;
+    void fetchInvitations() noexcept override;
+    void handleInvitations() noexcept override;
 
 public:
     mutable bool triggerMultiplayer{false};

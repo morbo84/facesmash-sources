@@ -18,11 +18,9 @@ void GameServicesNull::getOpponentFrame(std::function<void(const void *, int)> f
 void GameServicesNull::getOpponentScore(std::function<void(int)> func) const noexcept { func(100); }
 void GameServicesNull::sendCameraFrame(const void *, int) {}
 void GameServicesNull::sendPlayerScore(int) {}
-
-bool GameServicesNull::readyPlayerOne() const noexcept {
-    return triggerMultiplayer;
-}
-
+bool GameServicesNull::readyPlayerOne() const noexcept { return triggerMultiplayer; }
+void GameServicesNull::fetchInvitations() noexcept {}
+void GameServicesNull::handleInvitations() noexcept {}
 GameServicesService::Status GameServicesNull::status() const noexcept {  return GameServicesService::Status::SIGNED_OUT; }
 void GameServicesNull::signIn() noexcept {}
 void GameServicesNull::signOut() noexcept {}

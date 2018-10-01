@@ -44,6 +44,8 @@ struct MultiplayerService {
     virtual void sendCameraFrame(const void *, int) = 0;
     virtual void sendPlayerScore(int) = 0;
     virtual bool readyPlayerOne() const noexcept = 0;
+    virtual void fetchInvitations() noexcept = 0;
+    virtual void handleInvitations() noexcept = 0;
 };
 
 

@@ -64,6 +64,8 @@ struct GameServicesAndroid
     void getOpponentScore(std::function<void(int)>) const noexcept override;
     void sendPlayerScore(int) override;
     bool readyPlayerOne() const noexcept override;
+    void fetchInvitations() noexcept override;
+    void handleInvitations() noexcept override;
 
 #ifdef __ANDROID__
     void updateRoom(const gpg::RealTimeRoom &);
@@ -105,6 +107,7 @@ private:
     std::unique_ptr<gpg::GameServices> gservice;
     std::unique_ptr<unsigned char[]> remoteFrameBuffer;
     std::unique_ptr<unsigned char[]> localFrameBuffer;
+    bool hasPendingInvitations;
     uint32_t remoteFrameCounter;
     int partAccumulator;
     int sizeAccumulator;
