@@ -4,6 +4,7 @@
 
 #include "settings_service.h"
 #include <map>
+#include <mutex>
 #include <string>
 
 
@@ -29,6 +30,7 @@ private:
     void save();
 
     std::map<std::string, std::string> m_;
+    mutable std::mutex mtx_;
 };
 
 
