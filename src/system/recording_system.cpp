@@ -93,7 +93,7 @@ void RecordingSystem::update(GameRenderer &renderer, delta_type delta, std::func
             next();
 
             renderer.target(*recording);
-            SDL_RenderCopyEx(renderer, *logical, nullptr, nullptr, 0., nullptr, SDL_FLIP_HORIZONTAL);
+            SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
 
             renderer.target();
             SDL_RenderCopy(renderer, *logical, nullptr, nullptr);
