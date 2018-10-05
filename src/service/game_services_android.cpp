@@ -596,7 +596,7 @@ AMediaFormat *GameServicesAndroid::makeEncoderMediaFormat() {
     AMediaFormat_setString(mediaFormat, AMEDIAFORMAT_KEY_MIME, "video/avc");
     AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_WIDTH, opponentFrameWidth);
     AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_HEIGHT, opponentFrameHeight);
-    AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 400000);
+    AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_BIT_RATE, 300000);
     AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_FRAME_RATE, frameRate);
     AMediaFormat_setInt32(mediaFormat, "capture-rate", frameRate);
     AMediaFormat_setInt32(mediaFormat, AMEDIAFORMAT_KEY_I_FRAME_INTERVAL, 3);
