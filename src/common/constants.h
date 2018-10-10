@@ -48,6 +48,9 @@ constexpr SDL_Color colorYellow{255_ui8, 206_ui8, 41_ui8, 255_ui8};
 constexpr SDL_Color colorBlue{0_ui8, 222_ui8, 255_ui8, 255_ui8};
 constexpr SDL_Color colorGreen{0_ui8, 123_ui8, 74_ui8, 255_ui8};
 
+constexpr auto settingsRatingState = "rating/state";
+constexpr int64_t ratingDone = 0, ratingLater = 1, ratingNo = 2;
+
 
 }
 

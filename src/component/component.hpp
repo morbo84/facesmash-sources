@@ -251,6 +251,11 @@ struct Stanza final: SDL_Rect {
 };
 
 
+struct PlayedMatches final {
+    Uint16 count{};
+};
+
+
 }
 
 

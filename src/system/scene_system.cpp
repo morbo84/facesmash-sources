@@ -15,6 +15,14 @@
 namespace gamee {
 
 
+#ifdef __ANDROID__
+// prompt the user to rate the app in the store
+void showRateDialog() noexcept;
+#else
+void showRateDialog() noexcept {}
+#endif
+
+
 static void enableStanza(Registry &registry, StanzaType type) {
     registry.view<Stanza>().each([type](const auto, auto &stanza) {
         if(stanza.type == type) {
@@ -182,6 +190,23 @@ static void showShareMessages(Registry &registry) {
     const auto &bottomSprite = registry.get<Sprite>(bottomLabel);
     setPos(registry, bottomLabel, (logicalWidth - bottomSprite.w) / 2, 3 * logicalHeight / 4);
     registry.assign<ExpiringContent>(bottomLabel);
+}
+
+
+static void handleRateDialog(Registry &registry) {
+    constexpr auto numMatchesThreshold = 2U;
+    auto& settings = Locator::Settings::ref();
+
+    if(settings.read(settingsRatingState, ratingLater) == ratingLater) {
+        if(!registry.has<PlayedMatches>()) {
+            auto entity = registry.create();
+            registry.assign<PlayedMatches>(entt::tag_t{}, entity);
+        }
+
+        if(++registry.get<PlayedMatches>().count == numMatchesThreshold) {
+            showRateDialog();
+        }
+    }
 }
 
 
@@ -1070,6 +1095,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
+                handleRateDialog(registry);
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::MULTIPLAYER_RESULTS:
@@ -1080,6 +1106,7 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::MULTIPLAYER_RESULTS);
+                handleRateDialog(registry);
                 remaining = multiplayerResultsTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
