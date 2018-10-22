@@ -166,10 +166,18 @@ void createMenuTopPanel(Registry &registry) {
     setPos(registry, multiplayerButton, (panel.w / 3 - multiplayerSprite.w) / 2, 2 * panel.h / 5);
     setBoundingBox(registry, multiplayerButton, multiplayerSprite.w, multiplayerSprite.h);
 
+    auto multiplayerLabelHandle = textureCache.handle("str/menu/multiplayer");
+    auto multiplayerLabelEntity = createSprite(registry, parent, multiplayerLabelHandle, 150);
+    setPos(registry, multiplayerLabelEntity, (panel.w / 3 - multiplayerLabelHandle->width()) / 2, 2 * panel.h / 5 + multiplayerSprite.h + multiplayerLabelHandle->height() / 2);
+
     auto playButton = createPopupUIButton(registry, parent, UIAction::THE_GAME, 150);
     const auto &playSprite = registry.get<Sprite>(playButton);
     setPos(registry, playButton, (panel.w - playSprite.w) / 2, 2 * panel.h / 5 - playSprite.h / 2);
     registry.assign<PulseAnimation>(playButton, 10.f, .4f, .1f, 3000_ui32);
+
+    auto playLabelHandle = textureCache.handle("str/menu/play");
+    auto playLabelEntity = createSprite(registry, parent, playLabelHandle, 150);
+    setPos(registry, playLabelEntity, (panel.w - playLabelHandle->width()) / 2, 2 * panel.h / 5 + playSprite.h / 2 + playLabelHandle->height() / 2);
 
     auto trainingButton = createPopupUIButton(registry, parent, UIAction::TRAINING, 150);
     const auto &trainingSprite = registry.get<Sprite>(trainingButton);
@@ -177,6 +185,10 @@ void createMenuTopPanel(Registry &registry) {
     setPopupUIButtonSize(registry, trainingButton, trainingSprite.w, trainingSprite.h);
     setPos(registry, trainingButton, (5 * panel.w / 3 - trainingSprite.w) / 2, 2 * panel.h / 5);
     setBoundingBox(registry, trainingButton, trainingSprite.w, trainingSprite.h);
+
+    auto trainingLabelHandle = textureCache.handle("str/menu/training");
+    auto trainingLabelEntity = createSprite(registry, parent, trainingLabelHandle, 150);
+    setPos(registry, trainingLabelEntity, (5 * panel.w / 3 - trainingLabelHandle->width()) / 2, 2 * panel.h / 5 + trainingSprite.h + trainingLabelHandle->height() / 2);
 
     auto settingsButton = createPopupUIButton(registry, parent, UIAction::SETTINGS, 150);
     const auto &settingsSprite = registry.get<Sprite>(settingsButton);
@@ -212,6 +224,10 @@ void createMenuBottomPanel(Registry &registry) {
     setPos(registry, achievementsButton, (panel.w / 3 - achievementsSprite.w) / 2, 3 * panel.h / 5 - achievementsSprite.h);
     setBoundingBox(registry, achievementsButton, achievementsSprite.w, achievementsSprite.h);
 
+    auto achievementsLabelHandle = textureCache.handle("str/menu/achievements");
+    auto achievementsLabelEntity = createSprite(registry, parent, achievementsLabelHandle, 150);
+    setPos(registry, achievementsLabelEntity, (panel.w / 3 - achievementsLabelHandle->width()) / 2, 3 * panel.h / 5 - achievementsSprite.h - 3 * achievementsLabelHandle->height() / 2);
+
     auto infoButton = createPopupUIButton(registry, parent, UIAction::INFO, 150);
     const auto &infoSprite = registry.get<Sprite>(infoButton);
     setSpriteSize(registry, infoButton, 4 * infoSprite.w / 5, 4 * infoSprite.h / 5);
@@ -219,12 +235,20 @@ void createMenuBottomPanel(Registry &registry) {
     setPos(registry, infoButton, (panel.w - infoSprite.w) / 2, 3 * panel.h / 5 - infoSprite.h / 2);
     setBoundingBox(registry, infoButton, infoSprite.w, infoSprite.h);
 
+    auto infoLabelHandle = textureCache.handle("str/menu/info");
+    auto infoLabelEntity = createSprite(registry, parent, infoLabelHandle, 150);
+    setPos(registry, infoLabelEntity, (panel.w - infoLabelHandle->width()) / 2, 3 * panel.h / 5 - infoSprite.h / 2 - 3 * infoLabelHandle->height() / 2);
+
     auto leaderboardButton = createPopupUIButton(registry, parent, UIAction::LEADERBOARD, 150);
     const auto &leaderboardSprite = registry.get<Sprite>(leaderboardButton);
     setSpriteSize(registry, leaderboardButton, 4 * leaderboardSprite.w / 5, 4 * leaderboardSprite.h / 5);
     setPopupUIButtonSize(registry, leaderboardButton, leaderboardSprite.w, leaderboardSprite.h);
     setPos(registry, leaderboardButton, (5 * panel.w / 3 - leaderboardSprite.w) / 2, 3 * panel.h / 5 - leaderboardSprite.h);
     setBoundingBox(registry, leaderboardButton, leaderboardSprite.w, leaderboardSprite.h);
+
+    auto leaderboardLabelHandle = textureCache.handle("str/menu/leaderboard");
+    auto leaderboardLabelEntity = createSprite(registry, parent, leaderboardLabelHandle, 150);
+    setPos(registry, leaderboardLabelEntity, (5 * panel.w / 3 - leaderboardLabelHandle->width()) / 2, 3 * panel.h / 5 - leaderboardSprite.h - 3 * leaderboardLabelHandle->height() / 2);
 }
 
 

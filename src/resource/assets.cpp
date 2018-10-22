@@ -164,6 +164,13 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/tutorial/face", "USE YOUR FACE", renderer, *fontNormal, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/tutorial/touch", "TOUCH THESE", renderer, *fontNormal, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/tutorial/touchme", "TOUCH ME", renderer, *fontSmall, colorRed);
+
+    textureCache.load<TTFFontTextureLoader>("str/menu/multiplayer", "1vs1", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/menu/play", "play", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/menu/training", "train", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/menu/achievements", "goal", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/menu/info", "about", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/menu/leaderboard", "board", renderer, *fontSmall, colorWhite);
 }
 
 
