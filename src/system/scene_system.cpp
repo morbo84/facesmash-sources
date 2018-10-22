@@ -923,12 +923,14 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 case SceneType::GAME_RECORDING_STOP:
                     enableUIButtons(registry, PanelType::GAME_OVER);
                     enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
+                    handleRateDialog(registry);
                     break;
                 case SceneType::MULTIPLAYER_RECORDING_STOP:
                     enableUIButtons(registry, PanelType::MULTIPLAYER_RESULTS);
                     enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
                     // terminates the match and therefore leaves the room
                     Locator::GameServices::ref().multiplayer().terminateMatch();
+                    handleRateDialog(registry);
                     break;
                 case SceneType::THE_GAME:
                     enableCameraFrame(registry);
@@ -1095,7 +1097,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
-                handleRateDialog(registry);
                 remaining = gameOverTransition(registry);
                 break;
             case SceneType::MULTIPLAYER_RESULTS:
@@ -1106,7 +1107,6 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showShareMessages(registry);
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::MULTIPLAYER_RESULTS);
-                handleRateDialog(registry);
                 remaining = multiplayerResultsTransition(registry);
                 break;
             case SceneType::TRAINING_TUTORIAL:
