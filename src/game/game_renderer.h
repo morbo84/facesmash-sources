@@ -17,7 +17,7 @@ struct GameRenderer final {
     ~GameRenderer();
 
     void present() noexcept;
-    void clear() noexcept;
+    void clear(Uint8 = 0, Uint8 = 0, Uint8 = 0) noexcept;
 
     void target(SDL_Texture * = nullptr) noexcept;
 

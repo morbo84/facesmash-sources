@@ -35,8 +35,8 @@ void GameRenderer::present() noexcept {
 }
 
 
-void GameRenderer::clear() noexcept {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+void GameRenderer::clear(Uint8 r, Uint8 g, Uint8 b) noexcept {
+    SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
 }
 

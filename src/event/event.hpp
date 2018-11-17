@@ -33,6 +33,7 @@ struct SceneChangeEvent {
 struct FaceEvent {
     FaceType type;
     float probability;
+    std::unique_ptr<unsigned char[]> frame;
 };
 
 
@@ -98,6 +99,15 @@ struct AvRecorderEvent {
         EXPORT,
         DISABLE,
         ENABLE
+    };
+
+    const Type type;
+};
+
+
+struct WallpaperEvent {
+    enum class Type: Uint8 {
+        EXPORT
     };
 
     const Type type;

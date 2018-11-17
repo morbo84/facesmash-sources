@@ -12,6 +12,7 @@
 
 namespace gamee {
 
+
 #ifdef __ANDROID__
 void showOssLicenses();
 #else
@@ -176,7 +177,8 @@ void UIButtonSystem::update(Registry &registry) {
                 case UIAction::CLOSE:
                 case UIAction::MENU_CLOSE_UP:
                 case UIAction::MENU_CLOSE_DOWN:
-                    dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+                    // fake back event to force closing panels
+                    dispatcher.enqueue<KeyboardEvent>(KeyboardEvent::Type::BACK);
                     break;
                 case UIAction::INFO:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::INFO_PAGE);
@@ -200,7 +202,13 @@ void UIButtonSystem::update(Registry &registry) {
                             : (pending = &UIButtonSystem::showLeaderboard, Locator::GameServices::ref().signIn());
                     break;
                 case UIAction::SHARE:
+                    dispatcher.enqueue<SceneChangeEvent>(SceneType::WALLPAPER_PAGE);
+                    break;
+                case UIAction::SHARE_VIDEO:
                     dispatcher.enqueue<AvRecorderEvent>(AvRecorderEvent::Type::EXPORT);
+                    break;
+                case UIAction::SHARE_WALLPAPER:
+                    dispatcher.enqueue<WallpaperEvent>(WallpaperEvent::Type::EXPORT);
                     break;
                 case UIAction::SWITCH_AUDIO:
                     switchAudio(registry, entity);

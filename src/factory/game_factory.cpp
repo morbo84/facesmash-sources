@@ -1001,6 +1001,23 @@ void createInviteTrainRight(Registry &registry) {
 }
 
 
+void createWallpaperPanel(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+    auto handle = textureCache.handle("target/wallpaper");
+
+    const auto div = 1.f * logicalWidth / handle->width();
+    const int w = handle->width() * div;
+    const int h = handle->height() * div;
+
+    auto parent = createPanel(registry, PanelType::WALLPAPER, logicalWidth, 0, w, h);
+
+    const auto frame = registry.create();
+    registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), w, h);
+    registry.assign<Transform>(frame, parent, (logicalWidth - w) / 2.f, 0.f);
+    registry.assign<Renderable>(frame, 0.f, 15, 255);
+}
+
+
 void createInviteShareLeft(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
@@ -1023,6 +1040,46 @@ void createInviteShareRight(Registry &registry) {
     setPos(registry, streamButton, panel.w - 6 * streamSprite.w / 5, (panel.h - streamSprite.h) / 2);
     setBoundingBox(registry, streamButton, streamSprite.w, streamSprite.h);
     streamSprite.frame = 1;
+}
+
+
+void createInviteShareTop(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::INVITE_SHARE_TOP, 0, -logicalHeight, logicalWidth, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto shareVideoButton = createUIButton(registry, parent, UIAction::SHARE_VIDEO, 150);
+    auto &shareVideoSprite = registry.get<Sprite>(shareVideoButton);
+    setSpriteSize(registry, shareVideoButton, 3 * shareVideoSprite.w / 5, 3 * shareVideoSprite.h / 5);
+    setPos(registry, shareVideoButton, (panel.w - shareVideoSprite.w) / 2, panel.h / 5 - shareVideoSprite.h);
+    setBoundingBox(registry, shareVideoButton, shareVideoSprite.w, shareVideoSprite.h);
+    registry.assign<PulseAnimation>(shareVideoButton, 10.f, .4f, .1f, 3000_ui32);
+    shareVideoSprite.frame = 1;
+
+    auto shareVideoHandle = textureCache.handle("str/share/video");
+    auto shareVideoEntity = createSprite(registry, parent, shareVideoHandle, 150);
+    setPos(registry, shareVideoEntity, (panel.w - shareVideoHandle->width()) / 2, panel.h / 5 - shareVideoSprite.h - 3 * shareVideoHandle->height() / 2);
+}
+
+
+void createInviteShareBottom(Registry &registry) {
+    auto &textureCache = Locator::TextureCache::ref();
+
+    auto parent = createPanel(registry, PanelType::INVITE_SHARE_BOTTOM, 0, logicalHeight, logicalWidth, logicalHeight);
+    const auto &panel = registry.get<Panel>(parent);
+
+    auto shareWallpaperButton = createUIButton(registry, parent, UIAction::SHARE_WALLPAPER, 150);
+    auto &shareWallpaperSprite = registry.get<Sprite>(shareWallpaperButton);
+    setSpriteSize(registry, shareWallpaperButton, 3 * shareWallpaperSprite.w / 5, 3 * shareWallpaperSprite.h / 5);
+    setPos(registry, shareWallpaperButton, (panel.w - shareWallpaperSprite.w) / 2, 4 * panel.h / 5);
+    setBoundingBox(registry, shareWallpaperButton, shareWallpaperSprite.w, shareWallpaperSprite.h);
+    registry.assign<PulseAnimation>(shareWallpaperButton, 10.f, .4f, .1f, 3000_ui32);
+    shareWallpaperSprite.frame = 1;
+
+    auto shareWallpaperHandle = textureCache.handle("str/share/wallpaper");
+    auto shareWallpaperEntity = createSprite(registry, parent, shareWallpaperHandle, 150);
+    setPos(registry, shareWallpaperEntity, (panel.w - shareWallpaperHandle->width()) / 2, 4 * panel.h / 5 + shareWallpaperSprite.h + shareWallpaperHandle->height() / 2);
 }
 
 

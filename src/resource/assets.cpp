@@ -73,7 +73,7 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/game/score", "SCORE", renderer, *fontSmall, colorRed);
     textureCache.load<TTFFontTextureLoader>("str/game/timer", "TIME", renderer, *fontSmall, colorRed);
 
-    textureCache.load<TTFFontTextureLoader>("str/share/facesmashchallenge", "#FaceSmashChallenge", renderer, *fontSmall, colorGreen);
+    textureCache.load<TTFFontTextureLoader>("str/share/halloffaces", "#HallOfFaces", renderer, *fontSmall, colorGreen);
     textureCache.load<TTFFontTextureLoader>("str/share/facesmash", "#FaceSmash", renderer, *fontSmall, colorGreen);
 
     textureCache.load<TTFFontTextureLoader>("str/item/fountain", "COME ON", renderer, *fontLarge, colorRed);
@@ -132,6 +132,9 @@ void prepareGameStrings(GameRenderer &renderer) {
     textureCache.load<TTFFontTextureLoader>("str/multiplayer/quick", "QUICK", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/multiplayer/invite", "INVITE", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/multiplayer/show", "SHOW", renderer, *fontTiny, colorWhite);
+
+    textureCache.load<TTFFontTextureLoader>("str/share/wallpaper", "Share WALLPAPER", renderer, *fontSmall, colorWhite);
+    textureCache.load<TTFFontTextureLoader>("str/share/video", "Share your VIDEO", renderer, *fontSmall, colorWhite);
 
     textureCache.load<TTFFontTextureLoader>("str/audio", "AUDIO", renderer, *fontTiny, colorWhite);
     textureCache.load<TTFFontTextureLoader>("str/video", "VIDEO", renderer, *fontTiny, colorWhite);
@@ -211,10 +214,38 @@ void prepareOpponentFrame(GameRenderer &renderer) {
 }
 
 
+void prepareWallpaperFrames(GameRenderer &renderer) {
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/angry", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/disgusted", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/fearful", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/happy", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/sad", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+
+    Locator::TextureCache::ref().reload<SDLTextureLoader>(
+            "wallpaper/surprised", renderer, detectorFormat, SDL_TEXTUREACCESS_STREAMING,
+            detectorWidth, detectorHeight);
+}
+
+
 void prepareGameStuff(GameRenderer &renderer) {
     auto &textureCache = Locator::TextureCache::ref();
     textureCache.load<SDLTextureLoader>("target/logical", renderer, internalFormat, SDL_TEXTUREACCESS_TARGET, logicalWidth, logicalHeight);
     textureCache.load<SDLTextureLoader>("target/recording", renderer, internalFormat, SDL_TEXTUREACCESS_TARGET, recordingWidth, recordingHeight);
+    textureCache.load<SDLTextureLoader>("target/wallpaper", renderer, detectorFormat, SDL_TEXTUREACCESS_TARGET, 3 * detectorWidth, 2 * detectorHeight);
 }
 
 

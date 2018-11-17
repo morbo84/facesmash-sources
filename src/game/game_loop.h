@@ -30,6 +30,7 @@
 #include "../system/timer_system.h"
 #include "../system/training_system.h"
 #include "../system/ui_button_system.h"
+#include "../system/wallpaper_system.h"
 #include "game_env.h"
 
 
@@ -79,6 +80,7 @@ private:
     TimerSystem timerSystem;
     TrainingSystem trainingSystem;
     UIButtonSystem uiButtonSystem;
+    WallpaperSystem wallpaperSystem;
 };
 
 

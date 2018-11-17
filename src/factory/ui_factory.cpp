@@ -55,6 +55,8 @@ entity_type createUIButton(Registry &registry, entity_type parent, UIAction acti
         break;
     case UIAction::STREAM:
     case UIAction::SHARE:
+    case UIAction::SHARE_WALLPAPER:
+    case UIAction::SHARE_VIDEO:
         setSpriteGeometry(registry, entity, 0, 768, width, height, 2_ui8);
         break;
     case UIAction::SETTINGS:

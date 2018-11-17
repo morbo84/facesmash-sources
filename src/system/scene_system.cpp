@@ -53,6 +53,7 @@ static void hideBackgroundPanels(Registry &registry) {
         switch(panel.type) {
         case PanelType::EXIT:
         case PanelType::INFO:
+        case PanelType::WALLPAPER:
         case PanelType::MULTIPLAYER:
         case PanelType::SETTINGS:
         case PanelType::SPLASH_SCREEN:
@@ -179,8 +180,8 @@ static void resetPulseButton(Registry &registry) {
 static void showShareMessages(Registry &registry) {
     auto &textureCache = Locator::TextureCache::ref();
 
-    const auto faceSmashChallengeHandle = textureCache.handle("str/share/facesmashchallenge");
-    auto topLabel = createLastingMessage(registry, faceSmashChallengeHandle, 200);
+    const auto hallOfFacesHandle = textureCache.handle("str/share/halloffaces");
+    auto topLabel = createLastingMessage(registry, hallOfFacesHandle, 200);
     const auto &topSprite = registry.get<Sprite>(topLabel);
     setPos(registry, topLabel, (logicalWidth - topSprite.w) / 2, logicalHeight / 8);
     registry.assign<ExpiringContent>(topLabel);
@@ -351,43 +352,74 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
         }
     });
 
-    registry.view<Panel, Transform>().each([&registry, offset](auto entity, const auto &panel, const auto &transform) {
-        switch(panel.type) {
-        case PanelType::MENU_TOP:
-        case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::MENU_BOTTOM:
-        case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::GAME_OVER:
-        case PanelType::MULTIPLAYER_RESULTS:
-        case PanelType::INVITE_TRAIN_RIGHT:
-        case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::INVITE_TRAIN_LEFT:
-        case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
-            break;
-        case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::THE_GAME_BOTTOM:
-        case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
-            break;
-        case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
-            break;
-        default:
-            // all the other panels are already out of scene (they ought to be at least)
-            break;
-        }
-    });
+    if(type == PanelType::WALLPAPER) {
+        registry.view<Panel, Transform>().each([&registry, offset](auto entity, const auto &panel, const auto &transform) {
+            switch(panel.type) {
+            case PanelType::BACKGROUND_TOP:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::BACKGROUND_BOTTOM:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::GAME_OVER:
+            case PanelType::INVITE_TRAIN_RIGHT:
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 5, 0_ui32, &easeOutCubic);
+                break;
+            case PanelType::INVITE_TRAIN_LEFT:
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 5, 0_ui32, &easeOutCubic);
+                break;
+            case PanelType::INVITE_SHARE_TOP:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutElastic);
+                break;
+            case PanelType::INVITE_SHARE_BOTTOM:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutElastic);
+                break;
+            default:
+                // all the other panels are already out of scene (they ought to be at least)
+                break;
+            }
+        });
+    } else {
+        registry.view<Panel, Transform>().each([&registry, offset](auto entity, const auto &panel, const auto &transform) {
+            switch(panel.type) {
+            case PanelType::MENU_TOP:
+            case PanelType::BACKGROUND_TOP:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::MENU_BOTTOM:
+            case PanelType::BACKGROUND_BOTTOM:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::GAME_OVER:
+            case PanelType::MULTIPLAYER_RESULTS:
+            case PanelType::INVITE_TRAIN_RIGHT:
+            case PanelType::INVITE_SHARE_RIGHT:
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+                break;
+            case PanelType::INVITE_TRAIN_LEFT:
+            case PanelType::INVITE_SHARE_LEFT:
+                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+                break;
+            case PanelType::THE_GAME_TOP:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::THE_GAME_BOTTOM:
+            case PanelType::TRAINING_BOTTOM:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+                break;
+            case PanelType::TRAINING_TOP:
+                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+                break;
+            default:
+                // all the other panels are already out of scene (they ought to be at least)
+                break;
+            }
+        });
+    }
 
     return duration;
 }
@@ -458,6 +490,12 @@ static delta_type videoRecordingStopTransition(Registry &registry) {
         case PanelType::INVITE_TRAIN_LEFT:
         case PanelType::INVITE_TRAIN_RIGHT:
             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+            break;
+        case PanelType::INVITE_SHARE_TOP:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 5, 0_ui32, &easeOutCubic);
+            break;
+        case PanelType::INVITE_SHARE_BOTTOM:
+            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 5, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -587,6 +625,9 @@ static delta_type multiplayerShareTransition(Registry &registry) {
         }
     });
 
+    // used to suppress wrong warnings from g++
+    (void)duration;
+
     return {};
 }
 
@@ -651,6 +692,9 @@ static delta_type multiplayerResultsTransition(Registry &registry) {
             break;
         }
     });
+
+    // used to suppress wrong warnings from g++
+    (void)duration;
 
     return transition;
 }
@@ -816,8 +860,12 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
         case SceneType::SETTINGS_PAGE:
         case SceneType::TRAINING_SELECT:
         case SceneType::GAME_RECORDING_STOP:
+        case SceneType::GAME_OVER_NO_REFRESH:
         case SceneType::MULTIPLAYER_RECORDING_STOP:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::MENU_PAGE);
+            break;
+        case SceneType::WALLPAPER_PAGE:
+            dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_OVER_NO_REFRESH);
             break;
         case SceneType::TRAINING:
             dispatcher.enqueue<SceneChangeEvent>(SceneType::TRAINING_IS_OVER);
@@ -883,6 +931,13 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
                     enableUIButtons(registry, PanelType::INFO);
                     break;
+                case SceneType::WALLPAPER_PAGE:
+                    enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                    enableUIButtons(registry, PanelType::BACKGROUND_TOP);
+                    enableUIButtons(registry, PanelType::WALLPAPER);
+                    enableUIButtons(registry, PanelType::INVITE_SHARE_TOP);
+                    enableUIButtons(registry, PanelType::INVITE_SHARE_BOTTOM);
+                    break;
                 case SceneType::MULTIPLAYER_PAGE:
                     enableUIButtons(registry, PanelType::BACKGROUND_BOTTOM);
                     enableUIButtons(registry, PanelType::BACKGROUND_TOP);
@@ -924,6 +979,11 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     enableUIButtons(registry, PanelType::GAME_OVER);
                     enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
                     handleRateDialog(registry);
+                    [&dispatcher](bool openShare) {
+                        if(openShare) {
+                            dispatcher.enqueue<SceneChangeEvent>(SceneType::WALLPAPER_PAGE);
+                        }
+                    }(avRecorder.supportExport());
                     break;
                 case SceneType::MULTIPLAYER_RECORDING_STOP:
                     enableUIButtons(registry, PanelType::MULTIPLAYER_RESULTS);
@@ -949,6 +1009,10 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                     break;
                 case SceneType::GAME_OVER:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::GAME_RECORDING_STOP);
+                    break;
+                case SceneType::GAME_OVER_NO_REFRESH:
+                    enableUIButtons(registry, PanelType::GAME_OVER);
+                    enableUIButtons(registry, PanelType::INVITE_TRAIN_RIGHT);
                     break;
                 case SceneType::MULTIPLAYER_RESULTS:
                     dispatcher.enqueue<SceneChangeEvent>(SceneType::MULTIPLAYER_RECORDING_STOP);
@@ -1014,6 +1078,13 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 showPopupButtons(registry, PanelType::INFO);
                 hideBackgroundPanels(registry);
                 remaining = bgPanelTransition(registry, PanelType::INFO);
+                break;
+            case SceneType::WALLPAPER_PAGE:
+                showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
+                showPopupButtons(registry, PanelType::BACKGROUND_TOP);
+                showPopupButtons(registry, PanelType::WALLPAPER);
+                hideBackgroundPanels(registry);
+                remaining = bgPanelTransition(registry, PanelType::WALLPAPER);
                 break;
             case SceneType::MULTIPLAYER_PAGE:
                 showPopupButtons(registry, PanelType::BACKGROUND_BOTTOM);
@@ -1098,6 +1169,12 @@ void SceneSystem::update(Registry &registry, delta_type delta) {
                 resetPulseButton(registry);
                 hidePopupButtons(registry, PanelType::GAME_OVER);
                 remaining = gameOverTransition(registry);
+                break;
+            case SceneType::GAME_OVER_NO_REFRESH:
+                // fake transitions, we reuse (and abuse) existing functions so
+                // as not to rewrite the same code again and again ... :+1: :-)
+                gameOverTransition(registry);
+                remaining = videoRecordingStopTransition(registry);
                 break;
             case SceneType::MULTIPLAYER_RESULTS:
                 dispatcher.enqueue<ArmageddonEvent>();

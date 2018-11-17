@@ -119,13 +119,8 @@ void EmoDetector::receive(const CameraInitEvent &) noexcept {
 
     frame_ = std::make_unique<unsigned char[]>((width * height * SDL_BITSPERPIXEL(internalFormat)) / 8);
     copy_ = SDL_CreateRGBSurfaceWithFormat(0, width, height, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
-
-    const float mod = (1.f * detectorHeight) / (1.f * height);
-    const int w = width * mod;
-    const int h = height * mod;
-
-    dst_ = SDL_CreateRGBSurfaceWithFormat(0, w, h, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
-    image_ = vsCreateImage(vsSize(w, h), VS_DEPTH_8U, visageChannels);
+    dst_ = SDL_CreateRGBSurfaceWithFormat(0, detectorWidth, detectorHeight, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
+    image_ = vsCreateImage(vsSize(detectorWidth, detectorHeight), VS_DEPTH_8U, visageChannels);
 
     t_ = SDL_CreateThread(&EmoDetector::analyzeCurrentFrame, "detector", this);
 }
@@ -159,7 +154,13 @@ int EmoDetector::analyzeCurrentFrame(void *ptr) {
 
                 if(detector.analyzer_.estimateEmotion(detector.image_, &faceData, probs.data())) {
                     auto [face, prob] = estimateEmotion(probs);
-                    Locator::FaceBus::ref().enqueue({ face, prob });
+
+                    // future improvements: find a better way, we cannot copy the scaled frame each and every time
+                    std::unique_ptr<unsigned char[]> data = std::make_unique<unsigned char[]>(
+                            (detectorWidth * detectorHeight * SDL_BITSPERPIXEL(detectorFormat)) / 8);
+                    std::copy_n(pixels, detector.dst_->pitch * detector.dst_->h, data.get());
+
+                    Locator::FaceBus::ref().enqueue({ face, prob, std::move(data) });
                 }
             }
         }

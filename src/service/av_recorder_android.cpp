@@ -19,7 +19,7 @@ namespace gamee {
 
 
 const std::string& bindingVideoOutputPath();
-void bindingVideoExport();
+void bindingVideoShare();
 void bindingMuxAudioVideo();
 
 
@@ -185,7 +185,7 @@ bool AvRecorderAndroid::supportExport() const {
 void AvRecorderAndroid::exportMedia() {
     stop();
     waitRecording();
-    bindingVideoExport();
+    bindingVideoShare();
 }
 
 

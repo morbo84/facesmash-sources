@@ -15,6 +15,7 @@ void prepareGameStrings(GameRenderer &);
 void prepareDebugStrings(GameRenderer &);
 void prepareCameraFrame(GameRenderer &);
 void prepareOpponentFrame(GameRenderer &);
+void prepareWallpaperFrames(GameRenderer &);
 void prepareGameStuff(GameRenderer &);
 
 

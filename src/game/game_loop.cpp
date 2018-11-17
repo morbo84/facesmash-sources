@@ -21,6 +21,7 @@ void GameLoop::init(GameRenderer &renderer) {
     prepareGameStrings(renderer);
     prepareCameraFrame(renderer);
     prepareOpponentFrame(renderer);
+    prepareWallpaperFrames(renderer);
     prepareGameStuff(renderer);
 
     createExitPanel(registry);
@@ -47,6 +48,9 @@ void GameLoop::init(GameRenderer &renderer) {
     createInviteTrainRight(registry);
     createInviteShareLeft(registry);
     createInviteShareRight(registry);
+    createInviteShareTop(registry);
+    createInviteShareBottom(registry);
+    createWallpaperPanel(registry);
     createStanza(registry);
     createCamera(registry);
     createCameraFrame(registry);
@@ -90,6 +94,7 @@ void GameLoop::update(GameRenderer &renderer, delta_type delta) {
         multiplayerSystem.update(registry, delta);
 
         audioSystem.update();
+        wallpaperSystem.update(renderer);
         frameSystem.update(registry, renderer);
         sceneSystem.update(registry, delta);
         destroyLaterSystem.update(registry, delta);
