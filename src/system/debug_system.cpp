@@ -8,8 +8,8 @@ namespace gamee {
 
 
 void DebugSystem::update(Registry &registry, delta_type delta) {
-    if(registry.has<DebugInfo>()) {
-        auto &debug = registry.get<DebugInfo>();
+    if(!registry.empty<DebugInfo>()) {
+        auto &debug = *registry.raw<DebugInfo>();
         debug.average = (debug.average * .9f) + (delta * .1f);
 
         int time = 10 * debug.average;

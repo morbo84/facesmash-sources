@@ -92,8 +92,8 @@ void MultiplayerSystem::update(Registry &registry, delta_type delta) {
             }
         }
 
-        if(registry.has<PlayerScore>()) {
-            Locator::GameServices::ref().multiplayer().sendPlayerScore(registry.get<PlayerScore>().score);
+        if(!registry.empty<PlayerScore>()) {
+            Locator::GameServices::ref().multiplayer().sendPlayerScore(registry.raw<PlayerScore>()->score);
         }
     } else {
         elapsed = {};

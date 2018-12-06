@@ -12,8 +12,8 @@ namespace gamee {
 
 
 void TimerSystem::update(Registry &registry, delta_type delta) {
-    if(registry.has<Timer>()) {
-        auto &timer = registry.get<Timer>();
+    if(!registry.empty<Timer>()) {
+        auto &timer = *registry.raw<Timer>();
 
         if(timer.enabled) {
             timer.remaining -= std::min(timer.remaining, delta);

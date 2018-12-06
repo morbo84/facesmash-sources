@@ -285,8 +285,8 @@ void AchievementsSystem::receive(const BillingEvent &event) noexcept {
 
 
 void AchievementsSystem::update(Registry &registry) {
-    if(registry.has<PlayerScore>()) {
-        const auto &score = registry.get<PlayerScore>();
+    if(!registry.empty<PlayerScore>()) {
+        const auto &score = *registry.raw<PlayerScore>();
         auto delta = score - previous;
 
         if(current == SceneType::THE_GAME || current == SceneType::MULTIPLAYER) {

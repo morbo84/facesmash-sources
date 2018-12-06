@@ -26,8 +26,8 @@ void ItemSystem::movement(Registry &registry, float mod) {
 
 
 void ItemSystem::timer(Registry &registry, ItemType type, delta_type delta) {
-    if(registry.has<Timer>()) {
-        auto &timer = registry.get<Timer>();
+    if(!registry.empty<Timer>()) {
+        auto &timer = *registry.raw<Timer>();
 
         if(timer.enabled) {
             switch(type) {

@@ -40,14 +40,14 @@ void FrameSystem::receive(const PermissionEvent &event) noexcept {
 
 void FrameSystem::update(Registry &registry, GameRenderer &renderer) {
     if(refresh) {
-        registry.destroy(registry.attachee<CameraFrame>());
+        registry.destroy(*registry.view<CameraFrame>().begin());
         prepareCameraFrame(renderer);
         createCameraFrame(registry);
         refresh = false;
     }
 
-    const bool acquire = registry.has<CameraFrame>() &&
-            registry.get<CameraFrame>().acquire;
+    const bool acquire = !registry.empty<CameraFrame>() &&
+            registry.raw<CameraFrame>()->acquire;
 
     if(acquire && dirty) {
         auto &cameraService = Locator::Camera::ref();

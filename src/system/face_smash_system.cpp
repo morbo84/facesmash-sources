@@ -61,9 +61,9 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
 
     SDL_Rect smashArea = logicalScreen;
 
-    if(registry.has<LetsPlay>()) {
+    if(!registry.empty<LetsPlay>()) {
         smashArea = playArea;
-    } else if(registry.has<LetsTrain>()) {
+    } else if(!registry.empty<LetsTrain>()) {
         smashArea = trainingArea;
     }
 
@@ -136,11 +136,11 @@ void FaceSmashSystem::update(Registry &registry, Spawner &spawner) {
 
     // check rewards
     auto reward = [&](auto handle, auto shake) {
-        auto &camera = registry.get<Camera>();
+        auto &camera = *registry.raw<Camera>();
         camera.remaining = shakeDuration;
         camera.shake = shake;
 
-        if(registry.has<LetsPlay>()) {
+        if(!registry.empty<LetsPlay>()) {
             for(auto entity: registry.view<FaceSmashMessage>()) {
                 registry.destroy(entity);
             }

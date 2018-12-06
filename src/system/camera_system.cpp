@@ -6,10 +6,11 @@ namespace gamee {
 
 
 void CameraSystem::update(Registry &registry, delta_type delta) {
-    auto &camera = registry.get<Camera>();
+    const auto cameraEntity = *registry.view<Camera>().begin();
+    auto &camera = registry.get<Camera>(cameraEntity);
 
     if(camera.remaining) {
-        auto &transform = registry.get<Transform>(registry.attachee<Camera>());
+        auto &transform = registry.get<Transform>(cameraEntity);
 
         camera.remaining -= std::min(camera.remaining, delta);
 

@@ -61,7 +61,7 @@ void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type del
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);
     };
 
-    if(registry.has<LetsTrain>()) {
+    if(!registry.empty<LetsTrain>()) {
         const auto amount = 1 + (duration - remaining) / 1000_ui32;
         const auto size = registry.size<Face>();
 

@@ -328,7 +328,7 @@ void refreshInfoPanel(Registry &registry) {
     const auto &panel = registry.get<Panel>(parent);
     auto offset = panel.h / 2;
 
-    if(registry.has<FaceSmashSupporter>()) {
+    if(!registry.empty<FaceSmashSupporter>()) {
         auto welcomeHandle = textureCache.handle("str/info/welcome");
         auto welcomeEntity = createSprite(registry, parent, welcomeHandle, 20);
         setPos(registry, welcomeEntity, (panel.w - welcomeHandle->width()) / 2, offset);
@@ -692,8 +692,8 @@ void refreshGameOverPanel(Registry &registry) {
 
     const auto &panel = registry.get<Panel>(parent);
 
-    if(registry.has<PlayerScore>()) {
-        const auto &playerScore = registry.get<PlayerScore>();
+    if(!registry.empty<PlayerScore>()) {
+        const auto &playerScore = *registry.raw<PlayerScore>();
 
         auto printHit = [&](FaceType type, int PlayerScore:: *member, int xOffset, auto initYOffset) {
             auto faceEntity = createFaceBlueprint(registry, type, 150);
@@ -821,8 +821,8 @@ void refreshResultsMultiplayerResultsPanel(Registry &registry) {
 
     const auto &panel = registry.get<Panel>(parent);
 
-    if(registry.has<PlayerScore>()) {
-        const auto &playerScore = registry.get<PlayerScore>();
+    if(!registry.empty<PlayerScore>()) {
+        const auto &playerScore = *registry.raw<PlayerScore>();
 
         auto scoreEntity = createSprite(registry, parent, textureCache.handle("str/score"), 150);
         const auto &scoreSprite = registry.get<Sprite>(scoreEntity);
@@ -1091,7 +1091,7 @@ void createStanza(Registry &registry) {
 void createCamera(Registry &registry) {
     auto camera = registry.create();
     registry.assign<Transform>(camera, camera, 0.f, 0.f);
-    registry.assign<Camera>(entt::tag_t{}, camera);
+    registry.assign<Camera>(camera);
 }
 
 
@@ -1106,7 +1106,7 @@ void createCameraFrame(Registry &registry) {
     }
 
     const auto frame = registry.create();
-    registry.assign<CameraFrame>(entt::tag_t{}, frame);
+    registry.assign<CameraFrame>(frame);
     registry.assign<Sprite>(frame, handle, handle->width(), handle->height(), width, height);
     registry.assign<Transform>(frame, frame, (logicalWidth - width) / 2.f, (logicalHeight - height) / 2.f);
     registry.assign<Renderable>(frame, 0.f, 90, 0);
@@ -1145,7 +1145,7 @@ void createDebugHUD(Registry &registry) {
     auto symDotHandle = textureCache.handle("str/debug/.");
     auto sym0Handle = toStrDebug(0);
 
-    auto &debug = registry.assign<DebugInfo>(entt::tag_t{}, registry.create());
+    auto &debug = registry.assign<DebugInfo>(registry.create());
 
     offset = sym0Handle->width();
 

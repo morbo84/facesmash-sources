@@ -26,12 +26,12 @@ void TheGameSystem::receive(const TimeIsOverEvent &) noexcept {
 
 
 void TheGameSystem::update(Registry &registry, Spawner &spawner) {
-    if(registry.has<LetsPlay>()) {
+    if(!registry.empty<LetsPlay>()) {
         if(timeIsOver) {
-            const auto multiplayer = registry.get<LetsPlay>().multiplayer;
+            const auto multiplayer = registry.raw<LetsPlay>()->multiplayer;
             Locator::Dispatcher::ref().enqueue<SceneChangeEvent>(multiplayer ? SceneType::MULTIPLAYER_RESULTS : SceneType::GAME_OVER);
         } else {
-            const auto &timer = registry.get<Timer>();
+            const auto &timer = *registry.raw<Timer>();
 
             if(timer.remaining > 15000 && !registry.size<Face>()) {
                 spawner.spawnFaceBottom(registry, 50_ui16, 10_ui16, faceBag.get());
@@ -39,7 +39,7 @@ void TheGameSystem::update(Registry &registry, Spawner &spawner) {
                 spawner.spawnFaceBottom(registry, 100_ui16, 20_ui16, faceBag.get());
             }
 
-            const auto &score = registry.get<PlayerScore>();
+            const auto &score = *registry.raw<PlayerScore>();
 
             if(timer.remaining > 25000 && timer.remaining < 27500) {
                 if(registry.size<Face>() < 2

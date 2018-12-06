@@ -31,8 +31,8 @@ void BillingSystem::receive(const BillingEvent &event) noexcept {
 
 void BillingSystem::update(Registry &registry) {
     // we only add it and never remove the face smash supporter tag (yay!)
-    if(isFaceSmashSupporter && !registry.has<FaceSmashSupporter>()) {
-        registry.assign<FaceSmashSupporter>(entt::tag_t{}, registry.create());
+    if(isFaceSmashSupporter && registry.empty<FaceSmashSupporter>()) {
+        registry.assign<FaceSmashSupporter>(registry.create());
         // stop and disable services that are no longer required
         Locator::Billing::set<BillingNull>();
         Locator::Ads::set<AdsNull>();

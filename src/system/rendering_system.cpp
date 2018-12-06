@@ -14,7 +14,8 @@ namespace gamee {
 
 
 void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
-    const auto offset = transformToPosition(registry, registry.attachee<Camera>(), registry.get<Transform>(registry.attachee<Camera>()));
+    const auto camera = *registry.view<Camera>().begin();
+    const auto offset = transformToPosition(registry, camera, registry.get<Transform>(camera));
     auto view = registry.view<Transform, Renderable, Sprite>(entt::persistent_t{});
 
     view.sort<Renderable>();
@@ -91,10 +92,10 @@ void RenderingSystem::debug(Registry &registry, GameRenderer &renderer) {
         SDL_RenderDrawRect(renderer, &rect);
     });
 
-    if(registry.has<LetsPlay>()) {
+    if(!registry.empty<LetsPlay>()) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(renderer, &playArea);
-    } else if(registry.has<LetsTrain>()) {
+    } else if(!registry.empty<LetsTrain>()) {
         SDL_SetRenderDrawColor(renderer, 255_ui8, 0_ui8, 0_ui8, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(renderer, &trainingArea);
     }

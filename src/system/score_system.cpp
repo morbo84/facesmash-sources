@@ -29,8 +29,8 @@ void ScoreSystem::receive(const SmashEvent &event) noexcept {
 
 
 void ScoreSystem::update(Registry &registry) {
-    if(registry.has<PlayerScore>()) {
-        auto &playerScore = registry.get<PlayerScore>();
+    if(!registry.empty<PlayerScore>()) {
+        auto &playerScore = *registry.raw<PlayerScore>();
 
         if(dirty) {
             playerScore.hitAngry += last.angry;

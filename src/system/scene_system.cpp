@@ -199,12 +199,11 @@ static void handleRateDialog(Registry &registry) {
     auto& settings = Locator::Settings::ref();
 
     if(settings.read(settingsRatingState, ratingLater) == ratingLater) {
-        if(!registry.has<PlayedMatches>()) {
-            auto entity = registry.create();
-            registry.assign<PlayedMatches>(entt::tag_t{}, entity);
+        if(registry.view<PlayedMatches>().empty()) {
+            registry.assign<PlayedMatches>(registry.create());
         }
 
-        if(++registry.get<PlayedMatches>().count == numMatchesThreshold) {
+        if(++registry.raw<PlayedMatches>()->count == numMatchesThreshold) {
             showRateDialog();
         }
     }
@@ -212,52 +211,54 @@ static void handleRateDialog(Registry &registry) {
 
 
 static void disableCameraFrame(Registry &registry) {
-    if(registry.has<CameraFrame>()) {
-        registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 0;
-        registry.get<CameraFrame>().acquire = false;
+    auto view = registry.view<CameraFrame>();
+    if(!view.empty()) {
+        registry.get<Renderable>(*view.begin()).alpha = 0;
+        registry.get<CameraFrame>(*view.begin()).acquire = false;
     }
 }
 
 
 static void enableCameraFrame(Registry &registry) {
-    if(registry.has<CameraFrame>()) {
-        registry.get<Renderable>(registry.attachee<CameraFrame>()).alpha = 255;
-        registry.get<CameraFrame>().acquire = true;
+    auto view = registry.view<CameraFrame>();
+    if(!view.empty()) {
+        registry.get<Renderable>(*view.begin()).alpha = 255;
+        registry.get<CameraFrame>(*view.begin()).acquire = true;
     }
 }
 
 
 static void clearGame(Registry &registry) {
     // this way we support both solo games and multiplayer matches
-    registry.destroy(registry.attachee<PlayerScore>());
+    registry.destroy(*registry.view<PlayerScore>().begin());
 }
 
 
 static void clearMultiplayerGame(Registry &registry) {
-    registry.remove<LetsPlay>();
-    registry.remove<Timer>();
+    registry.remove<LetsPlay>(*registry.view<LetsPlay>().begin());
+    registry.remove<Timer>(*registry.view<Timer>().begin());
 }
 
 
 static void clearTraining(Registry &registry) {
-    if(registry.has<LetsTrain>()) {
-        registry.destroy(registry.attachee<LetsTrain>());
+    if(!registry.empty<LetsTrain>()) {
+        registry.destroy(*registry.view<LetsTrain>().begin());
     }
 }
 
 
 static void initGame(Registry &registry, bool multiplayer = false) {
     auto game = registry.create();
-    registry.assign<LetsPlay>(entt::tag_t{}, game, multiplayer);
-    registry.assign<PlayerScore>(entt::tag_t{}, game);
-    registry.assign<Timer>(entt::tag_t{}, game, gameDuration);
+    registry.assign<LetsPlay>(game, multiplayer);
+    registry.assign<PlayerScore>(game);
+    registry.assign<Timer>(game, gameDuration);
 }
 
 
 static void initTraining(Registry &registry) {
     auto game = registry.create();
-    registry.assign<LetsTrain>(entt::tag_t{}, game);
-    registry.assign<PlayerScore>(entt::tag_t{}, game);
+    registry.assign<LetsTrain>(game);
+    registry.assign<PlayerScore>(game);
 }
 
 
