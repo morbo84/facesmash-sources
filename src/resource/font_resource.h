@@ -35,17 +35,17 @@ private:
 };
 
 
-struct TTFFontLoader final: public entt::ResourceLoader<TTFFontLoader, TTFFontResource> {
+struct TTFFontLoader final: public entt::resource_loader<TTFFontLoader, TTFFontResource> {
     std::shared_ptr<TTFFontResource> load(const char *, int) const;
 };
 
 
-struct TTFFontTextureLoader final: public entt::ResourceLoader<TTFFontTextureLoader, SDLTextureResource> {
+struct TTFFontTextureLoader final: public entt::resource_loader<TTFFontTextureLoader, SDLTextureResource> {
     std::shared_ptr<SDLTextureResource> load(const char *, SDL_Renderer *, TTF_Font *, SDL_Color) const;
 };
 
 
-using TTFFontHandle = entt::ResourceHandle<TTFFontResource>;
+using TTFFontHandle = entt::resource_handle<TTFFontResource>;
 
 
 }

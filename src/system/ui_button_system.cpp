@@ -153,7 +153,7 @@ void UIButtonSystem::update(Registry &registry) {
                 auto &haptic = Locator::Haptic::ref();
                 auto &billing = Locator::Billing::ref();
 
-                registry.accommodate<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
+                registry.assign_or_replace<RotationAnimation>(entity, 0.f, 360.f, 1500_ui32, 0_ui32, false, &easeOutElastic);
                 haptic.rumble(RumbleEffect::SUPER_SUPER_SOFT);
 
                 switch(button.action) {

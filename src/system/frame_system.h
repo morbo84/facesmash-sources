@@ -17,8 +17,8 @@ struct FrameSystem final {
     FrameSystem() noexcept;
     ~FrameSystem() noexcept;
 
-    void receive(const FrameAvailableEvent &) noexcept;
-    void receive(const PermissionEvent &) noexcept;
+    void onFrameAvailable(const FrameAvailableEvent &) noexcept;
+    void onPermission(const PermissionEvent &) noexcept;
 
     void update(Registry &, GameRenderer &);
 

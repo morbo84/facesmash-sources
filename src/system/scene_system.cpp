@@ -79,7 +79,7 @@ static void enableUIButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Transform>().each([parent, &registry](auto child, auto &button, const auto &transform) {
                 if(transform.parent == parent && button.enabled) {
-                    registry.accommodate<InputReceiver>(child);
+                    registry.assign_or_replace<InputReceiver>(child);
                 }
             });
         }
@@ -93,7 +93,7 @@ static void showSmashButtons(Registry &registry) {
     for(auto entity: view) {
         const auto &sprite = registry.get<Sprite>(entity);
         const auto &transform = registry.get<Transform>(entity);
-        registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * sprite.w / 2, 500_ui32, 0_ui32, &easeInCubic);
+        registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - 3 * sprite.w / 2, 500_ui32, 0_ui32, &easeInCubic);
     }
 }
 
@@ -103,7 +103,7 @@ static void hideSmashButtons(Registry &registry) {
 
     for(auto entity: view) {
         const auto &transform = registry.get<Transform>(entity);
-        registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, 500_ui32, 0_ui32, &easeInCubic);
+        registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, 500_ui32, 0_ui32, &easeInCubic);
     }
 }
 
@@ -113,8 +113,8 @@ static void showPopupButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, auto &button, const auto &sprite, const auto &, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
-                    registry.accommodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutElastic);
-                    registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
+                    registry.assign_or_replace<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutElastic);
+                    registry.assign_or_replace<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1500_ui32, 0_ui32, &easeOutElastic);
                 }
             });
         }
@@ -127,8 +127,8 @@ static void hidePopupButtons(Registry &registry, PanelType type) {
         if(panel.type == type) {
             registry.view<UIButton, Sprite, Renderable, Transform>().each([parent, &registry](auto entity, const auto &button, const auto &sprite, const auto &, const auto &transform) {
                 if(transform.parent == parent && button.popup) {
-                    registry.accommodate<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutCubic);
-                    registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
+                    registry.assign_or_replace<RotationAnimation>(entity, 0.f, 720.f, 2000_ui32, 0_ui32, false, &easeOutCubic);
+                    registry.assign_or_replace<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 500_ui32, 0_ui32, &easeInCubic);
                 }
             });
         }
@@ -154,16 +154,16 @@ static void disableFaceButtons(Registry &registry) {
 
 static void showFaceButtons(Registry &registry) {
     registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &button, const auto &sprite, auto &renderable) {
-        registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
-        registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1000_ui32, 0_ui32, &easeOutElastic);
+        registry.assign_or_replace<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutElastic);
+        registry.assign_or_replace<SizeAnimation>(entity, sprite.w, sprite.h, button.w, button.h, 1000_ui32, 0_ui32, &easeOutElastic);
     });
 }
 
 
 static void hideFaceButtons(Registry &registry) {
     registry.view<FaceButton, Sprite, Renderable>().each([&registry](auto entity, auto &, const auto &sprite, auto &renderable) {
-        registry.accommodate<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutCubic);
-        registry.accommodate<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 1000_ui32, 0_ui32, &easeInCubic);
+        registry.assign_or_replace<RotationAnimation>(entity, renderable.angle, 720.f, 1000_ui32, 0_ui32, false, &easeOutCubic);
+        registry.assign_or_replace<SizeAnimation>(entity, sprite.w, sprite.h, 0, 0, 1000_ui32, 0_ui32, &easeInCubic);
     });
 }
 
@@ -268,13 +268,13 @@ static delta_type splashScreenTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration / 3, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration / 3, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration / 3, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration / 3, 0_ui32, &easeOutElastic);
             break;
         case PanelType::SPLASH_SCREEN:
-            registry.accommodate<Transform>(entity, entity, 0.f, 0.f);
+            registry.assign_or_replace<Transform>(entity, entity, 0.f, 0.f);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -292,44 +292,44 @@ static delta_type menuPageTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::MENU_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MULTIPLAYER_RESULTS:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_TRAIN_LEFT:
         case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_TRAIN_RIGHT:
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -348,7 +348,7 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
 
     registry.view<Panel>().each([&registry, type, &offset](auto entity, const auto &panel) {
         if(panel.type == type) {
-            registry.accommodate<Transform>(entity, entity, (logicalWidth - panel.w) / 2.f, (logicalHeight - panel.h) / 2.f);
+            registry.assign_or_replace<Transform>(entity, entity, (logicalWidth - panel.w) / 2.f, (logicalHeight - panel.h) / 2.f);
             offset = panel.h / 2;
         }
     });
@@ -357,25 +357,25 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
         registry.view<Panel, Transform>().each([&registry, offset](auto entity, const auto &panel, const auto &transform) {
             switch(panel.type) {
             case PanelType::BACKGROUND_TOP:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::BACKGROUND_BOTTOM:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::GAME_OVER:
             case PanelType::INVITE_TRAIN_RIGHT:
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 5, 0_ui32, &easeOutCubic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 5, 0_ui32, &easeOutCubic);
                 break;
             case PanelType::INVITE_TRAIN_LEFT:
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 5, 0_ui32, &easeOutCubic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 5, 0_ui32, &easeOutCubic);
                 break;
             case PanelType::INVITE_SHARE_TOP:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutElastic);
                 break;
             case PanelType::INVITE_SHARE_BOTTOM:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutElastic);
                 break;
             default:
                 // all the other panels are already out of scene (they ought to be at least)
@@ -387,33 +387,33 @@ static delta_type bgPanelTransition(Registry &registry, PanelType type) {
             switch(panel.type) {
             case PanelType::MENU_TOP:
             case PanelType::BACKGROUND_TOP:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -offset, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::MENU_BOTTOM:
             case PanelType::BACKGROUND_BOTTOM:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h + offset, duration, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::GAME_OVER:
             case PanelType::MULTIPLAYER_RESULTS:
             case PanelType::INVITE_TRAIN_RIGHT:
             case PanelType::INVITE_SHARE_RIGHT:
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
                 break;
             case PanelType::INVITE_TRAIN_LEFT:
             case PanelType::INVITE_SHARE_LEFT:
-                registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+                registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
                 break;
             case PanelType::THE_GAME_TOP:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::THE_GAME_BOTTOM:
             case PanelType::TRAINING_BOTTOM:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
                 break;
             case PanelType::TRAINING_TOP:
-                registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+                registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
                 break;
             default:
                 // all the other panels are already out of scene (they ought to be at least)
@@ -432,40 +432,40 @@ static delta_type gameAndMultiplayerTutorialTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TITLE_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TITLE_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
         case PanelType::MULTIPLAYER_RESULTS:
         case PanelType::INVITE_TRAIN_RIGHT:
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         case PanelType::INVITE_TRAIN_LEFT:
         case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -490,13 +490,13 @@ static delta_type videoRecordingStopTransition(Registry &registry) {
         switch(panel.type) {
         case PanelType::INVITE_TRAIN_LEFT:
         case PanelType::INVITE_TRAIN_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::INVITE_SHARE_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 5, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 5, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_SHARE_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 5, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 5, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -514,11 +514,11 @@ static delta_type multiplayerRecordingStopTransition(Registry &registry) {
      registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
          switch(panel.type) {
          case PanelType::THE_GAME_BOTTOM:
-             registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutExpo);
+             registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutExpo);
              break;
          case PanelType::INVITE_TRAIN_LEFT:
          case PanelType::INVITE_TRAIN_RIGHT:
-             registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+             registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
              break;
          default:
              // all the other panels are already out of scene (they ought to be at least)
@@ -536,25 +536,25 @@ static delta_type theGameTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::TITLE_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TITLE_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -572,29 +572,29 @@ static delta_type multiplayerTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::TITLE_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TITLE_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TUTORIAL_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::INVITE_SHARE_LEFT:
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutElastic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -612,13 +612,13 @@ static delta_type multiplayerShareTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::THE_GAME_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         default:
             // all the other panels are already in the right place (they ought to be at least)
@@ -640,16 +640,16 @@ static delta_type gameOverTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::GAME_OVER:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -671,22 +671,22 @@ static delta_type multiplayerResultsTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MULTIPLAYER_RESULTS:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::THE_GAME_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -707,31 +707,31 @@ static delta_type trainingTutorialTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 2, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::MENU_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration / 6, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 6, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration / 3, 0_ui32, &easeInCubic);
             break;
         case PanelType::GAME_OVER:
         case PanelType::MULTIPLAYER_RESULTS:
         case PanelType::INVITE_TRAIN_RIGHT:
         case PanelType::INVITE_SHARE_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration, 0_ui32, &easeOutExpo);
             break;
         case PanelType::INVITE_TRAIN_LEFT:
         case PanelType::INVITE_SHARE_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration, 0_ui32, &easeOutExpo);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -749,25 +749,25 @@ static delta_type trainingSelectTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -(panel.h - logicalHeight / 8), duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::TUTORIAL_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 2, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), -panel.w, duration / 2, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 2, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth, duration / 2, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 0, duration, 0_ui32, &easeInCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight - panel.h, duration, 0_ui32, &easeInCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -785,22 +785,22 @@ static delta_type trainingTransition(Registry &registry) {
     registry.view<Panel, Transform>().each([&registry](auto entity, const auto &panel, const auto &transform) {
         switch(panel.type) {
         case PanelType::BACKGROUND_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::BACKGROUND_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutElastic);
             break;
         case PanelType::TRAINING_LEFT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), 0, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_RIGHT:
-            registry.accommodate<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - panel.w, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<HorizontalAnimation>(entity, static_cast<int>(transform.x), logicalWidth - panel.w, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_TOP:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), -panel.h, duration, 0_ui32, &easeOutCubic);
             break;
         case PanelType::TRAINING_BOTTOM:
-            registry.accommodate<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
+            registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), logicalHeight, duration, 0_ui32, &easeOutCubic);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
@@ -819,9 +819,9 @@ SceneSystem::SceneSystem()
       remaining{0_ui32},
       isTransitioning{false}
 {
-    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<KeyboardEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<PermissionEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect<&SceneSystem::onSceneChange>(this);
+    Locator::Dispatcher::ref().sink<KeyboardEvent>().connect<&SceneSystem::onKeyboardEvent>(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().connect<&SceneSystem::onPermission>(this);
 }
 
 
@@ -832,7 +832,7 @@ SceneSystem::~SceneSystem() {
 }
 
 
-void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
+void SceneSystem::onSceneChange(const SceneChangeEvent &event) noexcept {
     // events are filtered out during transitions
     if(curr == next) {
         const auto nextRequiresCamera = event.scene == SceneType::GAME_TUTORIAL
@@ -850,7 +850,7 @@ void SceneSystem::receive(const SceneChangeEvent &event) noexcept {
 }
 
 
-void SceneSystem::receive(const KeyboardEvent &event) noexcept {
+void SceneSystem::onKeyboardEvent(const KeyboardEvent &event) noexcept {
     // inputs from keyboard are filtered out during transitions
     if(curr == next && event.type == KeyboardEvent::Type::BACK) {
         auto &dispatcher = Locator::Dispatcher::ref();
@@ -891,7 +891,7 @@ void SceneSystem::receive(const KeyboardEvent &event) noexcept {
 }
 
 
-void SceneSystem::receive(const PermissionEvent &event) noexcept {
+void SceneSystem::onPermission(const PermissionEvent &event) noexcept {
     if(event.permission == PermissionType::CAMERA && event.result == PermissionStatus::GRANTED) {
         Locator::GameServices::ref().multiplayer().terminateMatch();
         next = (curr == next) ? pending : next;

@@ -32,8 +32,8 @@ public:
     EmoDetector();
     ~EmoDetector();
 
-    void receive(const FrameAvailableEvent &) noexcept;
-    void receive(const CameraInitEvent &) noexcept;
+    void onFrameAvailable(const FrameAvailableEvent &) noexcept;
+    void onCameraInit(const CameraInitEvent &) noexcept;
 
 private:
     enum class Emotion {anger, disgust, fear, happiness, sadness, surprise, neutral};

@@ -16,7 +16,7 @@ namespace gamee {
 void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
     const auto camera = *registry.view<Camera>().begin();
     const auto offset = transformToPosition(registry, camera, registry.get<Transform>(camera));
-    auto view = registry.view<Transform, Renderable, Sprite>(entt::persistent_t{});
+    auto view = registry.persistent_view<Transform, Renderable, Sprite>();
 
     view.sort<Renderable>();
 
@@ -48,7 +48,7 @@ void RenderingSystem::game(Registry &registry, GameRenderer &renderer) {
 
 
 void RenderingSystem::hud(Registry &registry, GameRenderer &renderer) {
-    auto view = registry.view<Transform, Renderable, HUD>(entt::persistent_t{});
+    auto view = registry.persistent_view<Transform, Renderable, HUD>();
     view.sort<Renderable>();
 
     view.each([&](auto entity, const auto &transform, const auto &renderable, const auto &hud) {

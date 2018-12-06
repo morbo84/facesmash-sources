@@ -97,8 +97,8 @@ void ItemSystem::message(Registry &registry, ItemType type) {
 
 
 ItemSystem::ItemSystem(): dirty{false}, armageddon{false} {
-    Locator::Dispatcher::ref().sink<TouchEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<TouchEvent>().connect<&ItemSystem::onTouch>(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect<&ItemSystem::onArmageddon>(this);
 }
 
 
@@ -125,13 +125,13 @@ delta_type ItemSystem::toRemaining(ItemType type) {
 }
 
 
-void ItemSystem::receive(const TouchEvent &event) noexcept {
+void ItemSystem::onTouch(const TouchEvent &event) noexcept {
     coord = event;
     dirty = true;
 }
 
 
-void ItemSystem::receive(const ArmageddonEvent &) noexcept {
+void ItemSystem::onArmageddon(const ArmageddonEvent &) noexcept {
     armageddon = true;
     remaining = {};
 }

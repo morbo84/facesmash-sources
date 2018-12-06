@@ -22,8 +22,8 @@ TrainingSystem::TrainingSystem()
       counter{},
       current{FaceType::HAPPY}
 {
-    Locator::Dispatcher::ref().sink<FaceRequest>().connect(this);
-    Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<FaceRequest>().connect<&TrainingSystem::onFaceRequest>(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().connect<&TrainingSystem::onFace>(this);
 }
 
 
@@ -33,7 +33,7 @@ TrainingSystem::~TrainingSystem() {
 }
 
 
-void TrainingSystem::receive(const FaceRequest &event) noexcept {
+void TrainingSystem::onFaceRequest(const FaceRequest &event) noexcept {
     watchdog = expectation;
     remaining = duration;
     current = event.type;
@@ -45,7 +45,7 @@ void TrainingSystem::receive(const FaceRequest &event) noexcept {
 }
 
 
-void TrainingSystem::receive(const FaceEvent &event) noexcept {
+void TrainingSystem::onFace(const FaceEvent &event) noexcept {
     const auto match = (event.type == current);
     target = match ? event.probability : std::max(0.f, target - .1f);
     total += match ? event.probability : 0.f;

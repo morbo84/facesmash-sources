@@ -23,8 +23,8 @@ public:
     AudioSystem();
     ~AudioSystem();
 
-    void receive(const AudioEvent &) noexcept;
-    void receive(const AudioMusicEvent &) noexcept;
+    void onAudioEvent(const AudioEvent &) noexcept;
+    void onAudioMusicEvent(const AudioMusicEvent &) noexcept;
 
     void update();
 

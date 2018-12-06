@@ -22,23 +22,23 @@ namespace gamee {
 
 struct Locator final {
     // from entt with love
-    using AudioMusicCache = entt::ServiceLocator<gamee::AudioMusicCache>;
-    using AudioChunkCache = entt::ServiceLocator<gamee::AudioChunkCache>;
-    using TextureCache = entt::ServiceLocator<gamee::TextureCache>;
-    using TTFFontCache = entt::ServiceLocator<gamee::TTFFontCache>;
-    using Dispatcher = entt::ServiceLocator<gamee::Dispatcher>;
-    using InputHandler = entt::ServiceLocator<gamee::InputHandler>;
+    using AudioMusicCache = entt::service_locator<gamee::AudioMusicCache>;
+    using AudioChunkCache = entt::service_locator<gamee::AudioChunkCache>;
+    using TextureCache = entt::service_locator<gamee::TextureCache>;
+    using TTFFontCache = entt::service_locator<gamee::TTFFontCache>;
+    using Dispatcher = entt::service_locator<gamee::Dispatcher>;
+    using InputHandler = entt::service_locator<gamee::InputHandler>;
     // actual services
-    using GameServices = entt::ServiceLocator<gamee::GameServicesService>;
-    using Ads = entt::ServiceLocator<gamee::AdsService>;
-    using Camera = entt::ServiceLocator<gamee::CameraService>;
-    using Audio = entt::ServiceLocator<gamee::AudioService>;
-    using Haptic = entt::ServiceLocator<gamee::HapticService>;
-    using FaceBus = entt::ServiceLocator<gamee::FaceBusService>;
-    using AvRecorder = entt::ServiceLocator<gamee::AvRecorderService>;
-    using Billing = entt::ServiceLocator<gamee::BillingService>;
-    using Permissions = entt::ServiceLocator<gamee::PermissionsService>;
-    using Settings = entt::ServiceLocator<gamee::SettingsService>;
+    using GameServices = entt::service_locator<gamee::GameServicesService>;
+    using Ads = entt::service_locator<gamee::AdsService>;
+    using Camera = entt::service_locator<gamee::CameraService>;
+    using Audio = entt::service_locator<gamee::AudioService>;
+    using Haptic = entt::service_locator<gamee::HapticService>;
+    using FaceBus = entt::service_locator<gamee::FaceBusService>;
+    using AvRecorder = entt::service_locator<gamee::AvRecorderService>;
+    using Billing = entt::service_locator<gamee::BillingService>;
+    using Permissions = entt::service_locator<gamee::PermissionsService>;
+    using Settings = entt::service_locator<gamee::SettingsService>;
 };
 
 

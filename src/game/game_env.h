@@ -45,8 +45,8 @@ public:
     bool valid() const noexcept;
     ErrorCode error() const noexcept;
 
-    void receive(const KeyboardEvent &) noexcept;
-    void receive(const QuitEvent &) noexcept;
+    void onKeyboardEvent(const KeyboardEvent &) noexcept;
+    void onQuitEvent(const QuitEvent &) noexcept;
 
     int exec() noexcept;
 

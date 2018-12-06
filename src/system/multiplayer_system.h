@@ -26,8 +26,8 @@ public:
 
     void update(Registry &, delta_type);
 
-    void receive(const SceneChangeEvent &) noexcept;
-    void receive(const CameraInitEvent &) noexcept;
+    void onSceneChange(const SceneChangeEvent &) noexcept;
+    void onCameraInit(const CameraInitEvent &) noexcept;
 
 private:
     delta_type elapsed;

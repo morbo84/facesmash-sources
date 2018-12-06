@@ -22,9 +22,9 @@ struct WallpaperSystem final {
     WallpaperSystem();
     ~WallpaperSystem();
 
-    void receive(const FaceEvent &) noexcept;
-    void receive(const SceneChangeEvent &) noexcept;
-    void receive(const WallpaperEvent &) noexcept;
+    void onFace(const FaceEvent &) noexcept;
+    void onSceneChanged(const SceneChangeEvent &) noexcept;
+    void onWallpaper(const WallpaperEvent &) noexcept;
 
     void update(GameRenderer &);
 

@@ -18,9 +18,9 @@ struct AchievementsSystem final {
     AchievementsSystem() noexcept;
     ~AchievementsSystem() noexcept;
 
-    void receive(const SceneChangeEvent &) noexcept;
-    void receive(const TimeIsOverEvent &) noexcept;
-    void receive(const BillingEvent &) noexcept;
+    void onSceneChange(const SceneChangeEvent &) noexcept;
+    void onTimeOver(const TimeIsOverEvent &) noexcept;
+    void onBillingEvent(const BillingEvent &) noexcept;
 
     void update(Registry &);
 

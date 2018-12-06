@@ -36,17 +36,17 @@ private:
 };
 
 
-struct AssetTextureLoader final: public entt::ResourceLoader<AssetTextureLoader, SDLTextureResource> {
+struct AssetTextureLoader final: public entt::resource_loader<AssetTextureLoader, SDLTextureResource> {
     std::shared_ptr<SDLTextureResource> load(const char *, SDL_Renderer *) const;
 };
 
 
-struct SDLTextureLoader final: public entt::ResourceLoader<SDLTextureLoader, SDLTextureResource> {
+struct SDLTextureLoader final: public entt::resource_loader<SDLTextureLoader, SDLTextureResource> {
     std::shared_ptr<SDLTextureResource> load(SDL_Renderer *, Uint32, int, int, int) const;
 };
 
 
-using SDLTextureHandle = entt::ResourceHandle<SDLTextureResource>;
+using SDLTextureHandle = entt::resource_handle<SDLTextureResource>;
 
 
 }

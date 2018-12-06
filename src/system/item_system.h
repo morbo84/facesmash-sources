@@ -29,8 +29,8 @@ public:
 
     delta_type toRemaining(ItemType);
 
-    void receive(const TouchEvent &) noexcept;
-    void receive(const ArmageddonEvent &) noexcept;
+    void onTouch(const TouchEvent &) noexcept;
+    void onArmageddon(const ArmageddonEvent &) noexcept;
 
     void update(Registry &, Spawner &, delta_type);
 

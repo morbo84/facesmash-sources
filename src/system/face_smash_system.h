@@ -20,9 +20,9 @@ struct FaceSmashSystem final {
     FaceSmashSystem();
     ~FaceSmashSystem();
 
-    void receive(const FaceEvent &) noexcept;
-    void receive(const BonusEvent &) noexcept;
-    void receive(const ArmageddonEvent &) noexcept;
+    void onFace(const FaceEvent &) noexcept;
+    void onBonus(const BonusEvent &) noexcept;
+    void onArmageddon(const ArmageddonEvent &) noexcept;
 
     void update(Registry &, Spawner &);
 

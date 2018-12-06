@@ -254,9 +254,9 @@ AchievementsSystem::AchievementsSystem() noexcept
     : thankYouSupporter{false},
       timeIsOver{false}
 {
-    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<TimeIsOverEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<BillingEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect<&AchievementsSystem::onSceneChange>(this);
+    Locator::Dispatcher::ref().sink<TimeIsOverEvent>().connect<&AchievementsSystem::onTimeOver>(this);
+    Locator::Dispatcher::ref().sink<BillingEvent>().connect<&AchievementsSystem::onBillingEvent>(this);
 }
 
 
@@ -267,18 +267,18 @@ AchievementsSystem::~AchievementsSystem() noexcept {
 }
 
 
-void AchievementsSystem::receive(const SceneChangeEvent &event) noexcept {
+void AchievementsSystem::onSceneChange(const SceneChangeEvent &event) noexcept {
     current = event.scene;
 }
 
 
-void AchievementsSystem::receive(const TimeIsOverEvent &event) noexcept {
+void AchievementsSystem::onTimeOver(const TimeIsOverEvent &event) noexcept {
     // did we entered game over transition correctly after a full match?
     timeIsOver = !event.forced;
 }
 
 
-void AchievementsSystem::receive(const BillingEvent &event) noexcept {
+void AchievementsSystem::onBillingEvent(const BillingEvent &event) noexcept {
     thankYouSupporter = (event.product == Product::REMOVE_ADS)
             && (event.type == BillingEvent::Type::PURCHASE_OK || event.type == BillingEvent::Type::ALREADY_PURCHASED);
 }

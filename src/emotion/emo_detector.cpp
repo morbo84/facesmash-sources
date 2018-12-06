@@ -67,8 +67,8 @@ EmoDetector::EmoDetector()
     , dst_{nullptr}
 {
     analyzer_.init(visageDataPath().c_str());
-    Locator::Dispatcher::ref().sink<CameraInitEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<CameraInitEvent>().connect<&EmoDetector::onCameraInit>(this);
+    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().connect<&EmoDetector::onFrameAvailable>(this);
 }
 
 
@@ -94,7 +94,7 @@ EmoDetector::~EmoDetector() {
 }
 
 
-void EmoDetector::receive(const FrameAvailableEvent &) noexcept {
+void EmoDetector::onFrameAvailable(const FrameAvailableEvent &) noexcept {
     std::unique_lock lck{mtx_, std::try_to_lock_t{}};
 
     if (lck && frame_ && !dirty_ && SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
@@ -112,7 +112,7 @@ void EmoDetector::receive(const FrameAvailableEvent &) noexcept {
 }
 
 
-void EmoDetector::receive(const CameraInitEvent &) noexcept {
+void EmoDetector::onCameraInit(const CameraInitEvent &) noexcept {
     const auto &camera = Locator::Camera::ref();
     const auto width = camera.width();
     const auto height = camera.height();

@@ -138,7 +138,7 @@ void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
             if(!registry.has<SizeAnimation>(entity)) {
                 const int w = sprite.w * (1 - animation.squeeze);
                 const int h = sprite.h * (1 - animation.squeeze);
-                registry.accommodate<SizeAnimation>(entity, w, h, sprite.w, sprite.h, 1000_ui32, 0_ui32, &easeOutElastic);
+                registry.assign_or_replace<SizeAnimation>(entity, w, h, sprite.w, sprite.h, 1000_ui32, 0_ui32, &easeOutElastic);
             }
 
             registry.assign<DestroyLater>(pulse, 1000_ui32);
@@ -150,7 +150,7 @@ void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
             const auto sz = 1.f + animation.length;
             const int w = sprite.w * sz;
             const int h = sprite.h * sz;
-            registry.accommodate<SizeAnimation>(pulse, sprite.w, sprite.h, w, h, 1000_ui32, 0_ui32, &easeOutElastic);
+            registry.assign_or_replace<SizeAnimation>(pulse, sprite.w, sprite.h, w, h, 1000_ui32, 0_ui32, &easeOutElastic);
 
             if(animation.repeat) {
                 animation.elapsed = 0_ui32;

@@ -29,9 +29,9 @@ WallpaperSystem::WallpaperSystem()
       share{false},
       acquire{false}
 {
-    Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<WallpaperEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().connect<&WallpaperSystem::onFace>(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect<&WallpaperSystem::onSceneChanged>(this);
+    Locator::Dispatcher::ref().sink<WallpaperEvent>().connect<&WallpaperSystem::onWallpaper>(this);
 }
 
 
@@ -43,7 +43,7 @@ WallpaperSystem::~WallpaperSystem() {
 }
 
 
-void WallpaperSystem::receive(const FaceEvent &event) noexcept {
+void WallpaperSystem::onFace(const FaceEvent &event) noexcept {
     auto pos = static_cast<std::underlying_type_t<FaceType>>(event.type);
 
     if(acquire && event.frame && probs[pos] < event.probability) {
@@ -55,13 +55,13 @@ void WallpaperSystem::receive(const FaceEvent &event) noexcept {
 }
 
 
-void WallpaperSystem::receive(const SceneChangeEvent &event) noexcept {
+void WallpaperSystem::onSceneChanged(const SceneChangeEvent &event) noexcept {
     clear = (event.scene == SceneType::GAME_TUTORIAL);
     acquire = (event.scene == SceneType::THE_GAME);
 }
 
 
-void WallpaperSystem::receive(const WallpaperEvent &event) noexcept {
+void WallpaperSystem::onWallpaper(const WallpaperEvent &event) noexcept {
     share = (event.type == WallpaperEvent::Type::EXPORT);
 }
 

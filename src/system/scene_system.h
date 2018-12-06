@@ -17,9 +17,9 @@ struct SceneSystem final {
     SceneSystem();
     ~SceneSystem();
 
-    void receive(const SceneChangeEvent &) noexcept;
-    void receive(const KeyboardEvent &) noexcept;
-    void receive(const PermissionEvent &) noexcept;
+    void onSceneChange(const SceneChangeEvent &) noexcept;
+    void onKeyboardEvent(const KeyboardEvent &) noexcept;
+    void onPermission(const PermissionEvent &) noexcept;
 
     void update(Registry &, delta_type);
 

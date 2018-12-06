@@ -24,8 +24,8 @@ public:
     TrainingSystem();
     ~TrainingSystem();
 
-    void receive(const FaceRequest &) noexcept;
-    void receive(const FaceEvent &) noexcept;
+    void onFaceRequest(const FaceRequest &) noexcept;
+    void onFace(const FaceEvent &) noexcept;
 
     void update(Registry &, Spawner &, delta_type);
 

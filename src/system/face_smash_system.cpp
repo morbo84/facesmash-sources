@@ -21,9 +21,9 @@ FaceSmashSystem::FaceSmashSystem()
       richMan{false},
       armageddon{false}
 {
-    Locator::Dispatcher::ref().sink<FaceEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<BonusEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<FaceEvent>().connect<&FaceSmashSystem::onFace>(this);
+    Locator::Dispatcher::ref().sink<BonusEvent>().connect<&FaceSmashSystem::onBonus>(this);
+    Locator::Dispatcher::ref().sink<ArmageddonEvent>().connect<&FaceSmashSystem::onArmageddon>(this);
 }
 
 
@@ -34,7 +34,7 @@ FaceSmashSystem::~FaceSmashSystem() {
 }
 
 
-void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
+void FaceSmashSystem::onFace(const FaceEvent &event) noexcept {
     if(event.probability >= probabilityThreshold) {
         type = event.type;
         dirty = true;
@@ -42,13 +42,13 @@ void FaceSmashSystem::receive(const FaceEvent &event) noexcept {
 }
 
 
-void FaceSmashSystem::receive(const BonusEvent &event) noexcept {
+void FaceSmashSystem::onBonus(const BonusEvent &event) noexcept {
     smashAll = (event.type == BonusEvent::Type::SMASH_ALL);
     richMan = (event.type == BonusEvent::Type::I_AM_RICH);
 }
 
 
-void FaceSmashSystem::receive(const ArmageddonEvent &) noexcept {
+void FaceSmashSystem::onArmageddon(const ArmageddonEvent &) noexcept {
     armageddon = true;
 }
 

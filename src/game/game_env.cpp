@@ -82,8 +82,8 @@ GameEnv::GameEnv() noexcept
         // set event filter on SDL events
         SDL_SetEventFilter(&appEventFilter, this);
         // bind services to the surrounding environment
-        Locator::Dispatcher::ref().sink<KeyboardEvent>().connect(this);
-        Locator::Dispatcher::ref().sink<QuitEvent>().connect(this);
+        Locator::Dispatcher::ref().sink<KeyboardEvent>().connect<&GameEnv::onKeyboardEvent>(this);
+        Locator::Dispatcher::ref().sink<QuitEvent>().connect<&GameEnv::onQuitEvent>(this);
     }
 }
 
@@ -110,7 +110,7 @@ GameEnv::ErrorCode GameEnv::error() const noexcept {
 }
 
 
-void GameEnv::receive(const KeyboardEvent &event) noexcept {
+void GameEnv::onKeyboardEvent(const KeyboardEvent &event) noexcept {
     switch(event.type) {
     case KeyboardEvent::Type::ESCAPE:
         Locator::Dispatcher::ref().enqueue<QuitEvent>();
@@ -122,7 +122,7 @@ void GameEnv::receive(const KeyboardEvent &event) noexcept {
 }
 
 
-void GameEnv::receive(const QuitEvent &event) noexcept {
+void GameEnv::onQuitEvent(const QuitEvent &event) noexcept {
     loop = false;
 }
 

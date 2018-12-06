@@ -47,18 +47,18 @@ private:
 };
 
 
-struct AudioMusicLoader final: public entt::ResourceLoader<AudioMusicLoader, AudioMusicResource> {
+struct AudioMusicLoader final: public entt::resource_loader<AudioMusicLoader, AudioMusicResource> {
     std::shared_ptr<AudioMusicResource> load(const char *) const;
 };
 
 
-struct AudioChunkLoader final: public entt::ResourceLoader<AudioChunkLoader, AudioChunkResource> {
+struct AudioChunkLoader final: public entt::resource_loader<AudioChunkLoader, AudioChunkResource> {
     std::shared_ptr<AudioChunkResource> load(const char *) const;
 };
 
 
-using AudioMusicHandle = entt::ResourceHandle<AudioMusicResource>;
-using AudioChunkHandle = entt::ResourceHandle<AudioChunkResource>;
+using AudioMusicHandle = entt::resource_handle<AudioMusicResource>;
+using AudioChunkHandle = entt::resource_handle<AudioChunkResource>;
 
 
 }

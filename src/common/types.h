@@ -27,12 +27,12 @@ constexpr Sint64 operator"" _si64 (unsigned long long ull) { return Sint64(ull);
 
 using delta_type = Uint32;
 
-using AudioMusicCache = entt::ResourceCache<AudioMusicResource>;
-using AudioChunkCache = entt::ResourceCache<AudioChunkResource>;
-using TextureCache = entt::ResourceCache<SDLTextureResource>;
-using TTFFontCache = entt::ResourceCache<TTFFontResource>;
-using Dispatcher = entt::Dispatcher;
-using Registry = entt::DefaultRegistry;
+using AudioMusicCache = entt::resource_cache<AudioMusicResource>;
+using AudioChunkCache = entt::resource_cache<AudioChunkResource>;
+using TextureCache = entt::resource_cache<SDLTextureResource>;
+using TTFFontCache = entt::resource_cache<TTFFontResource>;
+using Dispatcher = entt::dispatcher;
+using Registry = entt::registry<>;
 
 
 using entity_type = typename Registry::entity_type;

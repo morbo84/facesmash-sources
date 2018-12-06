@@ -44,12 +44,12 @@ void MultiplayerSystem::acquire(Registry &registry) {
                 const int offset = numOfDigits(score);
 
                 for(auto i = offset; i < last; ++i) {
-                    registry.accommodate<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
+                    registry.assign_or_replace<HUD>(observer.entities[i], symEmptyHandle, symEmptyHandle->width(), symEmptyHandle->height(), symEmptyHandle->width(), symEmptyHandle->height());
                 }
 
                 for(auto i = offset; i > 0; --i) {
                     auto handle = toStrSmallHandle(score % 10);
-                    registry.accommodate<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
+                    registry.assign_or_replace<HUD>(observer.entities[i-1], handle, handle->width(), handle->height(), handle->width(), handle->height());
                     score /= 10;
                 }
             }
@@ -59,8 +59,8 @@ void MultiplayerSystem::acquire(Registry &registry) {
 
 
 MultiplayerSystem::MultiplayerSystem() {
-    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<CameraInitEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<SceneChangeEvent>().connect<&MultiplayerSystem::onSceneChange>(this);
+    Locator::Dispatcher::ref().sink<CameraInitEvent>().connect<&MultiplayerSystem::onCameraInit>(this);
 }
 
 
@@ -102,12 +102,12 @@ void MultiplayerSystem::update(Registry &registry, delta_type delta) {
 }
 
 
-void MultiplayerSystem::receive(const SceneChangeEvent &event) noexcept {
+void MultiplayerSystem::onSceneChange(const SceneChangeEvent &event) noexcept {
     shareStream = event.scene == SceneType::MULTIPLAYER_SHARE;
 }
 
 
-void MultiplayerSystem::receive(const CameraInitEvent &) noexcept {
+void MultiplayerSystem::onCameraInit(const CameraInitEvent &) noexcept {
     const auto &camera = Locator::Camera::ref();
     const auto width = camera.width();
     const auto height = camera.height();

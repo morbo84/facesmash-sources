@@ -17,8 +17,8 @@ FrameSystem::FrameSystem() noexcept
     : refresh{false},
       dirty{false}
 {
-    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<PermissionEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<FrameAvailableEvent>().connect<&FrameSystem::onFrameAvailable>(this);
+    Locator::Dispatcher::ref().sink<PermissionEvent>().connect<&FrameSystem::onPermission>(this);
 }
 
 
@@ -28,12 +28,12 @@ FrameSystem::~FrameSystem() noexcept {
 }
 
 
-void FrameSystem::receive(const FrameAvailableEvent &) noexcept {
+void FrameSystem::onFrameAvailable(const FrameAvailableEvent &) noexcept {
     dirty = true;
 }
 
 
-void FrameSystem::receive(const PermissionEvent &event) noexcept {
+void FrameSystem::onPermission(const PermissionEvent &event) noexcept {
     refresh = (event.permission == PermissionType::CAMERA && event.result == PermissionStatus::GRANTED);
 }
 

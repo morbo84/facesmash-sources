@@ -37,8 +37,8 @@ AudioSystem::AudioSystem()
     : curr{AudioMusicType::AUDIO_MUSIC_UNKNOWN},
       next{AudioMusicType::AUDIO_MUSIC_UNKNOWN}
 {
-    Locator::Dispatcher::ref().sink<AudioEvent>().connect(this);
-    Locator::Dispatcher::ref().sink<AudioMusicEvent>().connect(this);
+    Locator::Dispatcher::ref().sink<AudioEvent>().connect<&AudioSystem::onAudioEvent>(this);
+    Locator::Dispatcher::ref().sink<AudioMusicEvent>().connect<&AudioSystem::onAudioMusicEvent>(this);
 }
 
 
@@ -48,7 +48,7 @@ AudioSystem::~AudioSystem() {
 }
 
 
-void AudioSystem::receive(const AudioEvent &event) noexcept {
+void AudioSystem::onAudioEvent(const AudioEvent &event) noexcept {
     switch (event.type) {
     case AudioEvent::Type::START:
         start();
@@ -60,7 +60,7 @@ void AudioSystem::receive(const AudioEvent &event) noexcept {
 }
 
 
-void AudioSystem::receive(const AudioMusicEvent &event) noexcept {
+void AudioSystem::onAudioMusicEvent(const AudioMusicEvent &event) noexcept {
     if(event.playOrEntering) {
         next = event.type;
     } else if(event.type != curr) {
