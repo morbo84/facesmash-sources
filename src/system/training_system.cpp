@@ -55,7 +55,7 @@ void TrainingSystem::receive(const FaceEvent &event) noexcept {
 
 
 void TrainingSystem::update(Registry &registry, Spawner &spawner, delta_type delta) {
-    auto feedbackMsg = [&registry, this](const auto handle) {
+    auto feedbackMsg = [&registry](const auto handle) {
         auto entity = createLastingMessage(registry, handle, 200);
         const auto &sprite = registry.get<Sprite>(entity);
         setPos(registry, entity, (logicalWidth - sprite.w) / 2, (logicalHeight - sprite.h) / 2);

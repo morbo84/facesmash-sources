@@ -30,7 +30,6 @@ public:
     void receive(const CameraInitEvent &) noexcept;
 
 private:
-    delta_type accumulator;
     delta_type elapsed;
     bool shareStream;
     int current;
