@@ -62,13 +62,29 @@ endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${facesmash_SOURCE_DIR}/cmake/module)
 
+if(WIN32)
+	set(ENV{SDL2DIR} ${facesmash_SOURCE_DIR}/deps/SDL2)
+	set(ENV{SDL2IMAGEDIR} ${facesmash_SOURCE_DIR}/deps/SDL2_image)
+	set(ENV{SDL2MIXERDIR} ${facesmash_SOURCE_DIR}/deps/SDL2_mixer)
+	set(ENV{SDL2TTFDIR} ${facesmash_SOURCE_DIR}/deps/SDL2_ttf)
+	set(ZLIB_ROOT ${facesmash_SOURCE_DIR}/deps/zlib)
+	set(VISAGE_LIB_SUFFIX "64${CMAKE_STATIC_LIBRARY_SUFFIX}")
+	set(OpenCV_DIR ${facesmash_SOURCE_DIR}/deps/opencv/build)
+else()
+	set(VISAGE_LIB_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
+endif()
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(OpenCV REQUIRED)
+if(NOT WIN32)
 find_package(BLAS REQUIRED)
 find_package(OpenMP)
+# used for video stream acquisition
+endif()
 
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -77,8 +93,8 @@ endif()
 
 set(
     VISAGE_SDK_LIBRARIES
-    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageVision.a
-    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageAnalyser.a
+    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageVision${VISAGE_LIB_SUFFIX}
+    ${facesmash_SOURCE_DIR}/deps/visageSDK/lib/libVisageAnalyser${VISAGE_LIB_SUFFIX}
 )
 
 # this is necessary on archlinux to disable the default Position Independent Executable
@@ -107,6 +123,7 @@ target_include_directories(
     PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS}
     PRIVATE ${SDL2_MIXER_INCLUDE_DIRS}
     PRIVATE ${SDL2_TTF_INCLUDE_DIRS}
+    PRIVATE ${OpenCV_INCLUDE_DIRS}
 )
 
 target_link_libraries(
@@ -118,6 +135,7 @@ target_link_libraries(
     PRIVATE ${ZLIB_LIBRARIES}
     PRIVATE ${BLAS_LIBRARIES}
     PRIVATE ${VISAGE_SDK_LIBRARIES}
+    PRIVATE ${OpenCV_LIBS}
 )
 
 add_definitions(-DVISAGE_STATIC)

@@ -6,6 +6,10 @@
 #include <SDL_rect.h>
 #include "types.h"
 
+#if _WIN32 || (__linux__ && !__ANDROID__) || (__APPLE__ && __MACH__)
+#define FACESMASH_DESKTOP
+#endif
+
 
 namespace gamee {
 

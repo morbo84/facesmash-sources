@@ -15,7 +15,7 @@
 #include "service/billing_android.h"
 #include "service/billing_null.h"
 #include "service/camera_android.h"
-#include "service/camera_null.h"
+#include "service/camera_desktop.h"
 #include "service/game_services_android.h"
 #include "service/game_services_null.h"
 #include "service/haptic_null.h"
@@ -63,7 +63,7 @@ static void initPlatformServices() {
 #else
     gamee::Locator::Permissions::set<gamee::PermissionsNull>();
     gamee::Locator::Settings::set<gamee::SettingsOnMemory>();
-    gamee::Locator::Camera::set<gamee::CameraNull>();
+    gamee::Locator::Camera::set<gamee::CameraDesktop>();
     gamee::Locator::GameServices::set<gamee::GameServicesNull>();
     gamee::Locator::Ads::set<gamee::AdsNull>();
     gamee::Locator::Billing::set<gamee::BillingNull>();

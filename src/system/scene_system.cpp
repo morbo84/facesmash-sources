@@ -880,8 +880,7 @@ void SceneSystem::onKeyboardEvent(const KeyboardEvent &event) noexcept {
         case SceneType::THE_GAME:
         case SceneType::MULTIPLAYER:
         case SceneType::MULTIPLAYER_SHARE:
-            static constexpr auto forced = true;
-            dispatcher.enqueue<TimeIsOverEvent>(forced);
+            dispatcher.enqueue<TimeIsOverEvent>(true);
             break;
         default:
             // back is not allowed in all the other scenes

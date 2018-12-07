@@ -10,8 +10,14 @@
 #include <memory>
 #include <utility>
 #include <SDL_timer.h>
+
+#if _WIN64
+// needed to not make clash some name used by Visage against windows.h
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include "VisageTracker.h"
 #include "VisageFaceAnalyser.h"
+
 #include "../common/types.h"
 #include "../event/event.hpp"
 

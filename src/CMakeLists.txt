@@ -26,6 +26,7 @@ set(
     ${facesmash_SOURCE_DIR}/src/service/billing_android.cpp
     ${facesmash_SOURCE_DIR}/src/service/billing_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_android.cpp
+    ${facesmash_SOURCE_DIR}/src/service/camera_desktop.cpp
     ${facesmash_SOURCE_DIR}/src/service/camera_null.cpp
     ${facesmash_SOURCE_DIR}/src/service/face_bus_service.cpp
     ${facesmash_SOURCE_DIR}/src/service/game_services_android.cpp
