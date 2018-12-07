@@ -122,6 +122,17 @@ void EmoDetector::onCameraInit(const CameraInitEvent &) noexcept {
     dst_ = SDL_CreateRGBSurfaceWithFormat(0, detectorWidth, detectorHeight, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
     image_ = vsCreateImage(vsSize(detectorWidth, detectorHeight), VS_DEPTH_8U, visageChannels);
 
+    const auto rc = (1. * width) / height;
+    const auto rl = (1. * logicalWidth) / logicalHeight;
+    const auto w = rc >= rl ? (1 * height * logicalWidth) / logicalHeight : (1. * camera.width());
+    const auto h = rc >= rl ? (1. * camera.height()) : (1 * width * logicalHeight) / logicalWidth;
+    const auto x = rc >= rl ? (width - w) * 0.5 : 0.;
+    const auto y = rc >= rl ? 0. : (height - h) * 0.5;
+    rect_ = SDL_Rect{static_cast<int>(std::lround(x)),
+            static_cast<int>(std::lround(y)),
+            static_cast<int>(std::lround(w)),
+            static_cast<int>(std::lround(h))};
+
     t_ = SDL_CreateThread(&EmoDetector::analyzeCurrentFrame, "detector", this);
 }
 
@@ -142,7 +153,7 @@ int EmoDetector::analyzeCurrentFrame(void *ptr) {
                               internalFormat, detector.frame_.get(), (detector.copy_->w * SDL_BITSPERPIXEL(internalFormat)) / 8,
                               detectorFormat, detector.copy_->pixels, detector.copy_->pitch);
 
-            SDL_BlitScaled(detector.copy_, nullptr, detector.dst_, nullptr);
+            SDL_BlitScaled(detector.copy_, &detector.rect_, detector.dst_, nullptr);
             const auto *pixels = static_cast<const unsigned char*>(detector.dst_->pixels);
             std::copy_n(pixels, detector.dst_->pitch * detector.dst_->h, detector.image_->imageData);
 

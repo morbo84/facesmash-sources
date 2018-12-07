@@ -53,6 +53,7 @@ private:
     SDL_Thread *t_;
     SDL_Surface *copy_;
     SDL_Surface *dst_;
+    SDL_Rect rect_{};
 };
 
 
