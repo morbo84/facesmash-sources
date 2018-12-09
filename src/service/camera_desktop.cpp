@@ -49,8 +49,11 @@ CameraDesktop::CameraDesktop() noexcept
 	: camera_{0}
 	, t_{&CameraDesktop::run, this}
 {
-    width_ = std::lround(camera_.get(cv::CAP_PROP_FRAME_WIDTH));
-    height_ = camera_.get(cv::CAP_PROP_FRAME_HEIGHT);
+    if(camera_.isOpened()) {
+        width_ = std::lround(camera_.get(cv::CAP_PROP_FRAME_WIDTH));
+        height_ = camera_.get(cv::CAP_PROP_FRAME_HEIGHT);
+    }
+
     auto bitsPerPixel = SDL_BITSPERPIXEL(internalFormat);
     assert(width_ >= 0 && height_ >= 0 && bitsPerPixel >= 0);
     auto pitch = (static_cast<size_t>(bitsPerPixel) * static_cast<size_t>(width_)) / 8U;
