@@ -127,7 +127,6 @@ void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
 
         if(animation.elapsed > animation.duration) {
             const auto position = transformToPosition(registry, entity, transform);
-            auto pulse = registry.create();
 
             // we don't want to replace current animations
             if(!registry.has<RotationAnimation>(entity)) {
@@ -141,22 +140,24 @@ void AnimationSystem::pulseAnimation(Registry &registry, delta_type delta) {
                 registry.assign_or_replace<SizeAnimation>(entity, w, h, sprite.w, sprite.h, 1000_ui32, 0_ui32, &easeOutElastic);
             }
 
-            registry.assign<DestroyLater>(pulse, 1000_ui32);
-            registry.assign<Renderable>(pulse, renderable);
-            registry.assign<Sprite>(pulse, sprite);
-            registry.assign<Transform>(pulse, pulse, 1.f * position.x, 1.f * position.y);
-            registry.assign<FadeAnimation>(pulse, 99, 0, 1000_ui32, 0_ui32, &easeOutExpo);
-
             const auto sz = 1.f + animation.length;
             const int w = sprite.w * sz;
             const int h = sprite.h * sz;
-            registry.assign_or_replace<SizeAnimation>(pulse, sprite.w, sprite.h, w, h, 1000_ui32, 0_ui32, &easeOutElastic);
 
             if(animation.repeat) {
                 animation.elapsed = 0_ui32;
             } else {
                 registry.remove<PulseAnimation>(entity);
             }
+
+            auto pulse = registry.create();
+
+            registry.assign<DestroyLater>(pulse, 1000_ui32);
+            registry.assign<Renderable>(pulse, renderable);
+            registry.assign<Transform>(pulse, pulse, 1.f * position.x, 1.f * position.y);
+            registry.assign<FadeAnimation>(pulse, 99, 0, 1000_ui32, 0_ui32, &easeOutExpo);
+            registry.assign<SizeAnimation>(pulse, sprite.w, sprite.h, w, h, 1000_ui32, 0_ui32, &easeOutElastic);
+            registry.assign<Sprite>(pulse, sprite);
         }
     });
 }

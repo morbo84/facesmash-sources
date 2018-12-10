@@ -64,7 +64,7 @@ CameraDesktop::CameraDesktop() noexcept
     p0_ = frame0_.get();
     p1_ = frame1_.get();
     Locator::Dispatcher::ref().enqueue<CameraInitEvent>();
-	Locator::Dispatcher::ref().enqueue<PermissionEvent>(PermissionType::CAMERA, PermissionStatus::GRANTED);
+    Locator::Dispatcher::ref().enqueue<PermissionEvent>(PermissionType::CAMERA, PermissionStatus::GRANTED);
 
     t_ = std::thread{&CameraDesktop::run, this};
 }

@@ -212,6 +212,7 @@ static void handleRateDialog(Registry &registry) {
 
 static void disableCameraFrame(Registry &registry) {
     auto view = registry.view<CameraFrame>();
+
     if(!view.empty()) {
         registry.get<Renderable>(*view.begin()).alpha = 0;
         registry.get<CameraFrame>(*view.begin()).acquire = false;
@@ -221,6 +222,7 @@ static void disableCameraFrame(Registry &registry) {
 
 static void enableCameraFrame(Registry &registry) {
     auto view = registry.view<CameraFrame>();
+
     if(!view.empty()) {
         registry.get<Renderable>(*view.begin()).alpha = 255;
         registry.get<CameraFrame>(*view.begin()).acquire = true;
@@ -274,7 +276,7 @@ static delta_type splashScreenTransition(Registry &registry) {
             registry.assign_or_replace<VerticalAnimation>(entity, static_cast<int>(transform.y), 7 * logicalHeight / 8, duration / 3, 0_ui32, &easeOutElastic);
             break;
         case PanelType::SPLASH_SCREEN:
-            registry.assign_or_replace<Transform>(entity, entity, 0.f, 0.f);
+            registry.replace<Transform>(entity, entity, 0.f, 0.f);
             break;
         default:
             // all the other panels are already out of scene (they ought to be at least)
