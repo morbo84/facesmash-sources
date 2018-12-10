@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <cstddef>
 #include <string>
 #include <SDL_rect.h>
 #include <SDL_surface.h>
@@ -58,6 +57,7 @@ EmoDetector::EmoDetector()
     , tracker_{visageTrackingCfg().c_str()}
     , analyzer_{}
     , image_{nullptr}
+    , frame_{}
     , mtx_{}
     , cv_{}
     , dirty_{false}
@@ -97,10 +97,10 @@ EmoDetector::~EmoDetector() {
 void EmoDetector::onFrameAvailable(const FrameAvailableEvent &) noexcept {
     std::unique_lock lck{mtx_, std::try_to_lock_t{}};
 
-    if (lck && !dirty_ && SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
+    if (lck && frame_ && !dirty_ && SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
         Locator::Camera::ref().frame([this](const void* internal, int size) {
-            auto frame = static_cast<const std::byte*>(internal);
-            std::copy_n(frame, size, static_cast<std::byte*>(copy_->pixels));
+            auto frame = static_cast<const unsigned char *>(internal);
+            std::copy_n(frame, size, frame_.get());
         });
 
         timeout = SDL_GetTicks() + interval;
@@ -117,6 +117,7 @@ void EmoDetector::onCameraInit(const CameraInitEvent &) noexcept {
     const auto width = camera.width();
     const auto height = camera.height();
 
+    frame_ = std::make_unique<unsigned char[]>((width * height * SDL_BITSPERPIXEL(internalFormat)) / 8);
     copy_ = SDL_CreateRGBSurfaceWithFormat(0, width, height, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
     dst_ = SDL_CreateRGBSurfaceWithFormat(0, detectorWidth, detectorHeight, SDL_BITSPERPIXEL(detectorFormat), detectorFormat);
     image_ = vsCreateImage(vsSize(detectorWidth, detectorHeight), VS_DEPTH_8U, visageChannels);
@@ -148,12 +149,16 @@ int EmoDetector::analyzeCurrentFrame(void *ptr) {
         }
 
         if(!detector.end_) {
+            SDL_ConvertPixels(detector.copy_->w, detector.copy_->h,
+                              internalFormat, detector.frame_.get(), (detector.copy_->w * SDL_BITSPERPIXEL(internalFormat)) / 8,
+                              detectorFormat, detector.copy_->pixels, detector.copy_->pitch);
+
             SDL_BlitScaled(detector.copy_, &detector.rect_, detector.dst_, nullptr);
             const auto *pixels = static_cast<const unsigned char*>(detector.dst_->pixels);
             std::copy_n(pixels, detector.dst_->pitch * detector.dst_->h, detector.image_->imageData);
 
             auto* statuses = detector.tracker_.track(detector.image_->width, detector.image_->height, detector.image_->imageData,
-                                                     &faceData, VISAGE_FRAMEGRABBER_FMT_RGBA, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
+                                                     &faceData, VISAGE_FRAMEGRABBER_FMT_RGB, VISAGE_FRAMEGRABBER_ORIGIN_TL, 0, -1, 1);
 
             if(statuses[0] == TRACK_STAT_OK) {
                 std::array<float, 7> probs;

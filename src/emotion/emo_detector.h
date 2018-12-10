@@ -31,7 +31,7 @@ namespace gamee {
 
 class EmoDetector {
     static constexpr auto length = 7;
-    static constexpr auto visageChannels = 4;
+    static constexpr auto visageChannels = 3;
     static constexpr Uint32 interval = 200u;
 
 public:
@@ -51,6 +51,7 @@ private:
     VisageSDK::VisageTracker tracker_;
     VisageSDK::VisageFaceAnalyser analyzer_;
     VsImage* image_;
+    std::unique_ptr<unsigned char[]> frame_;
     std::mutex mtx_;
     std::condition_variable cv_;
     std::atomic_bool dirty_;
