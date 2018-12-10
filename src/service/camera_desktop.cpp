@@ -46,9 +46,9 @@ int CameraDesktop::height() const noexcept {
 
 
 CameraDesktop::CameraDesktop() noexcept
-	: camera_{0}
-	, t_{&CameraDesktop::run, this}
+    : camera_{0}
 {
+
     if(camera_.isOpened()) {
         width_ = std::lround(camera_.get(cv::CAP_PROP_FRAME_WIDTH));
         height_ = camera_.get(cv::CAP_PROP_FRAME_HEIGHT);
@@ -65,6 +65,8 @@ CameraDesktop::CameraDesktop() noexcept
     p1_ = frame1_.get();
     Locator::Dispatcher::ref().enqueue<CameraInitEvent>();
 	Locator::Dispatcher::ref().enqueue<PermissionEvent>(PermissionType::CAMERA, PermissionStatus::GRANTED);
+
+    t_ = std::thread{&CameraDesktop::run, this};
 }
 
 
