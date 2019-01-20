@@ -59,7 +59,8 @@ bool AdsAndroid::isLoaded(AdsType type) {
 void AdsAndroid::show(AdsType type) {
     switch(type) {
     case AdsType::BANNER:
-        bindingShowBannerAd();
+        // TODO commented out because it seems it doesn't fit google's policies
+        // bindingShowBannerAd();
         break;
     case AdsType::INTERSTITIAL:
         bindingShowInterstitialAd();
